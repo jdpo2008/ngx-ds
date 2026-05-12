@@ -1,0 +1,15 @@
+// ngx-ds Design System — Global Styles
+// Import this file in any consuming app's styles.scss:
+//   @use 'ngx-ds/styles/index' as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// ─── Design Tokens ────────────────────────────────────────────────────────────
+// Add CSS custom properties here as the design system grows.
+// Example:
+//   :root {
+//     --ngx-color-primary: theme('colors.blue.600');
+//     --ngx-font-sans: theme('fontFamily.sans');
+//   }
