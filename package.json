@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "echo Use 'ng serve --project=<project-name>' to serve a specific project",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
