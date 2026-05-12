@@ -8,6 +8,11 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "ngx-ds": [
+        "./projects/ngx-ds/src/public-api.ts"
+      ]
+    },
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
@@ -22,5 +27,13 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/ngx-ds/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-ds/tsconfig.spec.json"
+    }
+  ]
 }
