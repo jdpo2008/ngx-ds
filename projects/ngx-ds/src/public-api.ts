@@ -1,12 +1,8 @@
 // Public API Surface of ngx-ds
-/*
- * Public API Surface of ngx-ds
- */
+// Export components, directives, and pipes here as they are created.
+// Example: export * from './lib/components/button';
 
-// ── Root module ─────────────────────────────────────────────
-export * from './lib/ngx-ds.module';
-
- // ── Services ────────────────────────────────────────────────
+// ── Services ────────────────────────────────────────────────
 // export * from './lib/services/theme.service';
 // export * from './lib/services/toast.service';
 
@@ -56,4 +52,6 @@ export * from './lib/ngx-ds.module';
 
 // ── Directives ──────────────────────────────────────────────
 // export * from './lib/directives/tooltip.directive';
+
+export {};
 
