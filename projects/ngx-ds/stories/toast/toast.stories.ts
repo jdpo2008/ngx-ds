@@ -1,6 +1,5 @@
-import { applicationConfig, Meta, StoryObj } from '@storybook/angular';
+import { Meta, StoryObj } from '@storybook/angular';
 import { Component, inject } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { ToastComponent } from '../../src/lib/components/toast/toast.component';
 import { ToastrService, ToastPosition } from '../../src/lib/services/toast.service';
 
@@ -155,11 +154,6 @@ class AllPositionsWrapper {
 
 const meta: Meta = {
   title: 'Components/Toast',
-  decorators: [
-    applicationConfig({
-      providers: [provideAnimations()],
-    }),
-  ],
 };
 
 export default meta;
