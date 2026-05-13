@@ -14,5 +14,31 @@
     }
   },
   "projects": {
+    "ngx-ds": {
+      "projectType": "library",
+      "root": "projects/ngx-ds",
+      "sourceRoot": "projects/ngx-ds/src",
+      "prefix": "ngx",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-ds/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-ds/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ngx-ds/tsconfig.spec.json"
+          }
+        }
+      }
+    }
   }
 }
