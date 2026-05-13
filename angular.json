@@ -45,14 +45,11 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "configDir": "projects/ngx-ds/.storybook",
-            "browserTarget": "ngx-ds:build",
-            "compodoc": true,
-            "compodocArgs": [
-              "-e",
-              "json",
-              "-d",
-              "projects/ngx-ds"
+            "tsConfig": "projects/ngx-ds/.storybook/tsconfig.json",
+            "styles": [
+              "projects/ngx-ds/styles/index.scss"
             ],
+            "compodoc": false,
             "port": 6006
           }
         },
@@ -60,14 +57,11 @@
           "builder": "@storybook/angular:build-storybook",
           "options": {
             "configDir": "projects/ngx-ds/.storybook",
-            "browserTarget": "ngx-ds:build",
-            "compodoc": true,
-            "compodocArgs": [
-              "-e",
-              "json",
-              "-d",
-              "projects/ngx-ds"
+            "tsConfig": "projects/ngx-ds/.storybook/tsconfig.json",
+            "styles": [
+              "projects/ngx-ds/styles/index.scss"
             ],
+            "compodoc": false,
             "outputDir": "storybook-static"
           }
         }
