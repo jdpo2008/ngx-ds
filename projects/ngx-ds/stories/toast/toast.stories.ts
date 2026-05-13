@@ -153,7 +153,7 @@ class AllPositionsWrapper {
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
-const meta: Meta<DefaultWrapper> = {
+const meta: Meta = {
   title: 'Components/Toast',
   decorators: [
     applicationConfig({
@@ -163,24 +163,27 @@ const meta: Meta<DefaultWrapper> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 export const Default: Story = {
   render: () => ({
-    component: DefaultWrapper,
+    template: `<toast-default-wrapper />`,
+    moduleMetadata: { imports: [DefaultWrapper] },
   }),
 };
 
 export const AllTypes: Story = {
   render: () => ({
-    component: AllTypesWrapper,
+    template: `<toast-all-types-wrapper />`,
+    moduleMetadata: { imports: [AllTypesWrapper] },
   }),
 };
 
 export const AllPositions: Story = {
   render: () => ({
-    component: AllPositionsWrapper,
+    template: `<toast-positions-wrapper />`,
+    moduleMetadata: { imports: [AllPositionsWrapper] },
   }),
 };
