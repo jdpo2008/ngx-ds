@@ -153,7 +153,7 @@ class AllPositionsWrapper {
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
-const meta: Meta = {
+const meta: Meta<DefaultWrapper> = {
   title: 'Components/Toast',
   decorators: [
     applicationConfig({
@@ -163,7 +163,7 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<typeof meta>;
 
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
