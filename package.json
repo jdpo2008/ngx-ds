@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "echo Use 'ng serve --project=<project-name>' to serve a specific project",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "build": "ng build ngx-ds",
+    "watch": "ng build ngx-ds --watch --configuration development",
     "test": "ng test"
   },
   "prettier": {

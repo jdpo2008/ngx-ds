@@ -22,6 +22,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/ngx-ds/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/ngx-ds/tsconfig.lib.prod.json"
