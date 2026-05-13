@@ -40,6 +40,36 @@
           "options": {
             "tsConfig": "projects/ngx-ds/tsconfig.spec.json"
           }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": "projects/ngx-ds/.storybook",
+            "browserTarget": "ngx-ds:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/ngx-ds"
+            ],
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "projects/ngx-ds/.storybook",
+            "browserTarget": "ngx-ds:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/ngx-ds"
+            ],
+            "outputDir": "storybook-static"
+          }
         }
       }
     }
