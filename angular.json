@@ -45,7 +45,7 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "configDir": "projects/ngx-ds/.storybook",
-            "tsConfig": "projects/ngx-ds/.storybook/tsconfig.json",
+            "browserTarget": "ngx-ds:build",
             "styles": [
               "projects/ngx-ds/styles/index.scss"
             ],
@@ -57,7 +57,7 @@
           "builder": "@storybook/angular:build-storybook",
           "options": {
             "configDir": "projects/ngx-ds/.storybook",
-            "tsConfig": "projects/ngx-ds/.storybook/tsconfig.json",
+            "browserTarget": "ngx-ds:build",
             "styles": [
               "projects/ngx-ds/styles/index.scss"
             ],
