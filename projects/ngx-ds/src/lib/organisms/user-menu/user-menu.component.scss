@@ -1,0 +1,67 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Trigger button ────────────────────────────────────────────────────────────
+
+.um__trigger {
+  display: inline-flex;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.85; }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-500, #6366f1);
+    outline-offset: 3px;
+  }
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+
+.um__panel {
+  min-width: 14rem;
+  padding: 0.25rem 0;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.um__header {
+  padding: 0.75rem 1rem 0.625rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.um__name {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-base, #111827);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.um__email {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Actions list ──────────────────────────────────────────────────────────────
+
+.um__actions {
+  padding: 0.25rem 0.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
