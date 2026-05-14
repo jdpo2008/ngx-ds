@@ -29,11 +29,11 @@ export class UserMenuComponent {
 
   readonly actionClick = output<UserMenuAction>();
 
-  readonly #popover = viewChild.required(PopoverComponent);
+  private readonly popover = viewChild.required(PopoverComponent);
 
   onAction(action: UserMenuAction): void {
     if (action.disabled) return;
     this.actionClick.emit(action);
-    this.#popover().open.set(false);
+    this.popover().open.set(false);
   }
 }
