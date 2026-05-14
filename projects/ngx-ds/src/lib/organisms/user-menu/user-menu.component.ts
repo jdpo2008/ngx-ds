@@ -3,6 +3,7 @@ import {
   Component,
   input,
   output,
+  viewChild,
 } from '@angular/core';
 import { AvatarComponent } from '../../atoms/avatar/avatar.component';
 import { MenuButtonComponent } from '../../atoms/menu-button/menu-button.component';
@@ -29,8 +30,11 @@ export class UserMenuComponent {
 
   readonly actionClick = output<UserMenuAction>();
 
+  readonly #popover = viewChild.required(PopoverComponent);
+
   onAction(action: UserMenuAction): void {
     if (action.disabled) return;
     this.actionClick.emit(action);
+    this.#popover().toggle();
   }
 }

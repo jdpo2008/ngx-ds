@@ -9,6 +9,7 @@
   >
     <ngx-ds-avatar
       [src]="user().avatarSrc"
+      [alt]="user().name"
       [initials]="user().initials ?? ''"
       [color]="user().avatarColor ?? 'primary'"
       [size]="size()"
@@ -28,8 +29,8 @@
 
     <!-- Action list -->
     <div class="um__actions">
-      @for (action of actions(); track action.id) {
-        @if (action.separator) {
+      @for (action of actions(); track action.id; let first = $first) {
+        @if (action.separator && !first) {
           <ngx-ds-divider />
         }
         <ngx-ds-menu-button
