@@ -1,0 +1,49 @@
+<ngx-ds-popover [placement]="placement()">
+
+  <!-- ── Trigger ─────────────────────────────────────────────────────────── -->
+  <button
+    popover-trigger
+    type="button"
+    class="um__trigger"
+    [attr.aria-label]="user().name"
+  >
+    <ngx-ds-avatar
+      [src]="user().avatarSrc"
+      [initials]="user().initials ?? ''"
+      [color]="user().avatarColor ?? 'primary'"
+      [size]="size()"
+    />
+  </button>
+
+  <!-- ── Panel ───────────────────────────────────────────────────────────── -->
+  <div popover-content class="um__panel">
+
+    <!-- Header: name + email only, no avatar -->
+    <div class="um__header">
+      <p class="um__name">{{ user().name }}</p>
+      <p class="um__email">{{ user().email }}</p>
+    </div>
+
+    <ngx-ds-divider />
+
+    <!-- Action list -->
+    <div class="um__actions">
+      @for (action of actions(); track action.id) {
+        @if (action.separator) {
+          <ngx-ds-divider />
+        }
+        <ngx-ds-menu-button
+          [iconLeft]="action.icon"
+          [color]="action.color ?? 'default'"
+          [disabled]="action.disabled ?? false"
+          [fullWidth]="true"
+          (click)="onAction(action)"
+        >
+          {{ action.label }}
+        </ngx-ds-menu-button>
+      }
+    </div>
+
+  </div>
+
+</ngx-ds-popover>
