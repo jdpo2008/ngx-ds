@@ -1,57 +1,67 @@
 // Public API Surface of ngx-ds
-// Export components, directives, and pipes here as they are created.
-// Example: export * from './lib/components/button';
 
 // ── Services ────────────────────────────────────────────────
-// export * from './lib/services/theme.service';
-// export * from './lib/services/toast.service';
+export * from './lib/services/toast.service';
+export * from './lib/services/confirmation.service';
 
-// ── Shared ──────────────────────────────────────────────────
-// export * from './lib/shared/control-value-accessor.base';
+// ── Atoms ────────────────────────────────────────────────────
+export * from './lib/atoms/button';
+export * from './lib/atoms/icon-button';
+export * from './lib/atoms/icon';
+export * from './lib/atoms/avatar';
+export * from './lib/atoms/badge';
+export * from './lib/atoms/tag';
+export * from './lib/atoms/progress-bar';
+export * from './lib/atoms/spinner';
+export * from './lib/atoms/menu-button';
+export * from './lib/atoms/tooltip';
+export * from './lib/atoms/skeleton';
+export * from './lib/atoms/divider';
+export * from './lib/atoms/kbd';
 
-// ── Components — Core ───────────────────────────────────────
-// export * from './lib/components/button';
-// export * from './lib/components/icon';
-// export * from './lib/components/input';
-// export * from './lib/components/textarea';
-// export * from './lib/components/select';
-// export * from './lib/components/checkbox';
-// export * from './lib/components/radio';
-// export * from './lib/components/switch';
-// export * from './lib/components/badge';
-// export * from './lib/components/avatar';
+// ── Molecules ─────────────────────────────────────────────────
+export * from './lib/molecules/checkbox';
+export * from './lib/molecules/radio';
+export * from './lib/molecules/switch';
+export * from './lib/molecules/input';
+export * from './lib/molecules/textarea';
+export * from './lib/molecules/select';
+export * from './lib/molecules/dropdown';
+export * from './lib/molecules/autocomplete';
+export * from './lib/molecules/datepicker';
+export * from './lib/molecules/password-strength';
+export * from './lib/molecules/alert';
+export * from './lib/molecules/file-upload';
+export * from './lib/molecules/search-input';
+export * from './lib/molecules/otp-input';
+export * from './lib/molecules/range-slider';
+export * from './lib/molecules/card';
+export * from './lib/molecules/breadcrumb';
+export * from './lib/molecules/segmented-control';
+export * from './lib/molecules/empty-state';
+export * from './lib/molecules/number-input';
+export * from './lib/molecules/multi-select';
+export * from './lib/molecules/rating';
+export * from './lib/molecules/chip-group';
+export { DateRangePickerComponent } from './lib/molecules/date-range-picker';
+export * from './lib/molecules/color-picker';
 
-// ── Components — Navigation & Layout ────────────────────────
-// export * from './lib/components/tabs';
-// export * from './lib/components/breadcrumb';
-// export * from './lib/components/pagination';
-// export * from './lib/components/stepper';
-// export * from './lib/components/accordion';
-// export * from './lib/components/card';
-// export * from './lib/components/divider';
-
-// ── Components — Feedback & Overlay ─────────────────────────
-// export * from './lib/components/alert';
-// export * from './lib/components/toast';
-// export * from './lib/components/modal';
-// export * from './lib/components/confirmation-dialog';
-// export * from './lib/components/dropdown';
-// export * from './lib/components/chip';
-// export * from './lib/components/progress-bar';
-// export * from './lib/components/spinner';
-// export * from './lib/components/skeleton';
-
-// ── Components — Data Display & Avanzados ───────────────────
-// export * from './lib/components/table';
-// export * from './lib/components/empty-state';
-// export * from './lib/components/slider';
-// export * from './lib/components/form-field';
-// export * from './lib/components/data-list';
-// export * from './lib/components/autocomplete';
-// export * from './lib/components/date-picker';
-
-// ── Directives ──────────────────────────────────────────────
-// export * from './lib/directives/tooltip.directive';
+// ── Organisms ─────────────────────────────────────────────────
+export * from './lib/organisms/pagination';
+export * from './lib/organisms/toast';
+export * from './lib/organisms/confirmation';
+export * from './lib/organisms/table';
+export * from './lib/organisms/modal';
+export * from './lib/organisms/tabs';
+export * from './lib/organisms/drawer';
+export * from './lib/organisms/stepper';
+export * from './lib/organisms/accordion';
+export * from './lib/organisms/popover';
+export * from './lib/organisms/timeline';
+export * from './lib/organisms/tree-view';
+export * from './lib/organisms/calendar';
+export * from './lib/organisms/command-palette';
+export * from './lib/organisms/notification-center';
+export * from './lib/organisms/user-menu';
 
 export {};
-
