@@ -1,8 +1,6 @@
 import type { LucideIconData } from 'lucide-angular';
 import type { MenuButtonColor } from '../../atoms/menu-button/menu-button.component';
-import type { AvatarColor, AvatarSize } from '../../atoms/avatar/avatar.component';
-
-export type { AvatarSize };
+import type { AvatarColor } from '../../atoms/avatar/avatar.component';
 
 export interface UserMenuUser {
   name: string;
