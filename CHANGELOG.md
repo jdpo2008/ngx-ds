@@ -38,6 +38,6 @@ First public release.
 
 - Vitest specs for every atom, molecule, organism and shared helper (#6, #18, #20, #21, #22, #27).
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
-- Release workflow that publishes to npm with provenance when a GitHub release is published.
+- Release workflow that publishes to npm when a GitHub release is published.
 
 [0.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.1.0

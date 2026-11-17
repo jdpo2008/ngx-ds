@@ -37,7 +37,7 @@ This is **ngx-ds**, an Angular 21 component library built with `ng-packagr`. The
 Published to npm as `@jdpo2008/ngx-ds` (the unscoped `ngx-ds` name belongs to someone else).
 
 1. Bump `version` in `projects/ngx-ds/package.json` and add a section to `CHANGELOG.md` (root), via a normal PR.
-2. After merging, create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish --provenance` with the `NPM_TOKEN` secret.
+2. After merging, create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish` with the `NPM_TOKEN` secret. No `--provenance`: npm only accepts it from public repositories, and this one is private.
 
 Consumers load `styles/ngx-ds.scss` (tokens, no Tailwind). `styles/index.scss` adds the Tailwind directives for Storybook only.
 
