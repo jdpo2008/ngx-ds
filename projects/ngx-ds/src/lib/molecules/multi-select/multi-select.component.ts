@@ -1,4 +1,7 @@
 import {
+  inject,
+  Injector,
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -14,7 +17,7 @@ import { ChevronDown, X, Check } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
-import { isActivationKey } from '../../shared/keyboard';
+import { focusFirstOption, isActivationKey, moveOptionFocus } from '../../shared/keyboard';
 import { Size } from '../../shared/size';
 
 export interface MultiSelectOption {
@@ -93,21 +96,40 @@ export class MultiSelectComponent implements ControlValueAccessor {
 
   // ── Keyboard ───────────────────────────────────────────────
   private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
+  readonly #injector = inject(Injector);
 
   onTriggerKeydown(event: KeyboardEvent): void {
     // Ignore keys coming from nested controls (clear / chip-remove buttons).
     if (event.target !== event.currentTarget) return;
-    if (isActivationKey(event) || (event.key === 'ArrowDown' && !this.isOpen())) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (!this.isOpen()) this.toggleOpen();
+      this.#focusFirstOptionAfterRender();
+    } else if (isActivationKey(event)) {
       event.preventDefault();
       this.toggleOpen();
     }
   }
 
   onOptionKeydown(event: KeyboardEvent, option: MultiSelectOption): void {
+    if (moveOptionFocus(event)) return;
     if (!isActivationKey(event)) return;
     event.preventDefault();
     this.toggleOption(option);
     if (!this.isOpen()) this.triggerRef()?.nativeElement.focus();
+  }
+
+  /** ArrowDown in the search box moves focus into the option list. */
+  onSearchKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    focusFirstOption(document.getElementById(this.id + '-panel'));
+  }
+
+  #focusFirstOptionAfterRender(): void {
+    afterNextRender(() => focusFirstOption(document.getElementById(this.id + '-panel')), {
+      injector: this.#injector,
+    });
   }
 
   #closeOnEscape(): void {

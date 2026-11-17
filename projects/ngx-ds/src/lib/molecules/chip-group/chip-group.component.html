@@ -1,28 +1,31 @@
 <div [class]="hostClasses()" role="group">
   @for (chip of chips(); track chip.value) {
-    <button
-      type="button"
+    <span
       class="chip"
       [class.chip--selected]="isSelected(chip)"
       [class.chip--disabled]="chip.disabled || disabled()"
-      [disabled]="chip.disabled || disabled() || null"
-      (click)="toggle(chip)"
     >
-      {{ chip.label }}
+      <button
+        type="button"
+        class="chip__label"
+        [disabled]="chip.disabled || disabled() || null"
+        [attr.aria-pressed]="selectable() ? isSelected(chip) : null"
+        (click)="toggle(chip)"
+      >
+        {{ chip.label }}
+      </button>
 
       @if (removable()) {
-        <span
+        <button
+          type="button"
           class="chip__remove"
-          role="button"
-          tabindex="0"
-          (click)="remove(chip, $event)"
-          (keydown.enter)="remove(chip, $event)"
-          (keydown.space)="remove(chip, $event)"
+          [disabled]="chip.disabled || disabled() || null"
           [attr.aria-label]="'Quitar ' + chip.label"
+          (click)="remove(chip, $event)"
         >
           <ngx-ds-icon [icon]="XIcon" [size]="12" />
-        </span>
+        </button>
       }
-    </button>
+    </span>
   }
 </div>

@@ -25,6 +25,11 @@
     border-color 0.15s ease,
     box-shadow 0.15s ease;
   white-space: nowrap;
+  position: relative;
+
+  &:has(.chip__label:focus-visible) {
+    box-shadow: 0 0 0 2px var(--primary-300, #a5b4fc);
+  }
 
   &--disabled {
     opacity: 0.45;
@@ -32,9 +37,40 @@
   }
 }
 
+// Shared reset: both controls inherit the chip's look.
+.chip__label,
+.chip__remove {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: inherit;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// The label button covers the whole chip so its padding stays clickable.
+.chip__label {
+  outline: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+}
+
 // ── Remove button ─────────────────────────────────────────────────────────────
 
 .chip__remove {
+  position: relative; // above the label's ::after overlay
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -44,8 +80,14 @@
   line-height: 0;
   opacity: 0.6;
 
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 1;
+  }
+
+  &:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--primary-300, #a5b4fc);
+    outline-offset: 1px;
   }
 }
 
