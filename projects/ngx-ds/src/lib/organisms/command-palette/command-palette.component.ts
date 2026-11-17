@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostListener,
   computed,
   input,
   model,
@@ -34,6 +33,7 @@ let nextId = 0;
   templateUrl: './command-palette.component.html',
   styleUrl: './command-palette.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '(document:keydown)': 'onKeydown($event)' },
 })
 export class CommandPaletteComponent {
   readonly i18n = inject(NGX_DS_LABELS);
@@ -108,7 +108,6 @@ export class CommandPaletteComponent {
     return idx === this.#cursor();
   }
 
-  @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {
     const shortcut = this.openShortcut();
     if ((event.ctrlKey || event.metaKey) && event.key === shortcut) {

@@ -167,7 +167,7 @@
   }
 
   &:focus {
-    outline: 2px solid var(--ngx-color-primary);
+    outline: 2px solid var(--primary-500, #6366f1);
     outline-offset: 2px;
   }
 
@@ -182,7 +182,7 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  background-color: var(--ngx-color-primary);
+  background-color: var(--primary-600, #4f46e5);
   animation: progressDecrease linear forwards;
   opacity: 0.3;
 }
