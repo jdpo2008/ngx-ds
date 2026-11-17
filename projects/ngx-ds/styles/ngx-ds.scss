@@ -1,0 +1,23 @@
+// ngx-ds — consumer stylesheet (no Tailwind required)
+// Add it to the "styles" array in angular.json:
+//   "node_modules/@jdpo2008/ngx-ds/styles/ngx-ds.scss"
+// or load it from your global styles.scss:
+//   @use '@jdpo2008/ngx-ds/styles/ngx-ds';
+//
+// Design tokens (primitives + semantic), opt-in dark theme and deprecated
+// aliases. Everything lives in `@layer base`, so your own unlayered
+// :root overrides always win.
+@use './tokens';
+@use './themes';
+@use './legacy';
+
+@layer base {
+  :root {
+    // Font family (the library does not load the font files themselves)
+    --ngx-primary-font-family: 'Poppins', sans-serif;
+    --ngx-secondary-font-family: 'Roboto', sans-serif;
+    --ngx-font-size-base: 1rem;
+    --ngx-font-size-sm: 0.875rem;
+    --ngx-font-size-lg: 1.125rem;
+  }
+}

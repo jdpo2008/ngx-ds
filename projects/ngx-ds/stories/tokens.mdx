@@ -11,6 +11,7 @@ overrides it or switches theme.
 
 Source files (`projects/ngx-ds/styles/`):
 
+- **`ngx-ds.scss`**: the consumer entry point (`@use '@jdpo2008/ngx-ds/styles/ngx-ds';`). It loads the three partials below plus the font variables, with no Tailwind. `index.scss` adds the Tailwind directives for Storybook only.
 - **`_tokens.scss`** — primitives (`--gray-*`, `--primary-*`, `--danger-*`, `--success-*`, `--warning-*`, `--info-*`) and the semantic layer built on top of them.
 - **`_themes.scss`** — dark theme overrides, opt-in only (see below).
 - **`_legacy.scss`** — deprecated aliases (gen-2.5 `--color-*` and `--ngx-color-*`), kept for backwards compatibility. No component reads them.
