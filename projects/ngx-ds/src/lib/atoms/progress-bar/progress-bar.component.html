@@ -15,7 +15,7 @@
   [attr.aria-valuenow]="indeterminate() ? null : value()"
   [attr.aria-valuemin]="0"
   [attr.aria-valuemax]="max()"
-  [attr.aria-label]="label() || 'Progreso'"
+  [attr.aria-label]="label() || i18n.progress"
 >
   <div [class]="barClasses()" [style.width.%]="indeterminate() ? null : percentage()"></div>
 </div>

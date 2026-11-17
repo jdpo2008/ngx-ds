@@ -33,7 +33,7 @@
               <button
                 type="button"
                 class="ngx-select__tag-remove"
-                [attr.aria-label]="'Quitar ' + tagLabel(val)"
+                [attr.aria-label]="i18n.removeChip(tagLabel(val))"
                 (click)="removeTag(val, $event)"
               >
                 <ngx-ds-icon [icon]="XIcon" [size]="10" />
@@ -48,7 +48,7 @@
             <button
               type="button"
               class="ngx-select__tag-remove"
-              aria-label="Limpiar selección"
+              [attr.aria-label]="i18n.clearSelection"
               (click)="clearAll($event)"
             >
               <ngx-ds-icon [icon]="XIcon" [size]="10" />
@@ -59,7 +59,7 @@
     } @else if (!multiple() && displayText()) {
       <span class="ngx-select__value">{{ displayText() }}</span>
     } @else {
-      <span class="ngx-select__placeholder">{{ placeholder() }}</span>
+      <span class="ngx-select__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
     }
   </span>
 
@@ -68,7 +68,7 @@
     <button
       type="button"
       class="ngx-select__clear"
-      aria-label="Limpiar selección"
+      [attr.aria-label]="i18n.clearSelection"
       (click)="clearAll($event)"
     >
       <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
@@ -96,7 +96,7 @@
         <input
           class="ngx-select__search-input"
           type="text"
-          placeholder="Buscar..."
+          [placeholder]="i18n.searchPlaceholder"
           [value]="searchText()"
           (input)="onSearchChange($any($event.target).value)"
           (click)="$event.stopPropagation()"
@@ -113,7 +113,7 @@
         class="ngx-select__select-all"
         (click)="selectAll(); $event.stopPropagation()"
       >
-        Seleccionar todos
+        {{ i18n.selectAll }}
       </button>
     }
 
@@ -147,7 +147,7 @@
           <span class="ngx-select__option-label">{{ option.label }}</span>
         </li>
       } @empty {
-        <li class="ngx-select__empty">Sin resultados</li>
+        <li class="ngx-select__empty">{{ i18n.noResults }}</li>
       }
     </ul>
   </div>

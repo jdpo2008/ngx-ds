@@ -1,7 +1,7 @@
 <div [class]="hostClasses()" tabindex="0" (click)="onMarkRead()" (keydown.enter)="onMarkRead()">
   <!-- Unread dot -->
   @if (!notification().read) {
-    <span class="notif-item__dot" aria-label="No leída"></span>
+    <span class="notif-item__dot" [attr.aria-label]="i18n.unread"></span>
   }
 
   <!-- Type icon -->
@@ -34,7 +34,7 @@
   <ngx-ds-icon-button
     class="notif-item__dismiss"
     [icon]="XIcon"
-    ariaLabel="Descartar notificación"
+    [ariaLabel]="i18n.dismissNotification"
     variant="outline"
     color="secondary"
     size="sm"

@@ -19,6 +19,7 @@ import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { focusFirstOption, isActivationKey, moveOptionFocus } from '../../shared/keyboard';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface MultiSelectOption {
   value: string | number;
@@ -46,9 +47,11 @@ let nextId = 0;
   ],
 })
 export class MultiSelectComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly options = input<MultiSelectOption[]>([]);
   readonly value = model<(string | number)[]>([]);
-  readonly placeholder = input<string>('Seleccionar...');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly label = input<string>('');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');

@@ -34,6 +34,7 @@ import {
 } from 'lucide-angular';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { setupClickOutside } from '../../shared/click-outside';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 // ── Public types ─────────────────────────────────────────────────────────────
 
@@ -113,6 +114,8 @@ export interface TablePageEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent<T extends object = Record<string, unknown>> {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   protected readonly icons = {
     ArrowUp,
     ArrowDown,
@@ -170,16 +173,14 @@ export class TableComponent<T extends object = Record<string, unknown>> {
   readonly dense = input(false);
   readonly stickyHeader = input(false);
   readonly maxHeight = input<string>('');
-  readonly emptyMessage = input('No hay datos disponibles');
-  readonly emptyDescription = input<string>(
-    'Aun no hay elementos para mostrar. Intenta ajustando tus filtros o creando un nuevo elemento.',
-  );
+  readonly emptyMessage = input<string | undefined>(undefined);
+  readonly emptyDescription = input<string | undefined>(undefined);
   readonly emptyIcon = input<LucideIconData | null>(Inbox);
   readonly emptyTemplate = input<TemplateRef<void> | null>(null);
   readonly rowClickable = input(false);
 
   // ── Actions ───────────────────────────────────────────────────────────────
-  readonly addLabel = input<string>('Agregar');
+  readonly addLabel = input<string | undefined>(undefined);
   readonly showAddButton = input(true);
   readonly actions = input<TableAction<T>[]>([]);
   /** Header label for the actions column. Empty string hides the label. */
@@ -189,7 +190,7 @@ export class TableComponent<T extends object = Record<string, unknown>> {
 
   // ── Global filter ─────────────────────────────────────────────────────────
   readonly globalFilter = input(false);
-  readonly filterPlaceholder = input('Buscar...');
+  readonly filterPlaceholder = input<string | undefined>(undefined);
   /** Column keys searched by the global filter. Defaults to all visible columns. */
   readonly filterKeys = input<string[] | null>(null);
   readonly filterValue = model<string>('');

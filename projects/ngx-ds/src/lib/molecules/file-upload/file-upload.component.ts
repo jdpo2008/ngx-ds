@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  signal,
+  inject,
+} from '@angular/core';
 import {
   File as FileIcon,
   FileImage,
@@ -12,6 +20,7 @@ import {
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { ProgressBarComponent } from '../../atoms/progress-bar/progress-bar.component';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface UploadedFile {
   id: string;
@@ -41,13 +50,15 @@ export interface FileUploadState {
   host: { class: 'file-upload-host' },
 })
 export class FileUploadComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Inputs ───────────────────────────────────────────────────────────────
   readonly multiple = input<boolean>(false);
   readonly accept = input<string>('');
   readonly maxSizeMb = input<number | undefined>(undefined);
   readonly maxFiles = input<number | undefined>(undefined);
   readonly disabled = input<boolean>(false);
-  readonly label = input<string>('Arrastra archivos aquí o haz clic para seleccionar');
+  readonly label = input<string | undefined>(undefined);
   readonly hint = input<string>('');
   readonly uploadState = input<Record<string, FileUploadState>>({});
 

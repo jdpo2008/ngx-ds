@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed, inject } from '@angular/core';
 import { ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import type { TreeNode } from './tree-view.component';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 @Component({
   selector: 'ngx-ds-tree-node',
@@ -12,6 +13,8 @@ import type { TreeNode } from './tree-view.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeNodeComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly node = input.required<TreeNode>();
   readonly depth = input<number>(0);
   readonly selected = input<(string | number)[]>([]);

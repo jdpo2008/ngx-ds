@@ -14,7 +14,7 @@
   />
 
   <ngx-ds-icon class="upload-icon" [icon]="icons.Upload" [size]="32" />
-  <span class="upload-label">{{ label() }}</span>
+  <span class="upload-label">{{ label() ?? i18n.fileUploadPrompt }}</span>
   @if (hint()) {
     <span class="upload-hint">{{ hint() }}</span>
   }
@@ -72,7 +72,7 @@
 
         <ngx-ds-icon-button
           [icon]="icons.X"
-          ariaLabel="Eliminar archivo"
+          [ariaLabel]="i18n.removeFile"
           variant="outline"
           color="secondary"
           size="sm"

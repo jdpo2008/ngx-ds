@@ -1,4 +1,4 @@
-<div [class]="wrapperClasses()" role="group" aria-label="Código de verificación">
+<div [class]="wrapperClasses()" role="group" [attr.aria-label]="i18n.otpGroup">
   @for (i of indices(); track i) {
     <input
       #otpBox

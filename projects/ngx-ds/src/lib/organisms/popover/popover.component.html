@@ -13,7 +13,7 @@
   </div>
 
   @if (open()) {
-    <div [class]="panelClasses()" role="dialog" [attr.aria-label]="ariaLabel()">
+    <div [class]="panelClasses()" role="dialog" [attr.aria-label]="ariaLabel() ?? i18n.popover">
       <ng-content select="[popover-content]" />
     </div>
   }

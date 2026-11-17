@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg';
 export type SpinnerColor = 'current' | 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
@@ -11,6 +12,8 @@ export type SpinnerColor = 'current' | 'primary' | 'secondary' | 'danger' | 'suc
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpinnerComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly size = input<SpinnerSize>('md');
   readonly color = input<SpinnerColor>('current');
 

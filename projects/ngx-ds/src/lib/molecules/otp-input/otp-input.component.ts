@@ -9,8 +9,10 @@ import {
   ElementRef,
   viewChildren,
   effect,
+  inject,
 } from '@angular/core';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type OtpType = 'numeric' | 'alphanumeric';
 export type OtpSize = Size;
@@ -27,6 +29,8 @@ const BOX_FS: Record<OtpSize, string> = { sm: '0.875rem', md: '1rem', lg: '1.25r
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OtpInputComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly length = input<number>(6);
   readonly type = input<OtpType>('numeric');
   readonly size = input<OtpSize>('md');

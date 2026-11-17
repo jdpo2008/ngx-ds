@@ -6,8 +6,10 @@ import {
   input,
   model,
   signal,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 function hexToHsl(hex: string): [number, number, number] {
   let r = 0,
@@ -80,6 +82,8 @@ let nextId = 0;
   ],
 })
 export class ColorPickerComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly id = `ngx-color-picker-${nextId++}`;
   readonly value = model<string>('#6366f1');
   readonly label = input<string>('');

@@ -1,5 +1,14 @@
-import { Component, ChangeDetectionStrategy, input, model, computed, output } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  model,
+  computed,
+  output,
+  inject,
+} from '@angular/core';
 import { ButtonComponent } from '../../atoms/button/button.component';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 @Component({
   selector: 'ngx-ds-pagination',
@@ -10,6 +19,8 @@ import { ButtonComponent } from '../../atoms/button/button.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly totalPages = input.required<number>();
   readonly siblings = input<number>(1);
   readonly showBoundary = input<boolean>(true);

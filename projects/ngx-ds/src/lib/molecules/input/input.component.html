@@ -36,7 +36,7 @@
     <button
       type="button"
       class="ngx-input__password-toggle"
-      [attr.aria-label]="effectiveType() === 'text' ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+      [attr.aria-label]="effectiveType() === 'text' ? i18n.hidePassword : i18n.showPassword"
       (click)="togglePassword()"
       tabindex="-1"
     >

@@ -6,11 +6,13 @@ import {
   input,
   model,
   output,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface ChipItem {
   value: string | number;
@@ -37,6 +39,8 @@ export type ChipGroupVariant = 'filled' | 'outline' | 'soft';
   ],
 })
 export class ChipGroupComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly chips = input<ChipItem[]>([]);
   readonly selected = model<(string | number)[]>([]);
   readonly selectable = input<boolean>(true);

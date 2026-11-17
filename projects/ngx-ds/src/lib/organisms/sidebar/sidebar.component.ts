@@ -1,10 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  output,
+  inject,
+} from '@angular/core';
 import { LucideIconData, PanelLeftClose, PanelLeftOpen } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { BadgeComponent } from '../../atoms/badge/badge.component';
 import { TooltipDirective } from '../../atoms/tooltip/tooltip.directive';
 import { SidebarItem, SidebarSection } from './sidebar.types';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 @Component({
   selector: 'ngx-ds-sidebar',
@@ -15,10 +24,12 @@ import { SidebarItem, SidebarSection } from './sidebar.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly sections = input.required<SidebarSection[]>();
   readonly activeId = input<string | null>(null);
   readonly collapsible = input<boolean>(false);
-  readonly ariaLabel = input<string>('Navegación principal');
+  readonly ariaLabel = input<string | undefined>(undefined);
 
   readonly collapsed = model<boolean>(false);
   readonly itemClick = output<SidebarItem>();

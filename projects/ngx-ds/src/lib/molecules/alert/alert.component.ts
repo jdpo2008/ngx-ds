@@ -1,6 +1,15 @@
-import { Component, ChangeDetectionStrategy, input, output, signal, computed } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  output,
+  signal,
+  computed,
+  inject,
+} from '@angular/core';
 import { Info, CheckCircle2, AlertTriangle, AlertCircle, X, LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type AlertType = 'info' | 'success' | 'warning' | 'danger';
 export type AlertVariant = 'solid' | 'soft' | 'outline';
@@ -21,6 +30,8 @@ const TYPE_ICONS: Record<AlertType, LucideIconData> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly title = input<string>('');
   readonly type = input<AlertType>('info');
   readonly variant = input<AlertVariant>('soft');

@@ -30,7 +30,7 @@
     @if (displayValue()) {
       <span class="ngx-datepicker__value">{{ displayValue() }}</span>
     } @else {
-      <span class="ngx-datepicker__placeholder">{{ placeholder() }}</span>
+      <span class="ngx-datepicker__placeholder">{{ placeholder() ?? i18n.datePlaceholder }}</span>
     }
   </span>
 
@@ -39,7 +39,7 @@
     <button
       type="button"
       class="ngx-datepicker__clear"
-      aria-label="Limpiar fecha"
+      [attr.aria-label]="i18n.clearDate"
       (click)="clearValue($event)"
     >
       <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
@@ -49,13 +49,13 @@
 
 <!-- Calendar panel -->
 @if (isOpen()) {
-  <div class="ngx-datepicker__panel" role="dialog" aria-label="Calendario">
+  <div class="ngx-datepicker__panel" role="dialog" [attr.aria-label]="i18n.calendar">
     <!-- Month navigation -->
     <div class="ngx-datepicker__header">
       <button
         type="button"
         class="ngx-datepicker__nav"
-        aria-label="Mes anterior"
+        [attr.aria-label]="i18n.prevMonth"
         (click)="prevMonth(); $event.stopPropagation()"
       >
         <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
@@ -64,7 +64,7 @@
       <button
         type="button"
         class="ngx-datepicker__nav"
-        aria-label="Mes siguiente"
+        [attr.aria-label]="i18n.nextMonth"
         (click)="nextMonth(); $event.stopPropagation()"
       >
         <ngx-ds-icon [icon]="ChevronRight" [size]="16" />

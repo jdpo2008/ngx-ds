@@ -8,7 +8,7 @@
     class="number-input__btn"
     [disabled]="!canDecrement() || null"
     (click)="decrement()"
-    aria-label="Decrementar"
+    [attr.aria-label]="i18n.decrement"
   >
     <ngx-ds-icon [icon]="MinusIcon" [size]="iconSize()" />
   </button>
@@ -30,7 +30,7 @@
     class="number-input__btn"
     [disabled]="!canIncrement() || null"
     (click)="increment()"
-    aria-label="Incrementar"
+    [attr.aria-label]="i18n.increment"
   >
     <ngx-ds-icon [icon]="PlusIcon" [size]="iconSize()" />
   </button>

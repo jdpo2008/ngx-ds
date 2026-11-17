@@ -20,7 +20,7 @@
           type="button"
           class="chip__remove"
           [disabled]="chip.disabled || disabled() || null"
-          [attr.aria-label]="'Quitar ' + chip.label"
+          [attr.aria-label]="i18n.removeChip(chip.label)"
           (click)="remove(chip, $event)"
         >
           <ngx-ds-icon [icon]="XIcon" [size]="12" />

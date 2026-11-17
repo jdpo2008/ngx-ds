@@ -26,7 +26,7 @@
     @if (displayText()) {
       <span class="ngx-dropdown__value">{{ displayText() }}</span>
     } @else {
-      <span class="ngx-dropdown__placeholder">{{ placeholder() }}</span>
+      <span class="ngx-dropdown__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
     }
   </span>
 
@@ -35,7 +35,7 @@
     <button
       type="button"
       class="ngx-dropdown__clear"
-      aria-label="Limpiar selección"
+      [attr.aria-label]="i18n.clearSelection"
       (click)="clearValue($event)"
     >
       <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
@@ -72,7 +72,7 @@
           <span class="ngx-dropdown__option-label">{{ option.label }}</span>
         </li>
       } @empty {
-        <li class="ngx-dropdown__empty">Sin opciones</li>
+        <li class="ngx-dropdown__empty">{{ i18n.noOptions }}</li>
       }
     </ul>
   </div>

@@ -6,11 +6,13 @@ import {
   signal,
   computed,
   forwardRef,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideIconData, Eye, EyeOff } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type InputSize = Size;
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
@@ -35,6 +37,8 @@ let nextId = 0;
   ],
 })
 export class InputComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Configuration ────────────────────────────────────────────
   readonly label = input<string>('');
   readonly floatingLabel = input<boolean>(false);

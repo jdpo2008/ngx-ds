@@ -10,8 +10,8 @@
   <input
     class="search-input__native"
     type="search"
-    [placeholder]="placeholder()"
-    [attr.aria-label]="ariaLabel()"
+    [placeholder]="placeholder() ?? i18n.searchPlaceholder"
+    [attr.aria-label]="ariaLabel() ?? i18n.search"
     [disabled]="disabled() || null"
     [value]="value()"
     (input)="onInput($event)"
@@ -24,7 +24,7 @@
     <button
       class="search-input__clear"
       type="button"
-      aria-label="Limpiar búsqueda"
+      [attr.aria-label]="i18n.clear"
       (click)="clear()"
     >
       <ngx-ds-icon [icon]="clearIcon" [size]="iconSize()" />

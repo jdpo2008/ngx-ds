@@ -19,6 +19,7 @@ import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { focusFirstOption, isActivationKey, moveOptionFocus } from '../../shared/keyboard';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface DropdownOption {
   value: string | number;
@@ -49,11 +50,13 @@ let nextId = 0;
   ],
 })
 export class DropdownComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Configuration ──────────────────────────────────────────
   readonly options = input<DropdownOption[]>([]);
   readonly label = input<string>('');
   readonly floatingLabel = input<boolean>(false);
-  readonly placeholder = input<string>('Seleccionar...');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly size = input<DropdownSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');

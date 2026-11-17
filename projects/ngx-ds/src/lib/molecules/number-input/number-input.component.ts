@@ -5,11 +5,13 @@ import {
   forwardRef,
   input,
   model,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Plus, Minus } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type NumberInputSize = Size;
 
@@ -33,6 +35,8 @@ let nextId = 0;
   ],
 })
 export class NumberInputComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly value = model<number>(0);
   readonly min = input<number | null>(null);
   readonly max = input<number | null>(null);

@@ -1,4 +1,8 @@
-<nav class="sidebar" [class.sidebar--collapsed]="collapsed()" [attr.aria-label]="ariaLabel()">
+<nav
+  class="sidebar"
+  [class.sidebar--collapsed]="collapsed()"
+  [attr.aria-label]="ariaLabel() ?? i18n.mainNavigation"
+>
   <div class="sidebar__header">
     <ng-content select="[sidebar-header]" />
   </div>
@@ -46,7 +50,7 @@
     <ngx-ds-icon-button
       class="sidebar__toggle"
       [icon]="toggleIcon()"
-      [ariaLabel]="collapsed() ? 'Expandir menú' : 'Colapsar menú'"
+      [ariaLabel]="collapsed() ? i18n.expandMenu : i18n.collapseMenu"
       variant="outline"
       size="sm"
       (click)="toggleCollapsed()"

@@ -16,10 +16,15 @@
   >
     <ngx-ds-icon [icon]="CalendarIcon" [size]="16" class="drp__icon" />
     <span class="drp__text" [class.drp__text--placeholder]="!triggerLabel()">
-      {{ triggerLabel() || placeholder() + ' – ' + placeholder() }}
+      {{ triggerLabel() || placeholderText() + ' – ' + placeholderText() }}
     </span>
     @if (start() || end()) {
-      <button type="button" class="drp__clear" (click)="clear($event)" aria-label="Limpiar">
+      <button
+        type="button"
+        class="drp__clear"
+        (click)="clear($event)"
+        [attr.aria-label]="i18n.clear"
+      >
         ×
       </button>
     }
@@ -31,7 +36,7 @@
       #panel
       class="drp__panel"
       role="dialog"
-      aria-label="Seleccionar rango de fechas"
+      [attr.aria-label]="i18n.selectDateRange"
       (mouseleave)="onLeave()"
     >
       <!-- Left calendar -->
@@ -40,7 +45,7 @@
           <button
             type="button"
             class="drp__nav-btn"
-            aria-label="Mes anterior"
+            [attr.aria-label]="i18n.prevMonth"
             (click)="prevMonth()"
           >
             <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
@@ -110,7 +115,7 @@
           <button
             type="button"
             class="drp__nav-btn"
-            aria-label="Mes siguiente"
+            [attr.aria-label]="i18n.nextMonth"
             (click)="nextMonth()"
           >
             <ngx-ds-icon [icon]="ChevronRight" [size]="16" />

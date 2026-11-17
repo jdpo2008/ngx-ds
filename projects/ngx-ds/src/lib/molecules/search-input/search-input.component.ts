@@ -6,11 +6,13 @@ import {
   output,
   signal,
   computed,
+  inject,
 } from '@angular/core';
 import { Search, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { SpinnerComponent } from '../../atoms/spinner/spinner.component';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type SearchSize = Size;
 
@@ -25,9 +27,11 @@ const ICON_SIZE: Record<SearchSize, number> = { sm: 14, md: 16, lg: 18 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchInputComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly value = model<string>('');
-  readonly placeholder = input<string>('Buscar...');
-  readonly ariaLabel = input<string>('Buscar');
+  readonly placeholder = input<string | undefined>(undefined);
+  readonly ariaLabel = input<string | undefined>(undefined);
   readonly size = input<SearchSize>('md');
   readonly disabled = input<boolean>(false);
   readonly loading = input<boolean>(false);

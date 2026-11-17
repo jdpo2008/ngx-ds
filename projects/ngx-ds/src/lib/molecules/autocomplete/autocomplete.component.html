@@ -24,7 +24,9 @@
     [id]="id"
     type="text"
     [value]="inputText()"
-    [placeholder]="floatingLabel() && label() && !isFloating() ? '' : placeholder()"
+    [placeholder]="
+      floatingLabel() && label() && !isFloating() ? '' : (placeholder() ?? i18n.searchPlaceholder)
+    "
     [disabled]="isDisabled() || null"
     autocomplete="off"
     role="combobox"
@@ -48,7 +50,7 @@
     <button
       type="button"
       class="ngx-autocomplete__clear"
-      aria-label="Limpiar"
+      [attr.aria-label]="i18n.clear"
       (mousedown)="onClear($event)"
     >
       <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
@@ -78,12 +80,12 @@
         </li>
       } @empty {
         @if (!loading()) {
-          <li class="ngx-autocomplete__empty">{{ noResultsText() }}</li>
+          <li class="ngx-autocomplete__empty">{{ noResultsText() ?? i18n.noResults }}</li>
         }
       }
     </ul>
     @if (loading() && filteredOptions().length === 0) {
-      <p class="ngx-autocomplete__loading-text">Buscando...</p>
+      <p class="ngx-autocomplete__loading-text">{{ i18n.searching }}</p>
     }
   </div>
 }

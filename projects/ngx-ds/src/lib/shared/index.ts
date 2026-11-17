@@ -4,3 +4,4 @@ export * from './escape-close';
 export * from './size';
 export * from './keyboard';
 export * from './locale';
+export * from './labels';

@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService, ToastType, Toast } from '../../services/toast.service';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 @Component({
   selector: 'ngx-ds-toast',
@@ -11,6 +12,8 @@ import { ToastrService, ToastType, Toast } from '../../services/toast.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly toastService = inject(ToastrService);
   readonly toasts = this.toastService.toasts;
 

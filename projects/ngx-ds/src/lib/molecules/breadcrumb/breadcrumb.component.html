@@ -1,4 +1,4 @@
-<nav class="breadcrumb breadcrumb--{{ size() }}" aria-label="Breadcrumb">
+<nav class="breadcrumb breadcrumb--{{ size() }}" [attr.aria-label]="i18n.breadcrumb">
   <ol class="breadcrumb__list">
     @for (item of visibleItems(); track $index) {
       <li class="breadcrumb__item">

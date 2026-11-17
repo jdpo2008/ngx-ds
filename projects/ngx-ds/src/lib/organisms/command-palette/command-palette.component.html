@@ -8,7 +8,7 @@
     class="cp__dialog"
     role="dialog"
     aria-modal="true"
-    aria-label="Paleta de comandos"
+    [attr.aria-label]="i18n.commandPalette"
     ngxFocusTrap
     tabindex="-1"
   >
@@ -23,7 +23,7 @@
         aria-autocomplete="list"
         [attr.aria-controls]="listboxId"
         [attr.aria-activedescendant]="activeOptionId()"
-        [placeholder]="placeholder()"
+        [placeholder]="placeholder() ?? i18n.commandPlaceholder"
         [value]="query()"
         (input)="onSearch($event)"
       />
@@ -33,7 +33,7 @@
     <!-- Results -->
     <div class="cp__results" role="listbox" [attr.id]="listboxId">
       @if (filteredItems().length === 0) {
-        <div class="cp__empty">Sin resultados para "{{ query() }}"</div>
+        <div class="cp__empty">{{ i18n.noResultsFor(query()) }}</div>
       } @else {
         @for (group of categories(); track group.cat) {
           @if (group.cat) {
@@ -72,9 +72,12 @@
 
     <!-- Footer -->
     <div class="cp__footer">
-      <span><ngx-ds-kbd size="sm">↑</ngx-ds-kbd> <ngx-ds-kbd size="sm">↓</ngx-ds-kbd> navegar</span>
-      <span><ngx-ds-kbd size="sm">↵</ngx-ds-kbd> seleccionar</span>
-      <span><ngx-ds-kbd size="sm">Esc</ngx-ds-kbd> cerrar</span>
+      <span
+        ><ngx-ds-kbd size="sm">↑</ngx-ds-kbd> <ngx-ds-kbd size="sm">↓</ngx-ds-kbd>
+        {{ i18n.hintNavigate }}</span
+      >
+      <span><ngx-ds-kbd size="sm">↵</ngx-ds-kbd> {{ i18n.hintSelect }}</span>
+      <span><ngx-ds-kbd size="sm">Esc</ngx-ds-kbd> {{ i18n.hintClose }}</span>
     </div>
   </div>
 }

@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { NGX_DS_LABELS } from '../shared/labels';
 
 export interface ConfirmationOptions {
   title: string;
@@ -16,12 +17,14 @@ export interface ConfirmationState extends ConfirmationOptions {
   providedIn: 'root',
 })
 export class ConfirmationService {
+  readonly #labels = inject(NGX_DS_LABELS);
+
   private readonly _state = signal<ConfirmationState>({
     isOpen: false,
     title: '',
     message: '',
-    confirmText: 'Confirmar',
-    cancelText: 'Cancelar',
+    confirmText: this.#labels.confirm,
+    cancelText: this.#labels.cancel,
     type: 'info',
   });
 
@@ -35,8 +38,8 @@ export class ConfirmationService {
       this._state.set({
         ...options,
         isOpen: true,
-        confirmText: options.confirmText || 'Confirmar',
-        cancelText: options.cancelText || 'Cancelar',
+        confirmText: options.confirmText || this.#labels.confirm,
+        cancelText: options.cancelText || this.#labels.cancel,
         type: options.type || 'info',
       });
     });
