@@ -11,8 +11,15 @@ npm run storybook
 # Build the library (ng-packagr → dist/ngx-ds)
 npm run build
 
-# Run unit tests (Vitest) — no *.spec.ts files exist yet
-ng test
+# Run unit tests (Vitest, specs in src/**/*.spec.ts) — single run: npx ng test --watch=false
+npm test
+
+# Lint (angular-eslint) — must report 0 errors
+npm run lint
+
+# Prettier check / fix (src + stories)
+npm run format:check
+npm run format
 
 # Watch build (dev)
 npm run watch
@@ -82,7 +89,7 @@ All components use `ChangeDetectionStrategy.OnPush` and are `standalone: true`.
 
 ### Services
 
-`ToastService` and `ConfirmationService` in `src/lib/services/` are signal-based, `providedIn: 'root'` injectables. The Toast and Confirmation organisms read from these services; consumers trigger them by injecting the service.
+`ToastrService` (file `toast.service.ts`) and `ConfirmationService` in `src/lib/services/` are signal-based, `providedIn: 'root'` injectables. The Toast and Confirmation organisms read from these services; consumers trigger them by injecting the service.
 
 ### Content projection patterns
 
@@ -118,7 +125,8 @@ Also in `shared/`: `Size` type (`'sm' | 'md' | 'lg'`) for size inputs, and `day-
 1. `src/lib/<tier>/<name>/` with `.component.ts/.html/.scss` + `index.ts` barrel.
 2. Add `export * from './lib/<tier>/<name>';` to `src/public-api.ts` in its tier section.
 3. Add a story at `stories/<tier>/<name>/<name>.stories.ts`.
-4. Run `npm run build` — there are no unit specs yet, so the build is the real verification.
+4. Optionally add a `<name>.component.spec.ts` next to the component (Vitest + TestBed; see `atoms/badge/badge.component.spec.ts`).
+5. Verify: `npm run lint`, `npx ng test --watch=false` and `npm run build` — the same checks CI runs on every PR (`.github/workflows/ci.yml`).
 
 ### Storybook stories
 
