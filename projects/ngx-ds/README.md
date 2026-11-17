@@ -106,3 +106,7 @@ bootstrapApplication(AppComponent, {
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/jdpo2008/ngx-ds/blob/master/CHANGELOG.md).
+
+## License
+
+[MIT](https://github.com/jdpo2008/ngx-ds/blob/master/LICENSE)
