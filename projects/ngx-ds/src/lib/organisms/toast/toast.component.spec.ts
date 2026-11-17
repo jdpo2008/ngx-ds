@@ -32,6 +32,8 @@ describe('ToastComponent', () => {
     expect(toast.querySelector('.toast__title')?.textContent).toContain('Listo');
     expect(toast.querySelector('.toast__message')?.textContent).toContain('Guardado');
     expect(toast.querySelector('.toast__progress')).not.toBeNull();
+    // Icon color comes from the theme tokens in SCSS, not an inline style.
+    expect(toast.querySelector<HTMLElement>('.toast__icon')!.style.color).toBe('');
   });
 
   it('groups toasts by position', () => {

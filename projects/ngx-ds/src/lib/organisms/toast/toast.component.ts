@@ -50,18 +50,6 @@ export class ToastComponent {
     return icons[effectiveType];
   }
 
-  getIconColor(type: ToastType | undefined): string {
-    const defaultType: ToastType = 'info';
-    const effectiveType = type || defaultType;
-    const colors: Record<ToastType, string> = {
-      success: '#10b981',
-      error: '#ef4444',
-      warning: '#f59e0b',
-      info: '#3b82f6',
-    };
-    return colors[effectiveType];
-  }
-
   onClose(id: string): void {
     this.toastService.remove(id);
   }
