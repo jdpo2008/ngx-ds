@@ -1,64 +1,112 @@
-# NgxDs
+# @jdpo2008/ngx-ds
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+An Angular 21 component library: standalone components, a signal-based API, `OnPush` change detection and CSS custom-property design tokens with an opt-in dark theme.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Install
 
 ```bash
-ng generate component component-name
+npm install @jdpo2008/ngx-ds lucide-angular
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Peer dependencies: `@angular/common`, `@angular/core`, `@angular/forms` and `@angular/platform-browser` 21, and `lucide-angular` 1.
 
-```bash
-ng generate --help
+## Styles
+
+Load the design tokens once, globally. Add the stylesheet to `angular.json`:
+
+```json
+"styles": ["node_modules/@jdpo2008/ngx-ds/styles/ngx-ds.scss", "src/styles.scss"]
 ```
 
-## Building
+or `@use` it from your global `styles.scss`:
 
-To build the library, run:
-
-```bash
-ng build ngx-ds
+```scss
+@use '@jdpo2008/ngx-ds/styles/ngx-ds';
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+No Tailwind is required. Components use the `Poppins` font family by default but do not load it. Load it yourself, or point `--ngx-primary-font-family` at another font.
 
-### Publishing the Library
+### Theming
 
-Once the project is built, you can publish your library by following these steps:
+Every color is a CSS custom property (`--primary-600`, `--text-base`, `--surface-base`, `--border-base`, …). Override any of them in your own `:root`:
 
-1. Navigate to the `dist` directory:
-
-   ```bash
-   cd dist/ngx-ds
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+```css
+:root {
+  --primary-600: #0d9488;
+}
 ```
 
-## Running end-to-end tests
+The dark theme is opt-in. Set `data-theme="dark"` on `<html>` or add the `dark` class to an ancestor.
 
-For end-to-end (e2e) testing, run:
+## Usage
 
-```bash
-ng e2e
+Every component is standalone. Import it where you use it:
+
+```ts
+import { Component } from '@angular/core';
+import { ButtonComponent, InputComponent } from '@jdpo2008/ngx-ds';
+
+@Component({
+  selector: 'app-root',
+  imports: [ButtonComponent, InputComponent],
+  template: `
+    <ngx-ds-input [(value)]="name" />
+    <ngx-ds-button (click)="save()">Save</ngx-ds-button>
+  `,
+})
+export class AppComponent {
+  name = '';
+  save() {}
+}
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Form controls (Input, Select, Checkbox, Datepicker, …) implement `ControlValueAccessor`, so they also work with `ngModel` and reactive forms. SearchInput is the exception: bind it with `[(value)]`.
 
-## Additional Resources
+### Toasts and confirmations
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Place the hosts once, usually in the root component, and trigger them from the services:
+
+<!-- prettier-ignore -->
+```html
+<ngx-ds-toast />
+<ngx-ds-confirmation />
+```
+
+```ts
+const toastr = inject(ToastrService);
+const confirmation = inject(ConfirmationService);
+
+toastr.success('Changes saved');
+const ok = await confirmation.confirm({
+  title: 'Delete',
+  message: 'Are you sure?',
+  type: 'danger',
+});
+```
+
+### Language
+
+Labels default to Spanish and dates to `es-ES`. To switch app-wide:
+
+```ts
+import { NGX_DS_LABELS_EN, provideNgxDsLabels, provideNgxDsLocale } from '@jdpo2008/ngx-ds';
+
+bootstrapApplication(AppComponent, {
+  providers: [provideNgxDsLabels(NGX_DS_LABELS_EN), provideNgxDsLocale('en-US')],
+});
+```
+
+## Components
+
+- **Atoms:** Avatar, Badge, Button, Divider, Icon, IconButton, Kbd, MenuButton, ProgressBar, Skeleton, Spinner, Tag, Tooltip.
+- **Molecules:** Alert, Autocomplete, AvatarGroup, Breadcrumb, ButtonGroup, Card, Checkbox, ChipGroup, ColorPicker, Datepicker, DateRangePicker, Dropdown, EmptyState, FileUpload, FormField, Input, Menu, MultiSelect, NumberInput, OtpInput, PasswordStrength, Radio, RangeSlider, Rating, SearchInput, SegmentedControl, Select, Switch, Textarea.
+- **Organisms:** Accordion, Calendar, CommandPalette, Confirmation, ContextMenu, Drawer, Modal, NotificationCenter, Pagination, Popover, Sidebar, Stepper, Table, Tabs, Timeline, Toast, TreeView, UserMenu.
+- **Directives:** FocusTrap.
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/jdpo2008/ngx-ds/blob/master/CHANGELOG.md).
+
+## License
+
+[MIT](https://github.com/jdpo2008/ngx-ds/blob/master/LICENSE)

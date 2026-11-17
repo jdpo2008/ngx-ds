@@ -1,0 +1,55 @@
+name: Release
+
+# Publishes @jdpo2008/ngx-ds to npm when a GitHub release is published.
+# The release tag must be `v<version>` and match projects/ngx-ds/package.json.
+# Requires the repository secret NPM_TOKEN (an npm automation/granular token
+# with publish rights on the @jdpo2008 scope).
+
+on:
+  release:
+    types: [published]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Check tag matches package version
+        run: |
+          version=$(node -p "require('./projects/ngx-ds/package.json').version")
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match package version v${version}"
+            exit 1
+          fi
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npx ng test --watch=false
+
+      - name: Build library
+        run: npm run build
+
+      - name: Publish
+        run: npm publish ./dist/ngx-ds --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

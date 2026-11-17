@@ -32,6 +32,15 @@ npm run build-storybook
 
 This is **ngx-ds**, an Angular 21 component library built with `ng-packagr`. The library entry point is `projects/ngx-ds/src/public-api.ts`. Built output goes to `dist/ngx-ds`.
 
+### Releasing
+
+Published to npm as `@jdpo2008/ngx-ds` (the unscoped `ngx-ds` name belongs to someone else).
+
+1. Bump `version` in `projects/ngx-ds/package.json` and add a section to `CHANGELOG.md` (root), via a normal PR.
+2. After merging, create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish --provenance` with the `NPM_TOKEN` secret.
+
+Consumers load `styles/ngx-ds.scss` (tokens, no Tailwind). `styles/index.scss` adds the Tailwind directives for Storybook only.
+
 ### Component tiers
 
 Components are organized in three tiers, each in its own folder under `projects/ngx-ds/src/lib/`:
