@@ -12,7 +12,7 @@
 
   // ── Borders ────────────────────────────────────────────────────────────
   &--bordered {
-    border: 1.5px solid var(--border-color, #e5e7eb);
+    border: 1.5px solid var(--border-base, #e5e7eb);
   }
 
   // ── Shadows ────────────────────────────────────────────────────────────
@@ -55,7 +55,7 @@
 
 .card__header {
   padding: 0; // padding comes from the pad modifier below, applied to body
-  border-bottom: 1.5px solid var(--border-color, #e5e7eb);
+  border-bottom: 1.5px solid var(--border-base, #e5e7eb);
 
   &:not(:has(*)) {
     display: none;
@@ -73,7 +73,7 @@
 // ── Footer ────────────────────────────────────────────────────────────────────
 
 .card__footer {
-  border-top: 1.5px solid var(--border-color, #e5e7eb);
+  border-top: 1.5px solid var(--border-base, #e5e7eb);
 
   &:not(:has(*)) {
     display: none;

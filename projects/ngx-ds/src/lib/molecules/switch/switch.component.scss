@@ -1,11 +1,11 @@
 @use 'sass:list';
 
 $switch-colors: (
-  'primary': var(--color-primary, #3b82f6),
-  'secondary': var(--color-secondary, #6b7280),
-  'danger': var(--color-danger, #ef4444),
+  'primary': var(--primary-500, #6366f1),
+  'secondary': var(--gray-500, #6b7280),
+  'danger': var(--danger-500, #ef4444),
   'success': #10b981,
-  'warning': var(--color-warning, #f59e0b),
+  'warning': var(--warning-500, #f59e0b),
 );
 
 // track-w, track-h, padding, thumb-size, travel

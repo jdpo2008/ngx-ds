@@ -46,12 +46,12 @@ $sizes: (
     box-shadow 0.15s ease;
 
   &--focused {
-    border-color: var(--color-primary, #3b82f6);
+    border-color: var(--primary-500, #6366f1);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
   }
 
   &--error {
-    border-color: var(--color-danger, #ef4444);
+    border-color: var(--danger-500, #ef4444);
 
     &.ngx-input__field--focused {
       box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
@@ -133,14 +133,14 @@ $sizes: (
     font-size: 0.7rem;
     background: var(--surface-base, #fff);
     padding: 0 0.25rem;
-    color: var(--color-primary, #3b82f6);
+    color: var(--primary-500, #6366f1);
   }
 
   &--focused:not(&--error) {
-    color: var(--color-primary, #3b82f6);
+    color: var(--primary-500, #6366f1);
   }
   &--error {
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
   }
 }
 
@@ -179,6 +179,6 @@ $sizes: (
     color: var(--text-muted, #6b7280);
   }
   &--error {
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
   }
 }

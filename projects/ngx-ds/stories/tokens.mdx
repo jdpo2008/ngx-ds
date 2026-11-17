@@ -13,7 +13,7 @@ Source files (`projects/ngx-ds/styles/`):
 
 - **`_tokens.scss`** — primitives (`--gray-*`, `--primary-*`, `--danger-*`, `--success-*`, `--warning-*`, `--info-*`) and the semantic layer built on top of them.
 - **`_themes.scss`** — dark theme overrides, opt-in only (see below).
-- **`_legacy.scss`** — deprecated `--ngx-color-*` variables, kept as aliases for backwards compatibility.
+- **`_legacy.scss`** — deprecated aliases (gen-2.5 `--color-*` and `--ngx-color-*`), kept for backwards compatibility. No component reads them.
 
 ## Primitives
 
@@ -59,9 +59,9 @@ Source files (`projects/ngx-ds/styles/`):
     colors={{ 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }}
   />
   <ColorItem
-    title="Warning (yellow)"
+    title="Warning (amber)"
     subtitle="--warning-*"
-    colors={{ 50: '#fefce8', 100: '#fef9c3', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }}
+    colors={{ 50: '#fffbeb', 100: '#fef3c7', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }}
   />
   <ColorItem
     title="Info (blue)"
@@ -70,7 +70,7 @@ Source files (`projects/ngx-ds/styles/`):
   />
 </ColorPalette>
 
-> **Nota:** `--color-warning` (el alias semántico usado por la mayoría de componentes) es `#f59e0b` (amber-500), literal — no coincide exactamente con `--warning-500` (`#eab308`) porque no existe una escala amber propia todavía. `--color-primary` resuelve a la escala **info** (azul `#3b82f6`), no a `--primary-*` (índigo): la unificación de "primary" azul vs. índigo vs. verde de marca queda fuera de este cambio (ver "Pendientes").
+> **Nota:** `--primary-*` (índigo) es el color primario de todos los componentes: sobreescribir `--primary-500` (y su escala) re-tematiza la librería. El verde de marca (`--ngx-color-primary`) sigue fuera de la escala.
 
 ## Semantic tokens
 
@@ -92,22 +92,6 @@ Source files (`projects/ngx-ds/styles/`):
 | `--border-input`     | `var(--gray-300)` | Borde de campos de formulario             |
 | `--border-strong`    | `var(--gray-400)` | Borde enfatizado                          |
 
-### Alias gen-2.5
-
-Usados por varios componentes más antiguos; resuelven a la escala anterior:
-
-| Alias                 | Resuelve a                    |
-| --------------------- | ----------------------------- |
-| `--color-primary`     | `var(--info-500)` (`#3b82f6`) |
-| `--color-primary-50`  | `var(--info-50)`              |
-| `--color-danger`      | `var(--danger-500)`           |
-| `--color-success`     | `var(--success-500)`          |
-| `--color-warning`     | `#f59e0b` (literal)           |
-| `--color-secondary`   | `var(--gray-500)`             |
-| `--border-color`      | `var(--border-base)`          |
-| `--text-primary`      | `var(--text-base)`            |
-| `--surface-secondary` | `var(--surface-subtle)`       |
-
 ## Dark mode
 
 El tema oscuro es **opt-in** — ngx-ds nunca activa `prefers-color-scheme`
@@ -127,18 +111,35 @@ oscuros. Los componentes que ya usan tokens semánticos reaccionan
 automáticamente; los que aún dependen de hex hardcoded sin fallback a token
 no lo harán (ver tabla de deprecados).
 
-## Deprecados (`--ngx-color-*`)
+## Deprecados
 
-Predatan el sistema de tokens actual. Se mantienen como alias por
-compatibilidad — usa el sustituto en código nuevo.
+Se mantienen como alias en `_legacy.scss` por compatibilidad, pero **ningún
+componente los lee**: sobreescribirlos ya no cambia los componentes. Usa el
+sustituto. Se eliminarán en la próxima versión major.
+
+### Alias gen-2.5 (`--color-*`)
+
+| Alias                 | Sustituto          |
+| --------------------- | ------------------ |
+| `--color-primary`     | `--primary-500`    |
+| `--color-primary-50`  | `--primary-50`     |
+| `--color-danger`      | `--danger-500`     |
+| `--color-success`     | `--success-500`    |
+| `--color-warning`     | `--warning-500`    |
+| `--color-secondary`   | `--gray-500`       |
+| `--border-color`      | `--border-base`    |
+| `--text-primary`      | `--text-base`      |
+| `--surface-secondary` | `--surface-subtle` |
+
+### `--ngx-color-*`
 
 | Legacy                           | Sustituto          | Nota                                                                                |
 | -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
 | `--ngx-color-primary`            | —                  | Verde de marca (`#1fdd5e`), sin equivalente en la escala nueva; se mantiene literal |
 | `--ngx-color-primary-dark`       | —                  | Idem, sin equivalente                                                               |
 | `--ngx-color-primary-success`    | —                  | Emerald (`#10b981`), sin equivalente; se mantiene literal                           |
-| `--ngx-color-primary-error`      | `--color-danger`   |                                                                                     |
-| `--ngx-color-primary-warning`    | `--color-warning`  |                                                                                     |
+| `--ngx-color-primary-error`      | `--danger-500`     |                                                                                     |
+| `--ngx-color-primary-warning`    | `--warning-500`    |                                                                                     |
 | `--ngx-color-primary-info`       | `--info-500`       |                                                                                     |
 | `--ngx-color-primary-background` | `--surface-subtle` |                                                                                     |
 | `--ngx-color-primary-title`      | `--text-base`      |                                                                                     |
@@ -149,7 +150,5 @@ compatibilidad — usa el sustituto en código nuevo.
 
 ## Pendiente (fuera de este cambio)
 
-- Consolidar "primary" — hoy conviven azul (`--color-primary`/`--info-*`),
-  índigo (`--primary-*`) y verde de marca (`--ngx-color-primary`). Es un
-  cambio visual/de producto, no se toca aquí.
+- Decidir si el verde de marca (`--ngx-color-primary`) pasa a ser la escala `--primary-*`.
 - Reactivar `prefers-color-scheme` automático queda a criterio del consumidor.

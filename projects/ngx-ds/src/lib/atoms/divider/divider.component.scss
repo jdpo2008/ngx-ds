@@ -5,7 +5,7 @@
 // ── Base ──────────────────────────────────────────────────────────────────────
 
 .divider {
-  border-color: var(--border-color, #e5e7eb);
+  border-color: var(--border-base, #e5e7eb);
 
   // ── Horizontal ───────────────────────────────────────────────────────────
   &--horizontal {

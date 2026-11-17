@@ -1,17 +1,35 @@
 // ngx-ds — Legacy tokens (deprecated)
-// `--ngx-color-*` predates the token system in _tokens.scss. Kept as aliases
-// for backwards compatibility; prefer the semantic tokens in new code.
+// No component reads these any more. They are kept as aliases so consumer
+// stylesheets that still reference them keep working; they will be removed in
+// the next major. Use the primitive/semantic tokens from _tokens.scss instead.
+//
+// Note: overriding a deprecated alias no longer re-themes the components —
+// override the canonical token (e.g. `--primary-500`) instead.
+//
+// `--ngx-color-*` predates the token system in _tokens.scss.
 // Brand green (#1fdd5e) and emerald success (#10b981) have no equivalent in
 // the new scale and stay literal.
 
 @layer base {
   :root {
+    // ── Gen-2.5 aliases (deprecated) ────────────────────────────────────────
+    --color-primary:     var(--primary-500);
+    --color-primary-50:  var(--primary-50);
+    --color-danger:      var(--danger-500);
+    --color-success:     var(--success-500);
+    --color-warning:     var(--warning-500);
+    --color-secondary:   var(--gray-500);
+    --border-color:      var(--border-base);
+    --text-primary:      var(--text-base);
+    --surface-secondary: var(--surface-subtle);
+
+    // ── --ngx-color-* (deprecated) ──────────────────────────────────────────
     // Primary (brand green — literal, no equivalent)
     --ngx-color-primary: #1fdd5e;
     --ngx-color-primary-dark: #1bbf52;
     --ngx-color-primary-success: #10b981;
     --ngx-color-primary-error: var(--danger-500);
-    --ngx-color-primary-warning: var(--color-warning);
+    --ngx-color-primary-warning: var(--warning-500);
     --ngx-color-primary-info: var(--info-500);
 
     // Neutral
