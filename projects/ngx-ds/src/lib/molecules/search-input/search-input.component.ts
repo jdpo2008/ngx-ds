@@ -35,13 +35,6 @@ export class SearchInputComponent {
 
   /** Emits the current query when the user presses Enter. */
   readonly searchSubmit = output<string>();
-  /**
-   * @deprecated Use `(searchSubmit)` instead. `search` clashes with the native DOM
-   * `search` event. Still emitted alongside `searchSubmit`; will be removed in the
-   * next major.
-   */
-  // eslint-disable-next-line @angular-eslint/no-output-native
-  readonly search = output<string>();
   readonly cleared = output<void>();
 
   protected readonly focused = signal(false);
@@ -72,9 +65,7 @@ export class SearchInputComponent {
 
   protected onKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Enter') return;
-    const query = this.value();
-    this.searchSubmit.emit(query);
-    this.search.emit(query);
+    this.searchSubmit.emit(this.value());
   }
 
   protected clear(): void {
