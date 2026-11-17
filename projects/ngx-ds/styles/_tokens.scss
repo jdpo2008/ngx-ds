@@ -72,7 +72,7 @@
     --text-placeholder: var(--gray-400);
     --text-disabled:    var(--gray-300);
     --text-inverse:     #ffffff;
-    --text-on-color:    #ffffff; // text/marks on colored fills; same in dark
+    --text-on-color:    #ffffff; // text/marks on solid colored fills
 
     // Surfaces
     --surface-base:   #ffffff;
@@ -80,6 +80,8 @@
     --surface-muted:  var(--gray-100);
     --surface-hover:  var(--gray-100);
     --surface-active: var(--gray-200);
+    --surface-thumb:  #ffffff;         // switch / slider thumbs; same in dark
+    --fill-neutral:   var(--gray-500); // solid neutral fills (secondary variants)
 
     // Borders
     --border-subtle: var(--gray-100);
