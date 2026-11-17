@@ -50,7 +50,7 @@ Rules:
 `<name>.component.scss`:
 - `:host { display: ...; font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif); }`
 - Short BEM block (`badge`, `um__trigger`).
-- Tokens with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. Not the legacy `--ngx-color-*`.
+- Tokens with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. Never the deprecated aliases in `styles/_legacy.scss` (`--color-*`, `--ngx-color-*`, …).
 
 `index.ts`: `export * from './<name>.component';`
 

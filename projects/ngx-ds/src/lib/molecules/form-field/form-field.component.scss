@@ -14,7 +14,7 @@
 
   &__required {
     margin-left: 0.125rem;
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
   }
 
   &__control {
@@ -33,7 +33,7 @@
       color: var(--text-muted, #6b7280);
     }
     &--error {
-      color: var(--color-danger, #ef4444);
+      color: var(--danger-500, #ef4444);
     }
   }
 }

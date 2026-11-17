@@ -14,7 +14,7 @@
 // ── Flush: no gap, outer border from container ────────────────────────────────
 
 .accordion--flush {
-  border: 1.5px solid var(--border-color, #e5e7eb);
+  border: 1.5px solid var(--border-base, #e5e7eb);
   border-radius: 0.5rem;
   overflow: hidden;
 

@@ -85,7 +85,7 @@ All components use `ChangeDetectionStrategy.OnPush` and are `standalone: true`.
 
 - Each component's `:host` sets `display` and `font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif)`.
 - Class names use short BEM blocks scoped to the component (`btn__icon`, `nc__panel`, `um__trigger`).
-- Colors and surfaces use short CSS custom properties with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. These are **not** the `--ngx-color-*` tokens defined in `styles/index.scss` (those are legacy).
+- Colors and surfaces use short CSS custom properties with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. Tokens live in `styles/_tokens.scss` (dark overrides in `_themes.scss`). Never use the deprecated aliases in `styles/_legacy.scss` (`--color-*`, `--border-color`, `--text-primary`, `--surface-secondary`, `--ngx-color-*`) — no component reads them.
 
 ### Services
 

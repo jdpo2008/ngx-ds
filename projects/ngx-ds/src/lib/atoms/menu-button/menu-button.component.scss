@@ -48,35 +48,35 @@
 
   // ── Colors ─────────────────────────────────────────────────────────────
   &--default {
-    color: var(--text-primary, #111827);
+    color: var(--text-base, #111827);
     &:hover:not(:disabled) {
       background: var(--surface-hover, #f3f4f6);
     }
   }
 
   &--primary {
-    color: var(--color-primary, #3b82f6);
+    color: var(--primary-500, #6366f1);
     &:hover:not(:disabled) {
-      background: var(--color-primary-50, #eff6ff);
+      background: var(--primary-50, #eef2ff);
     }
   }
 
   &--danger {
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
     &:hover:not(:disabled) {
       background: #fef2f2;
     }
   }
 
   &--success {
-    color: var(--color-success, #22c55e);
+    color: var(--success-500, #22c55e);
     &:hover:not(:disabled) {
       background: #f0fdf4;
     }
   }
 
   &--warning {
-    color: var(--color-warning, #f59e0b);
+    color: var(--warning-500, #f59e0b);
     &:hover:not(:disabled) {
       background: #fffbeb;
     }

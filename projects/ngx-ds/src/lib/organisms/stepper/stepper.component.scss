@@ -86,17 +86,17 @@
   outline: none;
 
   .stepper__item.is-active & {
-    border-color: var(--color-primary, #3b82f6);
-    color: var(--color-primary, #3b82f6);
+    border-color: var(--primary-500, #6366f1);
+    color: var(--primary-500, #6366f1);
   }
   .stepper__item.is-completed & {
-    border-color: var(--color-primary, #3b82f6);
-    background: var(--color-primary, #3b82f6);
+    border-color: var(--primary-500, #6366f1);
+    background: var(--primary-500, #6366f1);
     color: #fff;
   }
   .stepper__item.is-error & {
-    border-color: var(--color-danger, #ef4444);
-    background: var(--color-danger, #ef4444);
+    border-color: var(--danger-500, #ef4444);
+    background: var(--danger-500, #ef4444);
     color: #fff;
   }
 
@@ -114,7 +114,7 @@
 // ── Connector ──────────────────────────────────────────────────────────────
 
 .stepper__line {
-  background: var(--border-color, #e5e7eb);
+  background: var(--border-base, #e5e7eb);
   transition: background 0.3s ease;
 
   .stepper--horizontal & {
@@ -128,7 +128,7 @@
   }
 
   &--done {
-    background: var(--color-primary, #3b82f6);
+    background: var(--primary-500, #6366f1);
   }
 }
 
@@ -149,7 +149,7 @@
     color: var(--text-secondary, #374151);
   }
   .stepper__item.is-error & {
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
   }
 }
 

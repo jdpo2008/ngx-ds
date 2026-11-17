@@ -149,10 +149,10 @@ $status-sizes: (
       background-color: var(--gray-400, #9ca3af);
     }
     &--away {
-      background-color: var(--color-warning, #f59e0b);
+      background-color: var(--warning-500, #f59e0b);
     }
     &--busy {
-      background-color: var(--color-danger, #ef4444);
+      background-color: var(--danger-500, #ef4444);
     }
   }
 }

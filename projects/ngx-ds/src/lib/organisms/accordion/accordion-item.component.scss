@@ -8,7 +8,7 @@
 .accordion-item {
   // ── Default variant ─────────────────────────────────────────────────────
   &--default {
-    border: 1.5px solid var(--border-color, #e5e7eb);
+    border: 1.5px solid var(--border-base, #e5e7eb);
     border-radius: 0.5rem;
     background: var(--surface-base, #fff);
     overflow: hidden;
@@ -22,7 +22,7 @@
 
   // ── Flush variant ────────────────────────────────────────────────────────
   &--flush {
-    border-bottom: 1.5px solid var(--border-color, #e5e7eb);
+    border-bottom: 1.5px solid var(--border-base, #e5e7eb);
 
     .accordion-item__trigger {
       &:hover:not(:disabled) {

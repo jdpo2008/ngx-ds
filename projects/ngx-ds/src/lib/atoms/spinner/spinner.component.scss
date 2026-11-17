@@ -40,19 +40,19 @@
     border-color: currentColor;
   }
   &--primary {
-    border-color: var(--color-primary, #3b82f6);
+    border-color: var(--primary-500, #6366f1);
   }
   &--secondary {
-    border-color: var(--color-secondary, #6b7280);
+    border-color: var(--gray-500, #6b7280);
   }
   &--danger {
-    border-color: var(--color-danger, #ef4444);
+    border-color: var(--danger-500, #ef4444);
   }
   &--success {
-    border-color: var(--color-success, #22c55e);
+    border-color: var(--success-500, #22c55e);
   }
   &--warning {
-    border-color: var(--color-warning, #f59e0b);
+    border-color: var(--warning-500, #f59e0b);
   }
 }
 

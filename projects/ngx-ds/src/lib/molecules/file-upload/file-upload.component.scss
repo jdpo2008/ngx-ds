@@ -25,11 +25,11 @@
 
   &:hover:not(.upload-zone--disabled),
   &--dragging {
-    border-color: var(--color-primary, #3b82f6);
+    border-color: var(--primary-500, #6366f1);
     background: rgba(59, 130, 246, 0.04);
 
     .upload-icon {
-      color: var(--color-primary, #3b82f6);
+      color: var(--primary-500, #6366f1);
     }
   }
 
@@ -88,7 +88,7 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   padding: 0.625rem 0.875rem;
-  border: 1px solid var(--border-color, #e5e7eb);
+  border: 1px solid var(--border-base, #e5e7eb);
   border-radius: 0.5rem;
   background: var(--surface-base, #fff);
 
@@ -98,7 +98,7 @@
     background: rgba(239, 68, 68, 0.04);
 
     .upload-file__meta {
-      color: var(--color-danger, #ef4444);
+      color: var(--danger-500, #ef4444);
     }
   }
 }
@@ -114,7 +114,7 @@
     color: #10b981;
   }
   &--error {
-    color: var(--color-danger, #ef4444);
+    color: var(--danger-500, #ef4444);
   }
 }
 

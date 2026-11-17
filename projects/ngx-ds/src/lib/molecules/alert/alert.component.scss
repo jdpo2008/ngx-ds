@@ -15,13 +15,13 @@ $alert-types: (
     #065f46,
   ),
   'warning': (
-    var(--color-warning, #f59e0b),
+    var(--warning-500, #f59e0b),
     #fffbeb,
     #fde68a,
     #92400e,
   ),
   'danger': (
-    var(--color-danger, #ef4444),
+    var(--danger-500, #ef4444),
     var(--danger-50, #fef2f2),
     #fecaca,
     #991b1b,
