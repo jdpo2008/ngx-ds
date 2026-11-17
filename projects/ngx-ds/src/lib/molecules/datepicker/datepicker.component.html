@@ -79,29 +79,36 @@
     </div>
 
     <!-- Day grid -->
-    <div class="ngx-datepicker__days" role="grid">
-      @for (cell of calendarDays(); track trackByTime($index, cell)) {
-        <button
-          type="button"
-          class="ngx-datepicker__day"
-          [class.ngx-datepicker__day--other-month]="!cell.inMonth"
-          [class.ngx-datepicker__day--today]="cell.isToday"
-          [class.ngx-datepicker__day--selected]="cell.isSelected"
-          [class.ngx-datepicker__day--disabled]="cell.isDisabled"
-          [disabled]="cell.isDisabled || null"
-          [attr.aria-label]="
-            cell.date.toLocaleDateString('es-ES', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })
-          "
-          [attr.aria-pressed]="cell.isSelected"
-          role="gridcell"
-          (click)="selectDate(cell); $event.stopPropagation()"
-        >
-          {{ cell.date.getDate() }}
-        </button>
+    <div #grid class="ngx-datepicker__days" role="grid" [attr.aria-label]="headerText()">
+      @for (week of calendarWeeks(); track $index) {
+        <div class="ngx-datepicker__week" role="row">
+          @for (cell of week; track trackByTime($index, cell)) {
+            <button
+              type="button"
+              class="ngx-datepicker__day"
+              [class.ngx-datepicker__day--other-month]="!cell.inMonth"
+              [class.ngx-datepicker__day--today]="cell.isToday"
+              [class.ngx-datepicker__day--selected]="cell.isSelected"
+              [class.ngx-datepicker__day--disabled]="cell.isDisabled"
+              [attr.aria-disabled]="cell.isDisabled || null"
+              [attr.aria-label]="
+                cell.date.toLocaleDateString('es-ES', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })
+              "
+              [attr.aria-selected]="cell.isSelected"
+              [attr.aria-current]="cell.isToday ? 'date' : null"
+              [attr.tabindex]="isFocusTarget(cell) ? 0 : -1"
+              role="gridcell"
+              (click)="selectDate(cell); $event.stopPropagation()"
+              (keydown)="onDayKeydown($event, cell)"
+            >
+              {{ cell.date.getDate() }}
+            </button>
+          }
+        </div>
       }
     </div>
 

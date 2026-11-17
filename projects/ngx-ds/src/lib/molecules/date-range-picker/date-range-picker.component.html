@@ -27,40 +27,67 @@
 
   <!-- Calendars panel -->
   @if (isOpen()) {
-    <div class="drp__panel" (mouseleave)="onLeave()">
+    <div
+      #panel
+      class="drp__panel"
+      role="dialog"
+      aria-label="Seleccionar rango de fechas"
+      (mouseleave)="onLeave()"
+    >
       <!-- Left calendar -->
       <div class="drp__calendar">
         <div class="drp__cal-header">
-          <button type="button" class="drp__nav-btn" (click)="prevMonth()">
+          <button
+            type="button"
+            class="drp__nav-btn"
+            aria-label="Mes anterior"
+            (click)="prevMonth()"
+          >
             <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
           </button>
           <span class="drp__month-title">{{ leftTitle() }}</span>
-          <button type="button" class="drp__nav-btn" style="visibility: hidden">
+          <button
+            type="button"
+            class="drp__nav-btn"
+            style="visibility: hidden"
+            aria-hidden="true"
+            tabindex="-1"
+          >
             <ngx-ds-icon [icon]="ChevronRight" [size]="16" />
           </button>
         </div>
-        <div class="drp__weekdays">
+        <div class="drp__weekdays" aria-hidden="true">
           @for (d of weekdays; track d) {
             <span class="drp__weekday">{{ d }}</span>
           }
         </div>
-        <div class="drp__grid">
-          @for (cell of leftDays(); track cell.date.getTime()) {
-            <button
-              type="button"
-              class="drp__day"
-              [class.drp__day--other]="!cell.inMonth"
-              [class.drp__day--today]="cell.isToday"
-              [class.drp__day--start]="isStart(cell.date)"
-              [class.drp__day--end]="isEnd(cell.date)"
-              [class.drp__day--in-range]="inRange(cell.date)"
-              [class.drp__day--disabled]="cell.isDisabled"
-              [disabled]="cell.isDisabled || null"
-              (click)="selectDay(cell)"
-              (mouseenter)="onHover(cell)"
-            >
-              {{ cell.date.getDate() }}
-            </button>
+        <div class="drp__grid" role="grid" [attr.aria-label]="leftTitle()">
+          @for (week of leftWeeks(); track $index) {
+            <div class="drp__week" role="row">
+              @for (cell of week; track cell.date.getTime()) {
+                <button
+                  type="button"
+                  class="drp__day"
+                  role="gridcell"
+                  [class.drp__day--other]="!cell.inMonth"
+                  [class.drp__day--today]="cell.isToday"
+                  [class.drp__day--start]="isStart(cell.date)"
+                  [class.drp__day--end]="isEnd(cell.date)"
+                  [class.drp__day--in-range]="inRange(cell.date)"
+                  [class.drp__day--disabled]="cell.isDisabled"
+                  [attr.aria-disabled]="cell.isDisabled || null"
+                  [attr.aria-label]="dayLabel(cell.date)"
+                  [attr.aria-selected]="isSelected(cell.date)"
+                  [attr.aria-current]="cell.isToday ? 'date' : null"
+                  [attr.tabindex]="isFocusTarget(cell) ? 0 : -1"
+                  (click)="selectDay(cell)"
+                  (mouseenter)="onHover(cell)"
+                  (keydown)="onDayKeydown($event, cell)"
+                >
+                  {{ cell.date.getDate() }}
+                </button>
+              }
+            </div>
           }
         </div>
       </div>
@@ -70,36 +97,57 @@
       <!-- Right calendar -->
       <div class="drp__calendar">
         <div class="drp__cal-header">
-          <button type="button" class="drp__nav-btn" style="visibility: hidden">
+          <button
+            type="button"
+            class="drp__nav-btn"
+            style="visibility: hidden"
+            aria-hidden="true"
+            tabindex="-1"
+          >
             <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
           </button>
           <span class="drp__month-title">{{ rightTitle() }}</span>
-          <button type="button" class="drp__nav-btn" (click)="nextMonth()">
+          <button
+            type="button"
+            class="drp__nav-btn"
+            aria-label="Mes siguiente"
+            (click)="nextMonth()"
+          >
             <ngx-ds-icon [icon]="ChevronRight" [size]="16" />
           </button>
         </div>
-        <div class="drp__weekdays">
+        <div class="drp__weekdays" aria-hidden="true">
           @for (d of weekdays; track d) {
             <span class="drp__weekday">{{ d }}</span>
           }
         </div>
-        <div class="drp__grid">
-          @for (cell of rightDays(); track cell.date.getTime()) {
-            <button
-              type="button"
-              class="drp__day"
-              [class.drp__day--other]="!cell.inMonth"
-              [class.drp__day--today]="cell.isToday"
-              [class.drp__day--start]="isStart(cell.date)"
-              [class.drp__day--end]="isEnd(cell.date)"
-              [class.drp__day--in-range]="inRange(cell.date)"
-              [class.drp__day--disabled]="cell.isDisabled"
-              [disabled]="cell.isDisabled || null"
-              (click)="selectDay(cell)"
-              (mouseenter)="onHover(cell)"
-            >
-              {{ cell.date.getDate() }}
-            </button>
+        <div class="drp__grid" role="grid" [attr.aria-label]="rightTitle()">
+          @for (week of rightWeeks(); track $index) {
+            <div class="drp__week" role="row">
+              @for (cell of week; track cell.date.getTime()) {
+                <button
+                  type="button"
+                  class="drp__day"
+                  role="gridcell"
+                  [class.drp__day--other]="!cell.inMonth"
+                  [class.drp__day--today]="cell.isToday"
+                  [class.drp__day--start]="isStart(cell.date)"
+                  [class.drp__day--end]="isEnd(cell.date)"
+                  [class.drp__day--in-range]="inRange(cell.date)"
+                  [class.drp__day--disabled]="cell.isDisabled"
+                  [attr.aria-disabled]="cell.isDisabled || null"
+                  [attr.aria-label]="dayLabel(cell.date)"
+                  [attr.aria-selected]="isSelected(cell.date)"
+                  [attr.aria-current]="cell.isToday ? 'date' : null"
+                  [attr.tabindex]="isFocusTarget(cell) ? 0 : -1"
+                  (click)="selectDay(cell)"
+                  (mouseenter)="onHover(cell)"
+                  (keydown)="onDayKeydown($event, cell)"
+                >
+                  {{ cell.date.getDate() }}
+                </button>
+              }
+            </div>
           }
         </div>
       </div>

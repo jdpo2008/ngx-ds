@@ -229,6 +229,11 @@ $sizes: (
   padding: 0 0.5rem 0.5rem;
 }
 
+// Rows exist for the ARIA grid structure only; the cells stay on the 7-column grid.
+.ngx-datepicker__week {
+  display: contents;
+}
+
 .ngx-datepicker__day {
   display: flex;
   align-items: center;
@@ -246,6 +251,11 @@ $sizes: (
     background 0.1s ease,
     color 0.1s ease;
   font-variant-numeric: tabular-nums;
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-300, #a5b4fc);
+    outline-offset: 1px;
+  }
 
   &:hover:not(&--disabled):not(&--selected) {
     background: var(--surface-muted, #f3f4f6);

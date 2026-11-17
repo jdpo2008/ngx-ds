@@ -7,12 +7,22 @@ import {
   computed,
   forwardRef,
   ElementRef,
+  Injector,
+  afterNextRender,
+  inject,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Calendar, X, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
-import { DayCell } from '../../shared/day-cell';
+import {
+  DayCell,
+  addMonths,
+  isSameDay,
+  moveFocusDate,
+  startOfDay,
+  toWeeks,
+} from '../../shared/day-cell';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
@@ -88,8 +98,11 @@ export class DatepickerComponent implements ControlValueAccessor {
   readonly #open = signal(false);
   readonly #focused = signal(false);
   readonly #disabled = signal(false);
-  readonly #viewMonth = signal(new Date().getMonth());
-  readonly #viewYear = signal(new Date().getFullYear());
+  /** Day that owns the roving tabindex in the grid; the visible month follows it. */
+  readonly #focusedDate = signal<Date>(startOfDay(new Date()));
+  readonly #viewMonth = computed(() => this.#focusedDate().getMonth());
+  readonly #viewYear = computed(() => this.#focusedDate().getFullYear());
+  readonly #injector = inject(Injector);
 
   readonly isOpen = this.#open.asReadonly();
   readonly isDisabled = this.#disabled.asReadonly();
@@ -168,6 +181,8 @@ export class DatepickerComponent implements ControlValueAccessor {
     return cells;
   });
 
+  readonly calendarWeeks = computed(() => toWeeks(this.calendarDays()));
+
   // ── Click outside ─────────────────────────────────────────
   constructor() {
     setupEscapeClose(() => this.#closeOnEscape());
@@ -181,6 +196,30 @@ export class DatepickerComponent implements ControlValueAccessor {
   // ── Interactions ──────────────────────────────────────────
   // ── Keyboard ───────────────────────────────────────────────
   private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
+  private readonly gridRef = viewChild<ElementRef<HTMLElement>>('grid');
+
+  /** True for the single day button reachable with Tab (roving tabindex). */
+  isFocusTarget(cell: DayCell): boolean {
+    return cell.inMonth && isSameDay(cell.date, this.#focusedDate());
+  }
+
+  onDayKeydown(event: KeyboardEvent, cell: DayCell): void {
+    const next = moveFocusDate(cell.date, event, this.firstDayOfWeek());
+    if (!next) return;
+    event.preventDefault();
+    this.#focusedDate.set(next);
+    this.#focusGridAfterRender();
+  }
+
+  #focusGridAfterRender(): void {
+    afterNextRender(
+      () =>
+        this.gridRef()
+          ?.nativeElement.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')
+          ?.focus(),
+      { injector: this.#injector },
+    );
+  }
 
   onTriggerKeydown(event: KeyboardEvent): void {
     // Ignore keys coming from nested controls (clear / chip-remove buttons).
@@ -203,25 +242,18 @@ export class DatepickerComponent implements ControlValueAccessor {
     const opening = !this.#open();
     this.#open.set(opening);
     this.#focused.set(opening);
-    if (opening) this.syncViewToValue();
+    if (opening) {
+      this.syncViewToValue();
+      this.#focusGridAfterRender();
+    }
   }
 
   prevMonth(): void {
-    if (this.#viewMonth() === 0) {
-      this.#viewMonth.set(11);
-      this.#viewYear.update((y) => y - 1);
-    } else {
-      this.#viewMonth.update((m) => m - 1);
-    }
+    this.#focusedDate.update((d) => addMonths(d, -1));
   }
 
   nextMonth(): void {
-    if (this.#viewMonth() === 11) {
-      this.#viewMonth.set(0);
-      this.#viewYear.update((y) => y + 1);
-    } else {
-      this.#viewMonth.update((m) => m + 1);
-    }
+    this.#focusedDate.update((d) => addMonths(d, 1));
   }
 
   selectDate(cell: DayCell): void {
@@ -230,6 +262,7 @@ export class DatepickerComponent implements ControlValueAccessor {
     this.onChange(cell.date);
     this.#open.set(false);
     this.#focused.set(false);
+    this.triggerRef()?.nativeElement.focus();
   }
 
   selectToday(): void {
@@ -258,11 +291,7 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   // ── Helpers ───────────────────────────────────────────────
   private syncViewToValue(): void {
-    const v = this.value();
-    if (v) {
-      this.#viewMonth.set(v.getMonth());
-      this.#viewYear.set(v.getFullYear());
-    }
+    this.#focusedDate.set(startOfDay(this.value() ?? new Date()));
   }
 
   private isDateDisabled(date: Date): boolean {
@@ -310,10 +339,7 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   writeValue(v: Date | null): void {
     this.value.set(v ?? null);
-    if (v) {
-      this.#viewMonth.set(v.getMonth());
-      this.#viewYear.set(v.getFullYear());
-    }
+    if (v) this.#focusedDate.set(startOfDay(v));
   }
 
   registerOnChange(fn: (v: Date | null) => void): void {
