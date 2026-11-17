@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   RangeSliderComponent,
   SliderColor,
@@ -217,5 +218,46 @@ export const DualConMinGap: Story = {
   render: () => ({
     template: `<slider-dual-mingap-wrapper />`,
     moduleMetadata: { imports: [DualMinGapWrapper] },
+  }),
+};
+
+// ── Reactive Forms ────────────────────────────────────────────────────────────
+
+@Component({
+  selector: 'slider-forms-wrapper',
+  standalone: true,
+  imports: [RangeSliderComponent, ReactiveFormsModule],
+  template: `
+    <div class="p-6 space-y-6" style="max-width: 420px">
+      <ngx-ds-range-slider label="Volumen" [formControl]="volume" />
+      <ngx-ds-range-slider label="Precio" [range]="true" [minGap]="10" [formControl]="price" />
+      <p class="text-sm text-gray-500">
+        volume: <code>{{ volume.value }}</code> · price: <code>{{ price.value }}</code>
+      </p>
+      <div class="flex gap-2">
+        <button type="button" (click)="volume.setValue(75); price.setValue([200, 600])">
+          Set values
+        </button>
+        <button type="button" (click)="toggle()">Toggle disabled</button>
+      </div>
+    </div>
+  `,
+})
+class SliderFormsWrapper {
+  volume = new FormControl(40, { nonNullable: true });
+  price = new FormControl<[number, number]>([20, 80], { nonNullable: true });
+
+  toggle(): void {
+    for (const c of [this.volume, this.price]) {
+      if (c.disabled) c.enable();
+      else c.disable();
+    }
+  }
+}
+
+export const ReactiveForms: Story = {
+  render: () => ({
+    template: `<slider-forms-wrapper />`,
+    moduleMetadata: { imports: [SliderFormsWrapper] },
   }),
 };

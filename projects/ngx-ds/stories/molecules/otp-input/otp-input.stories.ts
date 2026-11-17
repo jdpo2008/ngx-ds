@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   OtpInputComponent,
   OtpSize,
@@ -179,5 +180,42 @@ export const States: Story = {
   render: () => ({
     template: `<otp-states-wrapper />`,
     moduleMetadata: { imports: [StatesWrapper] },
+  }),
+};
+
+// ── Reactive Forms ────────────────────────────────────────────────────────────
+
+@Component({
+  selector: 'otp-forms-wrapper',
+  standalone: true,
+  imports: [OtpInputComponent, ReactiveFormsModule],
+  template: `
+    <div class="p-6 space-y-4">
+      <ngx-ds-otp-input [formControl]="code" [error]="code.invalid && code.touched" />
+      <p class="text-sm text-gray-500">
+        value: <code>{{ code.value || '—' }}</code> · valid: {{ code.valid }} · touched:
+        {{ code.touched }}
+      </p>
+      <div class="flex gap-2">
+        <button type="button" (click)="code.setValue('123456')">Set 123456</button>
+        <button type="button" (click)="code.reset()">Reset</button>
+        <button type="button" (click)="code.disabled ? code.enable() : code.disable()">
+          Toggle disabled
+        </button>
+      </div>
+    </div>
+  `,
+})
+class OtpFormsWrapper {
+  code = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.minLength(6)],
+  });
+}
+
+export const ReactiveForms: Story = {
+  render: () => ({
+    template: `<otp-forms-wrapper />`,
+    moduleMetadata: { imports: [OtpFormsWrapper] },
   }),
 };

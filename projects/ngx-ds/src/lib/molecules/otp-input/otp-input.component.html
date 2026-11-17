@@ -6,8 +6,9 @@
       [type]="inputType()"
       [inputMode]="inputMode()"
       maxlength="1"
+      [value]="digits()[i] || ''"
       [attr.autocomplete]="i === 0 ? 'one-time-code' : 'off'"
-      [disabled]="disabled() || null"
+      [disabled]="isDisabled() || null"
       [style.width]="boxDim()"
       [style.height]="boxDim()"
       [style.fontSize]="boxFs()"
@@ -15,6 +16,7 @@
       (keydown)="onKeydown($event, i)"
       (paste)="onPaste($event)"
       (focus)="onFocus($event)"
+      (blur)="onBlur()"
     />
   }
 </div>
