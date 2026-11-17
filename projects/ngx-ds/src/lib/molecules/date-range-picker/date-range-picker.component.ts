@@ -26,6 +26,7 @@ import {
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
+import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 import { Size } from '../../shared/size';
 
 export type DateRangePickerSize = Size;
@@ -36,23 +37,6 @@ export interface DateRange {
 }
 
 export type { DayCellBase } from '../../shared/day-cell';
-
-const MONTHS_ES = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
-
-const WEEKDAYS_ES = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
 let nextId = 0;
 
@@ -98,10 +82,12 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   /** Day that owns the roving tabindex; always inside one of the two visible months. */
   readonly #focusedDate = signal<Date>(startOfDay(new Date()));
   readonly #injector = inject(Injector);
+  readonly #locale = inject(NGX_DS_LOCALE);
+  readonly #months = monthNames(this.#locale);
 
   readonly isOpen = this.#open.asReadonly();
 
-  readonly weekdays = WEEKDAYS_ES;
+  readonly weekdays = weekdayNames(this.#locale);
 
   // ── Trigger label ────────────────────────────────────────────────────────
 
@@ -125,7 +111,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
 
   // ── Left calendar (current view) ─────────────────────────────────────────
 
-  readonly leftTitle = computed(() => `${MONTHS_ES[this.#viewMonth()]} ${this.#viewYear()}`);
+  readonly leftTitle = computed(() => `${this.#months[this.#viewMonth()]} ${this.#viewYear()}`);
 
   readonly rightViewMonth = computed(() => (this.#viewMonth() + 1) % 12);
   readonly rightViewYear = computed(() =>
@@ -133,7 +119,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   );
 
   readonly rightTitle = computed(
-    () => `${MONTHS_ES[this.rightViewMonth()]} ${this.rightViewYear()}`,
+    () => `${this.#months[this.rightViewMonth()]} ${this.rightViewYear()}`,
   );
 
   readonly leftDays = computed(() => this.buildMonth(this.#viewYear(), this.#viewMonth()));
@@ -162,7 +148,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   }
 
   dayLabel(d: Date): string {
-    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    return formatDayLabel(d, this.#locale);
   }
 
   inRange(d: Date): boolean {
