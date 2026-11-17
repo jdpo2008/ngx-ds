@@ -44,6 +44,7 @@ export interface NgxDsLabels {
   colorHex: string;
   fileUploadPrompt: string;
   removeFile: string;
+  fileTooLarge: (maxMb: number) => string;
   closeAlert: string;
 
   // ── Password strength ─────────────────────────────────────
@@ -155,6 +156,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   colorHex: 'Color en hexadecimal',
   fileUploadPrompt: 'Arrastra archivos aquí o haz clic para seleccionar',
   removeFile: 'Eliminar archivo',
+  fileTooLarge: (mb) => `Supera el máximo de ${mb} MB`,
   closeAlert: 'Cerrar alerta',
 
   passwordRequirements: 'Requisitos de contraseña',
@@ -260,6 +262,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   colorHex: 'Hex color',
   fileUploadPrompt: 'Drag files here or click to select',
   removeFile: 'Remove file',
+  fileTooLarge: (mb) => `Exceeds the ${mb} MB limit`,
   closeAlert: 'Close alert',
 
   passwordRequirements: 'Password requirements',
