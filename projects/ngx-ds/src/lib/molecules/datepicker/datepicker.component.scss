@@ -271,7 +271,7 @@ $sizes: (
   &--today:not(&--selected) {
     color: var(--primary-500, #6366f1);
     font-weight: 700;
-    background: var(--info-50, #eff6ff);
+    background: var(--primary-50, #eef2ff);
   }
 
   // Selected day
@@ -281,7 +281,7 @@ $sizes: (
     font-weight: 600;
 
     &:hover {
-      background: var(--info-600, #2563eb);
+      background: var(--primary-600, #4f46e5);
     }
   }
 
@@ -316,8 +316,8 @@ $sizes: (
     border-color 0.1s ease;
 
   &:hover {
-    background: var(--info-50, #eff6ff);
-    border-color: var(--info-200, #bfdbfe);
+    background: var(--primary-50, #eef2ff);
+    border-color: var(--primary-200, #c7d2fe);
   }
 }
 

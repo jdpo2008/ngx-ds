@@ -109,8 +109,8 @@ $sizes: (
   align-items: center;
   gap: 0.25rem;
   padding: 0.125rem 0.375rem;
-  background: var(--info-50, #eff6ff);
-  color: var(--info-700, #1d4ed8);
+  background: var(--primary-100, #e0e7ff);
+  color: var(--primary-700, #4338ca);
   border-radius: 0.25rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -245,7 +245,7 @@ $sizes: (
   cursor: pointer;
   font-family: inherit;
   &:hover {
-    background: var(--info-50, #eff6ff);
+    background: var(--primary-50, #eef2ff);
   }
 }
 
@@ -273,8 +273,8 @@ $sizes: (
   }
 
   &--selected:not(&--disabled) {
-    color: var(--info-700, #1d4ed8);
-    background: var(--info-50, #eff6ff);
+    color: var(--primary-700, #4338ca);
+    background: var(--primary-50, #eef2ff);
   }
 
   &--disabled {
