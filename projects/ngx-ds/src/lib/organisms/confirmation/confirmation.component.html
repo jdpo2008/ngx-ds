@@ -1,5 +1,9 @@
 @if (state().isOpen) {
-  <div class="confirmation-overlay" (click)="onBackdropClick()">
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- backdrop click is a mouse shortcut; keyboard users close with Escape -->
+  <div
+    class="confirmation-overlay"
+    (click)="$event.target === $event.currentTarget && onBackdropClick()"
+  >
     <div
       class="confirmation-modal"
       [class.confirmation-modal--danger]="state().type === 'danger'"
@@ -9,7 +13,6 @@
       aria-labelledby="ngx-confirmation-title"
       ngxFocusTrap
       tabindex="-1"
-      (click)="$event.stopPropagation()"
     >
       <div class="confirmation-modal__header">
         @if (state().type === 'danger') {

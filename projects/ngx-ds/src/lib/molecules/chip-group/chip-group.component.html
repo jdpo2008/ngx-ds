@@ -13,7 +13,11 @@
       @if (removable()) {
         <span
           class="chip__remove"
+          role="button"
+          tabindex="0"
           (click)="remove(chip, $event)"
+          (keydown.enter)="remove(chip, $event)"
+          (keydown.space)="remove(chip, $event)"
           [attr.aria-label]="'Quitar ' + chip.label"
         >
           <ngx-ds-icon [icon]="XIcon" [size]="12" />

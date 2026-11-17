@@ -1,4 +1,4 @@
-<div [class]="hostClasses()" (click)="onMarkRead()">
+<div [class]="hostClasses()" tabindex="0" (click)="onMarkRead()" (keydown.enter)="onMarkRead()">
   <!-- Unread dot -->
   @if (!notification().read) {
     <span class="notif-item__dot" aria-label="No leída"></span>

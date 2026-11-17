@@ -1,5 +1,5 @@
 <div class="tabs">
-  <div [class]="navClasses()" role="tablist" (keydown)="onKeydown($event)">
+  <div [class]="navClasses()" role="tablist">
     @for (tab of tabs(); track $index) {
       <button
         #tabBtn
@@ -13,6 +13,7 @@
         [attr.aria-controls]="panelId($index)"
         [attr.tabindex]="active() === $index ? 0 : -1"
         (click)="select($index)"
+        (keydown)="onKeydown($event)"
       >
         @if (tab.icon()) {
           <ngx-ds-icon

@@ -5,16 +5,19 @@
 
 <!-- Field trigger -->
 <div
+  #trigger
   [class]="fieldClasses()"
   (click)="togglePanel()"
+  (keydown)="onTriggerKeydown($event)"
   [attr.id]="id"
   role="button"
+  [attr.tabindex]="isDisabled() ? -1 : 0"
   [attr.aria-expanded]="isOpen()"
   [attr.aria-disabled]="isDisabled()"
 >
   <!-- Floating label -->
   @if (floatingLabel() && label()) {
-    <label [class]="floatLabelClasses()">{{ label() }}</label>
+    <span [class]="floatLabelClasses()">{{ label() }}</span>
   }
 
   <!-- Calendar icon -->

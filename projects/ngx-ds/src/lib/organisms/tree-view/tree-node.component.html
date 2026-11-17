@@ -1,6 +1,18 @@
-<li class="tree-node" role="treeitem" [attr.aria-expanded]="hasChildren() ? isExpanded() : null">
+<li
+  class="tree-node"
+  role="treeitem"
+  [attr.aria-selected]="isSelected()"
+  [attr.aria-expanded]="hasChildren() ? isExpanded() : null"
+>
   <!-- Row -->
-  <div [class]="rowClasses()" [style.paddingLeft]="indent()" (click)="select()">
+  <div
+    [class]="rowClasses()"
+    [style.paddingLeft]="indent()"
+    tabindex="0"
+    (click)="select()"
+    (keydown.enter)="select()"
+    (keydown.space)="$event.preventDefault(); select()"
+  >
     <!-- Expand toggle -->
     <button
       type="button"

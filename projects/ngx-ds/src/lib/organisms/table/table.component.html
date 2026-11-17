@@ -199,11 +199,15 @@
                 @if (selectMode() === 'multi') {
                   <ngx-ds-checkbox [checked]="isSelected(row)" (checkedChange)="toggleRow(row)" />
                 } @else {
-                  <div
+                  <button
+                    type="button"
                     class="ngx-table__radio"
+                    role="radio"
+                    aria-label="Seleccionar fila"
+                    [attr.aria-checked]="isSelected(row)"
                     [class.ngx-table__radio--selected]="isSelected(row)"
                     (click)="toggleRow(row)"
-                  ></div>
+                  ></button>
                 }
               </td>
             }

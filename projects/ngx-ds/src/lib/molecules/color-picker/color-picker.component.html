@@ -1,15 +1,21 @@
 @if (label()) {
-  <label class="cp__label">{{ label() }}</label>
+  <span class="cp__label" [id]="id + '-label'">{{ label() }}</span>
 }
 
-<div class="cp" [class.cp--disabled]="disabled()">
+<div
+  class="cp"
+  [class.cp--disabled]="disabled()"
+  role="group"
+  [attr.aria-labelledby]="label() ? id + '-label' : null"
+>
   <!-- Preview swatch -->
   <div class="cp__preview" [style]="previewStyle()"></div>
 
   <div class="cp__sliders">
     <!-- Hue slider -->
-    <label class="cp__slider-label">Matiz</label>
+    <label class="cp__slider-label" [for]="id + '-hue'">Matiz</label>
     <input
+      [id]="id + '-hue'"
       type="range"
       class="cp__range cp__range--hue"
       [value]="hue()"
@@ -21,8 +27,9 @@
     />
 
     <!-- Saturation slider -->
-    <label class="cp__slider-label">Saturación</label>
+    <label class="cp__slider-label" [for]="id + '-sat'">Saturación</label>
     <input
+      [id]="id + '-sat'"
       type="range"
       class="cp__range cp__range--sat"
       [value]="saturation()"
@@ -35,8 +42,9 @@
     />
 
     <!-- Lightness slider -->
-    <label class="cp__slider-label">Luminosidad</label>
+    <label class="cp__slider-label" [for]="id + '-light'">Luminosidad</label>
     <input
+      [id]="id + '-light'"
       type="range"
       class="cp__range cp__range--light"
       [value]="lightness()"
@@ -57,6 +65,7 @@
       [value]="hexInput()"
       maxlength="7"
       placeholder="#000000"
+      aria-label="Color en hexadecimal"
       [disabled]="disabled() || null"
       (input)="onHexInput($event)"
     />

@@ -10,6 +10,8 @@ const TRACK_COLORS: Record<SliderColor, string> = {
   danger: '#ef4444',
 };
 
+let nextId = 0;
+
 @Component({
   selector: 'ngx-ds-range-slider',
   standalone: true,
@@ -19,6 +21,7 @@ const TRACK_COLORS: Record<SliderColor, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RangeSliderComponent {
+  readonly id = `ngx-range-slider-${nextId++}`;
   readonly value = model<number>(0);
   readonly min = input<number>(0);
   readonly max = input<number>(100);

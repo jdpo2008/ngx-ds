@@ -6,12 +6,16 @@ import {
   signal,
   computed,
   forwardRef,
+  ElementRef,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Calendar, X, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { DayCell } from '../../shared/day-cell';
 import { setupClickOutside } from '../../shared/click-outside';
+import { setupEscapeClose } from '../../shared/escape-close';
+import { isActivationKey } from '../../shared/keyboard';
 import { Size } from '../../shared/size';
 
 export type DatepickerSize = Size;
@@ -166,6 +170,7 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   // ── Click outside ─────────────────────────────────────────
   constructor() {
+    setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
       this.#open.set(false);
       this.#focused.set(false);
@@ -174,6 +179,25 @@ export class DatepickerComponent implements ControlValueAccessor {
   }
 
   // ── Interactions ──────────────────────────────────────────
+  // ── Keyboard ───────────────────────────────────────────────
+  private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
+
+  onTriggerKeydown(event: KeyboardEvent): void {
+    // Ignore keys coming from nested controls (clear / chip-remove buttons).
+    if (event.target !== event.currentTarget) return;
+    if (isActivationKey(event) || (event.key === 'ArrowDown' && !this.isOpen())) {
+      event.preventDefault();
+      this.togglePanel();
+    }
+  }
+
+  #closeOnEscape(): void {
+    if (!this.isOpen()) return;
+    this.#open.set(false);
+    this.#focused.set(false);
+    this.triggerRef()?.nativeElement.focus();
+  }
+
   togglePanel(): void {
     if (this.isDisabled()) return;
     const opening = !this.#open();

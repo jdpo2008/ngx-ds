@@ -1,5 +1,6 @@
 @if (open()) {
   <!-- Backdrop -->
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- backdrop click is a mouse shortcut; keyboard users close with Escape -->
   <div class="cp__backdrop" (click)="close()"></div>
 
   <!-- Dialog -->
