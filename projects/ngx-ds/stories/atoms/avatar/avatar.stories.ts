@@ -1,11 +1,6 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
-import {
-  AvatarComponent,
-  AvatarSize,
-  AvatarColor,
-  AvatarShape,
-} from '../../../src/lib/atoms/avatar/avatar.component';
+import { AvatarComponent } from '../../../src/lib/atoms/avatar/avatar.component';
 
 // ── Default Wrapper ───────────────────────────────────────────────────────────
 

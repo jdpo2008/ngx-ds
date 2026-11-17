@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/angular';
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { PopoverComponent } from '../../../src/lib/organisms/popover/popover.component';
 import { ButtonComponent } from '../../../src/lib/atoms/button/button.component';
 

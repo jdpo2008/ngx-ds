@@ -33,6 +33,8 @@ export class SearchInputComponent {
   readonly loading = input<boolean>(false);
   readonly clearable = input<boolean>(true);
 
+  // TODO: rename (breaking) — native DOM event name.
+  // eslint-disable-next-line @angular-eslint/no-output-native
   readonly search = output<string>();
   readonly cleared = output<void>();
 

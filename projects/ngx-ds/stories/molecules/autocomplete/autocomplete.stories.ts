@@ -7,7 +7,7 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { Search, MapPin, User } from 'lucide-angular';
+import { MapPin, User } from 'lucide-angular';
 import {
   AutocompleteComponent,
   AutocompleteOption,

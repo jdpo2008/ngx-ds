@@ -563,7 +563,7 @@ class ServerSideWrapper {
   private fetchPage(page: number, size: number, sort: TableSort | null): void {
     this.loading.set(true);
     setTimeout(() => {
-      let rows = [...USERS];
+      const rows = [...USERS];
       if (sort) {
         rows.sort((a: any, b: any) => {
           const cmp =

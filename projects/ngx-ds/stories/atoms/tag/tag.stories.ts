@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
 import { TagComponent } from '../../../src/lib/atoms/tag/tag.component';
-import { Check, X, Star, Zap, Tag, Flame, Clock, Bell, Lock, Globe } from 'lucide-angular';
+import { Check, Star, Zap, Tag, Flame, Clock, Bell, Lock, Globe } from 'lucide-angular';
 
 // ── Default Wrapper ───────────────────────────────────────────────────────────
 

@@ -1,12 +1,6 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { SelectComponent, SelectOption } from '../../../src/lib/molecules/select/select.component';
 
 // ── Shared options ────────────────────────────────────────────
