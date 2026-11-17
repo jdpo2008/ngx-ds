@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 :host {
   display: block;
   font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
@@ -59,8 +61,8 @@ $sizes: (
 
   // Sizes — apply padding to the container (native inherits)
   @each $name, $vals in $sizes {
-    $pad: nth($vals, 1);
-    $fs: nth($vals, 2);
+    $pad: list.nth($vals, 1);
+    $fs: list.nth($vals, 2);
 
     &--#{$name} {
       padding: $pad;

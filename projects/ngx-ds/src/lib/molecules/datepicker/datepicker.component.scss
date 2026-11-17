@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 :host {
   display: block;
   position: relative;
@@ -64,8 +66,8 @@ $sizes: (
   }
 
   @each $name, $vals in $sizes {
-    $pad: nth($vals, 1);
-    $fs: nth($vals, 2);
+    $pad: list.nth($vals, 1);
+    $fs: list.nth($vals, 2);
     &--#{$name} {
       padding: $pad;
       font-size: $fs;

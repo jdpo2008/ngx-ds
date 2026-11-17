@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 $tag-palette: (
   'primary': (
     var(--color-primary, #3b82f6),
@@ -96,9 +98,9 @@ $tag-palette: (
 
   // ── Color × Variant ───────────────────────────────────────────
   @each $name, $values in $tag-palette {
-    $base: nth($values, 1);
-    $light: nth($values, 2);
-    $dark: nth($values, 3);
+    $base: list.nth($values, 1);
+    $light: list.nth($values, 2);
+    $dark: list.nth($values, 3);
 
     &--#{$name} {
       &.tag--solid {
