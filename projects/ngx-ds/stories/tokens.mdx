@@ -51,22 +51,55 @@ Source files (`projects/ngx-ds/styles/`):
   <ColorItem
     title="Danger (red)"
     subtitle="--danger-*"
-    colors={{ 50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c' }}
+    colors={{
+      50: '#fef2f2',
+      100: '#fee2e2',
+      200: '#fecaca',
+      500: '#ef4444',
+      600: '#dc2626',
+      700: '#b91c1c',
+      800: '#991b1b',
+    }}
   />
   <ColorItem
-    title="Success (green)"
+    title="Success (emerald)"
     subtitle="--success-*"
-    colors={{ 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }}
+    colors={{
+      50: '#ecfdf5',
+      100: '#d1fae5',
+      200: '#a7f3d0',
+      500: '#10b981',
+      600: '#059669',
+      700: '#047857',
+      800: '#065f46',
+    }}
   />
   <ColorItem
     title="Warning (amber)"
     subtitle="--warning-*"
-    colors={{ 50: '#fffbeb', 100: '#fef3c7', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }}
+    colors={{
+      50: '#fffbeb',
+      100: '#fef3c7',
+      200: '#fde68a',
+      400: '#fbbf24',
+      500: '#f59e0b',
+      600: '#d97706',
+      700: '#b45309',
+      800: '#92400e',
+    }}
   />
   <ColorItem
     title="Info (blue)"
     subtitle="--info-*"
-    colors={{ 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }}
+    colors={{
+      50: '#eff6ff',
+      100: '#dbeafe',
+      200: '#bfdbfe',
+      500: '#3b82f6',
+      600: '#2563eb',
+      700: '#1d4ed8',
+      800: '#1e40af',
+    }}
   />
 </ColorPalette>
 
@@ -74,23 +107,24 @@ Source files (`projects/ngx-ds/styles/`):
 
 ## Semantic tokens
 
-| Token                | Valor (light)     | Uso                                       |
-| -------------------- | ----------------- | ----------------------------------------- |
-| `--text-base`        | `var(--gray-900)` | Texto principal                           |
-| `--text-secondary`   | `var(--gray-700)` | Labels, texto secundario                  |
-| `--text-muted`       | `var(--gray-500)` | Texto atenuado, hints                     |
-| `--text-placeholder` | `var(--gray-400)` | Placeholders, iconos inactivos            |
-| `--text-disabled`    | `var(--gray-300)` | Texto en estado disabled                  |
-| `--text-inverse`     | `#ffffff`         | Texto sobre fondos sólidos oscuros        |
-| `--surface-base`     | `#ffffff`         | Fondo por defecto (cards, inputs, panels) |
-| `--surface-subtle`   | `var(--gray-50)`  | Fondo sutil (disabled, hover suave)       |
-| `--surface-muted`    | `var(--gray-100)` | Fondo hover/backgrounds secundarios       |
-| `--surface-hover`    | `var(--gray-100)` | Hover de superficies                      |
-| `--surface-active`   | `var(--gray-200)` | Estado activo/pressed                     |
-| `--border-subtle`    | `var(--gray-100)` | Bordes casi invisibles (separadores)      |
-| `--border-base`      | `var(--gray-200)` | Borde estándar                            |
-| `--border-input`     | `var(--gray-300)` | Borde de campos de formulario             |
-| `--border-strong`    | `var(--gray-400)` | Borde enfatizado                          |
+| Token                | Valor (light)     | Uso                                                      |
+| -------------------- | ----------------- | -------------------------------------------------------- |
+| `--text-base`        | `var(--gray-900)` | Texto principal                                          |
+| `--text-secondary`   | `var(--gray-700)` | Labels, texto secundario                                 |
+| `--text-muted`       | `var(--gray-500)` | Texto atenuado, hints                                    |
+| `--text-placeholder` | `var(--gray-400)` | Placeholders, iconos inactivos                           |
+| `--text-disabled`    | `var(--gray-300)` | Texto en estado disabled                                 |
+| `--text-inverse`     | `#ffffff`         | Texto sobre fondos sólidos oscuros                       |
+| `--text-on-color`    | `#ffffff`         | Texto y marcas sobre rellenos de color (igual en oscuro) |
+| `--surface-base`     | `#ffffff`         | Fondo por defecto (cards, inputs, panels)                |
+| `--surface-subtle`   | `var(--gray-50)`  | Fondo sutil (disabled, hover suave)                      |
+| `--surface-muted`    | `var(--gray-100)` | Fondo hover/backgrounds secundarios                      |
+| `--surface-hover`    | `var(--gray-100)` | Hover de superficies                                     |
+| `--surface-active`   | `var(--gray-200)` | Estado activo/pressed                                    |
+| `--border-subtle`    | `var(--gray-100)` | Bordes casi invisibles (separadores)                     |
+| `--border-base`      | `var(--gray-200)` | Borde estándar                                           |
+| `--border-input`     | `var(--gray-300)` | Borde de campos de formulario                            |
+| `--border-strong`    | `var(--gray-400)` | Borde enfatizado                                         |
 
 ## Dark mode
 
@@ -137,7 +171,7 @@ sustituto. Se eliminarán en la próxima versión major.
 | -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
 | `--ngx-color-primary`            | —                  | Verde de marca (`#1fdd5e`), sin equivalente en la escala nueva; se mantiene literal |
 | `--ngx-color-primary-dark`       | —                  | Idem, sin equivalente                                                               |
-| `--ngx-color-primary-success`    | —                  | Emerald (`#10b981`), sin equivalente; se mantiene literal                           |
+| `--ngx-color-primary-success`    | `--success-500`    |                                                                                     |
 | `--ngx-color-primary-error`      | `--danger-500`     |                                                                                     |
 | `--ngx-color-primary-warning`    | `--warning-500`    |                                                                                     |
 | `--ngx-color-primary-info`       | `--info-500`       |                                                                                     |

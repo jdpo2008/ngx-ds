@@ -30,30 +30,39 @@
     // Danger (red)
     --danger-50:  #fef2f2;
     --danger-100: #fee2e2;
+    --danger-200: #fecaca;
     --danger-500: #ef4444;
     --danger-600: #dc2626;
     --danger-700: #b91c1c;
+    --danger-800: #991b1b;
 
     // Success (green)
-    --success-50:  #f0fdf4;
-    --success-100: #dcfce7;
-    --success-500: #22c55e;
-    --success-600: #16a34a;
-    --success-700: #15803d;
+    --success-50:  #ecfdf5;
+    --success-100: #d1fae5;
+    --success-200: #a7f3d0;
+    --success-500: #10b981;
+    --success-600: #059669;
+    --success-700: #047857;
+    --success-800: #065f46;
 
     // Warning (amber)
     --warning-50:  #fffbeb;
     --warning-100: #fef3c7;
+    --warning-200: #fde68a;
     --warning-400: #fbbf24;
     --warning-500: #f59e0b;
     --warning-600: #d97706;
+    --warning-700: #b45309;
+    --warning-800: #92400e;
 
     // Info (blue)
     --info-50:  #eff6ff;
     --info-100: #dbeafe;
+    --info-200: #bfdbfe;
     --info-500: #3b82f6;
     --info-600: #2563eb;
     --info-700: #1d4ed8;
+    --info-800: #1e40af;
 
     // ── Semantic ────────────────────────────────────────────────────────────
     // Text
@@ -63,6 +72,7 @@
     --text-placeholder: var(--gray-400);
     --text-disabled:    var(--gray-300);
     --text-inverse:     #ffffff;
+    --text-on-color:    #ffffff; // text/marks on colored fills; same in dark
 
     // Surfaces
     --surface-base:   #ffffff;

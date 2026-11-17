@@ -2,7 +2,7 @@ $checkbox-colors: (
   'primary': var(--primary-500, #6366f1),
   'secondary': var(--gray-500, #6b7280),
   'danger': var(--danger-500, #ef4444),
-  'success': #10b981,
+  'success': var(--success-500, #10b981),
   'warning': var(--warning-500, #f59e0b),
 );
 
@@ -63,7 +63,7 @@ $checkbox-sizes: (
       top: 46%;
       width: 35%;
       height: 58%;
-      border: 2px solid #fff;
+      border: 2px solid var(--text-on-color, #fff);
       border-top: none;
       border-left: none;
       transform: translate(-50%, -50%) rotate(45deg);
@@ -94,7 +94,7 @@ $checkbox-sizes: (
       width: 55%;
       height: 2px;
       border: none;
-      background: #fff;
+      background: var(--text-on-color, #fff);
       top: 50%;
       transform: translate(-50%, -50%);
     }

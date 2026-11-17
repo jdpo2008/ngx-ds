@@ -16,7 +16,7 @@ export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'dan
 const TRACK_COLORS: Record<SliderColor, string> = {
   primary: 'var(--primary-500, #6366f1)',
   secondary: 'var(--gray-500, #6b7280)',
-  success: 'var(--success-500, #22c55e)',
+  success: 'var(--success-500, #10b981)',
   warning: 'var(--warning-500, #f59e0b)',
   danger: 'var(--danger-500, #ef4444)',
 };

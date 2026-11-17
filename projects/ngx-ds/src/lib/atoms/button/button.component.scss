@@ -2,7 +2,7 @@ $btn-colors: (
   'primary': var(--primary-500, #6366f1),
   'secondary': var(--gray-500, #6b7280),
   'danger': var(--danger-500, #ef4444),
-  'success': #10b981,
+  'success': var(--success-500, #10b981),
   'warning': var(--warning-500, #f59e0b),
 );
 
@@ -76,7 +76,7 @@ $btn-colors: (
       &.btn--solid {
         background-color: $color;
         border-color: $color;
-        color: #fff;
+        color: var(--text-on-color, #fff);
 
         &:hover:not(:disabled) {
           filter: brightness(0.88);
@@ -94,13 +94,13 @@ $btn-colors: (
 
         &:hover:not(:disabled) {
           background-color: $color;
-          color: #fff;
+          color: var(--text-on-color, #fff);
         }
 
         &:active:not(:disabled) {
           background-color: $color;
           filter: brightness(0.88);
-          color: #fff;
+          color: var(--text-on-color, #fff);
         }
       }
     }
