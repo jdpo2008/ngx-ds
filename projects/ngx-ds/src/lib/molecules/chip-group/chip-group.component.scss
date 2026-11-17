@@ -111,7 +111,7 @@
 // Soft
 .chip-group--soft .chip {
   background: var(--surface-muted, #f3f4f6);
-  color: var(--text-muted, #6b7280);
+  color: var(--text-secondary, #374151);
   border: 1px solid transparent;
 
   &:hover:not(.chip--disabled) {

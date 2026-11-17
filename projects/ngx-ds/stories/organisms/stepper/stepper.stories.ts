@@ -18,9 +18,9 @@ import { ButtonComponent } from '../../../src/lib/atoms/button/button.component'
       <ngx-ds-stepper [(active)]="step" orientation="horizontal">
         <ngx-ds-step label="Información personal" description="Nombre, email y teléfono">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Formulario con datos básicos de contacto. Completa todos los campos obligatorios antes
               de continuar.
             </p>
@@ -28,27 +28,27 @@ import { ButtonComponent } from '../../../src/lib/atoms/button/button.component'
         </ngx-ds-step>
         <ngx-ds-step label="Dirección" description="Dirección de facturación y envío">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Ingresa la dirección de envío. Puedes usar la misma para facturación.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Método de pago" description="Tarjeta o transferencia">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Selecciona tu método de pago preferido y confirma los datos.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Confirmación" description="Revisa y envía tu pedido">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Revisa el resumen de tu pedido. Al confirmar se procesará el pago.
             </p>
           </div>
@@ -86,8 +86,12 @@ class HorizontalWrapper {
     <div class="p-6" style="max-width: 52rem;">
       <ngx-ds-stepper [(active)]="step" orientation="vertical">
         <ngx-ds-step label="Crear cuenta" description="Elige usuario y contraseña">
-          <div style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem;">
-            <p style="font-size: 0.875rem; color: #374151; margin: 0 0 1rem;">
+          <div
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem;"
+          >
+            <p
+              style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0 0 1rem;"
+            >
               Ingresa los datos para crear tu cuenta de acceso.
             </p>
             <div style="display: flex; gap: 0.75rem;">
@@ -103,8 +107,12 @@ class HorizontalWrapper {
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Verificar email" description="Código enviado a tu correo">
-          <div style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem;">
-            <p style="font-size: 0.875rem; color: #374151; margin: 0 0 1rem;">
+          <div
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem;"
+          >
+            <p
+              style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0 0 1rem;"
+            >
               Ingresa el código de 6 dígitos que enviamos a tu email.
             </p>
             <div style="display: flex; gap: 0.75rem;">
@@ -116,8 +124,12 @@ class HorizontalWrapper {
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Configurar perfil" description="Personaliza tu experiencia">
-          <div style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem;">
-            <p style="font-size: 0.875rem; color: #374151; margin: 0 0 1rem;">
+          <div
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem;"
+          >
+            <p
+              style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0 0 1rem;"
+            >
               Sube tu foto de perfil y elige tus preferencias.
             </p>
             <div style="display: flex; gap: 0.75rem;">
@@ -156,45 +168,45 @@ class VerticalWrapper {
       <ngx-ds-stepper [(active)]="step" [clickable]="true">
         <ngx-ds-step label="Datos básicos">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Paso 1 — Datos básicos del formulario.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Detalles">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Paso 2 — Información detallada.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Documentos">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Paso 3 — Adjunta los documentos requeridos.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Revisión">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Paso 4 — Revisa y confirma la información.
             </p>
           </div>
         </ngx-ds-step>
         <ngx-ds-step label="Envío">
           <div
-            style="padding: 1.25rem; border: 1.5px dashed #e5e7eb; border-radius: 0.5rem; margin-top: 0.5rem;"
+            style="padding: 1.25rem; border: 1.5px dashed var(--border-base, #e5e7eb); border-radius: 0.5rem; margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #374151; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary, #374151); margin: 0;">
               Paso 5 — Tu solicitud ha sido enviada.
             </p>
           </div>
@@ -284,22 +296,22 @@ export const Default: Story = {
       <div style="padding: 1.5rem; max-width: 52rem;">
         <ngx-ds-stepper [orientation]="orientation" [clickable]="clickable" [active]="active">
           <ngx-ds-step label="Información" description="Datos de contacto">
-            <div style="padding:1rem;border:1.5px dashed #e5e7eb;border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:#374151;">
+            <div style="padding:1rem;border:1.5px dashed var(--border-base, #e5e7eb);border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:var(--text-secondary, #374151);">
               Contenido del paso 1.
             </div>
           </ngx-ds-step>
           <ngx-ds-step label="Dirección" description="Datos de envío">
-            <div style="padding:1rem;border:1.5px dashed #e5e7eb;border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:#374151;">
+            <div style="padding:1rem;border:1.5px dashed var(--border-base, #e5e7eb);border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:var(--text-secondary, #374151);">
               Contenido del paso 2.
             </div>
           </ngx-ds-step>
           <ngx-ds-step label="Pago" description="Método de pago">
-            <div style="padding:1rem;border:1.5px dashed #e5e7eb;border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:#374151;">
+            <div style="padding:1rem;border:1.5px dashed var(--border-base, #e5e7eb);border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:var(--text-secondary, #374151);">
               Contenido del paso 3.
             </div>
           </ngx-ds-step>
           <ngx-ds-step label="Confirmación">
-            <div style="padding:1rem;border:1.5px dashed #e5e7eb;border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:#374151;">
+            <div style="padding:1rem;border:1.5px dashed var(--border-base, #e5e7eb);border-radius:0.5rem;margin-top:0.5rem;font-size:0.875rem;color:var(--text-secondary, #374151);">
               Contenido del paso 4.
             </div>
           </ngx-ds-step>

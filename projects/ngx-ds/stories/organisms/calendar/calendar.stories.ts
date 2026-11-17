@@ -25,7 +25,9 @@ function fmt(d: Date | null): string {
       style="display:flex; flex-direction:column; gap:1.5rem; align-items:flex-start;"
     >
       <ngx-ds-calendar [(value)]="selected" />
-      <p style="font-size:0.8rem;color:#6b7280;">Seleccionado: {{ selectedLabel() }}</p>
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280);">
+        Seleccionado: {{ selectedLabel() }}
+      </p>
     </div>
   `,
 })

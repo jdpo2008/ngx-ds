@@ -32,15 +32,21 @@ class LabeledWrapper {}
   template: `
     <div class="p-6" style="max-width: 28rem; display:flex; flex-direction:column; gap:1.5rem;">
       <div>
-        <p style="font-size:0.75rem;color:#9ca3af;margin:0 0 0.5rem;">Solid</p>
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+          Solid
+        </p>
         <ngx-ds-divider variant="solid" />
       </div>
       <div>
-        <p style="font-size:0.75rem;color:#9ca3af;margin:0 0 0.5rem;">Dashed</p>
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+          Dashed
+        </p>
         <ngx-ds-divider variant="dashed" />
       </div>
       <div>
-        <p style="font-size:0.75rem;color:#9ca3af;margin:0 0 0.5rem;">Dotted</p>
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+          Dotted
+        </p>
         <ngx-ds-divider variant="dotted" />
       </div>
     </div>
@@ -56,11 +62,11 @@ class VariantsWrapper {}
   imports: [DividerComponent],
   template: `
     <div class="p-6" style="display:flex; align-items:center; gap:0; height:3rem;">
-      <span style="font-size:0.875rem;color:#374151;">Inicio</span>
+      <span style="font-size:0.875rem;color:var(--text-secondary, #374151);">Inicio</span>
       <ngx-ds-divider orientation="vertical" />
-      <span style="font-size:0.875rem;color:#374151;">Productos</span>
+      <span style="font-size:0.875rem;color:var(--text-secondary, #374151);">Productos</span>
       <ngx-ds-divider orientation="vertical" />
-      <span style="font-size:0.875rem;color:#374151;">Detalle</span>
+      <span style="font-size:0.875rem;color:var(--text-secondary, #374151);">Detalle</span>
     </div>
   `,
 })

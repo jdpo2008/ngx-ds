@@ -13,7 +13,7 @@ import { RatingComponent } from '../../../src/lib/molecules/rating/rating.compon
       <ngx-ds-rating [(value)]="val" size="lg" />
       <ngx-ds-rating [value]="4" [readonly]="true" label="Solo lectura" />
       <ngx-ds-rating [value]="3" [disabled]="true" label="Deshabilitado" />
-      <p style="font-size:0.8rem;color:#6b7280;">Valor: {{ val() }}</p>
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280);">Valor: {{ val() }}</p>
     </div>
   `,
 })

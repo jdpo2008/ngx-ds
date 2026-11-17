@@ -173,7 +173,9 @@ class NoCloseWrapper {
               <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
           </span>
-          <span style="font-size: 1rem; font-weight: 600; color: #111827;">Advertencia</span>
+          <span style="font-size: 1rem; font-weight: 600; color: var(--text-base, #111827);"
+            >Advertencia</span
+          >
         </div>
 
         <p>

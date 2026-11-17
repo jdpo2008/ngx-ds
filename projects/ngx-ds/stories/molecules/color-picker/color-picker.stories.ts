@@ -10,7 +10,7 @@ import { ColorPickerComponent } from '../../../src/lib/molecules/color-picker/co
     <div class="p-6" style="display:flex; gap:2rem; flex-wrap:wrap;">
       <ngx-ds-color-picker label="Color primario" [(value)]="color" />
       <ngx-ds-color-picker label="Deshabilitado" [value]="'#22c55e'" [disabled]="true" />
-      <p style="font-size:0.8rem;color:#6b7280; align-self:flex-end;">
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280); align-self:flex-end;">
         Valor: <code>{{ color() }}</code>
       </p>
     </div>

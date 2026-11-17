@@ -17,7 +17,7 @@ import { ButtonComponent } from '../../../src/lib/atoms/button/button.component'
         <ngx-ds-button popover-trigger variant="outline">Abrir popover</ngx-ds-button>
         <div popover-content>
           <p style="margin:0; font-size:0.875rem; font-weight:600;">Título del popover</p>
-          <p style="margin:0.5rem 0 0; font-size:0.8125rem; color:#6b7280;">
+          <p style="margin:0.5rem 0 0; font-size:0.8125rem; color:var(--text-muted, #6b7280);">
             Contenido del popover. Puede incluir cualquier elemento.
           </p>
         </div>

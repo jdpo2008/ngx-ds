@@ -21,7 +21,7 @@ function fmt(d: Date | null): string {
       />
       <ngx-ds-date-range-picker label="Tamaño sm" [(start)]="start" [(end)]="end" size="sm" />
       <ngx-ds-date-range-picker label="Tamaño lg" [(start)]="start" [(end)]="end" size="lg" />
-      <p style="font-size:0.8rem;color:#6b7280;">
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280);">
         Inicio: {{ startLabel() }} — Fin: {{ endLabel() }}
       </p>
     </div>

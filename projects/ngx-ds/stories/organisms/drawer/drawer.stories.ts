@@ -176,21 +176,27 @@ class NoCloseWrapper {
       <ngx-ds-drawer [(open)]="open" side="right" size="lg" title="Configuración de la cuenta">
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
           <section>
-            <h3 style="font-size: 0.875rem; font-weight: 600; color: #111827; margin: 0 0 0.5rem">
+            <h3
+              style="font-size: 0.875rem; font-weight: 600; color: var(--text-base, #111827); margin: 0 0 0.5rem"
+            >
               General
             </h3>
             <p>Nombre de la organización, zona horaria e idioma predeterminado.</p>
           </section>
-          <hr style="border: none; border-top: 1px solid #e5e7eb;" />
+          <hr style="border: none; border-top: 1px solid var(--border-base, #e5e7eb);" />
           <section>
-            <h3 style="font-size: 0.875rem; font-weight: 600; color: #111827; margin: 0 0 0.5rem">
+            <h3
+              style="font-size: 0.875rem; font-weight: 600; color: var(--text-base, #111827); margin: 0 0 0.5rem"
+            >
               Notificaciones
             </h3>
             <p>Frecuencia de alertas por correo y canales de comunicación.</p>
           </section>
-          <hr style="border: none; border-top: 1px solid #e5e7eb;" />
+          <hr style="border: none; border-top: 1px solid var(--border-base, #e5e7eb);" />
           <section>
-            <h3 style="font-size: 0.875rem; font-weight: 600; color: #111827; margin: 0 0 0.5rem">
+            <h3
+              style="font-size: 0.875rem; font-weight: 600; color: var(--text-base, #111827); margin: 0 0 0.5rem"
+            >
               Privacidad
             </h3>
             <p>Control de datos compartidos con integraciones externas.</p>

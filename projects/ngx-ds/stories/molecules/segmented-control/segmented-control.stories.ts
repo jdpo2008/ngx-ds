@@ -15,7 +15,7 @@ import {
       <ngx-ds-segmented-control [options]="opts" [(value)]="view" size="sm" />
       <ngx-ds-segmented-control [options]="opts" [(value)]="view" size="lg" />
       <ngx-ds-segmented-control [options]="opts" [(value)]="view" [fullWidth]="true" />
-      <p style="font-size:0.8rem; color:#6b7280;">Seleccionado: {{ view() }}</p>
+      <p style="font-size:0.8rem; color:var(--text-muted, #6b7280);">Seleccionado: {{ view() }}</p>
     </div>
   `,
 })

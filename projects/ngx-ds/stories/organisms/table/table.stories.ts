@@ -263,7 +263,7 @@ class ClientSideWrapper {
         [(selectedRows)]="selected"
         [hoverable]="true"
       />
-      <p style="font-size: 0.875rem; color: #6b7280;">
+      <p style="font-size: 0.875rem; color: var(--text-muted, #6b7280);">
         Seleccionados: {{ selected().length }} — IDs: {{ selectedIds() }}
       </p>
     </div>
@@ -300,7 +300,7 @@ class MultiSelectWrapper {
         [hoverable]="true"
       />
       @if (selected().length) {
-        <p style="font-size: 0.875rem; color: #6b7280;">
+        <p style="font-size: 0.875rem; color: var(--text-muted, #6b7280);">
           Seleccionado: <strong>{{ selected()[0].name }}</strong> — {{ selected()[0].role }}
         </p>
       }
@@ -359,7 +359,7 @@ class EmptyWrapper {
     <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 2.5rem;">
       <div>
         <p
-          style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin: 0 0 0.5rem;"
+          style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted, #6b7280); margin: 0 0 0.5rem;"
         >
           Striped + Dense
         </p>
@@ -367,7 +367,7 @@ class EmptyWrapper {
       </div>
       <div>
         <p
-          style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin: 0 0 0.5rem;"
+          style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted, #6b7280); margin: 0 0 0.5rem;"
         >
           Default (hoverable)
         </p>
@@ -407,15 +407,18 @@ class VariantsWrapper {
 
     <ng-template #scoreTpl let-value>
       <div style="display:flex;align-items:center;gap:0.5rem;min-width:120px;">
-        <div style="flex:1;height:6px;background:#e5e7eb;border-radius:9999px;overflow:hidden;">
+        <div
+          style="flex:1;height:6px;background:var(--surface-active, #e5e7eb);border-radius:9999px;overflow:hidden;"
+        >
           <div
             [style.width.%]="value"
             style="height:100%;background:#3b82f6;border-radius:9999px;"
           ></div>
         </div>
-        <span style="font-size:0.75rem;color:#6b7280;min-width:1.75rem;text-align:right;">{{
-          value
-        }}</span>
+        <span
+          style="font-size:0.75rem;color:var(--text-muted, #6b7280);min-width:1.75rem;text-align:right;"
+          >{{ value }}</span
+        >
       </div>
     </ng-template>
 
@@ -474,7 +477,7 @@ class CustomCellsWrapper implements AfterViewInit {
     const map: Record<string, string> = {
       Admin: 'background:#dbeafe;color:#1d4ed8',
       Editor: 'background:#dcfce7;color:#15803d',
-      Viewer: 'background:#f3f4f6;color:#374151',
+      Viewer: 'background:var(--surface-muted, #f3f4f6);color:var(--text-secondary, #374151)',
     };
     return `display:inline-flex;align-items:center;padding:0.125rem 0.625rem;border-radius:9999px;font-size:0.75rem;font-weight:500;${map[role] ?? ''}`;
   }
@@ -525,7 +528,7 @@ class StickyWrapper {
         (pageChange)="onPage($event)"
         (sortChange)="onSort($event)"
       />
-      <p style="font-size: 0.8125rem; color: #9ca3af;">
+      <p style="font-size: 0.8125rem; color: var(--text-placeholder, #9ca3af);">
         Simulando servidor — página {{ currentPage() }}, {{ pageSize() }} por página
         @if (currentSort()) {
           — orden: <strong>{{ currentSort()!.column }}</strong> {{ currentSort()!.direction }}
@@ -601,7 +604,7 @@ class ServerSideWrapper {
 
       @if (lastAction()) {
         <div
-          style="padding: 0.75rem 1rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; color: #374151;"
+          style="padding: 0.75rem 1rem; background: var(--surface-subtle, #f9fafb); border: 1px solid var(--border-base, #e5e7eb); border-radius: 0.5rem; font-size: 0.875rem; color: var(--text-secondary, #374151);"
         >
           <strong>Última acción:</strong> {{ lastAction() }}
         </div>
@@ -678,7 +681,7 @@ class ActionsWrapper {
     </div>
 
     <ng-template #detailTpl let-row>
-      <div style="display:flex;gap:2rem;font-size:0.8125rem;color:#374151;">
+      <div style="display:flex;gap:2rem;font-size:0.8125rem;color:var(--text-secondary, #374151);">
         <span><strong>Email:</strong> {{ row.email }}</span>
         <span><strong>Departamento:</strong> {{ row.department }}</span>
         <span><strong>Alta:</strong> {{ row.joinedAt }}</span>
@@ -774,7 +777,9 @@ class ColumnVisibilityWrapper {
         addLabel="Nuevo usuario"
         (addClick)="onAdd()"
       />
-      <p style="font-size: 0.875rem; color: #6b7280;">Clicks agregar: {{ clicks() }}</p>
+      <p style="font-size: 0.875rem; color: var(--text-muted, #6b7280);">
+        Clicks agregar: {{ clicks() }}
+      </p>
     </div>
   `,
 })
