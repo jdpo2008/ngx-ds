@@ -16,29 +16,38 @@
   </div>
 
   <!-- Weekday headers -->
-  <div class="calendar__weekdays">
+  <div class="calendar__weekdays" aria-hidden="true">
     @for (d of weekdays; track d) {
       <span class="calendar__weekday">{{ d }}</span>
     }
   </div>
 
-  <!-- Day grid -->
-  <div class="calendar__grid">
-    @for (cell of days(); track cell.date.getTime()) {
-      <button
-        type="button"
-        class="calendar__day"
-        [class.calendar__day--other]="!cell.inMonth"
-        [class.calendar__day--today]="cell.isToday"
-        [class.calendar__day--selected]="cell.isSelected"
-        [class.calendar__day--disabled]="cell.isDisabled"
-        [disabled]="cell.isDisabled || disabled() || null"
-        [attr.aria-label]="cell.date.toLocaleDateString('es-ES')"
-        [attr.aria-pressed]="cell.isSelected"
-        (click)="selectDay(cell)"
-      >
-        {{ cell.date.getDate() }}
-      </button>
+  <!-- Day grid (WAI-ARIA grid with roving tabindex) -->
+  <div #grid class="calendar__grid" role="grid" [attr.aria-label]="title()">
+    @for (week of weeks(); track $index) {
+      <div class="calendar__week" role="row">
+        @for (cell of week; track cell.date.getTime()) {
+          <button
+            type="button"
+            class="calendar__day"
+            role="gridcell"
+            [class.calendar__day--other]="!cell.inMonth"
+            [class.calendar__day--today]="cell.isToday"
+            [class.calendar__day--selected]="cell.isSelected"
+            [class.calendar__day--disabled]="cell.isDisabled"
+            [disabled]="disabled() || null"
+            [attr.aria-disabled]="cell.isDisabled || null"
+            [attr.aria-label]="dayLabel(cell.date)"
+            [attr.aria-selected]="cell.isSelected"
+            [attr.aria-current]="cell.isToday ? 'date' : null"
+            [attr.tabindex]="isFocusTarget(cell) ? 0 : -1"
+            (click)="selectDay(cell)"
+            (keydown)="onDayKeydown($event, cell)"
+          >
+            {{ cell.date.getDate() }}
+          </button>
+        }
+      </div>
     }
   </div>
 </div>

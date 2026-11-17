@@ -89,7 +89,12 @@
     background 0.1s ease,
     color 0.1s ease;
 
-  &:hover:not(:disabled):not(.calendar__day--selected) {
+  &:focus-visible {
+    outline: 2px solid var(--primary-300, #a5b4fc);
+    outline-offset: 1px;
+  }
+
+  &:hover:not(:disabled):not(.calendar__day--disabled):not(.calendar__day--selected) {
     background: var(--surface-hover, #f3f4f6);
   }
 
@@ -112,4 +117,9 @@
     opacity: 0.35;
     cursor: not-allowed;
   }
+}
+
+// Rows exist for the ARIA grid structure only; the cells stay on the 7-column grid.
+.calendar__week {
+  display: contents;
 }
