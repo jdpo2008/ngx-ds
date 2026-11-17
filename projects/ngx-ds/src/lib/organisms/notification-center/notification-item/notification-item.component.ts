@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { Info, CheckCircle, AlertTriangle, AlertCircle, X, LucideIconData } from 'lucide-angular';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { IconComponent } from '../../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../../atoms/icon-button/icon-button.component';
+import { NGX_DS_LOCALE } from '../../../shared/locale';
 import type { NgxNotification, NotificationType } from '../notification.types';
 
 const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
@@ -12,7 +13,7 @@ const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
   error: AlertCircle,
 };
 
-function relativeTime(value: Date | string | undefined): string {
+function relativeTime(value: Date | string | undefined, locale: string): string {
   if (!value) return '';
   const date = value instanceof Date ? value : new Date(value);
   if (isNaN(date.getTime())) return String(value);
@@ -24,7 +25,7 @@ function relativeTime(value: Date | string | undefined): string {
   if (diffH < 24) return `Hace ${diffH} h`;
   const diffD = Math.floor(diffH / 24);
   if (diffD < 7) return `Hace ${diffD} d`;
-  return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  return date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
 }
 
 @Component({
@@ -45,7 +46,8 @@ export class NotificationItemComponent {
   readonly XIcon = X;
 
   readonly typeIcon = computed(() => TYPE_ICONS[this.notification().type]);
-  readonly timeLabel = computed(() => relativeTime(this.notification().time));
+  readonly #locale = inject(NGX_DS_LOCALE);
+  readonly timeLabel = computed(() => relativeTime(this.notification().time, this.#locale));
 
   readonly hostClasses = computed(() => {
     const n = this.notification();

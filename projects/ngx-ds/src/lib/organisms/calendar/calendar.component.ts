@@ -14,6 +14,7 @@ import {
 import { ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { addMonths, isSameDay, moveFocusDate, startOfDay, toWeeks } from '../../shared/day-cell';
+import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 
 export interface CalendarDayCell {
   date: Date;
@@ -22,23 +23,6 @@ export interface CalendarDayCell {
   isSelected: boolean;
   isDisabled: boolean;
 }
-
-const MONTHS_ES = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
-
-const WEEKDAYS_ES = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
 
 @Component({
   selector: 'ngx-ds-calendar',
@@ -67,12 +51,15 @@ export class CalendarComponent {
   readonly #viewMonth = computed(() => this.#focusedDate().getMonth());
   readonly #viewYear = computed(() => this.#focusedDate().getFullYear());
   readonly #injector = inject(Injector);
+  readonly #locale = inject(NGX_DS_LOCALE);
+  readonly #months = monthNames(this.#locale);
 
   private readonly gridRef = viewChild<ElementRef<HTMLElement>>('grid');
 
-  readonly weekdays = WEEKDAYS_ES;
+  /** Monday-first weekday labels. */
+  readonly weekdays = (([sun, ...rest]) => [...rest, sun])(weekdayNames(this.#locale));
 
-  readonly title = computed(() => `${MONTHS_ES[this.#viewMonth()]} ${this.#viewYear()}`);
+  readonly title = computed(() => `${this.#months[this.#viewMonth()]} ${this.#viewYear()}`);
 
   readonly days = computed(() => this.buildMonth(this.#viewYear(), this.#viewMonth()));
 
@@ -98,7 +85,7 @@ export class CalendarComponent {
   }
 
   dayLabel(d: Date): string {
-    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    return formatDayLabel(d, this.#locale);
   }
 
   onDayKeydown(event: KeyboardEvent, cell: CalendarDayCell): void {

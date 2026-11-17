@@ -26,28 +26,12 @@ import {
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
+import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 import { Size } from '../../shared/size';
 
 export type DatepickerSize = Size;
 
 export type { DayCell } from '../../shared/day-cell';
-
-const MONTHS_ES = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
-
-const WEEKDAYS_ES = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
 const ICON_SIZE: Record<DatepickerSize, number> = { sm: 14, md: 16, lg: 18 };
 
@@ -103,6 +87,9 @@ export class DatepickerComponent implements ControlValueAccessor {
   readonly #viewMonth = computed(() => this.#focusedDate().getMonth());
   readonly #viewYear = computed(() => this.#focusedDate().getFullYear());
   readonly #injector = inject(Injector);
+  readonly #locale = inject(NGX_DS_LOCALE);
+  readonly #months = monthNames(this.#locale);
+  readonly #weekdays = weekdayNames(this.#locale);
 
   readonly isOpen = this.#open.asReadonly();
   readonly isDisabled = this.#disabled.asReadonly();
@@ -125,12 +112,17 @@ export class DatepickerComponent implements ControlValueAccessor {
     ].join('/');
   });
 
-  readonly headerText = computed(() => `${MONTHS_ES[this.#viewMonth()]} ${this.#viewYear()}`);
+  readonly headerText = computed(() => `${this.#months[this.#viewMonth()]} ${this.#viewYear()}`);
 
   readonly weekdayLabels = computed(() => {
     const fdow = this.firstDayOfWeek();
-    return [...WEEKDAYS_ES.slice(fdow), ...WEEKDAYS_ES.slice(0, fdow)];
+    return [...this.#weekdays.slice(fdow), ...this.#weekdays.slice(0, fdow)];
   });
+
+  /** Accessible full-date label for a grid day, in the configured locale. */
+  dayLabel(date: Date): string {
+    return formatDayLabel(date, this.#locale);
+  }
 
   readonly calendarDays = computed((): DayCell[] => {
     const month = this.#viewMonth();

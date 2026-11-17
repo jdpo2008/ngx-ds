@@ -4,6 +4,9 @@
 export * from './lib/services/toast.service';
 export * from './lib/services/confirmation.service';
 
+// ── Locale ───────────────────────────────────────────────────
+export * from './lib/shared/locale';
+
 // ── Directives ───────────────────────────────────────────────
 export * from './lib/directives/focus-trap';
 

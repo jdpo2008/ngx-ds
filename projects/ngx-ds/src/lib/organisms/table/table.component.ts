@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   model,
   output,
@@ -9,6 +10,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { NGX_DS_LOCALE } from '../../shared/locale';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { MenuButtonComponent } from '../../atoms/menu-button/menu-button.component';
@@ -123,6 +125,7 @@ export class TableComponent<T extends object = Record<string, unknown>> {
     Plus,
   };
 
+  readonly #locale = inject(NGX_DS_LOCALE);
   readonly #openMenuId = signal<unknown>(null);
   readonly #columnMenuOpen = signal(false);
 
@@ -418,7 +421,7 @@ export class TableComponent<T extends object = Record<string, unknown>> {
       case 'date':
         return formatDate(val, col.dateFormat ?? 'dd/MM/yyyy');
       case 'number':
-        return typeof val === 'number' ? val.toLocaleString('es-ES') : String(val);
+        return typeof val === 'number' ? val.toLocaleString(this.#locale) : String(val);
       default:
         return String(val);
     }

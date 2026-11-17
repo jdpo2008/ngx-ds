@@ -91,13 +91,7 @@
               [class.ngx-datepicker__day--selected]="cell.isSelected"
               [class.ngx-datepicker__day--disabled]="cell.isDisabled"
               [attr.aria-disabled]="cell.isDisabled || null"
-              [attr.aria-label]="
-                cell.date.toLocaleDateString('es-ES', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
-              "
+              [attr.aria-label]="dayLabel(cell.date)"
               [attr.aria-selected]="cell.isSelected"
               [attr.aria-current]="cell.isToday ? 'date' : null"
               [attr.tabindex]="isFocusTarget(cell) ? 0 : -1"
