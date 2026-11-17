@@ -347,3 +347,10 @@ export const FullWidth: Story = {
     moduleMetadata: { imports: [FullWidthWrapper] },
   }),
 };
+
+export const Lazy: Story = {
+  render: () => ({
+    template: `<tabs-lazy-wrapper />`,
+    moduleMetadata: { imports: [LazyTabsWrapper] },
+  }),
+};

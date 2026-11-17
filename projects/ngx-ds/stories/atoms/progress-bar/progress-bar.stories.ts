@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/angular';
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, OnDestroy } from '@angular/core';
 import { ProgressBarComponent } from '../../../src/lib/atoms/progress-bar/progress-bar.component';
 
 // ── Default Wrapper ───────────────────────────────────────────────────────────

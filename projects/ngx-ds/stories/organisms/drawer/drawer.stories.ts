@@ -6,7 +6,7 @@ import {
   DrawerSize,
 } from '../../../src/lib/organisms/drawer/drawer.component';
 import { ButtonComponent } from '../../../src/lib/atoms/button/button.component';
-import { Trash2, Settings, Download } from 'lucide-angular';
+import { Settings, Download } from 'lucide-angular';
 
 // ── Basic Wrapper ─────────────────────────────────────────────────────────────
 

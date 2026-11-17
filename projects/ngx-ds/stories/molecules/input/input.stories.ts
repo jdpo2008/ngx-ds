@@ -7,7 +7,7 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { Mail, Lock, User, Search, Phone, Eye, EyeOff, AlertCircle } from 'lucide-angular';
+import { Mail, Lock, User, Search, Phone, AlertCircle } from 'lucide-angular';
 import { InputComponent } from '../../../src/lib/molecules/input/input.component';
 
 // ── Default Wrapper ───────────────────────────────────────────────────────────

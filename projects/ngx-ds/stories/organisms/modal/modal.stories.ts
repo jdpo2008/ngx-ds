@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { ModalComponent, ModalSize } from '../../../src/lib/organisms/modal/modal.component';
 import { ButtonComponent } from '../../../src/lib/atoms/button/button.component';
-import { Trash2, AlertTriangle } from 'lucide-angular';
+import { Trash2 } from 'lucide-angular';
 
 // ── Basic Wrapper ─────────────────────────────────────────────────────────────
 

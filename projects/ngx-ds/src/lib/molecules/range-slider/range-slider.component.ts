@@ -35,6 +35,8 @@ export class RangeSliderComponent {
   readonly ariaLabelStart = input<string>('');
   readonly ariaLabelEnd = input<string>('');
 
+  // TODO: rename (breaking) — native DOM event name.
+  // eslint-disable-next-line @angular-eslint/no-output-native
   readonly change = output<number>();
   readonly rangeChange = output<[number, number]>();
 

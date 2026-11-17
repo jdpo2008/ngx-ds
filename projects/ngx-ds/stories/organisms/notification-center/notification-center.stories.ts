@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/angular';
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { NotificationCenterComponent } from '../../../src/lib/organisms/notification-center/notification-center.component';
 import type { NgxNotification } from '../../../src/lib/organisms/notification-center/notification.types';
 
