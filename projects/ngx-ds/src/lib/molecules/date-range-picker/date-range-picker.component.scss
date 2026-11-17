@@ -184,7 +184,14 @@
     background 0.1s ease,
     color 0.1s ease;
 
-  &:hover:not(:disabled):not(.drp__day--in-range):not(.drp__day--start):not(.drp__day--end) {
+  &:focus-visible {
+    outline: 2px solid var(--primary-300, #a5b4fc);
+    outline-offset: 1px;
+  }
+
+  &:hover:not(.drp__day--disabled):not(.drp__day--in-range):not(.drp__day--start):not(
+      .drp__day--end
+    ) {
     background: var(--surface-hover, #f3f4f6);
   }
 
@@ -222,6 +229,11 @@
     opacity: 0.35;
     cursor: not-allowed;
   }
+}
+
+// Rows exist for the ARIA grid structure only; the cells stay on the 7-column grid.
+.drp__week {
+  display: contents;
 }
 
 // ── Messages ──────────────────────────────────────────────────────────────────

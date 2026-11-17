@@ -7,12 +7,22 @@ import {
   computed,
   forwardRef,
   ElementRef,
+  Injector,
+  afterNextRender,
+  inject,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
-import { DayCellBase } from '../../shared/day-cell';
+import {
+  DayCellBase,
+  addMonths,
+  isSameDay,
+  moveFocusDate,
+  startOfDay,
+  toWeeks,
+} from '../../shared/day-cell';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
@@ -43,18 +53,6 @@ const MONTHS_ES = [
 ];
 
 const WEEKDAYS_ES = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
-
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function startOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-}
 
 let nextId = 0;
 
@@ -97,6 +95,9 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly #viewMonth = signal(new Date().getMonth());
   readonly #viewYear = signal(new Date().getFullYear());
   readonly #picking = signal<'start' | 'end'>('start'); // which end we're setting next
+  /** Day that owns the roving tabindex; always inside one of the two visible months. */
+  readonly #focusedDate = signal<Date>(startOfDay(new Date()));
+  readonly #injector = inject(Injector);
 
   readonly isOpen = this.#open.asReadonly();
 
@@ -138,16 +139,30 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly leftDays = computed(() => this.buildMonth(this.#viewYear(), this.#viewMonth()));
   readonly rightDays = computed(() => this.buildMonth(this.rightViewYear(), this.rightViewMonth()));
 
+  readonly leftWeeks = computed(() => toWeeks(this.leftDays()));
+  readonly rightWeeks = computed(() => toWeeks(this.rightDays()));
+
   // ── Day state helpers ─────────────────────────────────────────────────────
 
   isStart(d: Date): boolean {
-    const s = this.start();
-    return !!s && isSameDay(d, s);
+    return isSameDay(d, this.start());
   }
 
   isEnd(d: Date): boolean {
-    const e = this.end();
-    return !!e && isSameDay(d, e);
+    return isSameDay(d, this.end());
+  }
+
+  isSelected(d: Date): boolean {
+    return this.isStart(d) || this.isEnd(d) || this.inRange(d);
+  }
+
+  /** True for the single day button reachable with Tab (roving tabindex). */
+  isFocusTarget(cell: DayCellBase): boolean {
+    return cell.inMonth && isSameDay(cell.date, this.#focusedDate());
+  }
+
+  dayLabel(d: Date): string {
+    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
   inRange(d: Date): boolean {
@@ -168,23 +183,55 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   // ── Navigation ────────────────────────────────────────────────────────────
 
   prevMonth(): void {
-    if (this.#viewMonth() === 0) {
-      this.#viewMonth.set(11);
-      this.#viewYear.update((y) => y - 1);
-    } else {
-      this.#viewMonth.update((m) => m - 1);
-    }
+    this.#shiftView(-1);
   }
 
   nextMonth(): void {
-    if (this.#viewMonth() === 10) {
-      this.#viewMonth.set(11);
-    } else if (this.#viewMonth() === 11) {
-      this.#viewMonth.set(0);
-      this.#viewYear.update((y) => y + 1);
-    } else {
-      this.#viewMonth.update((m) => m + 1);
-    }
+    this.#shiftView(1);
+  }
+
+  /** Moves both calendars by `n` months; the focused day moves with them. */
+  #shiftView(n: number): void {
+    this.#setView(addMonths(new Date(this.#viewYear(), this.#viewMonth(), 1), n));
+    this.#focusedDate.update((d) => addMonths(d, n));
+  }
+
+  #setView(firstOfLeftMonth: Date): void {
+    this.#viewMonth.set(firstOfLeftMonth.getMonth());
+    this.#viewYear.set(firstOfLeftMonth.getFullYear());
+  }
+
+  // ── Keyboard grid navigation ──────────────────────────────────────────────
+
+  private readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
+
+  onDayKeydown(event: KeyboardEvent, cell: DayCellBase): void {
+    const next = moveFocusDate(cell.date, event);
+    if (!next) return;
+    event.preventDefault();
+    this.#focusDate(next);
+    this.#focusGridAfterRender();
+  }
+
+  /** Focuses `date`, scrolling the two-month view only when it falls outside it. */
+  #focusDate(date: Date): void {
+    const left = new Date(this.#viewYear(), this.#viewMonth(), 1);
+    const afterRight = addMonths(left, 2);
+    const month = new Date(date.getFullYear(), date.getMonth(), 1);
+    if (month < left) this.#setView(month);
+    else if (month >= afterRight) this.#setView(addMonths(month, -1));
+    this.#focusedDate.set(date);
+    if (this.#picking() === 'end') this.#hover.set(date);
+  }
+
+  #focusGridAfterRender(): void {
+    afterNextRender(
+      () =>
+        this.panelRef()
+          ?.nativeElement.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')
+          ?.focus(),
+      { injector: this.#injector },
+    );
   }
 
   // ── Day selection ─────────────────────────────────────────────────────────
@@ -209,11 +256,12 @@ export class DateRangePickerComponent implements ControlValueAccessor {
       this.#open.set(false);
       this.#hover.set(null);
       this.#emitChange();
+      this.triggerRef()?.nativeElement.focus();
     }
   }
 
   onHover(cell: DayCellBase): void {
-    if (this.#picking() === 'end') this.#hover.set(cell.date);
+    if (this.#picking() === 'end' && !cell.isDisabled) this.#hover.set(cell.date);
   }
 
   onLeave(): void {
@@ -245,11 +293,10 @@ export class DateRangePickerComponent implements ControlValueAccessor {
     if (this.disabled()) return;
     this.#open.set(true);
     this.#picking.set('start');
-    const s = this.start();
-    if (s) {
-      this.#viewMonth.set(s.getMonth());
-      this.#viewYear.set(s.getFullYear());
-    }
+    const focus = startOfDay(this.start() ?? new Date());
+    this.#setView(new Date(focus.getFullYear(), focus.getMonth(), 1));
+    this.#focusedDate.set(focus);
+    this.#focusGridAfterRender();
   }
 
   clear(event: MouseEvent): void {
