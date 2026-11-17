@@ -196,35 +196,34 @@
   }
 }
 
-// Type-specific styles
+// Type-specific styles: one accent color drives the border, icon and progress bar.
 .toast--success {
-  border-left: 4px solid #10b981;
-
-  .toast__progress {
-    background-color: #10b981;
-  }
+  --toast-accent: var(--success-500, #10b981);
 }
 
 .toast--error {
-  border-left: 4px solid var(--color-danger, #ef4444);
-
-  .toast__progress {
-    background-color: var(--color-danger, #ef4444);
-  }
+  --toast-accent: var(--danger-500, #ef4444);
 }
 
 .toast--warning {
-  border-left: 4px solid var(--color-warning, #f59e0b);
-
-  .toast__progress {
-    background-color: var(--color-warning, #f59e0b);
-  }
+  --toast-accent: var(--warning-500, #f59e0b);
 }
 
 .toast--info {
-  border-left: 4px solid var(--info-500, #3b82f6);
+  --toast-accent: var(--info-500, #3b82f6);
+}
+
+.toast--success,
+.toast--error,
+.toast--warning,
+.toast--info {
+  border-left: 4px solid var(--toast-accent);
+
+  .toast__icon {
+    color: var(--toast-accent);
+  }
 
   .toast__progress {
-    background-color: var(--info-500, #3b82f6);
+    background-color: var(--toast-accent);
   }
 }

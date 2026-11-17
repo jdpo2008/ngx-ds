@@ -26,6 +26,11 @@ describe('DrawerComponent', () => {
     expect(el.querySelector('.drawer__title')?.textContent).toContain('Filtros');
   });
 
+  it('falls back to the i18n drawer label without a title', () => {
+    const { el } = setup();
+    expect(el.querySelector('[role="dialog"]')!.getAttribute('aria-label')).toBe('Panel lateral');
+  });
+
   it('locks body scroll while open and restores it on destroy', () => {
     const { fixture } = setup();
     expect(document.body.style.overflow).toBe('hidden');

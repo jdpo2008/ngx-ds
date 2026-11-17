@@ -24,6 +24,7 @@ export interface NgxDsLabels {
   collapse: string;
   dialog: string;
   popover: string;
+  drawer: string;
   progress: string;
   breadcrumb: string;
 
@@ -135,6 +136,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   collapse: 'Colapsar',
   dialog: 'Diálogo',
   popover: 'Popover',
+  drawer: 'Panel lateral',
   progress: 'Progreso',
   breadcrumb: 'Ruta de navegación',
 
@@ -239,6 +241,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   collapse: 'Collapse',
   dialog: 'Dialog',
   popover: 'Popover',
+  drawer: 'Side panel',
   progress: 'Progress',
   breadcrumb: 'Breadcrumb',
 
