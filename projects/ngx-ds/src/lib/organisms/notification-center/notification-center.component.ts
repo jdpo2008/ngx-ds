@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  signal,
+  inject,
+} from '@angular/core';
 import { Bell, BellOff } from 'lucide-angular';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
@@ -7,6 +15,7 @@ import { IconButtonComponent } from '../../atoms/icon-button/icon-button.compone
 import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 import type { NgxNotification } from './notification.types';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type NotificationFilter = 'all' | 'unread';
 
@@ -19,9 +28,11 @@ export type NotificationFilter = 'all' | 'unread';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationCenterComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Inputs ────────────────────────────────────────────────────────────────
   readonly notifications = input<NgxNotification[]>([]);
-  readonly panelTitle = input<string>('Notificaciones');
+  readonly panelTitle = input<string | undefined>(undefined);
   readonly maxHeight = input<string>('28rem');
   readonly placement = input<'bottom-end' | 'bottom-start'>('bottom-end');
 

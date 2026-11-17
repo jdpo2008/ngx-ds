@@ -5,7 +5,7 @@
         class="ngx-table__toolbar-filter"
         [value]="filterValue()"
         (valueChange)="onFilterChange($event)"
-        [placeholder]="filterPlaceholder()"
+        [placeholder]="filterPlaceholder() ?? i18n.searchPlaceholder"
         size="sm"
       />
     }
@@ -18,7 +18,7 @@
         >
           <ngx-ds-icon-button
             [icon]="icons.Columns3"
-            ariaLabel="Columnas visibles"
+            [ariaLabel]="i18n.visibleColumns"
             variant="outline"
             color="secondary"
             size="sm"
@@ -46,7 +46,7 @@
           variant="solid"
           [iconLeft]="icons.Plus"
           (click)="onAddClick()"
-          >{{ addLabel() }}</ngx-ds-button
+          >{{ addLabel() ?? i18n.tableAdd }}</ngx-ds-button
         >
       }
     </div>
@@ -146,8 +146,8 @@
             } @else {
               <ngx-ds-empty-state
                 [icon]="emptyIcon()"
-                [title]="emptyMessage()"
-                [description]="emptyDescription()"
+                [title]="emptyMessage() ?? i18n.tableEmpty"
+                [description]="emptyDescription() ?? i18n.tableEmptyDescription"
                 size="md"
               >
                 @if (showAddButton()) {
@@ -158,7 +158,7 @@
                     variant="solid"
                     [iconLeft]="icons.Plus"
                     (click)="onAddClick()"
-                    >{{ addLabel() }}</ngx-ds-button
+                    >{{ addLabel() ?? i18n.tableAdd }}</ngx-ds-button
                   >
                 }
               </ngx-ds-empty-state>
@@ -182,7 +182,7 @@
                 >
                   <ngx-ds-icon-button
                     [icon]="icons.ChevronRight"
-                    ariaLabel="Expandir fila"
+                    [ariaLabel]="i18n.expandRow"
                     variant="outline"
                     color="secondary"
                     size="sm"
@@ -203,7 +203,7 @@
                     type="button"
                     class="ngx-table__radio"
                     role="radio"
-                    aria-label="Seleccionar fila"
+                    [attr.aria-label]="i18n.selectRow"
                     [attr.aria-checked]="isSelected(row)"
                     [class.ngx-table__radio--selected]="isSelected(row)"
                     (click)="toggleRow(row)"
@@ -257,7 +257,7 @@
                 >
                   <ngx-ds-icon-button
                     [icon]="icons.MoreVertical"
-                    ariaLabel="Acciones"
+                    [ariaLabel]="i18n.rowActions"
                     variant="outline"
                     color="secondary"
                     size="sm"
@@ -311,7 +311,7 @@
 @if (paginated()) {
   <div class="ngx-table__footer">
     <div class="ngx-table__page-size">
-      <span class="ngx-table__label">Filas por página:</span>
+      <span class="ngx-table__label">{{ i18n.rowsPerPage }}</span>
       <select
         class="ngx-table__page-size-select"
         [value]="effectivePageSize()"
@@ -325,9 +325,9 @@
 
     <span class="ngx-table__page-info">
       @if (totalItems() > 0) {
-        {{ pageStart() }}–{{ pageEnd() }} de {{ totalItems() }}
+        {{ i18n.pageRange(pageStart(), pageEnd(), totalItems()) }}
       } @else {
-        0 resultados
+        {{ i18n.zeroResults }}
       }
     </span>
 

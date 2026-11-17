@@ -7,11 +7,13 @@ import {
   model,
   output,
   signal,
+  inject,
 } from '@angular/core';
 import { Search } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { KbdComponent } from '../../atoms/kbd/kbd.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface CommandItem {
   id: string | number;
@@ -34,9 +36,11 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommandPaletteComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly open = model<boolean>(false);
   readonly items = input<CommandItem[]>([]);
-  readonly placeholder = input<string>('Buscar comandos...');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly openShortcut = input<string>('k'); // activated with Ctrl/Cmd + this key
 
   readonly itemSelect = output<CommandItem>();

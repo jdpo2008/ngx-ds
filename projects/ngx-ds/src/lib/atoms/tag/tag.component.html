@@ -13,7 +13,7 @@
     <button
       type="button"
       class="tag__dismiss"
-      [attr.aria-label]="'Eliminar ' + label()"
+      [attr.aria-label]="i18n.removeTag(label())"
       (click)="onDismiss()"
     >
       <ngx-ds-icon [icon]="closeIcon" [size]="iconSize()" aria-hidden="true" />

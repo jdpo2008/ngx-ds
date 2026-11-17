@@ -28,6 +28,7 @@ import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
 import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type DatepickerSize = Size;
 
@@ -53,10 +54,12 @@ let nextId = 0;
   ],
 })
 export class DatepickerComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Configuration ─────────────────────────────────────────
   readonly label = input<string>('');
   readonly floatingLabel = input<boolean>(false);
-  readonly placeholder = input<string>('DD/MM/AAAA');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly size = input<DatepickerSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');

@@ -1,4 +1,4 @@
-<nav class="pagination" aria-label="Pagination">
+<nav class="pagination" [attr.aria-label]="i18n.pagination">
   <!-- Prev -->
   <ngx-ds-button
     size="sm"
@@ -6,7 +6,7 @@
     color="secondary"
     [disabled]="currentPage() === 1"
     (click)="prev()"
-    aria-label="Previous page"
+    [attr.aria-label]="i18n.prevPage"
   >
     <span class="pagination__arrow pagination__arrow--prev" aria-hidden="true"></span>
   </ngx-ds-button>
@@ -34,7 +34,7 @@
     color="secondary"
     [disabled]="currentPage() === totalPages()"
     (click)="next()"
-    aria-label="Next page"
+    [attr.aria-label]="i18n.nextPage"
   >
     <span class="pagination__arrow pagination__arrow--next" aria-hidden="true"></span>
   </ngx-ds-button>

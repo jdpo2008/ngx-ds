@@ -15,6 +15,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { addMonths, isSameDay, moveFocusDate, startOfDay, toWeeks } from '../../shared/day-cell';
 import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface CalendarDayCell {
   date: Date;
@@ -33,6 +34,8 @@ export interface CalendarDayCell {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly value = model<Date | null>(null);
   readonly minDate = model<Date | null>(null);
   readonly maxDate = model<Date | null>(null);

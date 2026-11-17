@@ -1,6 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  output,
+  inject,
+} from '@angular/core';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type PopoverPlacement =
   'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
@@ -14,12 +23,14 @@ export type PopoverPlacement =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PopoverComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly open = model<boolean>(false);
   readonly placement = input<PopoverPlacement>('bottom');
   readonly closeOnClickOutside = input<boolean>(true);
   readonly closeOnEscape = input<boolean>(true);
   readonly disabled = input<boolean>(false);
-  readonly ariaLabel = input<string>('Popover');
+  readonly ariaLabel = input<string | undefined>(undefined);
 
   readonly opened = output<void>();
   readonly closed = output<void>();

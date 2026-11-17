@@ -28,6 +28,7 @@ import { setupEscapeClose } from '../../shared/escape-close';
 import { isActivationKey } from '../../shared/keyboard';
 import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type DateRangePickerSize = Size;
 
@@ -56,8 +57,10 @@ let nextId = 0;
   ],
 })
 export class DateRangePickerComponent implements ControlValueAccessor {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly label = input<string>('');
-  readonly placeholder = input<string>('DD/MM/AAAA');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly size = input<DateRangePickerSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
@@ -86,6 +89,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly #months = monthNames(this.#locale);
 
   readonly isOpen = this.#open.asReadonly();
+  readonly placeholderText = computed(() => this.placeholder() ?? this.i18n.datePlaceholder);
 
   readonly weekdays = weekdayNames(this.#locale);
 

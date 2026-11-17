@@ -20,7 +20,7 @@
       [class.tree-node__toggle--expanded]="isExpanded()"
       [style.visibility]="hasChildren() ? 'visible' : 'hidden'"
       (click)="toggle($event)"
-      [attr.aria-label]="isExpanded() ? 'Colapsar' : 'Expandir'"
+      [attr.aria-label]="isExpanded() ? i18n.collapse : i18n.expand"
     >
       <ngx-ds-icon [icon]="ChevronRight" [size]="14" />
     </button>

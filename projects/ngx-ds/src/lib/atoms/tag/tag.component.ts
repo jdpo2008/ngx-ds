@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, input, output, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, computed, inject } from '@angular/core';
 import { LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../icon/icon.component';
 import { X } from 'lucide-angular';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type TagSize = Size;
 export type TagColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
@@ -19,6 +20,8 @@ const ICON_SIZE: Record<TagSize, number> = { sm: 12, md: 14, lg: 16 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly label = input.required<string>();
   readonly size = input<TagSize>('md');
   readonly color = input<TagColor>('primary');

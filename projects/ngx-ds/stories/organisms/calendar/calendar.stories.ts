@@ -3,6 +3,7 @@ import { Component, signal, computed } from '@angular/core';
 import { CalendarComponent } from '../../../src/lib/organisms/calendar/calendar.component';
 import { DatepickerComponent } from '../../../src/lib/molecules/datepicker/datepicker.component';
 import { provideNgxDsLocale } from '../../../src/lib/shared/locale';
+import { NGX_DS_LABELS_EN, provideNgxDsLabels } from '../../../src/lib/shared/labels';
 
 function fmt(d: Date | null): string {
   if (!d) return '—';
@@ -48,13 +49,14 @@ export const Default: Story = {
   selector: 'calendar-locale-wrapper',
   standalone: true,
   imports: [CalendarComponent, DatepickerComponent],
-  // A component-level provider scopes the locale to this subtree; apps usually
-  // call provideNgxDsLocale() once in bootstrapApplication providers.
-  providers: [provideNgxDsLocale('en-US')],
+  // Component-level providers scope locale and labels to this subtree; apps usually
+  // call provideNgxDsLocale() / provideNgxDsLabels() once in bootstrapApplication.
+  providers: [provideNgxDsLocale('en-US'), provideNgxDsLabels(NGX_DS_LABELS_EN)],
   template: `
     <div class="p-6 space-y-6" style="max-width: 360px">
       <p class="text-sm text-gray-500">
-        Locale <code>en-US</code> via <code>provideNgxDsLocale</code>
+        Locale <code>en-US</code> + English labels via <code>provideNgxDsLocale</code> and
+        <code>provideNgxDsLabels(NGX_DS_LABELS_EN)</code>
       </p>
       <ngx-ds-calendar [(value)]="selected" />
       <ngx-ds-datepicker label="Date" [(value)]="selected" [firstDayOfWeek]="0" />

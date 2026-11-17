@@ -14,7 +14,12 @@
     </div>
 
     @if (dismissible()) {
-      <button type="button" class="alert__close" (click)="close()" aria-label="Cerrar alerta">
+      <button
+        type="button"
+        class="alert__close"
+        (click)="close()"
+        [attr.aria-label]="i18n.closeAlert"
+      >
         <ngx-ds-icon [icon]="closeIcon" [size]="16" aria-hidden="true" />
       </button>
     }

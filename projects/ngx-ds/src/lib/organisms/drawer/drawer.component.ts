@@ -14,6 +14,7 @@ import { X } from 'lucide-angular';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
 export type DrawerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -27,6 +28,8 @@ export type DrawerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerComponent implements OnDestroy {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   private readonly doc = inject(DOCUMENT);
 
   protected readonly icons = { X };

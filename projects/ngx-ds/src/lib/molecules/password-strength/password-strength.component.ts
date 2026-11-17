@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type PasswordStrengthLevel = 'none' | 'weak' | 'fair' | 'good' | 'strong';
 
@@ -6,14 +7,6 @@ export interface PasswordCriterion {
   label: string;
   met: boolean;
 }
-
-const STRENGTH_LABELS: Record<PasswordStrengthLevel, string> = {
-  none: '',
-  weak: 'Débil',
-  fair: 'Regular',
-  good: 'Buena',
-  strong: 'Fuerte',
-};
 
 @Component({
   selector: 'ngx-ds-password-strength',
@@ -23,6 +16,8 @@ const STRENGTH_LABELS: Record<PasswordStrengthLevel, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordStrengthComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   // ── Value ────────────────────────────────────────────────────
   readonly password = input<string>('');
 
@@ -46,32 +41,32 @@ export class PasswordStrengthComponent {
     const list: PasswordCriterion[] = [];
 
     list.push({
-      label: `Mínimo ${this.minLength()} caracteres`,
+      label: this.i18n.passwordMinLength(this.minLength()),
       met: p.length >= this.minLength(),
     });
 
     const max = this.maxLength();
     if (max !== undefined) {
       list.push({
-        label: `Máximo ${max} caracteres`,
+        label: this.i18n.passwordMaxLength(max),
         met: p.length > 0 && p.length <= max,
       });
     }
 
     if (this.requireLowercase()) {
-      list.push({ label: 'Al menos una minúscula (a–z)', met: /[a-z]/.test(p) });
+      list.push({ label: this.i18n.passwordLowercase, met: /[a-z]/.test(p) });
     }
 
     if (this.requireUppercase()) {
-      list.push({ label: 'Al menos una mayúscula (A–Z)', met: /[A-Z]/.test(p) });
+      list.push({ label: this.i18n.passwordUppercase, met: /[A-Z]/.test(p) });
     }
 
     if (this.requireNumbers()) {
-      list.push({ label: 'Al menos un número (0–9)', met: /[0-9]/.test(p) });
+      list.push({ label: this.i18n.passwordNumber, met: /[0-9]/.test(p) });
     }
 
     if (this.requireSpecial()) {
-      list.push({ label: 'Al menos un carácter especial (!@#…)', met: /[^a-zA-Z0-9]/.test(p) });
+      list.push({ label: this.i18n.passwordSpecial, met: /[^a-zA-Z0-9]/.test(p) });
     }
 
     return list;
@@ -96,5 +91,15 @@ export class PasswordStrengthComponent {
     return levels[this.score()];
   });
 
-  readonly strengthLabel = computed(() => STRENGTH_LABELS[this.strengthLevel()]);
+  readonly strengthLabel = computed(() => {
+    const l = this.i18n;
+    const labels: Record<PasswordStrengthLevel, string> = {
+      none: '',
+      weak: l.strengthWeak,
+      fair: l.strengthFair,
+      good: l.strengthGood,
+      strong: l.strengthStrong,
+    };
+    return labels[this.strengthLevel()];
+  });
 }

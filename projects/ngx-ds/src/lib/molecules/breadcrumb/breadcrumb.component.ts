@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
 import { ChevronRight, LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface BreadcrumbItem {
   label: string;
@@ -23,6 +24,8 @@ const ICON_SIZE: Record<BreadcrumbSize, number> = { sm: 12, md: 14, lg: 16 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly items = input<BreadcrumbItem[]>([]);
   readonly size = input<BreadcrumbSize>('md');
   readonly maxItems = input<number>(0); // 0 = show all

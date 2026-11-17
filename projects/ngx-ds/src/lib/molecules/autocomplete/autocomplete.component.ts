@@ -18,6 +18,7 @@ import { LucideIconData, Search, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export interface AutocompleteOption {
   value: string | number;
@@ -48,13 +49,15 @@ let nextId = 0;
   ],
 })
 export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   private readonly sanitizer = inject(DomSanitizer);
 
   // ── Configuration ─────────────────────────────────────────
   readonly options = input<AutocompleteOption[]>([]);
   readonly label = input<string>('');
   readonly floatingLabel = input<boolean>(false);
-  readonly placeholder = input<string>('Buscar...');
+  readonly placeholder = input<string | undefined>(undefined);
   readonly size = input<AutocompleteSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
@@ -69,7 +72,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   readonly allowCustom = input<boolean>(false);
   /** Show all options when focused with no text (minChars=0 equivalent) */
   readonly showAllOnFocus = input<boolean>(false);
-  readonly noResultsText = input<string>('Sin resultados');
+  readonly noResultsText = input<string | undefined>(undefined);
 
   // ── Value ────────────────────────────────────────────────
   readonly value = model<AutocompleteValue | null>(null);

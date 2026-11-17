@@ -25,7 +25,7 @@
             type="button"
             class="toast__close"
             (click)="onClose(toast.id)"
-            aria-label="Cerrar"
+            [attr.aria-label]="i18n.close"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

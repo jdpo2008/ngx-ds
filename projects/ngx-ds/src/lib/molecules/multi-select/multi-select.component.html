@@ -17,7 +17,7 @@
   >
     <div class="ms__chips">
       @if (value().length === 0) {
-        <span class="ms__placeholder">{{ placeholder() }}</span>
+        <span class="ms__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
       }
       @for (val of value(); track val) {
         @let label = selectedLabels()[$index];
@@ -27,7 +27,7 @@
             type="button"
             class="ms__chip-remove"
             (click)="removeChip(val, $event)"
-            [attr.aria-label]="'Quitar ' + label"
+            [attr.aria-label]="i18n.removeChip(label)"
           >
             <ngx-ds-icon [icon]="XIcon" [size]="12" />
           </button>
@@ -55,7 +55,7 @@
           <input
             class="ms__search"
             type="text"
-            placeholder="Buscar..."
+            [placeholder]="i18n.searchPlaceholder"
             [value]="search()"
             (input)="onSearch($event)"
             (click)="$event.stopPropagation()"
@@ -89,7 +89,7 @@
         }
 
         @if (filteredOptions().length === 0) {
-          <li class="ms__empty">Sin resultados</li>
+          <li class="ms__empty">{{ i18n.noResults }}</li>
         }
       </ul>
     </div>

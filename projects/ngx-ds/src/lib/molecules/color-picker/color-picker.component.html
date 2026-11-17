@@ -13,7 +13,7 @@
 
   <div class="cp__sliders">
     <!-- Hue slider -->
-    <label class="cp__slider-label" [for]="id + '-hue'">Matiz</label>
+    <label class="cp__slider-label" [for]="id + '-hue'">{{ i18n.colorHue }}</label>
     <input
       [id]="id + '-hue'"
       type="range"
@@ -27,7 +27,7 @@
     />
 
     <!-- Saturation slider -->
-    <label class="cp__slider-label" [for]="id + '-sat'">Saturación</label>
+    <label class="cp__slider-label" [for]="id + '-sat'">{{ i18n.colorSaturation }}</label>
     <input
       [id]="id + '-sat'"
       type="range"
@@ -42,7 +42,7 @@
     />
 
     <!-- Lightness slider -->
-    <label class="cp__slider-label" [for]="id + '-light'">Luminosidad</label>
+    <label class="cp__slider-label" [for]="id + '-light'">{{ i18n.colorLightness }}</label>
     <input
       [id]="id + '-light'"
       type="range"
@@ -65,7 +65,7 @@
       [value]="hexInput()"
       maxlength="7"
       placeholder="#000000"
-      aria-label="Color en hexadecimal"
+      [attr.aria-label]="i18n.colorHex"
       [disabled]="disabled() || null"
       (input)="onHexInput($event)"
     />

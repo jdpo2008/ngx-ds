@@ -5,6 +5,7 @@ import { IconComponent } from '../../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../../atoms/icon-button/icon-button.component';
 import { NGX_DS_LOCALE } from '../../../shared/locale';
 import type { NgxNotification, NotificationType } from '../notification.types';
+import { NGX_DS_LABELS, NgxDsLabels } from '../../../shared/labels';
 
 const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
   info: Info,
@@ -13,18 +14,22 @@ const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
   error: AlertCircle,
 };
 
-function relativeTime(value: Date | string | undefined, locale: string): string {
+function relativeTime(
+  value: Date | string | undefined,
+  locale: string,
+  labels: NgxDsLabels,
+): string {
   if (!value) return '';
   const date = value instanceof Date ? value : new Date(value);
   if (isNaN(date.getTime())) return String(value);
   const diffMs = Date.now() - date.getTime();
   const diffMin = Math.floor(diffMs / 60_000);
-  if (diffMin < 1) return 'Ahora';
-  if (diffMin < 60) return `Hace ${diffMin} min`;
+  if (diffMin < 1) return labels.timeNow;
+  if (diffMin < 60) return labels.minutesAgo(diffMin);
   const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `Hace ${diffH} h`;
+  if (diffH < 24) return labels.hoursAgo(diffH);
   const diffD = Math.floor(diffH / 24);
-  if (diffD < 7) return `Hace ${diffD} d`;
+  if (diffD < 7) return labels.daysAgo(diffD);
   return date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
 }
 
@@ -37,6 +42,8 @@ function relativeTime(value: Date | string | undefined, locale: string): string 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationItemComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly notification = input.required<NgxNotification>();
 
   readonly markRead = output<NgxNotification>();
@@ -47,7 +54,9 @@ export class NotificationItemComponent {
 
   readonly typeIcon = computed(() => TYPE_ICONS[this.notification().type]);
   readonly #locale = inject(NGX_DS_LOCALE);
-  readonly timeLabel = computed(() => relativeTime(this.notification().time, this.#locale));
+  readonly timeLabel = computed(() =>
+    relativeTime(this.notification().time, this.#locale, this.i18n),
+  );
 
   readonly hostClasses = computed(() => {
     const n = this.notification();

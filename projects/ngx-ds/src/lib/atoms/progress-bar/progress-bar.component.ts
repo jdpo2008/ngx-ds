@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
 import { Size } from '../../shared/size';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type ProgressBarSize = Size;
 export type ProgressBarColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
@@ -12,6 +13,8 @@ export type ProgressBarColor = 'primary' | 'secondary' | 'danger' | 'success' | 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressBarComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly value = input<number>(0);
   readonly max = input<number>(100);
   readonly size = input<ProgressBarSize>('md');
