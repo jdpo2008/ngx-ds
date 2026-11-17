@@ -16,7 +16,7 @@ import {
       <ngx-ds-search-input
         placeholder="Buscar productos..."
         [(value)]="query"
-        (search)="onSearch($event)"
+        (searchSubmit)="onSearch($event)"
         (cleared)="onClear()"
       />
       @if (query) {
