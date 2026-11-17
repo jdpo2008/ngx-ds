@@ -1,0 +1,127 @@
+<!-- Static label -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-datepicker__label">{{ label() }}</label>
+}
+
+<!-- Field trigger -->
+<div
+  [class]="fieldClasses()"
+  (click)="togglePanel()"
+  [attr.id]="id"
+  role="button"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-disabled]="isDisabled()"
+>
+  <!-- Floating label -->
+  @if (floatingLabel() && label()) {
+    <label [class]="floatLabelClasses()">{{ label() }}</label>
+  }
+
+  <!-- Calendar icon -->
+  <span class="ngx-datepicker__icon" aria-hidden="true">
+    <ngx-ds-icon [icon]="CalendarIcon" [size]="iconSize()" />
+  </span>
+
+  <!-- Display value -->
+  <span class="ngx-datepicker__display">
+    @if (displayValue()) {
+      <span class="ngx-datepicker__value">{{ displayValue() }}</span>
+    } @else {
+      <span class="ngx-datepicker__placeholder">{{ placeholder() }}</span>
+    }
+  </span>
+
+  <!-- Clear button -->
+  @if (hasValue() && !isDisabled()) {
+    <button
+      type="button"
+      class="ngx-datepicker__clear"
+      aria-label="Limpiar fecha"
+      (click)="clearValue($event)"
+    >
+      <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
+    </button>
+  }
+</div>
+
+<!-- Calendar panel -->
+@if (isOpen()) {
+  <div class="ngx-datepicker__panel" role="dialog" aria-label="Calendario">
+    <!-- Month navigation -->
+    <div class="ngx-datepicker__header">
+      <button
+        type="button"
+        class="ngx-datepicker__nav"
+        aria-label="Mes anterior"
+        (click)="prevMonth(); $event.stopPropagation()"
+      >
+        <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
+      </button>
+      <span class="ngx-datepicker__header-text">{{ headerText() }}</span>
+      <button
+        type="button"
+        class="ngx-datepicker__nav"
+        aria-label="Mes siguiente"
+        (click)="nextMonth(); $event.stopPropagation()"
+      >
+        <ngx-ds-icon [icon]="ChevronRight" [size]="16" />
+      </button>
+    </div>
+
+    <!-- Weekday labels -->
+    <div class="ngx-datepicker__weekdays" aria-hidden="true">
+      @for (day of weekdayLabels(); track day) {
+        <span class="ngx-datepicker__weekday">{{ day }}</span>
+      }
+    </div>
+
+    <!-- Day grid -->
+    <div class="ngx-datepicker__days" role="grid">
+      @for (cell of calendarDays(); track trackByTime($index, cell)) {
+        <button
+          type="button"
+          class="ngx-datepicker__day"
+          [class.ngx-datepicker__day--other-month]="!cell.inMonth"
+          [class.ngx-datepicker__day--today]="cell.isToday"
+          [class.ngx-datepicker__day--selected]="cell.isSelected"
+          [class.ngx-datepicker__day--disabled]="cell.isDisabled"
+          [disabled]="cell.isDisabled || null"
+          [attr.aria-label]="
+            cell.date.toLocaleDateString('es-ES', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })
+          "
+          [attr.aria-pressed]="cell.isSelected"
+          role="gridcell"
+          (click)="selectDate(cell); $event.stopPropagation()"
+        >
+          {{ cell.date.getDate() }}
+        </button>
+      }
+    </div>
+
+    <!-- Footer -->
+    @if (showToday()) {
+      <div class="ngx-datepicker__footer">
+        <button
+          type="button"
+          class="ngx-datepicker__today-btn"
+          (click)="selectToday(); $event.stopPropagation()"
+        >
+          Hoy
+        </button>
+      </div>
+    }
+  </div>
+}
+
+<!-- Error / Hint -->
+@if (hasError()) {
+  <p class="ngx-datepicker__message ngx-datepicker__message--error" role="alert">
+    {{ errorMessage() }}
+  </p>
+} @else if (hint()) {
+  <p class="ngx-datepicker__message ngx-datepicker__message--hint">{{ hint() }}</p>
+}

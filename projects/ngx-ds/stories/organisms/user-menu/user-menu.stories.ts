@@ -2,7 +2,10 @@ import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { User, Settings, LogOut, CreditCard } from 'lucide-angular';
 import { UserMenuComponent } from '../../../src/lib/organisms/user-menu/user-menu.component';
-import type { UserMenuAction, UserMenuUser } from '../../../src/lib/organisms/user-menu/user-menu.types';
+import type {
+  UserMenuAction,
+  UserMenuUser,
+} from '../../../src/lib/organisms/user-menu/user-menu.types';
 
 // ── Seed data ─────────────────────────────────────────────────────────────────
 
@@ -21,10 +24,10 @@ const USER_INITIALS: UserMenuUser = {
 };
 
 const ACTIONS: UserMenuAction[] = [
-  { id: 'profile',  label: 'Perfil',         icon: User,       color: 'default' },
-  { id: 'billing',  label: 'Facturación',     icon: CreditCard, color: 'default' },
-  { id: 'settings', label: 'Configuración',   icon: Settings,   color: 'default' },
-  { id: 'logout',   label: 'Cerrar sesión',   icon: LogOut,     color: 'danger',  separator: true },
+  { id: 'profile', label: 'Perfil', icon: User, color: 'default' },
+  { id: 'billing', label: 'Facturación', icon: CreditCard, color: 'default' },
+  { id: 'settings', label: 'Configuración', icon: Settings, color: 'default' },
+  { id: 'logout', label: 'Cerrar sesión', icon: LogOut, color: 'danger', separator: true },
 ];
 
 // ── Interactive wrapper ───────────────────────────────────────────────────────
@@ -34,7 +37,9 @@ const ACTIONS: UserMenuAction[] = [
   standalone: true,
   imports: [UserMenuComponent],
   template: `
-    <div style="padding: 2rem; min-height: 420px; display: flex; align-items: flex-start; justify-content: flex-end;">
+    <div
+      style="padding: 2rem; min-height: 420px; display: flex; align-items: flex-start; justify-content: flex-end;"
+    >
       <ngx-ds-user-menu
         [user]="user"
         [actions]="actions"
@@ -48,7 +53,7 @@ const ACTIONS: UserMenuAction[] = [
   `,
 })
 class Wrapper {
-  user    = USER_WITH_AVATAR;
+  user = USER_WITH_AVATAR;
   actions = ACTIONS;
   lastAction = signal('ninguna');
 
@@ -64,7 +69,9 @@ class Wrapper {
   standalone: true,
   imports: [UserMenuComponent],
   template: `
-    <div style="padding: 2rem; min-height: 420px; display: flex; align-items: flex-start; justify-content: flex-end;">
+    <div
+      style="padding: 2rem; min-height: 420px; display: flex; align-items: flex-start; justify-content: flex-end;"
+    >
       <ngx-ds-user-menu
         [user]="user"
         [actions]="actions"
@@ -78,7 +85,7 @@ class Wrapper {
   `,
 })
 class InitialsWrapper {
-  user    = USER_INITIALS;
+  user = USER_INITIALS;
   actions = ACTIONS;
   lastAction = signal('ninguna');
 

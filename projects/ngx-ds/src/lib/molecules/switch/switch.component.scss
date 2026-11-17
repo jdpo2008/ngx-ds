@@ -1,0 +1,139 @@
+$switch-colors: (
+  'primary': var(--color-primary, #3b82f6),
+  'secondary': var(--color-secondary, #6b7280),
+  'danger': var(--color-danger, #ef4444),
+  'success': #10b981,
+  'warning': var(--color-warning, #f59e0b),
+);
+
+// track-w, track-h, padding, thumb-size, travel
+$switch-sizes: (
+  'sm': (
+    2rem,
+    1.125rem,
+    0.1875rem,
+    0.75rem,
+    0.875rem,
+  ),
+  'md': (
+    2.75rem,
+    1.5rem,
+    0.25rem,
+    1rem,
+    1.25rem,
+  ),
+  'lg': (
+    3.5rem,
+    1.875rem,
+    0.3125rem,
+    1.25rem,
+    1.625rem,
+  ),
+);
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // ── Hidden native input ────────────────────────────────────────
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+
+    &:focus-visible ~ .switch__track {
+      outline: 2px solid var(--ngx-switch-color);
+      outline-offset: 2px;
+    }
+  }
+
+  // ── Track ──────────────────────────────────────────────────────
+  &__track {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: var(--border-input, #d1d5db);
+    transition: background-color 0.2s ease;
+  }
+
+  &--checked &__track {
+    background-color: var(--ngx-switch-color);
+  }
+
+  &:hover:not(&--disabled) &__track {
+    filter: brightness(0.95);
+  }
+
+  // ── Thumb ──────────────────────────────────────────────────────
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    background: #fff;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+    transform: translateY(-50%) translateX(var(--ngx-switch-thumb-start));
+  }
+
+  &--checked &__thumb {
+    transform: translateY(-50%) translateX(var(--ngx-switch-thumb-end));
+  }
+
+  // ── Labels ────────────────────────────────────────────────────
+  &__label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #374151);
+    line-height: 1.25;
+  }
+
+  &__state-label {
+    font-size: 0.75rem;
+    color: var(--text-muted, #6b7280);
+    min-width: 2rem;
+  }
+
+  // ── Sizes ─────────────────────────────────────────────────────
+  @each $name, $values in $switch-sizes {
+    $track-w: nth($values, 1);
+    $track-h: nth($values, 2);
+    $padding: nth($values, 3);
+    $thumb-size: nth($values, 4);
+    $travel: nth($values, 5);
+
+    &--#{$name} {
+      .switch__track {
+        width: $track-w;
+        height: $track-h;
+      }
+
+      .switch__thumb {
+        width: $thumb-size;
+        height: $thumb-size;
+        --ngx-switch-thumb-start: #{$padding};
+        --ngx-switch-thumb-end: #{$travel};
+      }
+    }
+  }
+
+  // ── Colors ────────────────────────────────────────────────────
+  @each $name, $color in $switch-colors {
+    &--#{$name} {
+      --ngx-switch-color: #{$color};
+    }
+  }
+}

@@ -1,0 +1,43 @@
+@if (label()) {
+  <label class="number-input__label" [for]="id">{{ label() }}</label>
+}
+
+<div [class]="hostClasses()">
+  <button
+    type="button"
+    class="number-input__btn"
+    [disabled]="!canDecrement() || null"
+    (click)="decrement()"
+    aria-label="Decrementar"
+  >
+    <ngx-ds-icon [icon]="MinusIcon" [size]="iconSize()" />
+  </button>
+
+  <input
+    class="number-input__field"
+    type="number"
+    [id]="id"
+    [value]="value()"
+    [min]="min() ?? null"
+    [max]="max() ?? null"
+    [step]="step()"
+    [disabled]="disabled() || null"
+    (change)="onInputChange($event)"
+  />
+
+  <button
+    type="button"
+    class="number-input__btn"
+    [disabled]="!canIncrement() || null"
+    (click)="increment()"
+    aria-label="Incrementar"
+  >
+    <ngx-ds-icon [icon]="PlusIcon" [size]="iconSize()" />
+  </button>
+</div>
+
+@if (errorMessage()) {
+  <p class="number-input__error">{{ errorMessage() }}</p>
+} @else if (hint()) {
+  <p class="number-input__hint">{{ hint() }}</p>
+}

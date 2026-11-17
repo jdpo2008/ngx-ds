@@ -1,0 +1,41 @@
+<nav class="pagination" aria-label="Pagination">
+  <!-- Prev -->
+  <ngx-ds-button
+    size="sm"
+    variant="outline"
+    color="secondary"
+    [disabled]="currentPage() === 1"
+    (click)="prev()"
+    aria-label="Previous page"
+  >
+    <span class="pagination__arrow pagination__arrow--prev" aria-hidden="true"></span>
+  </ngx-ds-button>
+
+  <!-- Pages -->
+  @for (page of pages(); track $index) {
+    @if (page === '...') {
+      <span class="pagination__ellipsis" aria-hidden="true">…</span>
+    } @else {
+      <ngx-ds-button
+        size="sm"
+        [variant]="page === currentPage() ? 'solid' : 'outline'"
+        [color]="page === currentPage() ? 'primary' : 'secondary'"
+        [attr.aria-current]="page === currentPage() ? 'page' : null"
+        (click)="go(page)"
+        >{{ page }}</ngx-ds-button
+      >
+    }
+  }
+
+  <!-- Next -->
+  <ngx-ds-button
+    size="sm"
+    variant="outline"
+    color="secondary"
+    [disabled]="currentPage() === totalPages()"
+    (click)="next()"
+    aria-label="Next page"
+  >
+    <span class="pagination__arrow pagination__arrow--next" aria-hidden="true"></span>
+  </ngx-ds-button>
+</nav>

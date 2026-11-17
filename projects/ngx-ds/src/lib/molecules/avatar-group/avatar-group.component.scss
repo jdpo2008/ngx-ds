@@ -1,0 +1,69 @@
+$count-sizes: (
+  'xs': (
+    1.5rem,
+    0.625rem,
+  ),
+  'sm': (
+    2rem,
+    0.75rem,
+  ),
+  'md': (
+    2.5rem,
+    0.875rem,
+  ),
+  'lg': (
+    3rem,
+    1rem,
+  ),
+  'xl': (
+    4rem,
+    1.25rem,
+  ),
+);
+
+:host {
+  display: inline-flex;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.avatar-group {
+  --ag-overlap: -0.5rem;
+  display: inline-flex;
+  align-items: center;
+
+  ::ng-deep ngx-ds-avatar {
+    display: inline-flex;
+    margin-left: var(--ag-overlap);
+    outline: 2px solid var(--surface-base, #fff);
+    border-radius: 9999px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: var(--ag-overlap);
+    border-radius: 9999px;
+    outline: 2px solid var(--surface-base, #fff);
+    background: var(--surface-muted, #f3f4f6);
+    color: var(--text-secondary, #4b5563);
+    font-weight: 600;
+    user-select: none;
+
+    @each $name, $values in $count-sizes {
+      $size: nth($values, 1);
+      $font: nth($values, 2);
+
+      &--#{$name} {
+        width: $size;
+        height: $size;
+        font-size: $font;
+      }
+    }
+  }
+}

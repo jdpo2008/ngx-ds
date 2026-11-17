@@ -1,0 +1,11 @@
+<button [type]="type()" [class]="hostClasses()" [disabled]="disabled() || loading() || null">
+  @if (loading()) {
+    <ngx-ds-spinner class="btn__icon" [size]="spinnerSize()" color="current" />
+  } @else if (iconLeft()) {
+    <ngx-ds-icon class="btn__icon" [icon]="iconLeft()!" [size]="iconSize()" aria-hidden="true" />
+  }
+  <ng-content />
+  @if (!loading() && iconRight()) {
+    <ngx-ds-icon class="btn__icon" [icon]="iconRight()!" [size]="iconSize()" aria-hidden="true" />
+  }
+</button>

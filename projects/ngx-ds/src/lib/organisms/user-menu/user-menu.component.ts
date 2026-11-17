@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, viewChild } from '@angular/core';
 import { AvatarComponent } from '../../atoms/avatar/avatar.component';
 import type { AvatarSize } from '../../atoms/avatar/avatar.component';
 import { MenuButtonComponent } from '../../atoms/menu-button/menu-button.component';
@@ -22,10 +16,10 @@ import type { UserMenuUser, UserMenuAction } from './user-menu.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserMenuComponent {
-  readonly user      = input.required<UserMenuUser>();
-  readonly actions   = input<UserMenuAction[]>([]);
+  readonly user = input.required<UserMenuUser>();
+  readonly actions = input<UserMenuAction[]>([]);
   readonly placement = input<PopoverPlacement>('bottom-end');
-  readonly size      = input<AvatarSize>('md');
+  readonly size = input<AvatarSize>('md');
 
   readonly actionClick = output<UserMenuAction>();
 

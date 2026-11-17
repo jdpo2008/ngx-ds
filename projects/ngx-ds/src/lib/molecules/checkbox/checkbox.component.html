@@ -1,0 +1,21 @@
+<label [for]="id" [class]="hostClasses()">
+  <input
+    type="checkbox"
+    [id]="id"
+    class="checkbox__input"
+    [checked]="checked()"
+    [indeterminate]="indeterminate() && !checked()"
+    [disabled]="isDisabled()"
+    (change)="onNativeChange($event)"
+  />
+
+  @if (labelPosition() === 'left' && label()) {
+    <span class="checkbox__label">{{ label() }}</span>
+  }
+
+  <span class="checkbox__box" aria-hidden="true"></span>
+
+  @if (labelPosition() === 'right' && label()) {
+    <span class="checkbox__label">{{ label() }}</span>
+  }
+</label>

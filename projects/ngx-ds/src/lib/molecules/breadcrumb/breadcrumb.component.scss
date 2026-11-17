@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── List ──────────────────────────────────────────────────────────────────────
+
+.breadcrumb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+}
+
+// ── Item ──────────────────────────────────────────────────────────────────────
+
+.breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+// ── Crumb (shared) ────────────────────────────────────────────────────────────
+
+.breadcrumb__crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  line-height: 1.4;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+
+  // ── Link (a or button) ──────────────────────────────────────────────────
+  &--link {
+    color: var(--text-muted, #6b7280);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.125rem 0.25rem;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: inherit;
+
+    &:hover {
+      color: var(--text-base, #111827);
+      background: var(--surface-muted, #f3f4f6);
+    }
+  }
+
+  // ── Current page ────────────────────────────────────────────────────────
+  &--current {
+    color: var(--text-base, #111827);
+    font-weight: 500;
+    padding: 0.125rem 0.25rem;
+  }
+
+  // ── Ellipsis ────────────────────────────────────────────────────────────
+  &--ellipsis {
+    color: var(--text-placeholder, #9ca3af);
+    padding: 0.125rem 0.25rem;
+  }
+}
+
+// ── Separator ─────────────────────────────────────────────────────────────────
+
+.breadcrumb__separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-disabled, #d1d5db);
+  padding: 0 0.125rem;
+}
+
+// ── Sizes ─────────────────────────────────────────────────────────────────────
+
+.breadcrumb--sm {
+  font-size: 0.75rem;
+}
+.breadcrumb--md {
+  font-size: 0.8125rem;
+}
+.breadcrumb--lg {
+  font-size: 0.9375rem;
+}

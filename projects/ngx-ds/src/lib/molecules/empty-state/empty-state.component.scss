@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+// ── Icon ──────────────────────────────────────────────────────────────────────
+
+.empty-state__illustration:not(:has(*)),
+.empty-state__action:not(:has(*)) {
+  display: none;
+}
+
+.empty-state__icon {
+  color: var(--text-disabled, #d1d5db);
+}
+
+// ── Text ──────────────────────────────────────────────────────────────────────
+
+.empty-state__title {
+  margin: 0;
+  color: var(--text-base, #111827);
+  font-weight: 600;
+}
+
+.empty-state__description {
+  margin: 0;
+  color: var(--text-muted, #6b7280);
+  max-width: 36ch;
+}
+
+// ── Sizes ─────────────────────────────────────────────────────────────────────
+
+.empty-state--sm {
+  padding: 1.5rem;
+
+  .empty-state__title {
+    font-size: 0.875rem;
+  }
+  .empty-state__description {
+    font-size: 0.8125rem;
+  }
+}
+
+.empty-state--md {
+  padding: 2.5rem;
+
+  .empty-state__title {
+    font-size: 1rem;
+  }
+  .empty-state__description {
+    font-size: 0.875rem;
+  }
+}
+
+.empty-state--lg {
+  padding: 3.5rem;
+
+  .empty-state__title {
+    font-size: 1.125rem;
+  }
+  .empty-state__description {
+    font-size: 0.9375rem;
+  }
+}

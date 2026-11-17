@@ -1,0 +1,8 @@
+// Storybook-only: make the preview canvas follow the active theme.
+// Not shipped with the library (only referenced by the storybook targets
+// in angular.json).
+
+body {
+  background: var(--surface-base, #ffffff);
+  color: var(--text-base, #111827);
+}

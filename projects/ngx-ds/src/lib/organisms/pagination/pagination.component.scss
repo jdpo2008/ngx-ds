@@ -1,0 +1,42 @@
+.pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+
+  // Force all buttons to the same square size
+  ngx-ds-button ::ng-deep .btn {
+    min-width: 2rem;
+    height: 2rem;
+    padding-inline: 0.375rem;
+  }
+
+  // ── Ellipsis ──────────────────────────────────────────────────
+  &__ellipsis {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding-bottom: 0.2rem;
+    font-size: 1rem;
+    color: #9ca3af;
+    user-select: none;
+  }
+
+  // ── CSS chevron arrows ────────────────────────────────────────
+  &__arrow {
+    display: block;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+
+    &--prev {
+      transform: rotate(135deg) translate(-1px, -1px);
+    }
+    &--next {
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+  }
+}

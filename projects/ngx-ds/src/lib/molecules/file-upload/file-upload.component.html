@@ -1,0 +1,85 @@
+<label
+  [class]="zoneClasses()"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  <input
+    type="file"
+    class="upload-input"
+    [accept]="accept() || null"
+    [multiple]="multiple() || null"
+    [disabled]="disabled() || null"
+    (change)="onFileSelected($event)"
+  />
+
+  <ngx-ds-icon class="upload-icon" [icon]="icons.Upload" [size]="32" />
+  <span class="upload-label">{{ label() }}</span>
+  @if (hint()) {
+    <span class="upload-hint">{{ hint() }}</span>
+  }
+</label>
+
+@if (files().length > 0) {
+  <ul class="upload-list" role="list">
+    @for (file of files(); track file.id) {
+      <li
+        class="upload-file"
+        [class.upload-file--invalid]="file.status === 'invalid'"
+        [class.upload-file--error]="stateFor(file)?.status === 'error'"
+      >
+        <ngx-ds-icon class="upload-file__icon" [icon]="fileIcon(file)" [size]="20" />
+        <div class="upload-file__info">
+          <span class="upload-file__name">{{ file.name }}</span>
+          <span class="upload-file__meta">
+            {{ formatSize(file.size) }}
+            @if (file.error) {
+              &nbsp;·&nbsp;{{ file.error }}
+            }
+            @if (stateFor(file)?.status === 'error' && stateFor(file)?.error) {
+              &nbsp;·&nbsp;{{ stateFor(file)?.error }}
+            }
+          </span>
+
+          @if (stateFor(file); as state) {
+            @if (state.status === 'uploading') {
+              <ngx-ds-progress-bar
+                class="upload-file__progress"
+                size="sm"
+                color="primary"
+                [value]="state.progress ?? 0"
+                [indeterminate]="state.progress == null"
+              />
+            }
+          }
+        </div>
+
+        @if (stateFor(file); as state) {
+          @if (state.status === 'done') {
+            <ngx-ds-icon
+              class="upload-file__status upload-file__status--done"
+              [icon]="icons.CheckCircle2"
+              [size]="18"
+            />
+          } @else if (state.status === 'error') {
+            <ngx-ds-icon
+              class="upload-file__status upload-file__status--error"
+              [icon]="icons.AlertCircle"
+              [size]="18"
+            />
+          }
+        }
+
+        <ngx-ds-icon-button
+          [icon]="icons.X"
+          ariaLabel="Eliminar archivo"
+          variant="outline"
+          color="secondary"
+          size="sm"
+          [bordered]="false"
+          (click)="removeFile(file.id)"
+        />
+      </li>
+    }
+  </ul>
+}

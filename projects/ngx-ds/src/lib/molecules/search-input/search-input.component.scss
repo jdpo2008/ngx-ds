@@ -1,0 +1,115 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Size tokens ───────────────────────────────────────────────────────────────
+
+$sizes: (
+  'sm': (
+    0.375rem 0.625rem,
+    0.8125rem,
+  ),
+  'md': (
+    0.5rem 0.75rem,
+    0.875rem,
+  ),
+  'lg': (
+    0.625rem 1rem,
+    1rem,
+  ),
+);
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+
+.search-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: 100%;
+  background: var(--surface-base, #fff);
+  border: 1.5px solid var(--border-input, #d1d5db);
+  border-radius: 0.375rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &--focused {
+    border-color: var(--color-primary, #3b82f6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+
+  &--disabled {
+    background: var(--surface-subtle, #f9fafb);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @each $name, $vals in $sizes {
+    $pad: nth($vals, 1);
+    $fs: nth($vals, 2);
+    &--#{$name} {
+      padding: $pad;
+      font-size: $fs;
+    }
+  }
+}
+
+// ── Icon ─────────────────────────────────────────────────────────────────────
+
+.search-input__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--text-placeholder, #9ca3af);
+}
+
+// ── Native input ──────────────────────────────────────────────────────────────
+
+.search-input__native {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-base, #111827);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+
+  &::placeholder {
+    color: var(--text-placeholder, #9ca3af);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--text-muted, #6b7280);
+  }
+
+  // Remove browser's native clear button on search type
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
+// ── Clear button ──────────────────────────────────────────────────────────────
+
+.search-input__clear {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-placeholder, #9ca3af);
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--text-muted, #6b7280);
+  }
+}

@@ -1,0 +1,8 @@
+<button
+  [type]="type()"
+  [class]="hostClasses()"
+  [disabled]="disabled() || null"
+  [attr.aria-label]="ariaLabel()"
+>
+  <ngx-ds-icon [icon]="icon()" [size]="iconSize()" aria-hidden="true" />
+</button>

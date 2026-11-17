@@ -1,0 +1,50 @@
+<div [class]="hostClasses()">
+  <div class="stepper__nav" role="list">
+    @for (step of steps(); track $index) {
+      <div
+        class="stepper__item"
+        role="listitem"
+        [class.is-active]="isActive($index)"
+        [class.is-completed]="isCompleted($index)"
+        [class.is-error]="step.error()"
+      >
+        <div class="stepper__track">
+          @if (orientation() === 'horizontal' && $index > 0) {
+            <div class="stepper__line" [class.stepper__line--done]="isCompleted($index - 1)"></div>
+          }
+
+          <button
+            class="stepper__bubble"
+            [attr.aria-current]="isActive($index) ? 'step' : null"
+            [attr.aria-label]="step.label()"
+            [disabled]="!clickable() || null"
+            (click)="goTo($index)"
+          >
+            @if (step.error()) {
+              <ngx-ds-icon [icon]="icons.X" [size]="14" />
+            } @else if (isCompleted($index)) {
+              <ngx-ds-icon [icon]="icons.Check" [size]="14" />
+            } @else {
+              {{ $index + 1 }}
+            }
+          </button>
+
+          @if (!$last) {
+            <div class="stepper__line" [class.stepper__line--done]="isCompleted($index)"></div>
+          }
+        </div>
+
+        <div class="stepper__meta">
+          <span class="stepper__label">{{ step.label() }}</span>
+          @if (step.description()) {
+            <span class="stepper__desc">{{ step.description() }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="stepper__content">
+    <ng-content />
+  </div>
+</div>

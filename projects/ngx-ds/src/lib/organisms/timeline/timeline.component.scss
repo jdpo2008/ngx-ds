@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

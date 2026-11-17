@@ -1,0 +1,115 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.calendar {
+  width: 20rem;
+  padding: 1rem;
+  background: var(--surface-base, #ffffff);
+  border: 1px solid var(--border-base, #e5e7eb);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.calendar__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-base, #111827);
+}
+
+.calendar__nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted, #6b7280);
+  transition: background 0.1s ease;
+
+  &:hover {
+    background: var(--surface-hover, #f3f4f6);
+    color: var(--text-base, #111827);
+  }
+}
+
+// ── Weekdays ──────────────────────────────────────────────────────────────────
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.25rem;
+}
+
+.calendar__weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-placeholder, #9ca3af);
+  padding: 0.25rem 0;
+}
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+
+.calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.125rem;
+}
+
+.calendar__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: none;
+  background: transparent;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-base, #111827);
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
+
+  &:hover:not(:disabled):not(.calendar__day--selected) {
+    background: var(--surface-hover, #f3f4f6);
+  }
+
+  &--other {
+    color: var(--text-disabled, #d1d5db);
+  }
+
+  &--today {
+    color: var(--primary-600, #4f46e5);
+    font-weight: 700;
+  }
+
+  &--selected {
+    background: var(--primary-500, #6366f1);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  &--disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}

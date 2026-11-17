@@ -1,0 +1,148 @@
+<!-- Static label -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-select__label">{{ label() }}</label>
+}
+
+<!-- Trigger -->
+<div
+  [class]="triggerClasses()"
+  (click)="togglePanel()"
+  [attr.id]="id"
+  role="combobox"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-disabled]="isDisabled()"
+>
+  <!-- Floating label -->
+  @if (floatingLabel() && label()) {
+    <span [class]="floatLabelClasses()">{{ label() }}</span>
+  }
+
+  <!-- Display area -->
+  <span class="ngx-select__display">
+    @if (multiple() && selectedValues().length) {
+      <!-- Chips (≤2) or count badge (>2) -->
+      @if (selectedValues().length <= 2) {
+        @for (val of selectedValues(); track val) {
+          <span class="ngx-select__tag">
+            {{ tagLabel(val) }}
+            @if (!isDisabled()) {
+              <button
+                type="button"
+                class="ngx-select__tag-remove"
+                [attr.aria-label]="'Quitar ' + tagLabel(val)"
+                (click)="removeTag(val, $event)"
+              >
+                <ngx-ds-icon [icon]="XIcon" [size]="10" />
+              </button>
+            }
+          </span>
+        }
+      } @else {
+        <span class="ngx-select__tag"
+          >{{ selectedValues().length }} seleccionados
+          @if (!isDisabled()) {
+            <button
+              type="button"
+              class="ngx-select__tag-remove"
+              aria-label="Limpiar selección"
+              (click)="clearAll($event)"
+            >
+              <ngx-ds-icon [icon]="XIcon" [size]="10" />
+            </button>
+          }
+        </span>
+      }
+    } @else if (!multiple() && displayText()) {
+      <span class="ngx-select__value">{{ displayText() }}</span>
+    } @else {
+      <span class="ngx-select__placeholder">{{ placeholder() }}</span>
+    }
+  </span>
+
+  <!-- Clear button (single mode) -->
+  @if (!multiple() && displayText() && !isDisabled()) {
+    <button
+      type="button"
+      class="ngx-select__clear"
+      aria-label="Limpiar selección"
+      (click)="clearAll($event)"
+    >
+      <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
+    </button>
+  }
+
+  <!-- Chevron -->
+  <span class="ngx-select__chevron" aria-hidden="true">
+    <ngx-ds-icon [icon]="isOpen() ? ChevronUp : ChevronDown" [size]="iconSize()" />
+  </span>
+</div>
+
+<!-- Dropdown panel -->
+@if (isOpen()) {
+  <div class="ngx-select__panel" role="listbox" [attr.aria-multiselectable]="multiple()">
+    <!-- Search -->
+    @if (searchable()) {
+      <div class="ngx-select__search">
+        <ngx-ds-icon [icon]="SearchIcon" [size]="14" class="ngx-select__search-icon" />
+        <input
+          class="ngx-select__search-input"
+          type="text"
+          placeholder="Buscar..."
+          [value]="searchText()"
+          (input)="onSearchChange($any($event.target).value)"
+          (click)="$event.stopPropagation()"
+          autocomplete="off"
+        />
+      </div>
+    }
+
+    <!-- Select all (multiple only) -->
+    @if (multiple() && !searchText()) {
+      <button
+        type="button"
+        class="ngx-select__select-all"
+        (click)="selectAll(); $event.stopPropagation()"
+      >
+        Seleccionar todos
+      </button>
+    }
+
+    <!-- Options -->
+    <ul class="ngx-select__options" role="presentation">
+      @for (option of filteredOptions(); track option.value) {
+        <li
+          class="ngx-select__option"
+          [class.ngx-select__option--selected]="isSelected(option.value)"
+          [class.ngx-select__option--disabled]="option.disabled"
+          role="option"
+          [attr.aria-selected]="isSelected(option.value)"
+          (click)="selectOption(option); $event.stopPropagation()"
+        >
+          @if (multiple()) {
+            <span
+              class="ngx-select__checkbox"
+              [class.ngx-select__checkbox--checked]="isSelected(option.value)"
+              aria-hidden="true"
+            ></span>
+          } @else {
+            <span class="ngx-select__check">
+              @if (isSelected(option.value)) {
+                <ngx-ds-icon [icon]="CheckIcon" [size]="14" />
+              }
+            </span>
+          }
+          <span class="ngx-select__option-label">{{ option.label }}</span>
+        </li>
+      } @empty {
+        <li class="ngx-select__empty">Sin resultados</li>
+      }
+    </ul>
+  </div>
+}
+
+<!-- Hint / Error -->
+@if (hasError()) {
+  <p class="ngx-select__message ngx-select__message--error" role="alert">{{ errorMessage() }}</p>
+} @else if (hint()) {
+  <p class="ngx-select__message ngx-select__message--hint">{{ hint() }}</p>
+}

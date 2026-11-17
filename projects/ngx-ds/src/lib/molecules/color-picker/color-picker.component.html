@@ -1,0 +1,65 @@
+@if (label()) {
+  <label class="cp__label">{{ label() }}</label>
+}
+
+<div class="cp" [class.cp--disabled]="disabled()">
+  <!-- Preview swatch -->
+  <div class="cp__preview" [style]="previewStyle()"></div>
+
+  <div class="cp__sliders">
+    <!-- Hue slider -->
+    <label class="cp__slider-label">Matiz</label>
+    <input
+      type="range"
+      class="cp__range cp__range--hue"
+      [value]="hue()"
+      min="0"
+      max="360"
+      step="1"
+      [disabled]="disabled() || null"
+      (input)="onHueChange($event)"
+    />
+
+    <!-- Saturation slider -->
+    <label class="cp__slider-label">Saturación</label>
+    <input
+      type="range"
+      class="cp__range cp__range--sat"
+      [value]="saturation()"
+      min="0"
+      max="100"
+      step="1"
+      [disabled]="disabled() || null"
+      [style.background]="gradientStyle()"
+      (input)="onSatChange($event)"
+    />
+
+    <!-- Lightness slider -->
+    <label class="cp__slider-label">Luminosidad</label>
+    <input
+      type="range"
+      class="cp__range cp__range--light"
+      [value]="lightness()"
+      min="0"
+      max="100"
+      step="1"
+      [disabled]="disabled() || null"
+      [style.background]="lightnessStyle()"
+      (input)="onLightChange($event)"
+    />
+  </div>
+
+  <!-- Hex input -->
+  <div class="cp__hex-row">
+    <input
+      type="text"
+      class="cp__hex-input"
+      [value]="hexInput()"
+      maxlength="7"
+      placeholder="#000000"
+      [disabled]="disabled() || null"
+      (input)="onHexInput($event)"
+    />
+    <span class="cp__hex-label">HEX</span>
+  </div>
+</div>

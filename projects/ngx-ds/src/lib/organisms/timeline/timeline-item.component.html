@@ -1,0 +1,25 @@
+<li class="timeline-item">
+  <div class="timeline-item__rail">
+    <div [class]="dotClasses()">
+      @if (icon()) {
+        <ngx-ds-icon [icon]="icon()!" [size]="14" />
+      }
+    </div>
+    <div class="timeline-item__line"></div>
+  </div>
+
+  <div class="timeline-item__body">
+    @if (time()) {
+      <span class="timeline-item__time">{{ time() }}</span>
+    }
+    @if (title()) {
+      <p class="timeline-item__title">{{ title() }}</p>
+    }
+    @if (description()) {
+      <p class="timeline-item__description">{{ description() }}</p>
+    }
+    <div class="timeline-item__content">
+      <ng-content />
+    </div>
+  </div>
+</li>

@@ -1,0 +1,76 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.popover {
+  position: relative;
+  display: inline-block;
+}
+
+.popover__trigger {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+
+.popover__panel {
+  position: absolute;
+  z-index: 1000;
+  min-width: 200px;
+  background: var(--surface-base, #ffffff);
+  border: 1px solid var(--border-base, #e5e7eb);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 0.75rem;
+  animation: popoverIn 0.12s ease;
+
+  // ── Placements ──────────────────────────────────────────────────────────────
+
+  &--bottom {
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    translate: -50% 0;
+  }
+  &--bottom-start {
+    top: calc(100% + 0.5rem);
+    left: 0;
+  }
+  &--bottom-end {
+    top: calc(100% + 0.5rem);
+    right: 0;
+  }
+  &--top {
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    translate: -50% 0;
+  }
+  &--top-start {
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+  }
+  &--top-end {
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+  }
+  &--left {
+    right: calc(100% + 0.5rem);
+    top: 50%;
+    translate: 0 -50%;
+  }
+  &--right {
+    left: calc(100% + 0.5rem);
+    top: 50%;
+    translate: 0 -50%;
+  }
+}
+
+@keyframes popoverIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

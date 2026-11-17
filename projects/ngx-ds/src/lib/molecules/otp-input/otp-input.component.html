@@ -1,0 +1,20 @@
+<div [class]="wrapperClasses()" role="group" aria-label="Código de verificación">
+  @for (i of indices(); track i) {
+    <input
+      #otpBox
+      [class]="boxClasses()"
+      [type]="inputType()"
+      [inputMode]="inputMode()"
+      maxlength="1"
+      [attr.autocomplete]="i === 0 ? 'one-time-code' : 'off'"
+      [disabled]="disabled() || null"
+      [style.width]="boxDim()"
+      [style.height]="boxDim()"
+      [style.fontSize]="boxFs()"
+      (input)="onInput($event, i)"
+      (keydown)="onKeydown($event, i)"
+      (paste)="onPaste($event)"
+      (focus)="onFocus($event)"
+    />
+  }
+</div>

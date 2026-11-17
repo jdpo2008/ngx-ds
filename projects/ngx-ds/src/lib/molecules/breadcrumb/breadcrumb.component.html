@@ -1,0 +1,52 @@
+<nav class="breadcrumb breadcrumb--{{ size() }}" aria-label="Breadcrumb">
+  <ol class="breadcrumb__list">
+    @for (item of visibleItems(); track $index) {
+      <li class="breadcrumb__item">
+        @if (isLast($index)) {
+          <!-- Current page — not a link -->
+          <span class="breadcrumb__crumb breadcrumb__crumb--current" [attr.aria-current]="'page'">
+            @if (item.icon) {
+              <ngx-ds-icon [icon]="item.icon" [size]="iconSize()" aria-hidden="true" />
+            }
+            {{ item.label }}
+          </span>
+        } @else if (item.disabled) {
+          <!-- Ellipsis collapse placeholder -->
+          <span class="breadcrumb__crumb breadcrumb__crumb--ellipsis">{{ item.label }}</span>
+        } @else if (item.href) {
+          <a
+            class="breadcrumb__crumb breadcrumb__crumb--link"
+            [href]="item.href"
+            (click)="onClick(item)"
+          >
+            @if (item.icon) {
+              <ngx-ds-icon [icon]="item.icon" [size]="iconSize()" aria-hidden="true" />
+            }
+            {{ item.label }}
+          </a>
+        } @else {
+          <button
+            class="breadcrumb__crumb breadcrumb__crumb--link"
+            type="button"
+            (click)="onClick(item)"
+          >
+            @if (item.icon) {
+              <ngx-ds-icon [icon]="item.icon" [size]="iconSize()" aria-hidden="true" />
+            }
+            {{ item.label }}
+          </button>
+        }
+
+        @if (!isLast($index)) {
+          <span class="breadcrumb__separator" aria-hidden="true">
+            @if (separatorIsIcon()) {
+              <ngx-ds-icon [icon]="separatorIcon()!" [size]="iconSize()" />
+            } @else {
+              {{ separatorChar() }}
+            }
+          </span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

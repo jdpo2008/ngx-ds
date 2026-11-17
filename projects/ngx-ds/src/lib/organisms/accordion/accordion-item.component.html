@@ -1,0 +1,42 @@
+<div [class]="itemClasses()">
+  <!-- Trigger -->
+  <button
+    class="accordion-item__trigger"
+    type="button"
+    [attr.aria-expanded]="_open()"
+    [disabled]="disabled() || null"
+    (click)="toggle()"
+  >
+    @if (icon()) {
+      <ngx-ds-icon
+        class="accordion-item__icon"
+        [icon]="icon()!"
+        [size]="iconSize()"
+        aria-hidden="true"
+      />
+    }
+
+    <span class="accordion-item__labels">
+      <span class="accordion-item__label">{{ label() }}</span>
+      @if (description()) {
+        <span class="accordion-item__description">{{ description() }}</span>
+      }
+    </span>
+
+    <ngx-ds-icon
+      class="accordion-item__chevron"
+      [icon]="chevronIcon"
+      [size]="iconSize()"
+      aria-hidden="true"
+    />
+  </button>
+
+  <!-- Panel (animated with grid-template-rows trick) -->
+  <div class="accordion-item__panel" [attr.aria-hidden]="!_open() || null">
+    <div class="accordion-item__panel-inner">
+      <div class="accordion-item__panel-content">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<span [class]="hostClasses()">
+  @if (iconLeft()) {
+    <ngx-ds-icon class="tag__icon" [icon]="iconLeft()!" [size]="iconSize()" aria-hidden="true" />
+  }
+
+  <span class="tag__label">{{ label() }}</span>
+
+  @if (iconRight()) {
+    <ngx-ds-icon class="tag__icon" [icon]="iconRight()!" [size]="iconSize()" aria-hidden="true" />
+  }
+
+  @if (dismissible()) {
+    <button
+      type="button"
+      class="tag__dismiss"
+      [attr.aria-label]="'Eliminar ' + label()"
+      (click)="onDismiss()"
+    >
+      <ngx-ds-icon [icon]="closeIcon" [size]="iconSize()" aria-hidden="true" />
+    </button>
+  }
+</span>

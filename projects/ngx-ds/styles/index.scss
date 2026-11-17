@@ -2,14 +2,28 @@
 // Import this file in any consuming app's styles.scss:
 //   @use 'ngx-ds/styles/index' as *;
 
+// Design tokens (primitives + semantic), dark theme and deprecated aliases.
+// Sass requires @use before any other rule; Tailwind relocates their
+// `@layer base` content into the @tailwind base insertion point below.
+@use './tokens';
+@use './themes';
+@use './legacy';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 // ─── Design Tokens ────────────────────────────────────────────────────────────
 // Add CSS custom properties here as the design system grows.
-// Example:
-//   :root {
-//     --ngx-color-primary: theme('colors.blue.600');
-//     --ngx-font-sans: theme('fontFamily.sans');
-//   }
+
+@layer base {
+  :root {
+
+    //Font family
+    --ngx-primary-font-family: 'Poppins', sans-serif;
+    --ngx-secondary-font-family: 'Roboto', sans-serif;
+    --ngx-font-size-base: 1rem;
+    --ngx-font-size-sm: 0.875rem;
+    --ngx-font-size-lg: 1.125rem;
+  }
+}

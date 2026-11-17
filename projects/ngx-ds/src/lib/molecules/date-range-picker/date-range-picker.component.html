@@ -1,0 +1,105 @@
+@if (label()) {
+  <label class="drp__label" [for]="id">{{ label() }}</label>
+}
+
+<div class="drp">
+  <!-- Trigger -->
+  <div [class]="triggerClasses()" [id]="id" (click)="openCalendar()">
+    <ngx-ds-icon [icon]="CalendarIcon" [size]="16" class="drp__icon" />
+    <span class="drp__text" [class.drp__text--placeholder]="!triggerLabel()">
+      {{ triggerLabel() || placeholder() + ' – ' + placeholder() }}
+    </span>
+    @if (start() || end()) {
+      <button type="button" class="drp__clear" (click)="clear($event)" aria-label="Limpiar">
+        ×
+      </button>
+    }
+  </div>
+
+  <!-- Calendars panel -->
+  @if (isOpen()) {
+    <div class="drp__panel" (mouseleave)="onLeave()">
+      <!-- Left calendar -->
+      <div class="drp__calendar">
+        <div class="drp__cal-header">
+          <button type="button" class="drp__nav-btn" (click)="prevMonth()">
+            <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
+          </button>
+          <span class="drp__month-title">{{ leftTitle() }}</span>
+          <button type="button" class="drp__nav-btn" style="visibility: hidden">
+            <ngx-ds-icon [icon]="ChevronRight" [size]="16" />
+          </button>
+        </div>
+        <div class="drp__weekdays">
+          @for (d of weekdays; track d) {
+            <span class="drp__weekday">{{ d }}</span>
+          }
+        </div>
+        <div class="drp__grid">
+          @for (cell of leftDays(); track cell.date.getTime()) {
+            <button
+              type="button"
+              class="drp__day"
+              [class.drp__day--other]="!cell.inMonth"
+              [class.drp__day--today]="cell.isToday"
+              [class.drp__day--start]="isStart(cell.date)"
+              [class.drp__day--end]="isEnd(cell.date)"
+              [class.drp__day--in-range]="inRange(cell.date)"
+              [class.drp__day--disabled]="cell.isDisabled"
+              [disabled]="cell.isDisabled || null"
+              (click)="selectDay(cell)"
+              (mouseenter)="onHover(cell)"
+            >
+              {{ cell.date.getDate() }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="drp__divider"></div>
+
+      <!-- Right calendar -->
+      <div class="drp__calendar">
+        <div class="drp__cal-header">
+          <button type="button" class="drp__nav-btn" style="visibility: hidden">
+            <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
+          </button>
+          <span class="drp__month-title">{{ rightTitle() }}</span>
+          <button type="button" class="drp__nav-btn" (click)="nextMonth()">
+            <ngx-ds-icon [icon]="ChevronRight" [size]="16" />
+          </button>
+        </div>
+        <div class="drp__weekdays">
+          @for (d of weekdays; track d) {
+            <span class="drp__weekday">{{ d }}</span>
+          }
+        </div>
+        <div class="drp__grid">
+          @for (cell of rightDays(); track cell.date.getTime()) {
+            <button
+              type="button"
+              class="drp__day"
+              [class.drp__day--other]="!cell.inMonth"
+              [class.drp__day--today]="cell.isToday"
+              [class.drp__day--start]="isStart(cell.date)"
+              [class.drp__day--end]="isEnd(cell.date)"
+              [class.drp__day--in-range]="inRange(cell.date)"
+              [class.drp__day--disabled]="cell.isDisabled"
+              [disabled]="cell.isDisabled || null"
+              (click)="selectDay(cell)"
+              (mouseenter)="onHover(cell)"
+            >
+              {{ cell.date.getDate() }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+@if (errorMessage()) {
+  <p class="drp__error">{{ errorMessage() }}</p>
+} @else if (hint()) {
+  <p class="drp__hint">{{ hint() }}</p>
+}

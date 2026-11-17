@@ -1,0 +1,20 @@
+:host {
+  display: contents;
+}
+
+.ctx {
+  display: contents;
+}
+
+.ctx__panel {
+  position: fixed;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}

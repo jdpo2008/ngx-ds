@@ -1,0 +1,49 @@
+<!-- Static label -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-textarea__label">{{ label() }}</label>
+}
+
+<!-- Field container -->
+<div [class]="fieldClasses()">
+  <!-- Floating label -->
+  @if (floatingLabel() && label()) {
+    <label [for]="id" [class]="floatLabelClasses()">{{ label() }}</label>
+  }
+
+  <!-- Native textarea -->
+  <textarea
+    class="ngx-textarea__native"
+    [id]="id"
+    [rows]="rows()"
+    [value]="value()"
+    [placeholder]="effectivePlaceholder()"
+    [disabled]="isDisabled() || null"
+    [attr.readonly]="readonly() || null"
+    [attr.maxlength]="maxLength() ?? null"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  ></textarea>
+</div>
+
+<!-- Footer: error/hint + char count -->
+<div class="ngx-textarea__footer">
+  @if (hasError()) {
+    <p class="ngx-textarea__message ngx-textarea__message--error" role="alert">
+      {{ errorMessage() }}
+    </p>
+  } @else if (hint()) {
+    <p class="ngx-textarea__message ngx-textarea__message--hint">{{ hint() }}</p>
+  } @else {
+    <span></span>
+  }
+
+  @if (showCount() && maxLength()) {
+    <span
+      class="ngx-textarea__count"
+      [class.ngx-textarea__count--limit]="charCount() >= maxLength()!"
+    >
+      {{ charCount() }}/{{ maxLength() }}
+    </span>
+  }
+</div>

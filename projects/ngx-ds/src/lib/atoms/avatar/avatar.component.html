@@ -1,0 +1,11 @@
+<span [class]="hostClasses()">
+  @if (src()) {
+    <img [src]="src()" [alt]="alt()" class="avatar__img" />
+  } @else {
+    <span class="avatar__initials">{{ displayInitials() }}</span>
+  }
+
+  @if (status()) {
+    <span class="avatar__status avatar__status--{{ status() }}" aria-hidden="true"></span>
+  }
+</span>

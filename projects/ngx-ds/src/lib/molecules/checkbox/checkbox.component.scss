@@ -1,0 +1,124 @@
+$checkbox-colors: (
+  'primary': var(--color-primary, #3b82f6),
+  'secondary': var(--color-secondary, #6b7280),
+  'danger': var(--color-danger, #ef4444),
+  'success': #10b981,
+  'warning': var(--color-warning, #f59e0b),
+);
+
+$checkbox-sizes: (
+  'sm': 0.875rem,
+  'md': 1.125rem,
+  'lg': 1.375rem,
+);
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // ── Hidden native input ────────────────────────────────────────
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+
+    &:focus-visible ~ .checkbox__box {
+      outline: 2px solid var(--ngx-checkbox-color);
+      outline-offset: 2px;
+    }
+  }
+
+  // ── Visual box ─────────────────────────────────────────────────
+  &__box {
+    position: relative;
+    flex-shrink: 0;
+    border: 2px solid var(--border-input, #d1d5db);
+    border-radius: 0.25rem;
+    background: var(--surface-base, #fff);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+
+    // checkmark — shown when checked
+    &::after {
+      content: '';
+      position: absolute;
+      display: none;
+      left: 50%;
+      top: 46%;
+      width: 35%;
+      height: 58%;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+
+  &:hover:not(&--disabled):not(&--checked):not(&--indeterminate) &__box {
+    border-color: var(--ngx-checkbox-color);
+  }
+
+  // checked state
+  &--checked &__box {
+    background-color: var(--ngx-checkbox-color);
+    border-color: var(--ngx-checkbox-color);
+
+    &::after {
+      display: block;
+    }
+  }
+
+  // indeterminate state — horizontal dash replaces checkmark
+  &--indeterminate &__box {
+    background-color: var(--ngx-checkbox-color);
+    border-color: var(--ngx-checkbox-color);
+
+    &::after {
+      display: block;
+      width: 55%;
+      height: 2px;
+      border: none;
+      background: #fff;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  // ── Label ──────────────────────────────────────────────────────
+  &__label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #374151);
+    line-height: 1.25;
+  }
+
+  // ── Sizes ─────────────────────────────────────────────────────
+  @each $name, $size in $checkbox-sizes {
+    &--#{$name} .checkbox__box {
+      width: $size;
+      height: $size;
+    }
+  }
+
+  // ── Colors ────────────────────────────────────────────────────
+  @each $name, $color in $checkbox-colors {
+    &--#{$name} {
+      --ngx-checkbox-color: #{$color};
+    }
+  }
+}

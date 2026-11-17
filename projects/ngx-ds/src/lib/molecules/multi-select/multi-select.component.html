@@ -1,0 +1,84 @@
+@if (label()) {
+  <label class="ms__label" [for]="id">{{ label() }}</label>
+}
+
+<div class="ms">
+  <!-- Trigger -->
+  <div [class]="triggerClasses()" (click)="toggleOpen()" [id]="id">
+    <div class="ms__chips">
+      @if (value().length === 0) {
+        <span class="ms__placeholder">{{ placeholder() }}</span>
+      }
+      @for (val of value(); track val) {
+        @let label = selectedLabels()[$index];
+        <span class="ms__chip">
+          {{ label }}
+          <button
+            type="button"
+            class="ms__chip-remove"
+            (click)="removeChip(val, $event)"
+            [attr.aria-label]="'Quitar ' + label"
+          >
+            <ngx-ds-icon [icon]="XIcon" [size]="12" />
+          </button>
+        </span>
+      }
+    </div>
+    <ngx-ds-icon
+      [icon]="ChevronDownIcon"
+      [size]="16"
+      class="ms__arrow"
+      [class.ms__arrow--open]="isOpen()"
+    />
+  </div>
+
+  <!-- Dropdown -->
+  @if (isOpen()) {
+    <div class="ms__dropdown" role="listbox" [attr.aria-multiselectable]="true">
+      @if (searchable()) {
+        <div class="ms__search-wrap">
+          <input
+            class="ms__search"
+            type="text"
+            placeholder="Buscar..."
+            [value]="search()"
+            (input)="onSearch($event)"
+            (click)="$event.stopPropagation()"
+          />
+        </div>
+      }
+
+      <ul class="ms__list">
+        @for (option of filteredOptions(); track option.value) {
+          <li
+            class="ms__option"
+            [class.ms__option--selected]="isSelected(option)"
+            [class.ms__option--disabled]="
+              option.disabled || (!canSelectMore() && !isSelected(option))
+            "
+            role="option"
+            [attr.aria-selected]="isSelected(option)"
+            (click)="toggleOption(option)"
+          >
+            <span class="ms__option-check">
+              @if (isSelected(option)) {
+                <ngx-ds-icon [icon]="CheckIcon" [size]="14" />
+              }
+            </span>
+            {{ option.label }}
+          </li>
+        }
+
+        @if (filteredOptions().length === 0) {
+          <li class="ms__empty">Sin resultados</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
+
+@if (errorMessage()) {
+  <p class="ms__error">{{ errorMessage() }}</p>
+} @else if (hint()) {
+  <p class="ms__hint">{{ hint() }}</p>
+}

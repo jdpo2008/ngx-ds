@@ -1,0 +1,24 @@
+<div [class]="hostClasses()" role="group">
+  @for (chip of chips(); track chip.value) {
+    <button
+      type="button"
+      class="chip"
+      [class.chip--selected]="isSelected(chip)"
+      [class.chip--disabled]="chip.disabled || disabled()"
+      [disabled]="chip.disabled || disabled() || null"
+      (click)="toggle(chip)"
+    >
+      {{ chip.label }}
+
+      @if (removable()) {
+        <span
+          class="chip__remove"
+          (click)="remove(chip, $event)"
+          [attr.aria-label]="'Quitar ' + chip.label"
+        >
+          <ngx-ds-icon [icon]="XIcon" [size]="12" />
+        </span>
+      }
+    </button>
+  }
+</div>
