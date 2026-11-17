@@ -4,7 +4,7 @@
 
 <div
   class="cp"
-  [class.cp--disabled]="disabled()"
+  [class.cp--disabled]="isDisabled()"
   role="group"
   [attr.aria-labelledby]="label() ? id + '-label' : null"
 >
@@ -22,7 +22,7 @@
       min="0"
       max="360"
       step="1"
-      [disabled]="disabled() || null"
+      [disabled]="isDisabled() || null"
       (input)="onHueChange($event)"
     />
 
@@ -36,7 +36,7 @@
       min="0"
       max="100"
       step="1"
-      [disabled]="disabled() || null"
+      [disabled]="isDisabled() || null"
       [style.background]="gradientStyle()"
       (input)="onSatChange($event)"
     />
@@ -51,7 +51,7 @@
       min="0"
       max="100"
       step="1"
-      [disabled]="disabled() || null"
+      [disabled]="isDisabled() || null"
       [style.background]="lightnessStyle()"
       (input)="onLightChange($event)"
     />
@@ -66,7 +66,7 @@
       maxlength="7"
       placeholder="#000000"
       [attr.aria-label]="i18n.colorHex"
-      [disabled]="disabled() || null"
+      [disabled]="isDisabled() || null"
       (input)="onHexInput($event)"
     />
     <span class="cp__hex-label">HEX</span>

@@ -88,6 +88,8 @@ export class ColorPickerComponent implements ControlValueAccessor {
   readonly value = model<string>('#6366f1');
   readonly label = input<string>('');
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly #h = signal(234);
   readonly #s = signal(89);
@@ -172,5 +174,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {}
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
+  }
 }

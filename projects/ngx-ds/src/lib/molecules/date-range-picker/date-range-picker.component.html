@@ -9,8 +9,9 @@
     [class]="triggerClasses()"
     [id]="id"
     role="button"
-    [attr.tabindex]="disabled() ? -1 : 0"
+    [attr.tabindex]="isDisabled() ? -1 : 0"
     [attr.aria-expanded]="isOpen()"
+    [attr.aria-disabled]="isDisabled() || null"
     (click)="openCalendar()"
     (keydown)="onTriggerKeydown($event)"
   >
@@ -18,7 +19,7 @@
     <span class="drp__text" [class.drp__text--placeholder]="!triggerLabel()">
       {{ triggerLabel() || placeholderText() + ' – ' + placeholderText() }}
     </span>
-    @if (start() || end()) {
+    @if ((start() || end()) && !isDisabled()) {
       <button
         type="button"
         class="drp__clear"

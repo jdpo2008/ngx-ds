@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  signal,
   forwardRef,
   input,
   model,
@@ -49,6 +50,8 @@ export class ChipGroupComponent implements ControlValueAccessor {
   readonly size = input<ChipGroupSize>('md');
   readonly variant = input<ChipGroupVariant>('soft');
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly removed = output<ChipItem>();
 
@@ -63,7 +66,7 @@ export class ChipGroupComponent implements ControlValueAccessor {
   }
 
   toggle(chip: ChipItem): void {
-    if (!this.selectable() || chip.disabled || this.disabled()) return;
+    if (!this.selectable() || chip.disabled || this.isDisabled()) return;
 
     const current = this.selected();
     const idx = current.indexOf(chip.value);
@@ -99,5 +102,7 @@ export class ChipGroupComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {}
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
+  }
 }

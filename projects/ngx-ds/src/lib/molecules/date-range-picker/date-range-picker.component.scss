@@ -53,6 +53,12 @@
   &--error {
     border-color: var(--danger-600, #dc2626);
   }
+
+  &--disabled {
+    background: var(--surface-subtle, #f9fafb);
+    color: var(--text-disabled, #9ca3af);
+    cursor: not-allowed;
+  }
 }
 
 .drp__icon {
