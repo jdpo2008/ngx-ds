@@ -12,12 +12,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
 
+// Theme tokens (with fallbacks) so consumers can restyle the slider via CSS.
 const TRACK_COLORS: Record<SliderColor, string> = {
-  primary: '#3b82f6',
-  secondary: '#6b7280',
-  success: '#22c55e',
-  warning: '#f59e0b',
-  danger: '#ef4444',
+  primary: 'var(--primary-500, #6366f1)',
+  secondary: 'var(--gray-500, #6b7280)',
+  success: 'var(--success-500, #22c55e)',
+  warning: 'var(--warning-500, #f59e0b)',
+  danger: 'var(--danger-500, #ef4444)',
 };
 
 let nextId = 0;
