@@ -1,6 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, model, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  linkedSignal,
+  model,
+  output,
+  viewChild,
+} from '@angular/core';
 import { ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
+import { addMonths, isSameDay, moveFocusDate, startOfDay, toWeeks } from '../../shared/day-cell';
 
 export interface CalendarDayCell {
   date: Date;
@@ -27,14 +40,6 @@ const MONTHS_ES = [
 
 const WEEKDAYS_ES = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
 
-function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
 @Component({
   selector: 'ngx-ds-calendar',
   standalone: true,
@@ -54,8 +59,16 @@ export class CalendarComponent {
   readonly ChevronLeft = ChevronLeft;
   readonly ChevronRight = ChevronRight;
 
-  readonly #viewMonth = signal(new Date().getMonth());
-  readonly #viewYear = signal(new Date().getFullYear());
+  /**
+   * Day that owns the roving tabindex. The visible month is derived from it,
+   * and it follows `value` when the selection changes from outside.
+   */
+  readonly #focusedDate = linkedSignal(() => startOfDay(this.value() ?? new Date()));
+  readonly #viewMonth = computed(() => this.#focusedDate().getMonth());
+  readonly #viewYear = computed(() => this.#focusedDate().getFullYear());
+  readonly #injector = inject(Injector);
+
+  private readonly gridRef = viewChild<ElementRef<HTMLElement>>('grid');
 
   readonly weekdays = WEEKDAYS_ES;
 
@@ -63,28 +76,44 @@ export class CalendarComponent {
 
   readonly days = computed(() => this.buildMonth(this.#viewYear(), this.#viewMonth()));
 
+  readonly weeks = computed(() => toWeeks(this.days()));
+
   prevMonth(): void {
-    if (this.#viewMonth() === 0) {
-      this.#viewMonth.set(11);
-      this.#viewYear.update((y) => y - 1);
-    } else {
-      this.#viewMonth.update((m) => m - 1);
-    }
+    this.#focusedDate.update((d) => addMonths(d, -1));
   }
 
   nextMonth(): void {
-    if (this.#viewMonth() === 11) {
-      this.#viewMonth.set(0);
-      this.#viewYear.update((y) => y + 1);
-    } else {
-      this.#viewMonth.update((m) => m + 1);
-    }
+    this.#focusedDate.update((d) => addMonths(d, 1));
   }
 
   selectDay(cell: CalendarDayCell): void {
     if (cell.isDisabled || this.disabled()) return;
     this.value.set(cell.date);
     this.dateSelect.emit(cell.date);
+  }
+
+  /** True for the single day button reachable with Tab (roving tabindex). */
+  isFocusTarget(cell: CalendarDayCell): boolean {
+    return !this.disabled() && cell.inMonth && isSameDay(cell.date, this.#focusedDate());
+  }
+
+  dayLabel(d: Date): string {
+    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  onDayKeydown(event: KeyboardEvent, cell: CalendarDayCell): void {
+    if (this.disabled()) return;
+    const next = moveFocusDate(cell.date, event);
+    if (!next) return;
+    event.preventDefault();
+    this.#focusedDate.set(next);
+    afterNextRender(
+      () =>
+        this.gridRef()
+          ?.nativeElement.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')
+          ?.focus(),
+      { injector: this.#injector },
+    );
   }
 
   private buildMonth(year: number, month: number): CalendarDayCell[] {
@@ -120,7 +149,7 @@ export class CalendarComponent {
       date,
       inMonth,
       isToday: isSameDay(date, new Date()),
-      isSelected: !!selected && isSameDay(date, selected),
+      isSelected: isSameDay(date, selected),
       isDisabled: (!!minT && t < minT) || (!!maxT && t > maxT),
     };
   }
