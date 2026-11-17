@@ -1,4 +1,14 @@
-import { Component, ChangeDetectionStrategy, input, model, output, computed } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  model,
+  output,
+  computed,
+  signal,
+  forwardRef,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
 
@@ -19,8 +29,15 @@ let nextId = 0;
   templateUrl: './range-slider.component.html',
   styleUrl: './range-slider.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RangeSliderComponent),
+      multi: true,
+    },
+  ],
 })
-export class RangeSliderComponent {
+export class RangeSliderComponent implements ControlValueAccessor {
   readonly id = `ngx-range-slider-${nextId++}`;
   readonly value = model<number>(0);
   readonly min = input<number>(0);
@@ -39,6 +56,9 @@ export class RangeSliderComponent {
   readonly ariaLabelEnd = input<string>('');
 
   readonly rangeChange = output<[number, number]>();
+
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   protected readonly fillPercent = computed(() => {
     const min = this.min(),
@@ -76,6 +96,7 @@ export class RangeSliderComponent {
   protected onInput(event: Event): void {
     const val = Number((event.target as HTMLInputElement).value);
     this.value.set(val);
+    this.#onChange(val);
   }
 
   protected onStartInput(event: Event): void {
@@ -86,6 +107,7 @@ export class RangeSliderComponent {
     const next: [number, number] = [clamped, end];
     this.values.set(next);
     this.rangeChange.emit(next);
+    this.#onChange(next);
   }
 
   protected onEndInput(event: Event): void {
@@ -96,5 +118,39 @@ export class RangeSliderComponent {
     const next: [number, number] = [start, clamped];
     this.values.set(next);
     this.rangeChange.emit(next);
+    this.#onChange(next);
+  }
+
+  protected onBlur(): void {
+    this.#onTouched();
+  }
+
+  // ── ControlValueAccessor ─────────────────────────────────────
+  // Single mode exchanges a number; range mode exchanges [start, end].
+  #onChange: (value: number | [number, number]) => void = () => {};
+  #onTouched: () => void = () => {};
+
+  writeValue(value: number | [number, number] | null): void {
+    if (Array.isArray(value)) {
+      this.values.set([value[0], value[1]]);
+    } else if (typeof value === 'number') {
+      this.value.set(value);
+    } else if (this.range()) {
+      this.values.set([this.min(), this.max()]);
+    } else {
+      this.value.set(this.min());
+    }
+  }
+
+  registerOnChange(fn: (value: number | [number, number]) => void): void {
+    this.#onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.#onTouched = fn;
+  }
+
+  setDisabledState(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
   }
 }

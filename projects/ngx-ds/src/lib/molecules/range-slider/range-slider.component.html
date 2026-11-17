@@ -16,9 +16,10 @@
         [max]="max()"
         [step]="step()"
         [value]="value()"
-        [disabled]="disabled() || null"
+        [disabled]="isDisabled() || null"
         [attr.aria-labelledby]="label() ? id + '-label' : null"
         (input)="onInput($event)"
+        (blur)="onBlur()"
       />
     </div>
 
@@ -44,9 +45,10 @@
         [max]="max()"
         [step]="step()"
         [value]="values()[0]"
-        [disabled]="disabled() || null"
+        [disabled]="isDisabled() || null"
         [attr.aria-label]="ariaLabelStart() || null"
         (input)="onStartInput($event)"
+        (blur)="onBlur()"
       />
       <input
         class="slider__native slider__native--range slider__native--end"
@@ -55,9 +57,10 @@
         [max]="max()"
         [step]="step()"
         [value]="values()[1]"
-        [disabled]="disabled() || null"
+        [disabled]="isDisabled() || null"
         [attr.aria-label]="ariaLabelEnd() || null"
         (input)="onEndInput($event)"
+        (blur)="onBlur()"
       />
     </div>
 

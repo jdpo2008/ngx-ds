@@ -10,7 +10,10 @@ import {
   viewChildren,
   effect,
   inject,
+  forwardRef,
+  untracked,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -27,8 +30,15 @@ const BOX_FS: Record<OtpSize, string> = { sm: '0.875rem', md: '1rem', lg: '1.25r
   templateUrl: './otp-input.component.html',
   styleUrl: './otp-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => OtpInputComponent),
+      multi: true,
+    },
+  ],
 })
-export class OtpInputComponent {
+export class OtpInputComponent implements ControlValueAccessor {
   readonly i18n = inject(NGX_DS_LABELS);
 
   readonly length = input<number>(6);
@@ -41,6 +51,9 @@ export class OtpInputComponent {
   readonly value = model<string>('');
   readonly complete = output<string>();
 
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+
   protected readonly digits = signal<string[]>([]);
   protected readonly boxes = viewChildren<ElementRef<HTMLInputElement>>('otpBox');
 
@@ -52,7 +65,7 @@ export class OtpInputComponent {
 
   protected readonly wrapperClasses = computed(() => {
     const b = 'otp';
-    return [b, this.disabled() ? `${b}--disabled` : ''].filter(Boolean).join(' ');
+    return [b, this.isDisabled() ? `${b}--disabled` : ''].filter(Boolean).join(' ');
   });
 
   protected readonly boxClasses = computed(() => {
@@ -61,23 +74,23 @@ export class OtpInputComponent {
       b,
       `${b}--${this.size()}`,
       this.error() ? `${b}--error` : '',
-      this.disabled() ? `${b}--disabled` : '',
+      this.isDisabled() ? `${b}--disabled` : '',
     ]
       .filter(Boolean)
       .join(' ');
   });
 
   constructor() {
-    effect(
-      () => {
-        const len = this.length();
-        const cur = this.digits();
-        if (cur.length !== len) {
-          this.digits.set(Array.from({ length: len }, (_, i) => cur[i] ?? ''));
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    // Keep the boxes in sync with the length and with values written from
+    // outside (two-way binding or a form control).
+    effect(() => {
+      const len = this.length();
+      const value = this.value() ?? '';
+      const cur = untracked(this.digits);
+      if (cur.length === len && cur.join('') === value) return;
+      const chars = cur.join('') === value ? cur : value.split('');
+      this.digits.set(Array.from({ length: len }, (_, i) => chars[i] ?? ''));
+    });
   }
 
   protected onInput(event: Event, index: number): void {
@@ -134,6 +147,10 @@ export class OtpInputComponent {
     boxes[Math.min(text.length, this.length() - 1)].nativeElement.focus();
   }
 
+  protected onBlur(): void {
+    this.#onTouched();
+  }
+
   protected onFocus(event: FocusEvent): void {
     (event.target as HTMLInputElement).select();
   }
@@ -141,8 +158,29 @@ export class OtpInputComponent {
   private _sync(digits: string[]): void {
     const joined = digits.join('');
     this.value.set(joined);
+    this.#onChange(joined);
     if (joined.length === this.length() && !digits.includes('')) {
       this.complete.emit(joined);
     }
+  }
+
+  // ── ControlValueAccessor ─────────────────────────────────────
+  #onChange: (value: string) => void = () => {};
+  #onTouched: () => void = () => {};
+
+  writeValue(value: string | null): void {
+    this.value.set(value ?? '');
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.#onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.#onTouched = fn;
+  }
+
+  setDisabledState(disabled: boolean): void {
+    this.#formDisabled.set(disabled);
   }
 }
