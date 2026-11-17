@@ -2,6 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   input,
+  output,
   signal,
   computed,
   forwardRef,
@@ -36,13 +37,22 @@ export class RadioComponent implements ControlValueAccessor {
   readonly size = input<RadioSize>('md');
   readonly color = input<RadioColor>('primary');
   readonly labelPosition = input<'left' | 'right'>('right');
+  /**
+   * Controlled checked state for use without forms. When left undefined the
+   * state comes from the form model (`ngModel` / `formControlName`).
+   */
+  readonly checked = input<boolean | undefined>(undefined);
+  readonly disabled = input<boolean>(false);
+
+  /** Emits this radio's `value` when the user selects it. */
+  readonly valueSelect = output<RadioValue>();
 
   readonly id = `ngx-radio-${nextId++}`;
 
   readonly #modelValue = signal<RadioValue | null>(null);
-  readonly #disabled = signal(false);
-  readonly isDisabled = this.#disabled.asReadonly();
-  readonly isChecked = computed(() => this.#modelValue() === this.value());
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
+  readonly isChecked = computed(() => this.checked() ?? this.#modelValue() === this.value());
 
   private onChange: (v: RadioValue) => void = () => {};
   private onTouched: () => void = () => {};
@@ -50,15 +60,17 @@ export class RadioComponent implements ControlValueAccessor {
   readonly hostClasses = computed(() => {
     const classes = ['radio', `radio--${this.size()}`, `radio--${this.color()}`];
     if (this.isChecked()) classes.push('radio--checked');
-    if (this.#disabled()) classes.push('radio--disabled');
+    if (this.isDisabled()) classes.push('radio--disabled');
     return classes.join(' ');
   });
 
   onSelect(): void {
-    if (this.#disabled()) return;
-    this.#modelValue.set(this.value());
-    this.onChange(this.value());
+    if (this.isDisabled()) return;
+    const value = this.value();
+    this.#modelValue.set(value);
+    this.onChange(value);
     this.onTouched();
+    this.valueSelect.emit(value);
   }
 
   writeValue(value: RadioValue | null): void {
@@ -71,6 +83,6 @@ export class RadioComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#formDisabled.set(disabled);
   }
 }

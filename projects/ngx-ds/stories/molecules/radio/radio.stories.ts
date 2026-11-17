@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal, computed } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RadioComponent } from '../../../src/lib/molecules/radio/radio.component';
 
 // ── Default Wrapper ───────────────────────────────────────────────────────────
@@ -14,21 +15,21 @@ import { RadioComponent } from '../../../src/lib/molecules/radio/radio.component
         name="demo"
         value="a"
         label="Opción A"
-        (change)="select('a')"
+        (valueSelect)="select('a')"
         [checked]="selected() === 'a'"
       />
       <ngx-ds-radio
         name="demo"
         value="b"
         label="Opción B"
-        (change)="select('b')"
+        (valueSelect)="select('b')"
         [checked]="selected() === 'b'"
       />
       <ngx-ds-radio
         name="demo"
         value="c"
         label="Opción C"
-        (change)="select('c')"
+        (valueSelect)="select('c')"
         [checked]="selected() === 'c'"
       />
       <p class="text-xs text-gray-400 mt-2">Seleccionado: {{ selected() }}</p>
@@ -142,28 +143,28 @@ class LabelPositionWrapper {}
           name="h"
           value="pequeno"
           label="Pequeño"
-          (change)="size.set('pequeno')"
+          (valueSelect)="size.set('pequeno')"
           [checked]="size() === 'pequeno'"
         />
         <ngx-ds-radio
           name="h"
           value="mediano"
           label="Mediano"
-          (change)="size.set('mediano')"
+          (valueSelect)="size.set('mediano')"
           [checked]="size() === 'mediano'"
         />
         <ngx-ds-radio
           name="h"
           value="grande"
           label="Grande"
-          (change)="size.set('grande')"
+          (valueSelect)="size.set('grande')"
           [checked]="size() === 'grande'"
         />
         <ngx-ds-radio
           name="h"
           value="xlarge"
           label="X-Large"
-          (change)="size.set('xlarge')"
+          (valueSelect)="size.set('xlarge')"
           [checked]="size() === 'xlarge'"
         />
       </div>
@@ -192,7 +193,7 @@ class HorizontalWrapper {
               [value]="plan.value"
               [label]="plan.label"
               color="primary"
-              (change)="selectedPlan.set(plan.value)"
+              (valueSelect)="selectedPlan.set(plan.value)"
               [checked]="selectedPlan() === plan.value"
             />
           }
@@ -217,6 +218,27 @@ class InteractiveWrapper {
   );
 }
 
+// ── ngModel Wrapper ───────────────────────────────────────────────────────────
+
+@Component({
+  selector: 'radio-ngmodel-wrapper',
+  standalone: true,
+  imports: [RadioComponent, FormsModule],
+  template: `
+    <div class="p-6 space-y-3">
+      <p class="text-sm text-gray-500 mb-2">Grupo enlazado con [(ngModel)]</p>
+      @for (opt of options; track opt) {
+        <ngx-ds-radio name="ngm" [value]="opt" [label]="opt" [(ngModel)]="choice" />
+      }
+      <p class="text-xs text-gray-400 mt-2">Seleccionado: {{ choice }}</p>
+    </div>
+  `,
+})
+class NgModelWrapper {
+  options = ['Email', 'SMS', 'Push'];
+  choice = 'SMS';
+}
+
 // ── States Wrapper ────────────────────────────────────────────────────────────
 
 @Component({
@@ -228,8 +250,14 @@ class InteractiveWrapper {
       <p class="text-sm text-gray-500 mb-2">Estados</p>
       <ngx-ds-radio name="st" value="a" label="Sin seleccionar" />
       <ngx-ds-radio name="st" value="b" label="Seleccionado" [checked]="true" />
-      <ngx-ds-radio name="st2" value="c" label="Deshabilitado sin seleccionar" />
-      <ngx-ds-radio name="st2" value="d" label="Deshabilitado seleccionado" [checked]="true" />
+      <ngx-ds-radio name="st2" value="c" label="Deshabilitado sin seleccionar" [disabled]="true" />
+      <ngx-ds-radio
+        name="st2"
+        value="d"
+        label="Deshabilitado seleccionado"
+        [checked]="true"
+        [disabled]="true"
+      />
     </div>
   `,
 })
@@ -285,6 +313,13 @@ export const Interactive: Story = {
   render: () => ({
     template: `<radio-interactive-wrapper />`,
     moduleMetadata: { imports: [InteractiveWrapper] },
+  }),
+};
+
+export const WithNgModel: Story = {
+  render: () => ({
+    template: `<radio-ngmodel-wrapper />`,
+    moduleMetadata: { imports: [NgModelWrapper] },
   }),
 };
 
