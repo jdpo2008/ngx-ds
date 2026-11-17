@@ -103,7 +103,7 @@ Source files (`projects/ngx-ds/styles/`):
   />
 </ColorPalette>
 
-> **Nota:** `--primary-*` (índigo) es el color primario de todos los componentes: sobreescribir `--primary-500` (y su escala) re-tematiza la librería. El verde de marca (`--ngx-color-primary`) sigue fuera de la escala.
+> **Nota:** `--primary-*` (índigo) es el color primario de todos los componentes: sobreescribir `--primary-500` (y su escala) re-tematiza la librería. El antiguo verde de marca (`--ngx-color-primary`) no forma parte del tema: con texto blanco encima no llega a 4.5:1 y se confundiría con `--success-*`.
 
 ## Semantic tokens
 
@@ -169,22 +169,21 @@ sustituto. Se eliminarán en la próxima versión major.
 
 ### `--ngx-color-*`
 
-| Legacy                           | Sustituto          | Nota                                                                                |
-| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| `--ngx-color-primary`            | —                  | Verde de marca (`#1fdd5e`), sin equivalente en la escala nueva; se mantiene literal |
-| `--ngx-color-primary-dark`       | —                  | Idem, sin equivalente                                                               |
-| `--ngx-color-primary-success`    | `--success-500`    |                                                                                     |
-| `--ngx-color-primary-error`      | `--danger-500`     |                                                                                     |
-| `--ngx-color-primary-warning`    | `--warning-500`    |                                                                                     |
-| `--ngx-color-primary-info`       | `--info-500`       |                                                                                     |
-| `--ngx-color-primary-background` | `--surface-subtle` |                                                                                     |
-| `--ngx-color-primary-title`      | `--text-base`      |                                                                                     |
-| `--ngx-color-primary-text`       | `--text-muted`     |                                                                                     |
-| `--ngx-color-primary-text-hover` | `--text-muted`     |                                                                                     |
-| `--ngx-color-primary-text-dark*` | `--text-inverse`   | Variantes hover/active/focus, todas `#fff`                                          |
-| `--ngx-color-primary-border`     | `--border-base`    |                                                                                     |
+| Legacy                           | Sustituto          | Nota                                                                                  |
+| -------------------------------- | ------------------ | ------------------------------------------------------------------------------------- |
+| `--ngx-color-primary`            | —                  | Antiguo verde de marca (`#1fdd5e`); el primario es `--primary-*`, se mantiene literal |
+| `--ngx-color-primary-dark`       | —                  | Idem, sin equivalente                                                                 |
+| `--ngx-color-primary-success`    | `--success-500`    |                                                                                       |
+| `--ngx-color-primary-error`      | `--danger-500`     |                                                                                       |
+| `--ngx-color-primary-warning`    | `--warning-500`    |                                                                                       |
+| `--ngx-color-primary-info`       | `--info-500`       |                                                                                       |
+| `--ngx-color-primary-background` | `--surface-subtle` |                                                                                       |
+| `--ngx-color-primary-title`      | `--text-base`      |                                                                                       |
+| `--ngx-color-primary-text`       | `--text-muted`     |                                                                                       |
+| `--ngx-color-primary-text-hover` | `--text-muted`     |                                                                                       |
+| `--ngx-color-primary-text-dark*` | `--text-inverse`   | Variantes hover/active/focus, todas `#fff`                                            |
+| `--ngx-color-primary-border`     | `--border-base`    |                                                                                       |
 
-## Pendiente (fuera de este cambio)
+## Notas
 
-- Decidir si el verde de marca (`--ngx-color-primary`) pasa a ser la escala `--primary-*`.
 - Reactivar `prefers-color-scheme` automático queda a criterio del consumidor.

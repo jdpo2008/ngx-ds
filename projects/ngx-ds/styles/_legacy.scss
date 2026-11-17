@@ -7,8 +7,8 @@
 // override the canonical token (e.g. `--primary-500`) instead.
 //
 // `--ngx-color-*` predates the token system in _tokens.scss.
-// Brand green (#1fdd5e) and emerald success (#10b981) have no equivalent in
-// the new scale and stay literal.
+// The old brand green (#1fdd5e) is not part of the theme: the primary color is
+// the indigo --primary-* scale. Its aliases stay literal until the next major.
 
 @layer base {
   :root {
