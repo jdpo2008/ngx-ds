@@ -1,0 +1,22 @@
+@if (!isClosed()) {
+  <div [class]="hostClasses()" role="alert">
+    @if (showIcon()) {
+      <ngx-ds-icon class="alert__icon" [icon]="typeIcon()" [size]="20" aria-hidden="true" />
+    }
+
+    <div class="alert__body">
+      @if (title()) {
+        <p class="alert__title">{{ title() }}</p>
+      }
+      <div class="alert__message">
+        <ng-content />
+      </div>
+    </div>
+
+    @if (dismissible()) {
+      <button type="button" class="alert__close" (click)="close()" aria-label="Cerrar alerta">
+        <ngx-ds-icon [icon]="closeIcon" [size]="16" aria-hidden="true" />
+      </button>
+    }
+  </div>
+}

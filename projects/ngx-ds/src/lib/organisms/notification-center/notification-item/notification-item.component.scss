@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Item row ──────────────────────────────────────────────────────────────────
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.12s ease;
+  border-bottom: 1px solid var(--border-subtle, #f3f4f6);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: var(--surface-subtle, #f9fafb);
+  }
+
+  &--unread {
+    background: var(--surface-subtle, #fafafa);
+  }
+}
+
+// ── Unread dot ────────────────────────────────────────────────────────────────
+
+.notif-item__dot {
+  position: absolute;
+  top: 1rem;
+  left: 0.375rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--primary-500, #6366f1);
+  flex-shrink: 0;
+}
+
+// ── Icon ──────────────────────────────────────────────────────────────────────
+
+.notif-item__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.notif-item--info .notif-item__icon-wrap {
+  background: var(--info-100, #dbeafe);
+}
+.notif-item--success .notif-item__icon-wrap {
+  background: var(--success-100, #dcfce7);
+}
+.notif-item--warning .notif-item__icon-wrap {
+  background: var(--warning-100, #fef9c3);
+}
+.notif-item--error .notif-item__icon-wrap {
+  background: var(--danger-100, #fee2e2);
+}
+
+.notif-item__icon {
+  display: flex;
+}
+.notif-item--info .notif-item__icon {
+  color: var(--info-600, #2563eb);
+}
+.notif-item--success .notif-item__icon {
+  color: var(--success-600, #16a34a);
+}
+.notif-item--warning .notif-item__icon {
+  color: var(--warning-600, #ca8a04);
+}
+.notif-item--error .notif-item__icon {
+  color: var(--danger-600, #dc2626);
+}
+
+// ── Content ───────────────────────────────────────────────────────────────────
+
+.notif-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.notif-item__title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-base, #111827);
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.notif-item--unread .notif-item__title {
+  font-weight: 600;
+}
+
+.notif-item__desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted, #6b7280);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ── Meta row ─────────────────────────────────────────────────────────────────
+
+.notif-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.notif-item__time {
+  font-size: 0.75rem;
+  color: var(--text-placeholder, #9ca3af);
+}
+
+// ── Dismiss button ────────────────────────────────────────────────────────────
+
+.notif-item__dismiss {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.notif-item:hover .notif-item__dismiss {
+  opacity: 1;
+}

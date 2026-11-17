@@ -1,12 +1,6 @@
 <ngx-ds-popover [placement]="placement()">
-
   <!-- ── Trigger ─────────────────────────────────────────────────────────── -->
-  <button
-    popover-trigger
-    type="button"
-    class="um__trigger"
-    [attr.aria-label]="user().name"
-  >
+  <button popover-trigger type="button" class="um__trigger" [attr.aria-label]="user().name">
     <ngx-ds-avatar
       [src]="user().avatarSrc"
       [alt]="user().name"
@@ -18,7 +12,6 @@
 
   <!-- ── Panel ───────────────────────────────────────────────────────────── -->
   <div popover-content class="um__panel">
-
     <!-- Header: name + email only, no avatar -->
     <div class="um__header">
       <p class="um__name">{{ user().name }}</p>
@@ -44,7 +37,5 @@
         </ngx-ds-menu-button>
       }
     </div>
-
   </div>
-
 </ngx-ds-popover>

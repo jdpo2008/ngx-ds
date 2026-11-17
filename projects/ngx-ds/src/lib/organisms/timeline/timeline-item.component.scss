@@ -1,0 +1,104 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.timeline-item {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+
+  &:last-child {
+    padding-bottom: 0;
+
+    .timeline-item__line {
+      display: none;
+    }
+  }
+}
+
+// ── Rail (dot + line) ─────────────────────────────────────────────────────────
+
+.timeline-item__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeline-item__dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid transparent;
+
+  &--completed {
+    background: var(--success-100, #dcfce7);
+    border-color: var(--success-500, #22c55e);
+    color: var(--success-700, #15803d);
+  }
+
+  &--active {
+    background: var(--primary-100, #e0e7ff);
+    border-color: var(--primary-500, #6366f1);
+    color: var(--primary-700, #4338ca);
+    box-shadow: 0 0 0 3px var(--primary-100, #e0e7ff);
+  }
+
+  &--pending {
+    background: var(--surface-muted, #f3f4f6);
+    border-color: var(--border-input, #d1d5db);
+    color: var(--text-placeholder, #9ca3af);
+  }
+
+  &--error {
+    background: var(--danger-100, #fee2e2);
+    border-color: var(--danger-500, #ef4444);
+    color: var(--danger-700, #b91c1c);
+  }
+}
+
+.timeline-item__line {
+  flex: 1;
+  width: 2px;
+  background: var(--border-base, #e5e7eb);
+  margin-top: 0.25rem;
+  min-height: 1rem;
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+
+.timeline-item__body {
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.timeline-item__time {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-placeholder, #9ca3af);
+  margin-bottom: 0.125rem;
+}
+
+.timeline-item__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-base, #111827);
+}
+
+.timeline-item__description {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--text-muted, #6b7280);
+}
+
+.timeline-item__content:not(:has(*)) {
+  display: none;
+}

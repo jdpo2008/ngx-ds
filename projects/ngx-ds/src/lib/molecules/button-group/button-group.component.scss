@@ -1,0 +1,49 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// Acoplamiento intencional a los internos de ngx-ds-button (.btn) para colapsar
+// bordes/radios entre botones agrupados — aceptable dentro de la propia librería.
+
+.btn-group {
+  display: inline-flex;
+
+  &--full-width {
+    display: flex;
+    width: 100%;
+
+    ::ng-deep ngx-ds-button {
+      flex: 1;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+
+  ::ng-deep ngx-ds-button {
+    .btn {
+      border-radius: 0;
+    }
+
+    &:first-child .btn {
+      border-top-left-radius: 0.375rem;
+      border-bottom-left-radius: 0.375rem;
+    }
+
+    &:last-child .btn {
+      border-top-right-radius: 0.375rem;
+      border-bottom-right-radius: 0.375rem;
+    }
+
+    &:not(:first-child) .btn {
+      margin-left: -1.5px;
+    }
+
+    .btn:focus-visible {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}

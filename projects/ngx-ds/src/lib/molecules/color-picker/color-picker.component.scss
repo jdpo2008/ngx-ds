@@ -1,0 +1,126 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.cp__label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-base, #111827);
+}
+
+.cp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border-base, #e5e7eb);
+  border-radius: 0.75rem;
+  background: var(--surface-base, #ffffff);
+  width: 240px;
+
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+// ── Preview ───────────────────────────────────────────────────────────────────
+
+.cp__preview {
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-base, #e5e7eb);
+}
+
+// ── Sliders ───────────────────────────────────────────────────────────────────
+
+.cp__sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cp__slider-label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  margin-bottom: 0.125rem;
+}
+
+.cp__range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 0.625rem;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+
+  &--hue {
+    background: linear-gradient(
+      to right,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid var(--border-input, #d1d5db);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid var(--border-input, #d1d5db);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+}
+
+// ── Hex input ─────────────────────────────────────────────────────────────────
+
+.cp__hex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cp__hex-input {
+  flex: 1;
+  border: 1px solid var(--border-input, #d1d5db);
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+  color: var(--text-base, #111827);
+  outline: none;
+  text-transform: uppercase;
+
+  &:focus {
+    border-color: var(--primary-500, #6366f1);
+    box-shadow: 0 0 0 2px var(--primary-100, #e0e7ff);
+  }
+}
+
+.cp__hex-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #6b7280);
+  letter-spacing: 0.05em;
+}

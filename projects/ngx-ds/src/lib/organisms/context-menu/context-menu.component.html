@@ -1,0 +1,21 @@
+<div class="ctx" (contextmenu)="onContextMenu($event)">
+  <ng-content />
+</div>
+
+@if (isOpen()) {
+  <div
+    #panel
+    class="ctx__panel"
+    [class.ctx__panel--visible]="visible()"
+    [style.left.px]="posX()"
+    [style.top.px]="posY()"
+  >
+    <ngx-ds-menu
+      [items]="items()"
+      [size]="size()"
+      [autofocus]="true"
+      (itemClick)="onMenuItemClick($event)"
+      (closed)="close()"
+    />
+  </div>
+}

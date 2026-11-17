@@ -1,0 +1,140 @@
+:host {
+  display: inline-block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+
+.nc {
+  position: relative;
+  display: inline-block;
+}
+
+// ── Bell button ───────────────────────────────────────────────────────────────
+
+.nc__bell-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+// ── Badge ─────────────────────────────────────────────────────────────────────
+
+.nc__badge {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.25rem;
+  background: var(--danger-500, #ef4444);
+  color: #ffffff;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid var(--surface-base, #ffffff);
+  box-sizing: border-box;
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+
+.nc__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  width: 24rem;
+  background: var(--surface-base, #ffffff);
+  border: 1px solid var(--border-base, #e5e7eb);
+  border-radius: 0.875rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  overflow: hidden;
+  animation: ncSlideIn 0.15s ease;
+
+  &--bottom-end {
+    right: 0;
+  }
+  &--bottom-start {
+    left: 0;
+  }
+}
+
+@keyframes ncSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.nc__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0.625rem;
+  border-bottom: 1px solid var(--border-subtle, #f3f4f6);
+}
+
+.nc__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-base, #111827);
+  flex: 1;
+}
+
+.nc__unread-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--primary-100, #e0e7ff);
+  color: var(--primary-700, #4338ca);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+
+.nc__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+
+.nc__filters {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle, #f3f4f6);
+}
+
+.nc__filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  margin-left: 0.25rem;
+}
+
+// ── List ──────────────────────────────────────────────────────────────────────
+
+.nc__list {
+  overflow-y: auto;
+
+  ngx-ds-empty-state {
+    padding: 1.5rem;
+  }
+}

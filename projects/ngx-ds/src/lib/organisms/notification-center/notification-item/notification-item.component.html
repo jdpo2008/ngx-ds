@@ -1,0 +1,44 @@
+<div [class]="hostClasses()" (click)="onMarkRead()">
+  <!-- Unread dot -->
+  @if (!notification().read) {
+    <span class="notif-item__dot" aria-label="No leída"></span>
+  }
+
+  <!-- Type icon -->
+  <div class="notif-item__icon-wrap">
+    <ngx-ds-icon [icon]="typeIcon()" [size]="18" class="notif-item__icon" />
+  </div>
+
+  <!-- Content -->
+  <div class="notif-item__body">
+    <p class="notif-item__title">{{ notification().title }}</p>
+
+    @if (notification().description) {
+      <p class="notif-item__desc">{{ notification().description }}</p>
+    }
+
+    <div class="notif-item__meta">
+      @if (timeLabel()) {
+        <span class="notif-item__time">{{ timeLabel() }}</span>
+      }
+
+      @if (notification().actionLabel) {
+        <ngx-ds-button variant="outline" size="sm" color="primary" (click)="onAction($event)">
+          {{ notification().actionLabel }}
+        </ngx-ds-button>
+      }
+    </div>
+  </div>
+
+  <!-- Dismiss -->
+  <ngx-ds-icon-button
+    class="notif-item__dismiss"
+    [icon]="XIcon"
+    ariaLabel="Descartar notificación"
+    variant="outline"
+    color="secondary"
+    size="sm"
+    [bordered]="false"
+    (click)="onDismiss($event)"
+  />
+</div>

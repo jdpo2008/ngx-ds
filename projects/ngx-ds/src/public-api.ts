@@ -4,6 +4,9 @@
 export * from './lib/services/toast.service';
 export * from './lib/services/confirmation.service';
 
+// ── Directives ───────────────────────────────────────────────
+export * from './lib/directives/focus-trap';
+
 // ── Atoms ────────────────────────────────────────────────────
 export * from './lib/atoms/button';
 export * from './lib/atoms/icon-button';
@@ -43,8 +46,12 @@ export * from './lib/molecules/number-input';
 export * from './lib/molecules/multi-select';
 export * from './lib/molecules/rating';
 export * from './lib/molecules/chip-group';
-export { DateRangePickerComponent } from './lib/molecules/date-range-picker';
+export * from './lib/molecules/date-range-picker';
 export * from './lib/molecules/color-picker';
+export * from './lib/molecules/button-group';
+export * from './lib/molecules/avatar-group';
+export * from './lib/molecules/menu';
+export * from './lib/molecules/form-field';
 
 // ── Organisms ─────────────────────────────────────────────────
 export * from './lib/organisms/pagination';
@@ -63,5 +70,5 @@ export * from './lib/organisms/calendar';
 export * from './lib/organisms/command-palette';
 export * from './lib/organisms/notification-center';
 export * from './lib/organisms/user-menu';
-
-export {};
+export * from './lib/organisms/context-menu';
+export * from './lib/organisms/sidebar';

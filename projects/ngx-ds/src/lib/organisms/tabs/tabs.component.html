@@ -1,0 +1,33 @@
+<div class="tabs">
+  <div [class]="navClasses()" role="tablist" (keydown)="onKeydown($event)">
+    @for (tab of tabs(); track $index) {
+      <button
+        #tabBtn
+        class="tabs__trigger"
+        role="tab"
+        [attr.id]="tabId($index)"
+        [class.tabs__trigger--active]="active() === $index"
+        [disabled]="tab.disabled() || null"
+        [attr.aria-selected]="active() === $index"
+        [attr.aria-disabled]="tab.disabled() || null"
+        [attr.aria-controls]="panelId($index)"
+        [attr.tabindex]="active() === $index ? 0 : -1"
+        (click)="select($index)"
+      >
+        @if (tab.icon()) {
+          <ngx-ds-icon
+            class="tabs__icon"
+            [icon]="tab.icon()!"
+            [size]="iconSize()"
+            aria-hidden="true"
+          />
+        }
+        {{ tab.label() }}
+      </button>
+    }
+  </div>
+
+  <div class="tabs__content">
+    <ng-content />
+  </div>
+</div>

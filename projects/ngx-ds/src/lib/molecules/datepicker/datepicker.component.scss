@@ -1,0 +1,323 @@
+:host {
+  display: block;
+  position: relative;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+$sizes: (
+  'sm': (
+    0.375rem 0.625rem,
+    0.8125rem,
+  ),
+  'md': (
+    0.5rem 0.75rem,
+    0.875rem,
+  ),
+  'lg': (
+    0.625rem 1rem,
+    1rem,
+  ),
+);
+
+// ── Static label ──────────────────────────────────────────────
+.ngx-datepicker__label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #374151);
+}
+
+// ── Field trigger ─────────────────────────────────────────────
+.ngx-datepicker__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--surface-base, #fff);
+  border: 1.5px solid var(--border-input, #d1d5db);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  min-height: 2.375rem;
+
+  &--focused {
+    border-color: var(--color-primary, #3b82f6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+
+  &--error {
+    border-color: var(--color-danger, #ef4444);
+    &.ngx-datepicker__field--focused {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+  }
+
+  &--disabled {
+    background: var(--surface-subtle, #f9fafb);
+    cursor: not-allowed;
+    color: var(--text-placeholder, #9ca3af);
+  }
+
+  @each $name, $vals in $sizes {
+    $pad: nth($vals, 1);
+    $fs: nth($vals, 2);
+    &--#{$name} {
+      padding: $pad;
+      font-size: $fs;
+    }
+  }
+}
+
+// ── Floating label ────────────────────────────────────────────
+.ngx-datepicker__float-label {
+  position: absolute;
+  // offset right of the calendar icon (16px icon + 8px gap + 12px field padding)
+  left: calc(0.75rem + 1.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: inherit;
+  color: var(--text-placeholder, #9ca3af);
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+  padding: 0;
+  background: transparent;
+  transition:
+    top 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease,
+    padding 0.15s ease;
+
+  &--active {
+    top: 0;
+    font-size: 0.7rem;
+    background: var(--surface-base, #fff);
+    padding: 0 0.25rem;
+    color: var(--color-primary, #3b82f6);
+  }
+
+  &--focused:not(&--error) {
+    color: var(--color-primary, #3b82f6);
+  }
+  &--error {
+    color: var(--color-danger, #ef4444);
+  }
+}
+
+// ── Field inner ───────────────────────────────────────────────
+.ngx-datepicker__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--text-placeholder, #9ca3af);
+}
+
+.ngx-datepicker__display {
+  flex: 1;
+  min-width: 0;
+}
+
+.ngx-datepicker__value {
+  display: block;
+  color: var(--text-base, #111827);
+  font-variant-numeric: tabular-nums;
+}
+
+.ngx-datepicker__placeholder {
+  display: block;
+  color: var(--text-placeholder, #9ca3af);
+}
+
+.ngx-datepicker__clear {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-placeholder, #9ca3af);
+  transition: color 0.15s ease;
+  &:hover {
+    color: var(--text-muted, #6b7280);
+  }
+}
+
+// ── Calendar panel ────────────────────────────────────────────
+.ngx-datepicker__panel {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  z-index: 100;
+  background: var(--surface-base, #fff);
+  border: 1.5px solid var(--border-input, #d1d5db);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 17.5rem; // 280px — 7 cols × 40px
+  overflow: hidden;
+}
+
+// ── Header ────────────────────────────────────────────────────
+.ngx-datepicker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.625rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle, #f3f4f6);
+}
+
+.ngx-datepicker__header-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-base, #111827);
+  text-transform: capitalize;
+}
+
+.ngx-datepicker__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--text-muted, #6b7280);
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
+
+  &:hover {
+    background: var(--surface-muted, #f3f4f6);
+    color: var(--text-base, #111827);
+  }
+}
+
+// ── Weekdays row ──────────────────────────────────────────────
+.ngx-datepicker__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0.375rem 0.5rem 0.25rem;
+}
+
+.ngx-datepicker__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-placeholder, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+// ── Day grid ──────────────────────────────────────────────────
+.ngx-datepicker__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  padding: 0 0.5rem 0.5rem;
+}
+
+.ngx-datepicker__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  color: var(--text-secondary, #374151);
+  cursor: pointer;
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
+  font-variant-numeric: tabular-nums;
+
+  &:hover:not(&--disabled):not(&--selected) {
+    background: var(--surface-muted, #f3f4f6);
+    color: var(--text-base, #111827);
+  }
+
+  // Greyed out: days from previous/next month
+  &--other-month {
+    color: var(--text-disabled, #d1d5db);
+  }
+
+  // Today indicator
+  &--today:not(&--selected) {
+    color: var(--color-primary, #3b82f6);
+    font-weight: 700;
+    background: var(--info-50, #eff6ff);
+  }
+
+  // Selected day
+  &--selected {
+    background: var(--color-primary, #3b82f6);
+    color: #fff;
+    font-weight: 600;
+
+    &:hover {
+      background: var(--info-600, #2563eb);
+    }
+  }
+
+  // Disabled
+  &--disabled {
+    color: var(--text-disabled, #d1d5db);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────
+.ngx-datepicker__footer {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  border-top: 1px solid var(--border-subtle, #f3f4f6);
+}
+
+.ngx-datepicker__today-btn {
+  padding: 0.25rem 0.875rem;
+  background: transparent;
+  border: 1.5px solid var(--border-base, #e5e7eb);
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--color-primary, #3b82f6);
+  cursor: pointer;
+  transition:
+    background 0.1s ease,
+    border-color 0.1s ease;
+
+  &:hover {
+    background: var(--info-50, #eff6ff);
+    border-color: #bfdbfe;
+  }
+}
+
+// ── Hint / Error ──────────────────────────────────────────────
+.ngx-datepicker__message {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  &--hint {
+    color: var(--text-muted, #6b7280);
+  }
+  &--error {
+    color: var(--color-danger, #ef4444);
+  }
+}

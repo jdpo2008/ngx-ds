@@ -1,0 +1,35 @@
+<li class="tree-node" role="treeitem" [attr.aria-expanded]="hasChildren() ? isExpanded() : null">
+  <!-- Row -->
+  <div [class]="rowClasses()" [style.paddingLeft]="indent()" (click)="select()">
+    <!-- Expand toggle -->
+    <button
+      type="button"
+      class="tree-node__toggle"
+      [class.tree-node__toggle--expanded]="isExpanded()"
+      [style.visibility]="hasChildren() ? 'visible' : 'hidden'"
+      (click)="toggle($event)"
+      [attr.aria-label]="isExpanded() ? 'Colapsar' : 'Expandir'"
+    >
+      <ngx-ds-icon [icon]="ChevronRight" [size]="14" />
+    </button>
+
+    <span class="tree-node__label">{{ node().label }}</span>
+  </div>
+
+  <!-- Children -->
+  @if (hasChildren() && isExpanded()) {
+    <ul class="tree-node__children" role="group">
+      @for (child of node().children; track child.id) {
+        <ngx-ds-tree-node
+          [node]="child"
+          [depth]="depth() + 1"
+          [selected]="selected()"
+          [expanded]="expanded()"
+          [selectable]="selectable()"
+          (nodeSelect)="bubbleSelect($event)"
+          (nodeToggle)="bubbleToggle($event)"
+        />
+      }
+    </ul>
+  }
+</li>

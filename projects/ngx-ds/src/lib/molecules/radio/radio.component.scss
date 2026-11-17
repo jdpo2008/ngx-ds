@@ -1,0 +1,104 @@
+$radio-colors: (
+  'primary': var(--color-primary, #3b82f6),
+  'secondary': var(--color-secondary, #6b7280),
+  'danger': var(--color-danger, #ef4444),
+  'success': #10b981,
+  'warning': var(--color-warning, #f59e0b),
+);
+
+$radio-sizes: (
+  'sm': 0.875rem,
+  'md': 1.125rem,
+  'lg': 1.375rem,
+);
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // ── Hidden native input ────────────────────────────────────────
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+
+    &:focus-visible ~ .radio__circle {
+      outline: 2px solid var(--ngx-radio-color);
+      outline-offset: 2px;
+    }
+  }
+
+  // ── Visual circle ──────────────────────────────────────────────
+  &__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    border: 2px solid var(--border-input, #d1d5db);
+    background: var(--surface-base, #fff);
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  &:hover:not(&--disabled):not(&--checked) &__circle {
+    border-color: var(--ngx-radio-color);
+  }
+
+  &--checked &__circle {
+    border-color: var(--ngx-radio-color);
+    background-color: var(--ngx-radio-color);
+  }
+
+  // ── Inner dot ─────────────────────────────────────────────────
+  &__dot {
+    border-radius: 9999px;
+    background: #fff;
+    width: 40%;
+    height: 40%;
+    transform: scale(0);
+    transition: transform 0.15s ease;
+  }
+
+  &--checked &__dot {
+    transform: scale(1);
+  }
+
+  // ── Label ──────────────────────────────────────────────────────
+  &__label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #374151);
+    line-height: 1.25;
+  }
+
+  // ── Sizes ─────────────────────────────────────────────────────
+  @each $name, $size in $radio-sizes {
+    &--#{$name} .radio__circle {
+      width: $size;
+      height: $size;
+    }
+  }
+
+  // ── Colors ────────────────────────────────────────────────────
+  @each $name, $color in $radio-colors {
+    &--#{$name} {
+      --ngx-radio-color: #{$color};
+    }
+  }
+}

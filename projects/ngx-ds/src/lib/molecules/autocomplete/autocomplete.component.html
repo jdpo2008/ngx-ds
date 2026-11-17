@@ -1,0 +1,97 @@
+<!-- Static label -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-autocomplete__label">{{ label() }}</label>
+}
+
+<!-- Field container -->
+<div [class]="fieldClasses()">
+  <!-- Floating label -->
+  @if (floatingLabel() && label()) {
+    <label [for]="id" [class]="floatLabelClasses()">{{ label() }}</label>
+  }
+
+  <!-- Left icon -->
+  @if (iconLeft()) {
+    <span class="ngx-autocomplete__icon ngx-autocomplete__icon--left" aria-hidden="true">
+      <ngx-ds-icon [icon]="iconLeft()!" [size]="iconSize()" />
+    </span>
+  }
+
+  <!-- Text input -->
+  <input
+    #nativeInput
+    class="ngx-autocomplete__native"
+    [id]="id"
+    type="text"
+    [value]="inputText()"
+    [placeholder]="floatingLabel() && label() && !isFloating() ? '' : placeholder()"
+    [disabled]="isDisabled() || null"
+    autocomplete="off"
+    role="combobox"
+    [attr.aria-expanded]="showPanel()"
+    [attr.aria-autocomplete]="'list'"
+    (input)="onInputChange($any($event.target).value)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+
+  <!-- Loading spinner -->
+  @if (loading()) {
+    <span class="ngx-autocomplete__spinner" aria-hidden="true">
+      <span class="ngx-autocomplete__spinner-ring"></span>
+    </span>
+  }
+
+  <!-- Clear button -->
+  @if (hasValue() && !isDisabled() && !loading()) {
+    <button
+      type="button"
+      class="ngx-autocomplete__clear"
+      aria-label="Limpiar"
+      (mousedown)="onClear($event)"
+    >
+      <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
+    </button>
+  }
+</div>
+
+<!-- Dropdown panel -->
+@if (showPanel()) {
+  <div class="ngx-autocomplete__panel" role="listbox">
+    <ul class="ngx-autocomplete__options" role="presentation">
+      @for (option of filteredOptions(); track option.value) {
+        <li
+          class="ngx-autocomplete__option"
+          [class.ngx-autocomplete__option--selected]="isSelected(option.value)"
+          [class.ngx-autocomplete__option--disabled]="option.disabled"
+          role="option"
+          [attr.aria-selected]="isSelected(option.value)"
+          (mousedown)="onOptionSelect(option)"
+        >
+          <span [innerHTML]="getHighlightedLabel(option.label)"></span>
+          @if (isSelected(option.value)) {
+            <span class="ngx-autocomplete__check" aria-hidden="true">
+              <ngx-ds-icon [icon]="SearchIcon" [size]="12" />
+            </span>
+          }
+        </li>
+      } @empty {
+        @if (!loading()) {
+          <li class="ngx-autocomplete__empty">{{ noResultsText() }}</li>
+        }
+      }
+    </ul>
+    @if (loading() && filteredOptions().length === 0) {
+      <p class="ngx-autocomplete__loading-text">Buscando...</p>
+    }
+  </div>
+}
+
+<!-- Error / Hint -->
+@if (hasError()) {
+  <p class="ngx-autocomplete__message ngx-autocomplete__message--error" role="alert">
+    {{ errorMessage() }}
+  </p>
+} @else if (hint()) {
+  <p class="ngx-autocomplete__message ngx-autocomplete__message--hint">{{ hint() }}</p>
+}

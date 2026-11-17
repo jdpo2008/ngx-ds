@@ -1,0 +1,29 @@
+<label [for]="id" [class]="hostClasses()">
+  <input
+    type="checkbox"
+    role="switch"
+    [id]="id"
+    class="switch__input"
+    [checked]="checked()"
+    [disabled]="isDisabled()"
+    [attr.aria-checked]="checked()"
+    [attr.aria-label]="label() || null"
+    (change)="onNativeChange($event)"
+  />
+
+  @if (labelPosition() === 'left' && label()) {
+    <span class="switch__label">{{ label() }}</span>
+  }
+
+  <span class="switch__track" aria-hidden="true">
+    <span class="switch__thumb"></span>
+  </span>
+
+  @if (labelPosition() === 'right' && label()) {
+    <span class="switch__label">{{ label() }}</span>
+  }
+
+  @if (activeLabel()) {
+    <span class="switch__state-label">{{ activeLabel() }}</span>
+  }
+</label>

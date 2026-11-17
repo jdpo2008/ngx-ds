@@ -1,0 +1,182 @@
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Size tokens ───────────────────────────────────────────────────────────────
+$sizes: (
+  'sm': (
+    0.375rem 0.625rem,
+    0.8125rem,
+  ),
+  // padding, font-size
+  'md': (
+    0.5rem 0.75rem,
+    0.875rem,
+  ),
+  'lg': (
+    0.625rem 1rem,
+    1rem,
+  ),
+);
+
+// ── Static label ──────────────────────────────────────────────────────────────
+.ngx-input__label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #374151);
+}
+
+// ── Field container ───────────────────────────────────────────────────────────
+.ngx-input__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--surface-base, #fff);
+  border: 1.5px solid var(--border-input, #d1d5db);
+  border-radius: 0.375rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &--focused {
+    border-color: var(--color-primary, #3b82f6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+
+  &--error {
+    border-color: var(--color-danger, #ef4444);
+
+    &.ngx-input__field--focused {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+  }
+
+  &--disabled {
+    background: var(--surface-subtle, #f9fafb);
+    cursor: not-allowed;
+  }
+
+  // Sizes
+  @each $name, $vals in $sizes {
+    $pad: nth($vals, 1);
+    $fs: nth($vals, 2);
+
+    &--#{$name} {
+      padding: $pad;
+      font-size: $fs;
+    }
+  }
+}
+
+// ── Native input ──────────────────────────────────────────────────────────────
+.ngx-input__native {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-base, #111827);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+
+  &::placeholder {
+    color: var(--text-placeholder, #9ca3af);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--text-muted, #6b7280);
+  }
+
+  &[readonly] {
+    cursor: default;
+  }
+}
+
+// ── Floating label ────────────────────────────────────────────────────────────
+.ngx-input__float-label {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: inherit;
+  color: var(--text-placeholder, #9ca3af);
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+  padding: 0;
+  background: transparent;
+  transition:
+    top 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease,
+    padding 0.15s ease;
+
+  // Pushed right when there is a left icon (icon 16px + gap 8px ≈ 1.5rem)
+  &--offset {
+    left: calc(0.75rem + 1.5rem);
+  }
+
+  // Floated state: sits on the top border
+  &--active {
+    top: 0;
+    font-size: 0.7rem;
+    background: var(--surface-base, #fff);
+    padding: 0 0.25rem;
+    color: var(--color-primary, #3b82f6);
+  }
+
+  &--focused:not(&--error) {
+    color: var(--color-primary, #3b82f6);
+  }
+  &--error {
+    color: var(--color-danger, #ef4444);
+  }
+}
+
+// ── Icons ─────────────────────────────────────────────────────────────────────
+.ngx-input__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--text-placeholder, #9ca3af);
+}
+
+// ── Password toggle button ────────────────────────────────────────────────────
+.ngx-input__password-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-placeholder, #9ca3af);
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--text-muted, #6b7280);
+  }
+}
+
+// ── Hint / Error message ──────────────────────────────────────────────────────
+.ngx-input__message {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+
+  &--hint {
+    color: var(--text-muted, #6b7280);
+  }
+  &--error {
+    color: var(--color-danger, #ef4444);
+  }
+}

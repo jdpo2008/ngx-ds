@@ -1,0 +1,71 @@
+@if (label()) {
+  <label class="slider__label">{{ label() }}</label>
+}
+
+@if (!range()) {
+  <div class="slider__row">
+    @if (showMinMax()) {
+      <span class="slider__bound">{{ min() }}</span>
+    }
+
+    <div class="slider__rail" [style]="trackStyle()">
+      <input
+        class="slider__native"
+        type="range"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [value]="value()"
+        [disabled]="disabled() || null"
+        (input)="onInput($event)"
+      />
+    </div>
+
+    @if (showMinMax()) {
+      <span class="slider__bound">{{ max() }}</span>
+    }
+
+    @if (showValue()) {
+      <span class="slider__value">{{ value() }}</span>
+    }
+  </div>
+} @else {
+  <div class="slider__row">
+    @if (showMinMax()) {
+      <span class="slider__bound">{{ min() }}</span>
+    }
+
+    <div class="slider__rail slider__rail--range" [style]="rangeTrackStyle()">
+      <input
+        class="slider__native slider__native--range slider__native--start"
+        type="range"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [value]="values()[0]"
+        [disabled]="disabled() || null"
+        [attr.aria-label]="ariaLabelStart() || null"
+        (input)="onStartInput($event)"
+      />
+      <input
+        class="slider__native slider__native--range slider__native--end"
+        type="range"
+        [min]="min()"
+        [max]="max()"
+        [step]="step()"
+        [value]="values()[1]"
+        [disabled]="disabled() || null"
+        [attr.aria-label]="ariaLabelEnd() || null"
+        (input)="onEndInput($event)"
+      />
+    </div>
+
+    @if (showMinMax()) {
+      <span class="slider__bound">{{ max() }}</span>
+    }
+
+    @if (showValue()) {
+      <span class="slider__value">{{ values()[0] }} – {{ values()[1] }}</span>
+    }
+  </div>
+}

@@ -1,0 +1,13 @@
+<ul class="tree-view" role="tree">
+  @for (node of nodes(); track node.id) {
+    <ngx-ds-tree-node
+      [node]="node"
+      [depth]="0"
+      [selected]="selected()"
+      [expanded]="expanded()"
+      [selectable]="selectable()"
+      (nodeSelect)="onSelect($event)"
+      (nodeToggle)="onToggle($event)"
+    />
+  }
+</ul>

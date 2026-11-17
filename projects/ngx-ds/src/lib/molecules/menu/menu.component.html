@@ -1,0 +1,43 @@
+@for (item of items(); track item.id; let i = $index) {
+  @if (item.separator) {
+    <ngx-ds-divider />
+  }
+  <div class="menu__item-wrapper">
+    <button
+      #itemBtn
+      type="button"
+      role="menuitem"
+      class="menu__item"
+      [class.menu__item--danger]="item.danger"
+      [class.menu__item--active]="activeIndex() === i"
+      [disabled]="item.disabled"
+      [attr.aria-haspopup]="item.children?.length ? 'menu' : null"
+      [attr.aria-expanded]="item.children?.length ? openSubmenu() === item.id : null"
+      [attr.tabindex]="activeIndex() === i ? 0 : -1"
+      (click)="onItemClick(item, i)"
+    >
+      @if (item.icon) {
+        <ngx-ds-icon [icon]="item.icon" [size]="iconSize()" class="menu__item-icon" />
+      }
+      <span class="menu__item-label">{{ item.label }}</span>
+      @if (item.kbd) {
+        <ngx-ds-kbd size="sm" class="menu__item-kbd">{{ item.kbd }}</ngx-ds-kbd>
+      }
+      @if (item.children?.length) {
+        <ngx-ds-icon [icon]="chevronRight" [size]="14" class="menu__item-chevron" />
+      }
+    </button>
+
+    @if (item.children?.length && openSubmenu() === item.id) {
+      <div class="menu__submenu">
+        <ngx-ds-menu
+          [items]="item.children!"
+          [size]="size()"
+          [autofocus]="true"
+          (itemClick)="onSubmenuItemClick($event)"
+          (closed)="onSubmenuClosed(i)"
+        />
+      </div>
+    }
+  </div>
+}

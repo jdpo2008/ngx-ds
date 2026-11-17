@@ -1,0 +1,81 @@
+<!-- Static label -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-dropdown__label">{{ label() }}</label>
+}
+
+<!-- Trigger -->
+<div
+  [class]="triggerClasses()"
+  (click)="togglePanel()"
+  [attr.id]="id"
+  role="combobox"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-disabled]="isDisabled()"
+>
+  <!-- Floating label -->
+  @if (floatingLabel() && label()) {
+    <span [class]="floatLabelClasses()">{{ label() }}</span>
+  }
+
+  <!-- Display area -->
+  <span class="ngx-dropdown__display">
+    @if (displayText()) {
+      <span class="ngx-dropdown__value">{{ displayText() }}</span>
+    } @else {
+      <span class="ngx-dropdown__placeholder">{{ placeholder() }}</span>
+    }
+  </span>
+
+  <!-- Clear button -->
+  @if (hasValue() && !isDisabled()) {
+    <button
+      type="button"
+      class="ngx-dropdown__clear"
+      aria-label="Limpiar selección"
+      (click)="clearValue($event)"
+    >
+      <ngx-ds-icon [icon]="XIcon" [size]="iconSize()" />
+    </button>
+  }
+
+  <!-- Chevron -->
+  <span class="ngx-dropdown__chevron" aria-hidden="true">
+    <ngx-ds-icon [icon]="isOpen() ? ChevronUp : ChevronDown" [size]="iconSize()" />
+  </span>
+</div>
+
+<!-- Dropdown panel -->
+@if (isOpen()) {
+  <div class="ngx-dropdown__panel" role="listbox">
+    <ul class="ngx-dropdown__options" role="presentation">
+      @for (option of options(); track option.value) {
+        <li
+          class="ngx-dropdown__option"
+          [class.ngx-dropdown__option--selected]="isSelected(option.value)"
+          [class.ngx-dropdown__option--disabled]="option.disabled"
+          role="option"
+          [attr.aria-selected]="isSelected(option.value)"
+          (click)="selectOption(option); $event.stopPropagation()"
+        >
+          <span class="ngx-dropdown__check">
+            @if (isSelected(option.value)) {
+              <ngx-ds-icon [icon]="CheckIcon" [size]="14" />
+            }
+          </span>
+          <span class="ngx-dropdown__option-label">{{ option.label }}</span>
+        </li>
+      } @empty {
+        <li class="ngx-dropdown__empty">Sin opciones</li>
+      }
+    </ul>
+  </div>
+}
+
+<!-- Hint / Error -->
+@if (hasError()) {
+  <p class="ngx-dropdown__message ngx-dropdown__message--error" role="alert">
+    {{ errorMessage() }}
+  </p>
+} @else if (hint()) {
+  <p class="ngx-dropdown__message ngx-dropdown__message--hint">{{ hint() }}</p>
+}

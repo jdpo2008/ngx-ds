@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+// ── Base ──────────────────────────────────────────────────────────────────────
+
+.divider {
+  border-color: var(--border-color, #e5e7eb);
+
+  // ── Horizontal ───────────────────────────────────────────────────────────
+  &--horizontal {
+    width: 100%;
+    border-top-width: 1.5px;
+    border-top-style: solid;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+  }
+
+  // ── Vertical ─────────────────────────────────────────────────────────────
+  &--vertical {
+    display: inline-block;
+    align-self: stretch;
+    min-height: 1em;
+    border-left-width: 1.5px;
+    border-left-style: solid;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    margin: 0 0.75rem;
+  }
+
+  // ── Variants ─────────────────────────────────────────────────────────────
+  &--dashed {
+    border-style: dashed;
+  }
+  &--dotted {
+    border-style: dotted;
+  }
+
+  // ── Labeled (horizontal only) ─────────────────────────────────────────────
+  &--labeled {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: none;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-top-width: 1.5px;
+      border-top-style: inherit;
+      border-color: inherit;
+    }
+  }
+
+  // label alignment
+  &--label-start::before {
+    flex: 0 0 1.5rem;
+  }
+  &--label-end::after {
+    flex: 0 0 1.5rem;
+  }
+}
+
+// ── Label text ────────────────────────────────────────────────────────────────
+
+.divider__label {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+  color: var(--text-placeholder, #9ca3af);
+  white-space: nowrap;
+}

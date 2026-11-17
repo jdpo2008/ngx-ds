@@ -1,0 +1,60 @@
+<!-- Static label (non-floating) -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-input__label">{{ label() }}</label>
+}
+
+<!-- Field container -->
+<div [class]="fieldClasses()">
+  <!-- Floating label (lives inside the bordered field) -->
+  @if (floatingLabel() && label()) {
+    <label [for]="id" [class]="floatLabelClasses()">{{ label() }}</label>
+  }
+
+  <!-- Left icon -->
+  @if (iconLeft()) {
+    <span class="ngx-input__icon ngx-input__icon--left" aria-hidden="true">
+      <ngx-ds-icon [icon]="iconLeft()!" [size]="iconSize()" />
+    </span>
+  }
+
+  <!-- Native input -->
+  <input
+    class="ngx-input__native"
+    [id]="id"
+    [type]="effectiveType()"
+    [value]="value()"
+    [placeholder]="effectivePlaceholder()"
+    [disabled]="isDisabled() || null"
+    [attr.readonly]="readonly() || null"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+
+  <!-- Password toggle -->
+  @if (type() === 'password') {
+    <button
+      type="button"
+      class="ngx-input__password-toggle"
+      [attr.aria-label]="effectiveType() === 'text' ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+      (click)="togglePassword()"
+      tabindex="-1"
+    >
+      <ngx-ds-icon [icon]="eyeIcon()" [size]="iconSize()" />
+    </button>
+  }
+
+  <!-- Right icon (non-password) -->
+  @if (iconRight() && type() !== 'password') {
+    <span class="ngx-input__icon ngx-input__icon--right" aria-hidden="true">
+      <ngx-ds-icon [icon]="iconRight()!" [size]="iconSize()" />
+    </span>
+  }
+</div>
+
+<!-- Error / Hint -->
+@if (hasError()) {
+  <p class="ngx-input__message ngx-input__message--error" role="alert">{{ errorMessage() }}</p>
+} @else if (hint()) {
+  <p class="ngx-input__message ngx-input__message--hint">{{ hint() }}</p>
+}

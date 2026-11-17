@@ -1,0 +1,336 @@
+@if (globalFilter() || columnToggle() || showAddButton()) {
+  <div class="ngx-table__toolbar">
+    @if (globalFilter()) {
+      <ngx-ds-search-input
+        class="ngx-table__toolbar-filter"
+        [value]="filterValue()"
+        (valueChange)="onFilterChange($event)"
+        [placeholder]="filterPlaceholder()"
+        size="sm"
+      />
+    }
+
+    <div class="ngx-table__toolbar-actions">
+      @if (columnToggle()) {
+        <div
+          class="ngx-table__column-menu"
+          [class.ngx-table__column-menu--open]="isColumnMenuOpen()"
+        >
+          <ngx-ds-icon-button
+            [icon]="icons.Columns3"
+            ariaLabel="Columnas visibles"
+            variant="outline"
+            color="secondary"
+            size="sm"
+            (click)="toggleColumnMenu($event)"
+          />
+
+          @if (isColumnMenuOpen()) {
+            <div class="ngx-table__column-panel">
+              @for (col of hideableColumns(); track col.key) {
+                <ngx-ds-checkbox
+                  [label]="col.label"
+                  [checked]="isColumnVisible(col.key)"
+                  (checkedChange)="toggleColumn(col.key)"
+                />
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (showAddButton()) {
+        <ngx-ds-button
+          size="sm"
+          color="primary"
+          variant="solid"
+          [iconLeft]="icons.Plus"
+          (click)="onAddClick()"
+          >{{ addLabel() }}</ngx-ds-button
+        >
+      }
+    </div>
+  </div>
+}
+
+<div
+  class="ngx-table__wrapper"
+  [class.ngx-table__wrapper--sticky-head]="stickyHeader()"
+  [class.ngx-table__wrapper--attached]="globalFilter() || columnToggle() || showAddButton()"
+  [style.maxHeight]="stickyHeader() && maxHeight() ? maxHeight() : null"
+>
+  <table
+    class="ngx-table"
+    [class.ngx-table--striped]="striped()"
+    [class.ngx-table--hoverable]="hoverable()"
+    [class.ngx-table--dense]="dense()"
+  >
+    <!-- ── HEAD ─────────────────────────────────────────────────────── -->
+    <thead class="ngx-table__head">
+      <tr class="ngx-table__row ngx-table__row--header">
+        @if (expandable()) {
+          <th class="ngx-table__th ngx-table__th--expand"></th>
+        }
+
+        @if (selectable()) {
+          <th class="ngx-table__th ngx-table__th--checkbox">
+            @if (selectMode() === 'multi') {
+              <ngx-ds-checkbox
+                [checked]="allSelected()"
+                [indeterminate]="someSelected()"
+                (checkedChange)="toggleAll($event)"
+              />
+            }
+          </th>
+        }
+
+        @for (col of visibleColumns(); track col.key) {
+          <th
+            class="ngx-table__th"
+            [class.ngx-table__th--sortable]="col.sortable"
+            [class.ngx-table__th--sorted]="isSortActive(col)"
+            [class.ngx-table__th--sticky]="col.sticky"
+            [style.width]="col.width ?? null"
+            [style.minWidth]="col.minWidth ?? null"
+            [style.maxWidth]="col.maxWidth ?? null"
+            [style.textAlign]="col.align ?? 'left'"
+            [attr.aria-sort]="
+              isSortActive(col) ? (isSortAsc(col) ? 'ascending' : 'descending') : null
+            "
+            (click)="col.sortable && onSort(col)"
+          >
+            @if (col.headerTemplate) {
+              <ng-container
+                [ngTemplateOutlet]="col.headerTemplate"
+                [ngTemplateOutletContext]="{ column: col }"
+              />
+            } @else {
+              <span class="ngx-table__th-inner">
+                {{ col.label }}
+                @if (col.sortable) {
+                  <span
+                    class="ngx-table__sort-icon"
+                    [class.ngx-table__sort-icon--active]="isSortActive(col)"
+                  >
+                    <ngx-ds-icon [icon]="sortIconFor(col)" [size]="14" />
+                  </span>
+                }
+              </span>
+            }
+          </th>
+        }
+
+        @if (hasActions()) {
+          <th class="ngx-table__th ngx-table__th--actions">...</th>
+        }
+      </tr>
+    </thead>
+
+    <!-- ── BODY ─────────────────────────────────────────────────────── -->
+    <tbody class="ngx-table__body">
+      @if (loading()) {
+        @for (row of skeletonRowsArr(); track $index) {
+          <tr class="ngx-table__row ngx-table__row--skeleton">
+            @for (col of skeletonColsArr(); track $index) {
+              <td class="ngx-table__td">
+                <span class="ngx-table__skeleton-cell"></span>
+              </td>
+            }
+          </tr>
+        }
+      } @else if (processedData().length === 0) {
+        <tr class="ngx-table__row ngx-table__row--empty">
+          <td [attr.colspan]="colSpanCount()" class="ngx-table__td ngx-table__td--empty">
+            @if (emptyTemplate()) {
+              <ng-container [ngTemplateOutlet]="emptyTemplate()!" />
+            } @else {
+              <ngx-ds-empty-state
+                [icon]="emptyIcon()"
+                [title]="emptyMessage()"
+                [description]="emptyDescription()"
+                size="md"
+              >
+                @if (showAddButton()) {
+                  <ngx-ds-button
+                    empty-action
+                    size="sm"
+                    color="primary"
+                    variant="solid"
+                    [iconLeft]="icons.Plus"
+                    (click)="onAddClick()"
+                    >{{ addLabel() }}</ngx-ds-button
+                  >
+                }
+              </ngx-ds-empty-state>
+            }
+          </td>
+        </tr>
+      } @else {
+        @for (row of processedData(); track rowTrack(row, $index)) {
+          <tr
+            class="ngx-table__row"
+            [class.ngx-table__row--odd]="$index % 2 === 1"
+            [class.ngx-table__row--selected]="isSelected(row)"
+            [class.ngx-table__row--clickable]="selectable() || rowClickable()"
+            (click)="onRowClick(row)"
+          >
+            @if (expandable()) {
+              <td class="ngx-table__td ngx-table__td--expand" (click)="$event.stopPropagation()">
+                <span
+                  class="ngx-table__expand-icon"
+                  [class.ngx-table__expand-icon--open]="isExpanded(row)"
+                >
+                  <ngx-ds-icon-button
+                    [icon]="icons.ChevronRight"
+                    ariaLabel="Expandir fila"
+                    variant="outline"
+                    color="secondary"
+                    size="sm"
+                    [bordered]="false"
+                    [attr.aria-expanded]="isExpanded(row)"
+                    (click)="toggleExpand(row, $event)"
+                  />
+                </span>
+              </td>
+            }
+
+            @if (selectable()) {
+              <td class="ngx-table__td ngx-table__td--checkbox" (click)="$event.stopPropagation()">
+                @if (selectMode() === 'multi') {
+                  <ngx-ds-checkbox [checked]="isSelected(row)" (checkedChange)="toggleRow(row)" />
+                } @else {
+                  <div
+                    class="ngx-table__radio"
+                    [class.ngx-table__radio--selected]="isSelected(row)"
+                    (click)="toggleRow(row)"
+                  ></div>
+                }
+              </td>
+            }
+
+            @for (col of visibleColumns(); track col.key) {
+              <td
+                class="ngx-table__td"
+                [class.ngx-table__td--sticky]="col.sticky"
+                [style.textAlign]="col.align ?? 'left'"
+              >
+                @if (col.cellTemplate) {
+                  <ng-container
+                    [ngTemplateOutlet]="col.cellTemplate"
+                    [ngTemplateOutletContext]="{
+                      $implicit: row,
+                      value: getCellValue(row, col),
+                      row: row,
+                    }"
+                  />
+                } @else if (col.type === 'boolean') {
+                  <span
+                    class="ngx-table__bool"
+                    [class.ngx-table__bool--true]="getCellValue(row, col)"
+                  >
+                    <ngx-ds-icon
+                      [icon]="getCellValue(row, col) ? icons.Check : icons.X"
+                      [size]="16"
+                    />
+                  </span>
+                } @else if (col.type === 'badge') {
+                  <ngx-ds-badge
+                    [label]="formatCell(row, col)"
+                    [color]="col.badgeColor ?? 'primary'"
+                    [variant]="col.badgeVariant ?? 'soft'"
+                  />
+                } @else {
+                  {{ formatCell(row, col) }}
+                }
+              </td>
+            }
+
+            @if (hasActions()) {
+              <td class="ngx-table__td ngx-table__td--actions" (click)="$event.stopPropagation()">
+                <div
+                  class="ngx-table__action-menu"
+                  [class.ngx-table__action-menu--open]="isMenuOpen(row)"
+                >
+                  <ngx-ds-icon-button
+                    [icon]="icons.MoreVertical"
+                    ariaLabel="Acciones"
+                    variant="outline"
+                    color="secondary"
+                    size="sm"
+                    [bordered]="false"
+                    (click)="toggleMenu(row, $event)"
+                  />
+
+                  @if (isMenuOpen(row)) {
+                    <div class="ngx-table__action-panel">
+                      @for (action of actions(); track action.label) {
+                        @if (isActionVisible(action, row)) {
+                          <ngx-ds-menu-button
+                            [color]="action.color ?? 'default'"
+                            size="md"
+                            [iconLeft]="action.icon"
+                            [fullWidth]="true"
+                            [disabled]="isActionDisabled(action, row)"
+                            (click)="onActionClick(action, row, $event)"
+                            >{{ action.label }}</ngx-ds-menu-button
+                          >
+                        }
+                      }
+                    </div>
+                  }
+                </div>
+              </td>
+            }
+          </tr>
+
+          @if (expandable() && isExpanded(row)) {
+            <tr class="ngx-table__row ngx-table__row--detail">
+              <td [attr.colspan]="colSpanCount()" class="ngx-table__td ngx-table__td--detail">
+                <div class="ngx-table__detail-content">
+                  @if (expandTemplate()) {
+                    <ng-container
+                      [ngTemplateOutlet]="expandTemplate()"
+                      [ngTemplateOutletContext]="{ $implicit: row, row: row }"
+                    />
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+@if (paginated()) {
+  <div class="ngx-table__footer">
+    <div class="ngx-table__page-size">
+      <span class="ngx-table__label">Filas por página:</span>
+      <select
+        class="ngx-table__page-size-select"
+        [value]="effectivePageSize()"
+        (change)="onPageSizeChange($event)"
+      >
+        @for (opt of pageSizeOptions(); track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    </div>
+
+    <span class="ngx-table__page-info">
+      @if (totalItems() > 0) {
+        {{ pageStart() }}–{{ pageEnd() }} de {{ totalItems() }}
+      } @else {
+        0 resultados
+      }
+    </span>
+
+    <ngx-ds-pagination
+      [totalPages]="totalPages()"
+      [currentPage]="effectivePage()"
+      (pageChange)="onPageChange($event)"
+    />
+  </div>
+}

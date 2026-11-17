@@ -1,0 +1,205 @@
+// ── Overlay ────────────────────────────────────────────────────────────────
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  animation: drawer-overlay-in 0.2s ease;
+}
+
+// ── Panel ──────────────────────────────────────────────────────────────────
+
+.drawer {
+  position: fixed;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-base, #ffffff);
+  overflow: hidden;
+
+  // ── Sides ────────────────────────────────────────────────────────────────
+
+  &--right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 1px solid var(--border-color, #e5e7eb);
+    box-shadow:
+      -4px 0 32px rgba(0, 0, 0, 0.12),
+      -1px 0 8px rgba(0, 0, 0, 0.06);
+    animation: drawer-slide-right 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  &--left {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-right: 1px solid var(--border-color, #e5e7eb);
+    box-shadow:
+      4px 0 32px rgba(0, 0, 0, 0.12),
+      1px 0 8px rgba(0, 0, 0, 0.06);
+    animation: drawer-slide-left 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  &--top {
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.12);
+    animation: drawer-slide-top 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  &--bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--border-color, #e5e7eb);
+    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.12);
+    animation: drawer-slide-bottom 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  // ── Sizes — left / right ─────────────────────────────────────────────────
+
+  &--left,
+  &--right {
+    &.drawer--sm {
+      width: 16rem;
+    }
+    &.drawer--md {
+      width: 24rem;
+    }
+    &.drawer--lg {
+      width: 36rem;
+    }
+    &.drawer--xl {
+      width: 48rem;
+    }
+    &.drawer--full {
+      width: 100vw;
+    }
+  }
+
+  // ── Sizes — top / bottom ─────────────────────────────────────────────────
+
+  &--top,
+  &--bottom {
+    &.drawer--sm {
+      height: 12rem;
+    }
+    &.drawer--md {
+      height: 18rem;
+    }
+    &.drawer--lg {
+      height: 24rem;
+    }
+    &.drawer--xl {
+      height: 32rem;
+    }
+    &.drawer--full {
+      height: 100dvh;
+    }
+  }
+}
+
+// ── Header ─────────────────────────────────────────────────────────────────
+
+.drawer__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  flex-shrink: 0;
+}
+
+.drawer__title {
+  flex: 1;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  line-height: 1.4;
+}
+
+.drawer__close {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+// ── Body ───────────────────────────────────────────────────────────────────
+
+.drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted, #6b7280);
+  line-height: 1.6;
+}
+
+// ── Footer ─────────────────────────────────────────────────────────────────
+
+.drawer__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+
+  &:not(:has(*)) {
+    display: none;
+  }
+}
+
+// ── Animations ─────────────────────────────────────────────────────────────
+
+@keyframes drawer-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drawer-slide-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawer-slide-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawer-slide-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes drawer-slide-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

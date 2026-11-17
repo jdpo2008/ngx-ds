@@ -1,0 +1,21 @@
+@if (label() || (showValue() && !indeterminate())) {
+  <div class="progress__header">
+    @if (label()) {
+      <span class="progress__label">{{ label() }}</span>
+    }
+    @if (showValue() && !indeterminate()) {
+      <span class="progress__value">{{ displayValue() }}</span>
+    }
+  </div>
+}
+
+<div
+  [class]="trackClasses()"
+  role="progressbar"
+  [attr.aria-valuenow]="indeterminate() ? null : value()"
+  [attr.aria-valuemin]="0"
+  [attr.aria-valuemax]="max()"
+  [attr.aria-label]="label() || 'Progreso'"
+>
+  <div [class]="barClasses()" [style.width.%]="indeterminate() ? null : percentage()"></div>
+</div>

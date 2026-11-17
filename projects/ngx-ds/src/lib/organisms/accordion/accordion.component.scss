@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+// ── Default: gap between cards ────────────────────────────────────────────────
+
+.accordion--default {
+  gap: 0.5rem;
+}
+
+// ── Flush: no gap, outer border from container ────────────────────────────────
+
+.accordion--flush {
+  border: 1.5px solid var(--border-color, #e5e7eb);
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  ngx-ds-accordion-item:last-child .accordion-item--flush {
+    border-bottom: none;
+  }
+}
+
+// ── Ghost: loose, no borders ──────────────────────────────────────────────────
+
+.accordion--ghost {
+  gap: 0.25rem;
+}

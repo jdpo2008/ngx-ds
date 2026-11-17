@@ -1,0 +1,155 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Design Tokens" />
+
+# Design tokens
+
+ngx-ds styles are driven by CSS custom properties, layered so that every
+component keeps its historical hardcoded fallback (`var(--token, #hex)`) —
+defining a token in `:root` changes nothing unless a consumer actually
+overrides it or switches theme.
+
+Source files (`projects/ngx-ds/styles/`):
+
+- **`_tokens.scss`** — primitives (`--gray-*`, `--primary-*`, `--danger-*`, `--success-*`, `--warning-*`, `--info-*`) and the semantic layer built on top of them.
+- **`_themes.scss`** — dark theme overrides, opt-in only (see below).
+- **`_legacy.scss`** — deprecated `--ngx-color-*` variables, kept as aliases for backwards compatibility.
+
+## Primitives
+
+<ColorPalette>
+  <ColorItem
+    title="Gray"
+    subtitle="--gray-*"
+    colors={{
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    }}
+  />
+  <ColorItem
+    title="Primary (indigo)"
+    subtitle="--primary-*"
+    colors={{
+      50: '#eef2ff',
+      100: '#e0e7ff',
+      200: '#c7d2fe',
+      300: '#a5b4fc',
+      400: '#818cf8',
+      500: '#6366f1',
+      600: '#4f46e5',
+      700: '#4338ca',
+    }}
+  />
+  <ColorItem
+    title="Danger (red)"
+    subtitle="--danger-*"
+    colors={{ 50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c' }}
+  />
+  <ColorItem
+    title="Success (green)"
+    subtitle="--success-*"
+    colors={{ 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' }}
+  />
+  <ColorItem
+    title="Warning (yellow)"
+    subtitle="--warning-*"
+    colors={{ 50: '#fefce8', 100: '#fef9c3', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }}
+  />
+  <ColorItem
+    title="Info (blue)"
+    subtitle="--info-*"
+    colors={{ 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }}
+  />
+</ColorPalette>
+
+> **Nota:** `--color-warning` (el alias semántico usado por la mayoría de componentes) es `#f59e0b` (amber-500), literal — no coincide exactamente con `--warning-500` (`#eab308`) porque no existe una escala amber propia todavía. `--color-primary` resuelve a la escala **info** (azul `#3b82f6`), no a `--primary-*` (índigo): la unificación de "primary" azul vs. índigo vs. verde de marca queda fuera de este cambio (ver "Pendientes").
+
+## Semantic tokens
+
+| Token                | Valor (light)     | Uso                                       |
+| -------------------- | ----------------- | ----------------------------------------- |
+| `--text-base`        | `var(--gray-900)` | Texto principal                           |
+| `--text-secondary`   | `var(--gray-700)` | Labels, texto secundario                  |
+| `--text-muted`       | `var(--gray-500)` | Texto atenuado, hints                     |
+| `--text-placeholder` | `var(--gray-400)` | Placeholders, iconos inactivos            |
+| `--text-disabled`    | `var(--gray-300)` | Texto en estado disabled                  |
+| `--text-inverse`     | `#ffffff`         | Texto sobre fondos sólidos oscuros        |
+| `--surface-base`     | `#ffffff`         | Fondo por defecto (cards, inputs, panels) |
+| `--surface-subtle`   | `var(--gray-50)`  | Fondo sutil (disabled, hover suave)       |
+| `--surface-muted`    | `var(--gray-100)` | Fondo hover/backgrounds secundarios       |
+| `--surface-hover`    | `var(--gray-100)` | Hover de superficies                      |
+| `--surface-active`   | `var(--gray-200)` | Estado activo/pressed                     |
+| `--border-subtle`    | `var(--gray-100)` | Bordes casi invisibles (separadores)      |
+| `--border-base`      | `var(--gray-200)` | Borde estándar                            |
+| `--border-input`     | `var(--gray-300)` | Borde de campos de formulario             |
+| `--border-strong`    | `var(--gray-400)` | Borde enfatizado                          |
+
+### Alias gen-2.5
+
+Usados por varios componentes más antiguos; resuelven a la escala anterior:
+
+| Alias                 | Resuelve a                    |
+| --------------------- | ----------------------------- |
+| `--color-primary`     | `var(--info-500)` (`#3b82f6`) |
+| `--color-primary-50`  | `var(--info-50)`              |
+| `--color-danger`      | `var(--danger-500)`           |
+| `--color-success`     | `var(--success-500)`          |
+| `--color-warning`     | `#f59e0b` (literal)           |
+| `--color-secondary`   | `var(--gray-500)`             |
+| `--border-color`      | `var(--border-base)`          |
+| `--text-primary`      | `var(--text-base)`            |
+| `--surface-secondary` | `var(--surface-subtle)`       |
+
+## Dark mode
+
+El tema oscuro es **opt-in** — ngx-ds nunca activa `prefers-color-scheme`
+automáticamente. Actívalo en el consumidor con cualquiera de estos dos
+mecanismos (ambos soportados a la vez, compatible con `darkMode: 'class'` de Tailwind):
+
+```html
+<html data-theme="dark">
+  <!-- o -->
+  <html class="dark"></html>
+</html>
+```
+
+Al activarlo, `_themes.scss` sobreescribe las primitivas y semánticos (texto,
+superficies, bordes, fondos "soft" de estado) con valores adaptados a fondos
+oscuros. Los componentes que ya usan tokens semánticos reaccionan
+automáticamente; los que aún dependen de hex hardcoded sin fallback a token
+no lo harán (ver tabla de deprecados).
+
+## Deprecados (`--ngx-color-*`)
+
+Predatan el sistema de tokens actual. Se mantienen como alias por
+compatibilidad — usa el sustituto en código nuevo.
+
+| Legacy                           | Sustituto          | Nota                                                                                |
+| -------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| `--ngx-color-primary`            | —                  | Verde de marca (`#1fdd5e`), sin equivalente en la escala nueva; se mantiene literal |
+| `--ngx-color-primary-dark`       | —                  | Idem, sin equivalente                                                               |
+| `--ngx-color-primary-success`    | —                  | Emerald (`#10b981`), sin equivalente; se mantiene literal                           |
+| `--ngx-color-primary-error`      | `--color-danger`   |                                                                                     |
+| `--ngx-color-primary-warning`    | `--color-warning`  |                                                                                     |
+| `--ngx-color-primary-info`       | `--info-500`       |                                                                                     |
+| `--ngx-color-primary-background` | `--surface-subtle` |                                                                                     |
+| `--ngx-color-primary-title`      | `--text-base`      |                                                                                     |
+| `--ngx-color-primary-text`       | `--text-muted`     |                                                                                     |
+| `--ngx-color-primary-text-hover` | `--text-muted`     |                                                                                     |
+| `--ngx-color-primary-text-dark*` | `--text-inverse`   | Variantes hover/active/focus, todas `#fff`                                          |
+| `--ngx-color-primary-border`     | `--border-base`    |                                                                                     |
+
+## Pendiente (fuera de este cambio)
+
+- Consolidar "primary" — hoy conviven azul (`--color-primary`/`--info-*`),
+  índigo (`--primary-*`) y verde de marca (`--ngx-color-primary`). Es un
+  cambio visual/de producto, no se toca aquí.
+- Reactivar `prefers-color-scheme` automático queda a criterio del consumidor.

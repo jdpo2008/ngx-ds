@@ -1,0 +1,92 @@
+<div class="nc">
+  <!-- ── Bell trigger ─────────────────────────────────────────────────────── -->
+  <div class="nc__bell-wrap">
+    <ngx-ds-icon-button
+      [icon]="BellIcon"
+      [ariaLabel]="'Notificaciones' + (unreadCount() > 0 ? ', ' + unreadCount() + ' sin leer' : '')"
+      variant="outline"
+      [color]="isOpen() || hasUnread() ? 'primary' : 'secondary'"
+      size="md"
+      (click)="togglePanel()"
+    />
+    @if (badgeLabel()) {
+      <span class="nc__badge">{{ badgeLabel() }}</span>
+    }
+  </div>
+
+  <!-- ── Panel ────────────────────────────────────────────────────────────── -->
+  @if (isOpen()) {
+    <div [class]="panelClasses()" role="dialog" aria-label="Centro de notificaciones">
+      <!-- Header -->
+      <div class="nc__header">
+        <h3 class="nc__title">{{ panelTitle() }}</h3>
+        @if (unreadCount() > 0) {
+          <span class="nc__unread-pill">{{ unreadCount() }} sin leer</span>
+        }
+        <div class="nc__header-actions">
+          @if (hasUnread()) {
+            <ngx-ds-button variant="outline" size="sm" color="primary" (click)="onMarkAllRead()">
+              Marcar todas
+            </ngx-ds-button>
+          }
+          @if (notifications().length > 0) {
+            <ngx-ds-button variant="outline" size="sm" color="danger" (click)="onDismissAll()">
+              Limpiar
+            </ngx-ds-button>
+          }
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="nc__filters" role="tablist">
+        <ngx-ds-button
+          role="tab"
+          [variant]="filter() === 'all' ? 'solid' : 'outline'"
+          [color]="filter() === 'all' ? 'primary' : 'secondary'"
+          size="sm"
+          (click)="setFilter('all')"
+        >
+          Todas
+          @if (notifications().length > 0) {
+            <span class="nc__filter-count">{{ notifications().length }}</span>
+          }
+        </ngx-ds-button>
+        <ngx-ds-button
+          role="tab"
+          [variant]="filter() === 'unread' ? 'solid' : 'outline'"
+          [color]="filter() === 'unread' ? 'primary' : 'secondary'"
+          size="sm"
+          (click)="setFilter('unread')"
+        >
+          Sin leer
+          @if (unreadCount() > 0) {
+            <span class="nc__filter-count">{{ unreadCount() }}</span>
+          }
+        </ngx-ds-button>
+      </div>
+
+      <!-- List -->
+      <div class="nc__list" [style.maxHeight]="maxHeight()">
+        @if (isEmpty()) {
+          <ngx-ds-empty-state
+            [icon]="BellOffIcon"
+            [title]="filter() === 'unread' ? 'Sin notificaciones sin leer' : 'Sin notificaciones'"
+            [description]="
+              filter() === 'unread' ? 'Estás al día.' : 'Aquí aparecerán tus notificaciones.'
+            "
+            size="sm"
+          />
+        } @else {
+          @for (n of displayedNotifications(); track n.id) {
+            <ngx-ds-notification-item
+              [notification]="n"
+              (markRead)="onMarkRead($event)"
+              (dismiss)="onDismiss($event)"
+              (action)="onAction($event)"
+            />
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

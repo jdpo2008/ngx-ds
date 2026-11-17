@@ -1,0 +1,55 @@
+<nav class="sidebar" [class.sidebar--collapsed]="collapsed()" [attr.aria-label]="ariaLabel()">
+  <div class="sidebar__header">
+    <ng-content select="[sidebar-header]" />
+  </div>
+
+  <div class="sidebar__body">
+    @for (section of sections(); track section.id ?? $index) {
+      <div class="sidebar__section">
+        @if (section.title) {
+          <span class="sidebar__section-title">{{ section.title }}</span>
+        }
+        @for (item of section.items; track item.id) {
+          <button
+            type="button"
+            class="sidebar__item"
+            [class.sidebar__item--active]="activeId() === item.id"
+            [disabled]="item.disabled"
+            [attr.aria-current]="activeId() === item.id ? 'page' : null"
+            [ngxTooltip]="collapsed() ? item.label : ''"
+            tooltipPlacement="right"
+            (click)="onItemClick(item)"
+          >
+            @if (item.icon) {
+              <ngx-ds-icon [icon]="item.icon" [size]="18" class="sidebar__item-icon" />
+            }
+            <span class="sidebar__item-label">{{ item.label }}</span>
+            @if (item.badge !== undefined) {
+              <ngx-ds-badge
+                class="sidebar__item-badge"
+                size="sm"
+                [count]="badgeCount(item)"
+                [label]="badgeLabel(item)"
+              />
+            }
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="sidebar__footer">
+    <ng-content select="[sidebar-footer]" />
+  </div>
+
+  @if (collapsible()) {
+    <ngx-ds-icon-button
+      class="sidebar__toggle"
+      [icon]="toggleIcon()"
+      [ariaLabel]="collapsed() ? 'Expandir menú' : 'Colapsar menú'"
+      variant="outline"
+      size="sm"
+      (click)="toggleCollapsed()"
+    />
+  }
+</nav>

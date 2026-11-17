@@ -1,0 +1,35 @@
+// ngx-ds — Legacy tokens (deprecated)
+// `--ngx-color-*` predates the token system in _tokens.scss. Kept as aliases
+// for backwards compatibility; prefer the semantic tokens in new code.
+// Brand green (#1fdd5e) and emerald success (#10b981) have no equivalent in
+// the new scale and stay literal.
+
+@layer base {
+  :root {
+    // Primary (brand green — literal, no equivalent)
+    --ngx-color-primary: #1fdd5e;
+    --ngx-color-primary-dark: #1bbf52;
+    --ngx-color-primary-success: #10b981;
+    --ngx-color-primary-error: var(--danger-500);
+    --ngx-color-primary-warning: var(--color-warning);
+    --ngx-color-primary-info: var(--info-500);
+
+    // Neutral
+    --ngx-color-primary-background: var(--surface-subtle);
+
+    // Text
+    --ngx-color-primary-title: var(--text-base);
+    --ngx-color-primary-text: var(--text-muted);
+    --ngx-color-primary-text-hover: var(--text-muted);
+    --ngx-color-primary-text-dark: #fff;
+    --ngx-color-primary-text-dark-hover: #fff;
+    --ngx-color-primary-text-dark-active: #fff;
+    --ngx-color-primary-text-dark-focus: #fff;
+    --ngx-color-primary-text-dark-hover-active: #fff;
+    --ngx-color-primary-text-dark-hover-focus: #fff;
+    --ngx-color-primary-text-dark-active-focus: #fff;
+
+    // Border
+    --ngx-color-primary-border: var(--border-base);
+  }
+}

@@ -1,0 +1,8 @@
+<div class="avatar-group" [style]="hostStyle()">
+  <ng-content />
+  @if (hiddenCount() > 0) {
+    <span class="avatar-group__count" [class]="'avatar-group__count--' + size()"
+      >+{{ hiddenCount() }}</span
+    >
+  }
+</div>

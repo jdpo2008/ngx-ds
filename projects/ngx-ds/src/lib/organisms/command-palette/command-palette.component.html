@@ -1,0 +1,79 @@
+@if (open()) {
+  <!-- Backdrop -->
+  <div class="cp__backdrop" (click)="close()"></div>
+
+  <!-- Dialog -->
+  <div
+    class="cp__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Paleta de comandos"
+    ngxFocusTrap
+    tabindex="-1"
+  >
+    <!-- Search bar -->
+    <div class="cp__search-row">
+      <ngx-ds-icon [icon]="SearchIcon" [size]="18" class="cp__search-icon" />
+      <input
+        type="text"
+        class="cp__search-input"
+        role="combobox"
+        aria-expanded="true"
+        aria-autocomplete="list"
+        [attr.aria-controls]="listboxId"
+        [attr.aria-activedescendant]="activeOptionId()"
+        [placeholder]="placeholder()"
+        [value]="query()"
+        (input)="onSearch($event)"
+      />
+      <ngx-ds-kbd size="sm">Esc</ngx-ds-kbd>
+    </div>
+
+    <!-- Results -->
+    <div class="cp__results" role="listbox" [attr.id]="listboxId">
+      @if (filteredItems().length === 0) {
+        <div class="cp__empty">Sin resultados para "{{ query() }}"</div>
+      } @else {
+        @for (group of categories(); track group.cat) {
+          @if (group.cat) {
+            <p class="cp__category" role="presentation">{{ group.cat }}</p>
+          }
+          @for (item of group.items; track item.id) {
+            <button
+              type="button"
+              class="cp__item"
+              role="option"
+              [attr.id]="optionId(item)"
+              [attr.aria-selected]="isActive(item)"
+              [class.cp__item--active]="isActive(item)"
+              [class.cp__item--disabled]="item.disabled"
+              [disabled]="item.disabled || null"
+              (click)="selectItem(item)"
+            >
+              <span class="cp__item-body">
+                <span class="cp__item-label">{{ item.label }}</span>
+                @if (item.description) {
+                  <span class="cp__item-desc">{{ item.description }}</span>
+                }
+              </span>
+              @if (item.kbd?.length) {
+                <span class="cp__item-kbd">
+                  @for (k of item.kbd!; track k) {
+                    <ngx-ds-kbd size="sm">{{ k }}</ngx-ds-kbd>
+                  }
+                </span>
+              }
+            </button>
+          }
+        }
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="cp__footer">
+      <span><ngx-ds-kbd size="sm">↑</ngx-ds-kbd> <ngx-ds-kbd size="sm">↓</ngx-ds-kbd> navegar</span>
+      <span><ngx-ds-kbd size="sm">↵</ngx-ds-kbd> seleccionar</span>
+      <span><ngx-ds-kbd size="sm">Esc</ngx-ds-kbd> cerrar</span>
+    </div>
+  </div>
+}

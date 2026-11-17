@@ -1,0 +1,18 @@
+@if (label()) {
+  <label [for]="fieldId()" class="ngx-ff__label">
+    {{ label() }}
+    @if (required()) {
+      <span class="ngx-ff__required" aria-hidden="true">*</span>
+    }
+  </label>
+}
+
+<div class="ngx-ff__control" [class.ngx-ff__control--disabled]="disabled()">
+  <ng-content />
+</div>
+
+@if (error()) {
+  <p [id]="errorId()" class="ngx-ff__message ngx-ff__message--error" role="alert">{{ error() }}</p>
+} @else if (hint()) {
+  <p [id]="hintId()" class="ngx-ff__message ngx-ff__message--hint">{{ hint() }}</p>
+}

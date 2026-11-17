@@ -1,0 +1,19 @@
+<button [type]="type()" [class]="hostClasses()" [disabled]="disabled() || null">
+  @if (iconLeft()) {
+    <ngx-ds-icon
+      class="menu-btn__icon"
+      [icon]="iconLeft()!"
+      [size]="iconSize()"
+      aria-hidden="true"
+    />
+  }
+  <ng-content />
+  @if (iconRight()) {
+    <ngx-ds-icon
+      class="menu-btn__icon"
+      [icon]="iconRight()!"
+      [size]="iconSize()"
+      aria-hidden="true"
+    />
+  }
+</button>

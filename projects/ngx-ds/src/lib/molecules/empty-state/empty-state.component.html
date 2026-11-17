@@ -1,0 +1,25 @@
+<div [class]="hostClasses()">
+  <!-- Custom illustration slot -->
+  <div class="empty-state__illustration">
+    <ng-content select="[empty-illustration]" />
+  </div>
+
+  @if (icon()) {
+    <div class="empty-state__icon">
+      <ngx-ds-icon [icon]="icon()!" [size]="iconSize()" />
+    </div>
+  }
+
+  @if (title()) {
+    <p class="empty-state__title">{{ title() }}</p>
+  }
+
+  @if (description()) {
+    <p class="empty-state__description">{{ description() }}</p>
+  }
+
+  <!-- Action slot (buttons, links, etc.) -->
+  <div class="empty-state__action">
+    <ng-content select="[empty-action]" />
+  </div>
+</div>

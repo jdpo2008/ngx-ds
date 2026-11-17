@@ -1,0 +1,16 @@
+<div [class]="hostClasses()">
+  <!-- Header — hidden when empty -->
+  <div class="card__header">
+    <ng-content select="[card-header]" />
+  </div>
+
+  <!-- Body -->
+  <div class="card__body">
+    <ng-content />
+  </div>
+
+  <!-- Footer — hidden when empty -->
+  <div class="card__footer">
+    <ng-content select="[card-footer]" />
+  </div>
+</div>

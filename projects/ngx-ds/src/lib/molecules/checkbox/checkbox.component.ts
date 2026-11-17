@@ -1,0 +1,76 @@
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  model,
+  signal,
+  computed,
+  forwardRef,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Size } from '../../shared/size';
+
+export type CheckboxSize = Size;
+export type CheckboxColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+
+let nextId = 0;
+
+@Component({
+  selector: 'ngx-ds-checkbox',
+  standalone: true,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CheckboxComponent),
+      multi: true,
+    },
+  ],
+  templateUrl: './checkbox.component.html',
+  styleUrl: './checkbox.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CheckboxComponent implements ControlValueAccessor {
+  readonly label = input<string>('');
+  readonly size = input<CheckboxSize>('md');
+  readonly color = input<CheckboxColor>('primary');
+  readonly indeterminate = input<boolean>(false);
+  readonly labelPosition = input<'left' | 'right'>('right');
+
+  readonly checked = model<boolean>(false);
+
+  readonly id = `ngx-checkbox-${nextId++}`;
+
+  readonly #disabled = signal(false);
+  readonly isDisabled = this.#disabled.asReadonly();
+
+  private onChange: (v: boolean) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  readonly hostClasses = computed(() => {
+    const classes = ['checkbox', `checkbox--${this.size()}`, `checkbox--${this.color()}`];
+    if (this.checked()) classes.push('checkbox--checked');
+    if (this.indeterminate() && !this.checked()) classes.push('checkbox--indeterminate');
+    if (this.#disabled()) classes.push('checkbox--disabled');
+    return classes.join(' ');
+  });
+
+  onNativeChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.checked.set(input.checked);
+    this.onChange(input.checked);
+    this.onTouched();
+  }
+
+  writeValue(value: boolean): void {
+    this.checked.set(!!value);
+  }
+  registerOnChange(fn: (v: boolean) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(disabled: boolean): void {
+    this.#disabled.set(disabled);
+  }
+}

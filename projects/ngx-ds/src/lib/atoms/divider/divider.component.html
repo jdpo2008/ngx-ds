@@ -1,0 +1,5 @@
+<div [class]="hostClasses()" [style.border-color]="color() || null" role="separator">
+  @if (label() && orientation() === 'horizontal') {
+    <span class="divider__label">{{ label() }}</span>
+  }
+</div>
