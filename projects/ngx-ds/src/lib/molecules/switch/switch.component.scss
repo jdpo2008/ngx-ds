@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 $switch-colors: (
   'primary': var(--color-primary, #3b82f6),
   'secondary': var(--color-secondary, #6b7280),
@@ -109,11 +111,11 @@ $switch-sizes: (
 
   // ── Sizes ─────────────────────────────────────────────────────
   @each $name, $values in $switch-sizes {
-    $track-w: nth($values, 1);
-    $track-h: nth($values, 2);
-    $padding: nth($values, 3);
-    $thumb-size: nth($values, 4);
-    $travel: nth($values, 5);
+    $track-w: list.nth($values, 1);
+    $track-h: list.nth($values, 2);
+    $padding: list.nth($values, 3);
+    $thumb-size: list.nth($values, 4);
+    $travel: list.nth($values, 5);
 
     &--#{$name} {
       .switch__track {

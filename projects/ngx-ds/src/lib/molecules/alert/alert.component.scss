@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 // type → (main-color, soft-bg, soft-border, soft-text)
 $alert-types: (
   'info': (
@@ -83,10 +85,10 @@ $alert-types: (
 
   // ── Types × Variants ─────────────────────────────────────────
   @each $name, $vals in $alert-types {
-    $color: nth($vals, 1);
-    $soft-bg: nth($vals, 2);
-    $soft-border: nth($vals, 3);
-    $soft-text: nth($vals, 4);
+    $color: list.nth($vals, 1);
+    $soft-bg: list.nth($vals, 2);
+    $soft-border: list.nth($vals, 3);
+    $soft-text: list.nth($vals, 4);
 
     &--#{$name} {
       &.alert--soft {

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../../atoms/button/button.component';
@@ -16,6 +16,8 @@ import { setupEscapeClose } from '../../shared/escape-close';
 export class ConfirmationComponent {
   readonly confirmationService = inject(ConfirmationService);
   readonly state = this.confirmationService.state;
+  /** Clicking the backdrop cancels the dialog (same as Escape). */
+  readonly closeOnBackdrop = input<boolean>(true);
 
   constructor() {
     setupEscapeClose(() => {
@@ -32,7 +34,6 @@ export class ConfirmationComponent {
   }
 
   onBackdropClick(): void {
-    // Optional: Close on backdrop click, or remove this if you want to force explicit choice
-    // this.confirmationService.handleCancel();
+    if (this.closeOnBackdrop()) this.onCancel();
   }
 }

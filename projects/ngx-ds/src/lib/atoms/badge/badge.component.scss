@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 $badge-colors: (
   'primary': (
     var(--color-primary, #3b82f6),
@@ -80,8 +82,8 @@ $badge-sizes: (
 
   // ── Sizes ─────────────────────────────────────────────────────
   @each $name, $vals in $badge-sizes {
-    $fs: nth($vals, 1);
-    $pad: nth($vals, 2);
+    $fs: list.nth($vals, 1);
+    $pad: list.nth($vals, 2);
 
     &--#{$name}:not(&--dot) {
       font-size: $fs;
@@ -91,9 +93,9 @@ $badge-sizes: (
 
   // ── Colors × Variants ─────────────────────────────────────────
   @each $name, $vals in $badge-colors {
-    $color: nth($vals, 1);
-    $bg-soft: nth($vals, 2);
-    $dark: nth($vals, 3);
+    $color: list.nth($vals, 1);
+    $bg-soft: list.nth($vals, 2);
+    $dark: list.nth($vals, 3);
 
     &--#{$name} {
       &.badge--solid {

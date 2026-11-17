@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 $count-sizes: (
   'xs': (
     1.5rem,
@@ -56,8 +58,8 @@ $count-sizes: (
     user-select: none;
 
     @each $name, $values in $count-sizes {
-      $size: nth($values, 1);
-      $font: nth($values, 2);
+      $size: list.nth($values, 1);
+      $font: list.nth($values, 2);
 
       &--#{$name} {
         width: $size;

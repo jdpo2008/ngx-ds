@@ -1,3 +1,6 @@
+@use 'sass:list';
+@use 'sass:map';
+
 $avatar-colors: (
   'neutral': (
     var(--gray-200, #e5e7eb),
@@ -82,9 +85,9 @@ $status-sizes: (
 
   // ── Sizes ─────────────────────────────────────────────────────
   @each $name, $values in $avatar-sizes {
-    $size: nth($values, 1);
-    $font: nth($values, 2);
-    $border: nth($values, 3);
+    $size: list.nth($values, 1);
+    $font: list.nth($values, 2);
+    $border: list.nth($values, 3);
 
     &--#{$name} {
       width: $size;
@@ -100,16 +103,16 @@ $status-sizes: (
       }
 
       .avatar__status {
-        width: map-get($status-sizes, $name);
-        height: map-get($status-sizes, $name);
+        width: map.get($status-sizes, $name);
+        height: map.get($status-sizes, $name);
       }
     }
   }
 
   // ── Colors (initials only) ─────────────────────────────────────
   @each $name, $pair in $avatar-colors {
-    $bg: nth($pair, 1);
-    $fg: nth($pair, 2);
+    $bg: list.nth($pair, 1);
+    $fg: list.nth($pair, 2);
 
     &--#{$name} {
       background-color: $bg;
