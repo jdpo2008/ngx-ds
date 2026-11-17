@@ -58,7 +58,7 @@
           [class.ngx-dropdown__option--selected]="isSelected(option.value)"
           [class.ngx-dropdown__option--disabled]="option.disabled"
           role="option"
-          tabindex="0"
+          tabindex="-1"
           [attr.aria-selected]="isSelected(option.value)"
           [attr.aria-disabled]="option.disabled || null"
           (click)="selectOption(option); $event.stopPropagation()"

@@ -257,8 +257,11 @@ class InteractiveWrapper {
 
         <!-- New password -->
         <div class="space-y-1.5">
-          <label class="block text-sm font-medium text-gray-700">Nueva contraseña</label>
+          <label for="ps-new" class="block text-sm font-medium text-gray-700"
+            >Nueva contraseña</label
+          >
           <input
+            id="ps-new"
             type="password"
             class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md
                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -279,8 +282,11 @@ class InteractiveWrapper {
 
         <!-- Confirm password -->
         <div class="space-y-1.5">
-          <label class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
+          <label for="ps-confirm" class="block text-sm font-medium text-gray-700"
+            >Confirmar contraseña</label
+          >
           <input
+            id="ps-confirm"
             type="password"
             class="w-full px-3 py-2 text-sm border rounded-md
                    focus:outline-none focus:ring-2 focus:border-blue-500"

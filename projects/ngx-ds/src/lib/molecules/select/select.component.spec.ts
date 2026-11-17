@@ -71,6 +71,38 @@ describe('SelectComponent', () => {
     expect(cmp.isOpen()).toBe(false);
   });
 
+  it('ArrowDown opens the panel and arrows move focus over enabled options', async () => {
+    const { fixture, cmp } = setup();
+    document.body.appendChild(fixture.nativeElement);
+    const trigger = fixture.nativeElement.querySelector('[role="combobox"]') as HTMLElement;
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    expect(cmp.isOpen()).toBe(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const options = Array.from(
+      fixture.nativeElement.querySelectorAll('[role="option"]'),
+    ) as HTMLElement[];
+    expect(options.every((o) => o.tabIndex === -1)).toBe(true);
+    expect(document.activeElement).toBe(options[0]);
+
+    const press = (key: string) =>
+      (document.activeElement as HTMLElement).dispatchEvent(
+        new KeyboardEvent('keydown', { key, bubbles: true }),
+      );
+    press('ArrowDown');
+    expect(document.activeElement).toBe(options[1]);
+    press('ArrowDown'); // options[2] is disabled → wraps to the first
+    expect(document.activeElement).toBe(options[0]);
+    press('ArrowUp');
+    expect(document.activeElement).toBe(options[1]);
+    press('Home');
+    expect(document.activeElement).toBe(options[0]);
+    press('End');
+    expect(document.activeElement).toBe(options[1]);
+    fixture.destroy();
+  });
+
   it('selects an option with Enter', () => {
     const { fixture, cmp } = setup();
     cmp.togglePanel();

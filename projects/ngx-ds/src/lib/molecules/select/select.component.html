@@ -100,6 +100,7 @@
           [value]="searchText()"
           (input)="onSearchChange($any($event.target).value)"
           (click)="$event.stopPropagation()"
+          (keydown)="onSearchKeydown($event)"
           autocomplete="off"
         />
       </div>
@@ -124,7 +125,7 @@
           [class.ngx-select__option--selected]="isSelected(option.value)"
           [class.ngx-select__option--disabled]="option.disabled"
           role="option"
-          tabindex="0"
+          tabindex="-1"
           [attr.aria-selected]="isSelected(option.value)"
           [attr.aria-disabled]="option.disabled || null"
           (click)="selectOption(option); $event.stopPropagation()"
