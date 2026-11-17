@@ -1,5 +1,5 @@
 @if (label()) {
-  <label class="slider__label">{{ label() }}</label>
+  <span class="slider__label" [id]="id + '-label'">{{ label() }}</span>
 }
 
 @if (!range()) {
@@ -17,6 +17,7 @@
         [step]="step()"
         [value]="value()"
         [disabled]="disabled() || null"
+        [attr.aria-labelledby]="label() ? id + '-label' : null"
         (input)="onInput($event)"
       />
     </div>
@@ -30,7 +31,7 @@
     }
   </div>
 } @else {
-  <div class="slider__row">
+  <div class="slider__row" role="group" [attr.aria-labelledby]="label() ? id + '-label' : null">
     @if (showMinMax()) {
       <span class="slider__bound">{{ min() }}</span>
     }

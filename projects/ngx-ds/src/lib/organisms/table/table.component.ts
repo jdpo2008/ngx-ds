@@ -41,6 +41,7 @@ export type SortDirection = 'asc' | 'desc';
 export type SelectMode = 'single' | 'multi';
 export type ActionColor = 'default' | 'primary' | 'danger' | 'success' | 'warning';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: consumers type rows loosely by default
 export interface TableAction<T = any> {
   label: string;
   icon?: LucideIconData;
@@ -52,6 +53,7 @@ export interface TableAction<T = any> {
   onClick: (row: T, event: Event) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: consumers type rows loosely by default
 export interface TableColumn<T = any> {
   key: string;
   label: string;
@@ -70,8 +72,10 @@ export interface TableColumn<T = any> {
   badgeColor?: BadgeColor;
   /** Variant for badge cells (type === 'badge'). Defaults to 'soft'. */
   badgeVariant?: BadgeVariant;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: formatters/templates receive arbitrary cell values
   cellTemplate?: TemplateRef<{ $implicit: T; value: any; row: T }>;
   headerTemplate?: TemplateRef<{ column: TableColumn<T> }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: formatters/templates receive arbitrary cell values
   valueFormatter?: (value: any, row: T) => string;
 }
 
@@ -106,7 +110,7 @@ export interface TablePageEvent {
   styleUrl: './table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T extends Record<string, any> = Record<string, any>> {
+export class TableComponent<T extends object = Record<string, unknown>> {
   protected readonly icons = {
     ArrowUp,
     ArrowDown,
@@ -119,7 +123,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
     Plus,
   };
 
-  readonly #openMenuId = signal<any>(null);
+  readonly #openMenuId = signal<unknown>(null);
   readonly #columnMenuOpen = signal(false);
 
   constructor() {
@@ -296,7 +300,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
   });
 
   // ── Selection ─────────────────────────────────────────────────────────────
-  readonly #selectedSet = computed((): Set<any> => {
+  readonly #selectedSet = computed((): Set<unknown> => {
     const key = this.rowKey();
     const selected = this.selectedRows();
     return key ? new Set(selected.map((r) => deepGet(r, key))) : new Set(selected);
@@ -402,7 +406,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
   }
 
   // ── Cell rendering ────────────────────────────────────────────────────────
-  getCellValue(row: T, col: TableColumn<T>): any {
+  getCellValue(row: T, col: TableColumn<T>): unknown {
     const raw = deepGet(row, col.key);
     return col.valueFormatter ? col.valueFormatter(raw, row) : raw;
   }
@@ -428,7 +432,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
     }
   }
 
-  rowTrack(row: T, index: number): any {
+  rowTrack(row: T, index: number): unknown {
     const key = this.rowKey();
     return key ? deepGet(row, key) : index;
   }
@@ -473,7 +477,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
   }
 
   // ── Expandable rows ───────────────────────────────────────────────────────
-  readonly #expandedSet = computed((): Set<any> => {
+  readonly #expandedSet = computed((): Set<unknown> => {
     const key = this.rowKey();
     const expanded = this.expandedRows();
     return key ? new Set(expanded.map((r) => deepGet(r, key))) : new Set(expanded);
@@ -501,7 +505,7 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
   }
 
   // ── Action menu ───────────────────────────────────────────────────────────
-  #rowMenuId(row: T): any {
+  #rowMenuId(row: T): unknown {
     const key = this.rowKey();
     return key ? deepGet(row, key) : row;
   }
@@ -539,12 +543,14 @@ export class TableComponent<T extends Record<string, any> = Record<string, any>>
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function deepGet(obj: any, path: string): any {
-  return path.split('.').reduce((o, k) => o?.[k], obj);
+function deepGet(obj: unknown, path: string): unknown {
+  return path
+    .split('.')
+    .reduce<unknown>((o, k) => (o == null ? undefined : (o as Record<string, unknown>)[k]), obj);
 }
 
-function formatDate(value: any, fmt: string): string {
-  const d = value instanceof Date ? value : new Date(value);
+function formatDate(value: unknown, fmt: string): string {
+  const d = value instanceof Date ? value : new Date(value as string | number);
   if (isNaN(d.getTime())) return String(value);
   const pad = (n: number) => String(n).padStart(2, '0');
   return fmt

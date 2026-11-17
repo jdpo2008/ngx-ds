@@ -5,10 +5,14 @@
 
 <!-- Trigger -->
 <div
+  #trigger
   [class]="triggerClasses()"
   (click)="togglePanel()"
+  (keydown)="onTriggerKeydown($event)"
   [attr.id]="id"
   role="combobox"
+  [attr.tabindex]="isDisabled() ? -1 : 0"
+  [attr.aria-controls]="id + '-panel'"
   [attr.aria-expanded]="isOpen()"
   [attr.aria-disabled]="isDisabled()"
 >
@@ -79,7 +83,12 @@
 
 <!-- Dropdown panel -->
 @if (isOpen()) {
-  <div class="ngx-select__panel" role="listbox" [attr.aria-multiselectable]="multiple()">
+  <div
+    class="ngx-select__panel"
+    [id]="id + '-panel'"
+    role="listbox"
+    [attr.aria-multiselectable]="multiple()"
+  >
     <!-- Search -->
     @if (searchable()) {
       <div class="ngx-select__search">
@@ -115,8 +124,11 @@
           [class.ngx-select__option--selected]="isSelected(option.value)"
           [class.ngx-select__option--disabled]="option.disabled"
           role="option"
+          tabindex="0"
           [attr.aria-selected]="isSelected(option.value)"
+          [attr.aria-disabled]="option.disabled || null"
           (click)="selectOption(option); $event.stopPropagation()"
+          (keydown)="onOptionKeydown($event, option)"
         >
           @if (multiple()) {
             <span

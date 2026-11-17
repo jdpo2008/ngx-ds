@@ -1,5 +1,6 @@
 @if (open()) {
-  <div class="modal-overlay" (click)="onBackdropClick()">
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- backdrop click is a mouse shortcut; keyboard users close with Escape -->
+  <div class="modal-overlay" (click)="$event.target === $event.currentTarget && onBackdropClick()">
     <div
       [class]="panelClasses()"
       role="dialog"
@@ -7,7 +8,6 @@
       [attr.aria-label]="title() || 'Diálogo'"
       ngxFocusTrap
       tabindex="-1"
-      (click)="$event.stopPropagation()"
     >
       <!-- ── Header ──────────────────────────────────────────────── -->
       <div class="modal__header">

@@ -6,11 +6,15 @@ import {
   signal,
   computed,
   forwardRef,
+  ElementRef,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChevronDown, ChevronUp, Check, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
+import { setupEscapeClose } from '../../shared/escape-close';
+import { isActivationKey } from '../../shared/keyboard';
 import { Size } from '../../shared/size';
 
 export interface DropdownOption {
@@ -111,6 +115,7 @@ export class DropdownComponent implements ControlValueAccessor {
 
   // ── Click outside ──────────────────────────────────────────
   constructor() {
+    setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
       this.#open.set(false);
       this.onTouched();
@@ -118,6 +123,31 @@ export class DropdownComponent implements ControlValueAccessor {
   }
 
   // ── Interactions ───────────────────────────────────────────
+  // ── Keyboard ───────────────────────────────────────────────
+  private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
+
+  onTriggerKeydown(event: KeyboardEvent): void {
+    // Ignore keys coming from nested controls (clear / chip-remove buttons).
+    if (event.target !== event.currentTarget) return;
+    if (isActivationKey(event) || (event.key === 'ArrowDown' && !this.isOpen())) {
+      event.preventDefault();
+      this.togglePanel();
+    }
+  }
+
+  onOptionKeydown(event: KeyboardEvent, option: DropdownOption): void {
+    if (!isActivationKey(event)) return;
+    event.preventDefault();
+    this.selectOption(option);
+    if (!this.isOpen()) this.triggerRef()?.nativeElement.focus();
+  }
+
+  #closeOnEscape(): void {
+    if (!this.isOpen()) return;
+    this.#open.set(false);
+    this.triggerRef()?.nativeElement.focus();
+  }
+
   togglePanel(): void {
     if (this.isDisabled()) return;
     this.#open.update((v) => !v);

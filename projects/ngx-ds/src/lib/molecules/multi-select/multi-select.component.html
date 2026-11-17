@@ -4,7 +4,17 @@
 
 <div class="ms">
   <!-- Trigger -->
-  <div [class]="triggerClasses()" (click)="toggleOpen()" [id]="id">
+  <div
+    #trigger
+    [class]="triggerClasses()"
+    [id]="id"
+    role="combobox"
+    [attr.tabindex]="disabled() ? -1 : 0"
+    [attr.aria-controls]="id + '-panel'"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggleOpen()"
+    (keydown)="onTriggerKeydown($event)"
+  >
     <div class="ms__chips">
       @if (value().length === 0) {
         <span class="ms__placeholder">{{ placeholder() }}</span>
@@ -34,7 +44,12 @@
 
   <!-- Dropdown -->
   @if (isOpen()) {
-    <div class="ms__dropdown" role="listbox" [attr.aria-multiselectable]="true">
+    <div
+      class="ms__dropdown"
+      [id]="id + '-panel'"
+      role="listbox"
+      [attr.aria-multiselectable]="true"
+    >
       @if (searchable()) {
         <div class="ms__search-wrap">
           <input
@@ -57,8 +72,11 @@
               option.disabled || (!canSelectMore() && !isSelected(option))
             "
             role="option"
+            tabindex="0"
             [attr.aria-selected]="isSelected(option)"
+            [attr.aria-disabled]="option.disabled || null"
             (click)="toggleOption(option)"
+            (keydown)="onOptionKeydown($event, option)"
           >
             <span class="ms__option-check">
               @if (isSelected(option)) {

@@ -28,6 +28,7 @@
     [disabled]="isDisabled() || null"
     autocomplete="off"
     role="combobox"
+    [attr.aria-controls]="id + '-panel'"
     [attr.aria-expanded]="showPanel()"
     [attr.aria-autocomplete]="'list'"
     (input)="onInputChange($any($event.target).value)"
@@ -57,7 +58,7 @@
 
 <!-- Dropdown panel -->
 @if (showPanel()) {
-  <div class="ngx-autocomplete__panel" role="listbox">
+  <div class="ngx-autocomplete__panel" role="listbox" [id]="id + '-panel'">
     <ul class="ngx-autocomplete__options" role="presentation">
       @for (option of filteredOptions(); track option.value) {
         <li

@@ -62,6 +62,8 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${f(0)}${f(8)}${f(4)}`;
 }
 
+let nextId = 0;
+
 @Component({
   selector: 'ngx-ds-color-picker',
   standalone: true,
@@ -78,6 +80,7 @@ function hslToHex(h: number, s: number, l: number): string {
   ],
 })
 export class ColorPickerComponent implements ControlValueAccessor {
+  readonly id = `ngx-color-picker-${nextId++}`;
   readonly value = model<string>('#6366f1');
   readonly label = input<string>('');
   readonly disabled = input<boolean>(false);

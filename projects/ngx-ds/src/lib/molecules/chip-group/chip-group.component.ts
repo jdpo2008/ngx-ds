@@ -76,7 +76,7 @@ export class ChipGroupComponent implements ControlValueAccessor {
     this.#onTouched();
   }
 
-  remove(chip: ChipItem, event: MouseEvent): void {
+  remove(chip: ChipItem, event: Event): void {
     event.stopPropagation();
     this.removed.emit(chip);
   }

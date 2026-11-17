@@ -4,7 +4,16 @@
 
 <div class="drp">
   <!-- Trigger -->
-  <div [class]="triggerClasses()" [id]="id" (click)="openCalendar()">
+  <div
+    #trigger
+    [class]="triggerClasses()"
+    [id]="id"
+    role="button"
+    [attr.tabindex]="disabled() ? -1 : 0"
+    [attr.aria-expanded]="isOpen()"
+    (click)="openCalendar()"
+    (keydown)="onTriggerKeydown($event)"
+  >
     <ngx-ds-icon [icon]="CalendarIcon" [size]="16" class="drp__icon" />
     <span class="drp__text" [class.drp__text--placeholder]="!triggerLabel()">
       {{ triggerLabel() || placeholder() + ' – ' + placeholder() }}

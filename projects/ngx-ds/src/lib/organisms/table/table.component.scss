@@ -349,6 +349,9 @@
 // ── Radio (single-select) ─────────────────────────────────────────────────
 
 .ngx-table__radio {
+  display: block;
+  padding: 0;
+  background: transparent;
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
