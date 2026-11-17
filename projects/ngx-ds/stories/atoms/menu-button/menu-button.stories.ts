@@ -122,7 +122,7 @@ class IconsWrapper {
     <div class="p-6">
       <p class="text-sm text-gray-500 mb-4">fullWidth — uso típico en paneles desplegables</p>
       <div
-        style="width: 180px; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.25rem; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 4px 16px rgba(0,0,0,.08);"
+        style="width: 180px; border: 1px solid var(--border-base, #e5e7eb); border-radius: 0.5rem; padding: 0.25rem; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 4px 16px rgba(0,0,0,.08);"
       >
         <ngx-ds-menu-button [fullWidth]="true" [iconLeft]="iconEdit">Editar</ngx-ds-menu-button>
         <ngx-ds-menu-button [fullWidth]="true" color="primary" [iconLeft]="iconEye"

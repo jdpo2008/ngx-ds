@@ -31,10 +31,12 @@ const COMMANDS: CommandItem[] = [
       <ngx-ds-button (click)="open.set(true)">
         Abrir paleta <kbd style="font-size:0.75rem; margin-left:0.5rem; opacity:0.7;">Ctrl+K</kbd>
       </ngx-ds-button>
-      <p style="margin-top:1rem; font-size:0.8rem; color:#6b7280;">
+      <p style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted, #6b7280);">
         También puedes usar <strong>Ctrl+K</strong> desde cualquier lugar.
       </p>
-      <p style="font-size:0.8rem; color:#6b7280;">Último seleccionado: {{ last() }}</p>
+      <p style="font-size:0.8rem; color:var(--text-muted, #6b7280);">
+        Último seleccionado: {{ last() }}
+      </p>
 
       <ngx-ds-command-palette [(open)]="open" [items]="commands" (itemSelect)="onSelect($event)" />
     </div>

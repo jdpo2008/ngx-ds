@@ -10,16 +10,18 @@ import { KbdComponent } from '../../../src/lib/atoms/kbd/kbd.component';
     <div class="p-6" style="display:flex; flex-direction:column; gap:1.5rem;">
       <div style="display:flex; gap:0.5rem; align-items:center;">
         <ngx-ds-kbd>Ctrl</ngx-ds-kbd>
-        <span style="font-size:0.875rem; color:#6b7280;">+</span>
+        <span style="font-size:0.875rem; color:var(--text-muted, #6b7280);">+</span>
         <ngx-ds-kbd>K</ngx-ds-kbd>
-        <span style="font-size:0.875rem; margin-left:0.5rem; color:#6b7280;">Abrir búsqueda</span>
+        <span style="font-size:0.875rem; margin-left:0.5rem; color:var(--text-muted, #6b7280);"
+          >Abrir búsqueda</span
+        >
       </div>
 
       <div style="display:flex; gap:0.5rem; align-items:center;">
         <ngx-ds-kbd>⌘</ngx-ds-kbd>
-        <span style="font-size:0.875rem; color:#6b7280;">+</span>
+        <span style="font-size:0.875rem; color:var(--text-muted, #6b7280);">+</span>
         <ngx-ds-kbd>Shift</ngx-ds-kbd>
-        <span style="font-size:0.875rem; color:#6b7280;">+</span>
+        <span style="font-size:0.875rem; color:var(--text-muted, #6b7280);">+</span>
         <ngx-ds-kbd>P</ngx-ds-kbd>
       </div>
 

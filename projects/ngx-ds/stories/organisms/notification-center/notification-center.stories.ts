@@ -73,7 +73,9 @@ const SEED: NgxNotification[] = [
         (action)="onAction($event)"
       />
     </div>
-    <p style="position:fixed; bottom:1rem; left:1rem; font-size:0.75rem; color:#9ca3af; margin:0;">
+    <p
+      style="position:fixed; bottom:1rem; left:1rem; font-size:0.75rem; color:var(--text-placeholder, #9ca3af); margin:0;"
+    >
       Última acción: {{ lastAction() }}
     </p>
   `,

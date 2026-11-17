@@ -40,7 +40,7 @@ const TREE: TreeNode[] = [
   template: `
     <div class="p-6" style="max-width:380px;">
       <ngx-ds-tree-view [nodes]="tree" [(selected)]="sel" [(expanded)]="exp" />
-      <p style="margin-top:1rem;font-size:0.8rem;color:#6b7280;">
+      <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted, #6b7280);">
         Seleccionados: {{ sel().join(', ') || 'ninguno' }}
       </p>
     </div>

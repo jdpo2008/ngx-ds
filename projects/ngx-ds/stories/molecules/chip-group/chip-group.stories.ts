@@ -28,7 +28,9 @@ const TAGS: ChipItem[] = [
         [removable]="true"
         (removed)="onRemove($event)"
       />
-      <p style="font-size:0.8rem;color:#6b7280;">Seleccionados: {{ sel().join(', ') }}</p>
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280);">
+        Seleccionados: {{ sel().join(', ') }}
+      </p>
     </div>
   `,
 })

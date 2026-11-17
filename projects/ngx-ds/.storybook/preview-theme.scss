@@ -6,3 +6,41 @@ body {
   background: var(--surface-base, #ffffff);
   color: var(--text-base, #111827);
 }
+
+// Story wrappers use Tailwind gray utilities, which have no dark variant.
+// In the dark theme, map them to the semantic tokens so the demo text and
+// panels around the components stay readable. Light values already match.
+:root[data-theme='dark'] {
+  .text-gray-800,
+  .text-gray-900 {
+    color: var(--text-base);
+  }
+  .text-gray-600,
+  .text-gray-700 {
+    color: var(--text-secondary);
+  }
+  .text-gray-500 {
+    color: var(--text-muted);
+  }
+  .text-gray-400 {
+    color: var(--text-placeholder);
+  }
+  .bg-white {
+    background-color: var(--surface-base);
+  }
+  .bg-gray-50 {
+    background-color: var(--surface-subtle);
+  }
+  .bg-gray-100 {
+    background-color: var(--surface-subtle); // --surface-muted is too light for muted text in dark
+  }
+  .border-gray-200 {
+    border-color: var(--border-base);
+  }
+  .border-gray-300 {
+    border-color: var(--border-input);
+  }
+  .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--border-subtle);
+  }
+}

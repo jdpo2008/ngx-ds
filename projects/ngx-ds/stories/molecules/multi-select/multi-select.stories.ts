@@ -39,7 +39,9 @@ const FRUITS: MultiSelectOption[] = [
         [(value)]="noSearch"
         [searchable]="false"
       />
-      <p style="font-size:0.8rem;color:#6b7280;">Seleccionados: {{ selected().join(', ') }}</p>
+      <p style="font-size:0.8rem;color:var(--text-muted, #6b7280);">
+        Seleccionados: {{ selected().join(', ') }}
+      </p>
     </div>
   `,
 })

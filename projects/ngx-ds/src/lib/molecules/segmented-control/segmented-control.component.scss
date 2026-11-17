@@ -39,7 +39,7 @@
     color 0.15s ease,
     box-shadow 0.15s ease;
   white-space: nowrap;
-  color: var(--text-muted, #6b7280);
+  color: var(--text-secondary, #374151);
 
   &:hover:not(:disabled):not(.segmented__option--active) {
     background: var(--surface-active, #e5e7eb);

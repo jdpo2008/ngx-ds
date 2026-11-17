@@ -22,7 +22,7 @@ import { Inbox, Search, FileX } from 'lucide-angular';
         <ngx-ds-button empty-action variant="outline" size="sm">Limpiar filtros</ngx-ds-button>
       </ngx-ds-empty-state>
 
-      <hr style="border:none; border-top:1px solid #e5e7eb;" />
+      <hr style="border:none; border-top:1px solid var(--border-base, #e5e7eb);" />
 
       <ngx-ds-empty-state
         [icon]="searchIcon"
@@ -32,7 +32,7 @@ import { Inbox, Search, FileX } from 'lucide-angular';
         <ngx-ds-button empty-action>Crear elemento</ngx-ds-button>
       </ngx-ds-empty-state>
 
-      <hr style="border:none; border-top:1px solid #e5e7eb;" />
+      <hr style="border:none; border-top:1px solid var(--border-base, #e5e7eb);" />
 
       <ngx-ds-empty-state
         [icon]="fileXIcon"

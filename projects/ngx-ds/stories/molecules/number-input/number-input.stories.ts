@@ -13,7 +13,7 @@ import { NumberInputComponent } from '../../../src/lib/molecules/number-input/nu
       <ngx-ds-number-input size="sm" [(value)]="qty" [min]="0" />
       <ngx-ds-number-input size="lg" [(value)]="qty" [min]="0" />
       <ngx-ds-number-input label="Deshabilitado" [value]="5" [disabled]="true" />
-      <p style="font-size:0.8rem; color:#6b7280;">Qty: {{ qty() }}</p>
+      <p style="font-size:0.8rem; color:var(--text-muted, #6b7280);">Qty: {{ qty() }}</p>
     </div>
   `,
 })
