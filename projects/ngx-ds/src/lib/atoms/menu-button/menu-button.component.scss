@@ -64,21 +64,21 @@
   &--danger {
     color: var(--danger-500, #ef4444);
     &:hover:not(:disabled) {
-      background: #fef2f2;
+      background: var(--danger-50, #fef2f2);
     }
   }
 
   &--success {
-    color: var(--success-500, #22c55e);
+    color: var(--success-500, #10b981);
     &:hover:not(:disabled) {
-      background: #f0fdf4;
+      background: var(--success-50, #ecfdf5);
     }
   }
 
   &--warning {
     color: var(--warning-500, #f59e0b);
     &:hover:not(:disabled) {
-      background: #fffbeb;
+      background: var(--warning-50, #fffbeb);
     }
   }
 

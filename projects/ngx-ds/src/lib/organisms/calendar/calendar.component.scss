@@ -109,7 +109,7 @@
 
   &--selected {
     background: var(--primary-500, #6366f1);
-    color: #ffffff;
+    color: var(--text-on-color, #fff);
     font-weight: 600;
   }
 

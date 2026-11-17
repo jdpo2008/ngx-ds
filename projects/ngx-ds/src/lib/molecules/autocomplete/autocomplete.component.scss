@@ -219,8 +219,8 @@ $sizes: (
   }
 
   &--selected:not(&--disabled) {
-    color: #1d4ed8;
-    background: #f0f9ff;
+    color: var(--info-700, #1d4ed8);
+    background: var(--info-50, #eff6ff);
   }
 
   &--disabled {
@@ -231,8 +231,8 @@ $sizes: (
 
 // Highlighted match text
 .ngx-autocomplete__highlight {
-  background: #fef08a;
-  color: #713f12;
+  background: var(--warning-200, #fde68a);
+  color: var(--warning-800, #92400e);
   border-radius: 0.125rem;
   font-style: normal;
   font-weight: 600;

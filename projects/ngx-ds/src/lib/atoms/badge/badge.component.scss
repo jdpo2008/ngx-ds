@@ -17,14 +17,14 @@ $badge-colors: (
     var(--danger-700, #b91c1c),
   ),
   'success': (
-    #10b981,
-    #ecfdf5,
-    #047857,
+    var(--success-500, #10b981),
+    var(--success-50, #ecfdf5),
+    var(--success-700, #047857),
   ),
   'warning': (
     var(--warning-500, #f59e0b),
-    #fffbeb,
-    #b45309,
+    var(--warning-50, #fffbeb),
+    var(--warning-700, #b45309),
   ),
 );
 
@@ -100,7 +100,7 @@ $badge-sizes: (
     &--#{$name} {
       &.badge--solid {
         background-color: $color;
-        color: #fff;
+        color: var(--text-on-color, #fff);
         border-color: $color;
       }
 

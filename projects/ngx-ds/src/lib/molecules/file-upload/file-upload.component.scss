@@ -111,7 +111,7 @@
   flex-shrink: 0;
 
   &--done {
-    color: #10b981;
+    color: var(--success-500, #10b981);
   }
   &--error {
     color: var(--danger-500, #ef4444);

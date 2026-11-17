@@ -19,12 +19,12 @@ $avatar-colors: (
     var(--danger-700, #b91c1c),
   ),
   'success': (
-    #d1fae5,
-    #065f46,
+    var(--success-100, #d1fae5),
+    var(--success-800, #065f46),
   ),
   'warning': (
-    #fef3c7,
-    #92400e,
+    var(--warning-100, #fef3c7),
+    var(--warning-800, #92400e),
   ),
 );
 
@@ -143,7 +143,7 @@ $status-sizes: (
     border: 1.5px solid var(--surface-base, #fff);
 
     &--online {
-      background-color: #10b981;
+      background-color: var(--success-500, #10b981);
     }
     &--offline {
       background-color: var(--gray-400, #9ca3af);

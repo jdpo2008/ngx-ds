@@ -27,7 +27,7 @@
     // Primary (brand green — literal, no equivalent)
     --ngx-color-primary: #1fdd5e;
     --ngx-color-primary-dark: #1bbf52;
-    --ngx-color-primary-success: #10b981;
+    --ngx-color-primary-success: var(--success-500);
     --ngx-color-primary-error: var(--danger-500);
     --ngx-color-primary-warning: var(--warning-500);
     --ngx-color-primary-info: var(--info-500);

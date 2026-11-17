@@ -76,7 +76,7 @@
     width: 1.125rem;
     height: 1.125rem;
     border-radius: 50%;
-    background: #ffffff;
+    background: var(--text-on-color, #fff);
     border: 2px solid var(--border-input, #d1d5db);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
@@ -86,7 +86,7 @@
     width: 1.125rem;
     height: 1.125rem;
     border-radius: 50%;
-    background: #ffffff;
+    background: var(--text-on-color, #fff);
     border: 2px solid var(--border-input, #d1d5db);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;

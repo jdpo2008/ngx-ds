@@ -92,12 +92,12 @@
   .stepper__item.is-completed & {
     border-color: var(--primary-500, #6366f1);
     background: var(--primary-500, #6366f1);
-    color: #fff;
+    color: var(--text-on-color, #fff);
   }
   .stepper__item.is-error & {
     border-color: var(--danger-500, #ef4444);
     background: var(--danger-500, #ef4444);
-    color: #fff;
+    color: var(--text-on-color, #fff);
   }
 
   &:not(:disabled) {
