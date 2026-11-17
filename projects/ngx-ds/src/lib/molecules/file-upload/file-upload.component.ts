@@ -132,7 +132,7 @@ export class FileUploadComponent {
     let error: string | undefined;
 
     if (maxSizeMb !== undefined && file.size > maxSizeMb * 1024 * 1024) {
-      error = `Supera el máximo de ${maxSizeMb} MB`;
+      error = this.i18n.fileTooLarge(maxSizeMb);
     }
 
     return {

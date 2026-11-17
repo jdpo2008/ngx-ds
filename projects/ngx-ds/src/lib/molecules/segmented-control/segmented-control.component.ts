@@ -5,6 +5,7 @@ import {
   forwardRef,
   input,
   model,
+  signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
@@ -38,11 +39,13 @@ export class SegmentedControlComponent implements ControlValueAccessor {
   readonly size = input<SegmentedControlSize>('md');
   readonly fullWidth = input<boolean>(false);
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly hostClasses = computed(() => {
     const cls = [`segmented segmented--${this.size()}`];
     if (this.fullWidth()) cls.push('segmented--full');
-    if (this.disabled()) cls.push('segmented--disabled');
+    if (this.isDisabled()) cls.push('segmented--disabled');
     return cls.join(' ');
   });
 
@@ -51,7 +54,7 @@ export class SegmentedControlComponent implements ControlValueAccessor {
   }
 
   select(option: SegmentOption): void {
-    if (this.disabled() || option.disabled) return;
+    if (this.isDisabled() || option.disabled) return;
     this.value.set(option.value);
     this.#onChange(option.value);
     this.#onTouched();
@@ -71,7 +74,7 @@ export class SegmentedControlComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {
-    /* disabled via input */
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
   }
 }

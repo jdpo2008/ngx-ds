@@ -4,7 +4,7 @@
 
 <div
   class="rating"
-  [class.rating--disabled]="disabled()"
+  [class.rating--disabled]="isDisabled()"
   [class.rating--readonly]="readonly()"
   (mouseleave)="onLeave()"
   [attr.aria-label]="label() || i18n.rating"
@@ -14,7 +14,7 @@
       type="button"
       class="rating__star"
       [class.rating__star--filled]="isFilled(star)"
-      [disabled]="disabled() || readonly() || null"
+      [disabled]="isDisabled() || readonly() || null"
       (mouseenter)="onHover(star)"
       (click)="onClick(star)"
       [attr.aria-label]="i18n.ratingStar(star)"

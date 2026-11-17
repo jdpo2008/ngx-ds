@@ -5,7 +5,7 @@
       class="segmented__option"
       [class.segmented__option--active]="isSelected(option)"
       [class.segmented__option--disabled]="option.disabled"
-      [disabled]="disabled() || option.disabled || null"
+      [disabled]="isDisabled() || option.disabled || null"
       [attr.aria-pressed]="isSelected(option)"
       (click)="select(option)"
     >

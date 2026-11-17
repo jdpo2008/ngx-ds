@@ -41,6 +41,8 @@ export class RatingComponent implements ControlValueAccessor {
   readonly size = input<RatingSize>('md');
   readonly readonly = input<boolean>(false);
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
   readonly label = input<string>('');
 
   readonly #hover = signal<number>(-1);
@@ -58,7 +60,7 @@ export class RatingComponent implements ControlValueAccessor {
   }
 
   onHover(index: number): void {
-    if (this.readonly() || this.disabled()) return;
+    if (this.readonly() || this.isDisabled()) return;
     this.#hover.set(index);
   }
 
@@ -67,7 +69,7 @@ export class RatingComponent implements ControlValueAccessor {
   }
 
   onClick(index: number): void {
-    if (this.readonly() || this.disabled()) return;
+    if (this.readonly() || this.isDisabled()) return;
     const next = this.value() === index ? 0 : index;
     this.value.set(next);
     this.#onChange(next);
@@ -88,5 +90,7 @@ export class RatingComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {}
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
+  }
 }
