@@ -3,12 +3,12 @@
     <span
       class="chip"
       [class.chip--selected]="isSelected(chip)"
-      [class.chip--disabled]="chip.disabled || disabled()"
+      [class.chip--disabled]="chip.disabled || isDisabled()"
     >
       <button
         type="button"
         class="chip__label"
-        [disabled]="chip.disabled || disabled() || null"
+        [disabled]="chip.disabled || isDisabled() || null"
         [attr.aria-pressed]="selectable() ? isSelected(chip) : null"
         (click)="toggle(chip)"
       >
@@ -19,7 +19,7 @@
         <button
           type="button"
           class="chip__remove"
-          [disabled]="chip.disabled || disabled() || null"
+          [disabled]="chip.disabled || isDisabled() || null"
           [attr.aria-label]="i18n.removeChip(chip.label)"
           (click)="remove(chip, $event)"
         >

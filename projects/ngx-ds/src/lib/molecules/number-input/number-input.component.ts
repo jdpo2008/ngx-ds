@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  signal,
   forwardRef,
   input,
   model,
@@ -46,6 +47,8 @@ export class NumberInputComponent implements ControlValueAccessor {
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly id = `ngx-number-${nextId++}`;
 
@@ -56,12 +59,12 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   readonly canDecrement = computed(() => {
     const min = this.min();
-    return !this.disabled() && (min === null || this.value() > min);
+    return !this.isDisabled() && (min === null || this.value() > min);
   });
 
   readonly canIncrement = computed(() => {
     const max = this.max();
-    return !this.disabled() && (max === null || this.value() < max);
+    return !this.isDisabled() && (max === null || this.value() < max);
   });
 
   readonly hostClasses = computed(() => `number-input number-input--${this.size()}`);
@@ -112,5 +115,7 @@ export class NumberInputComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {}
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
+  }
 }

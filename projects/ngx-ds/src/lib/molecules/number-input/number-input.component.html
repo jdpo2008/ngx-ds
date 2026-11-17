@@ -21,7 +21,7 @@
     [min]="min() ?? null"
     [max]="max() ?? null"
     [step]="step()"
-    [disabled]="disabled() || null"
+    [disabled]="isDisabled() || null"
     (change)="onInputChange($event)"
   />
 

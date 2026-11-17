@@ -67,6 +67,8 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
+  readonly #formDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly start = model<Date | null>(null);
   readonly end = model<Date | null>(null);
@@ -108,6 +110,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
 
   readonly triggerClasses = computed(() => {
     const base = `drp__trigger drp__trigger--${this.size()}`;
+    if (this.isDisabled()) return base + ' drp__trigger--disabled';
     if (this.#open()) return base + ' drp__trigger--open';
     if (this.errorMessage()) return base + ' drp__trigger--error';
     return base;
@@ -280,7 +283,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   }
 
   openCalendar(): void {
-    if (this.disabled()) return;
+    if (this.isDisabled()) return;
     this.#open.set(true);
     this.#picking.set('start');
     const focus = startOfDay(this.start() ?? new Date());
@@ -358,5 +361,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.#onTouched = fn;
   }
-  setDisabledState(_d: boolean): void {}
+  setDisabledState(isDisabled: boolean): void {
+    this.#formDisabled.set(isDisabled);
+  }
 }
