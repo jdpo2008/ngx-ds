@@ -15,7 +15,6 @@ concurrency:
 
 permissions:
   contents: read
-  id-token: write # npm provenance
 
 jobs:
   publish:
@@ -50,6 +49,6 @@ jobs:
         run: npm run build
 
       - name: Publish
-        run: npm publish ./dist/ngx-ds --provenance --access public
+        run: npm publish ./dist/ngx-ds --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
