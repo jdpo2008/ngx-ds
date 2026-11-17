@@ -38,13 +38,6 @@ export class RangeSliderComponent {
   readonly ariaLabelStart = input<string>('');
   readonly ariaLabelEnd = input<string>('');
 
-  /**
-   * @deprecated Use `(valueChange)` or `[(value)]` instead. `change` clashes with
-   * the native DOM `change` event, which bubbles up from the inner `<input>`, so a
-   * `(change)` handler also receives a raw `Event`. Will be removed in the next major.
-   */
-  // eslint-disable-next-line @angular-eslint/no-output-native
-  readonly change = output<number>();
   readonly rangeChange = output<[number, number]>();
 
   protected readonly fillPercent = computed(() => {
@@ -83,7 +76,6 @@ export class RangeSliderComponent {
   protected onInput(event: Event): void {
     const val = Number((event.target as HTMLInputElement).value);
     this.value.set(val);
-    this.change.emit(val);
   }
 
   protected onStartInput(event: Event): void {

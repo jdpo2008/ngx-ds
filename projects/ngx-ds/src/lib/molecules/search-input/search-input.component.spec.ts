@@ -9,12 +9,10 @@ describe('SearchInputComponent outputs', () => {
     const cmp = fixture.componentInstance;
     const input = (fixture.nativeElement as HTMLElement).querySelector('input') as HTMLInputElement;
     const submitted: string[] = [];
-    const legacy: string[] = [];
     cmp.searchSubmit.subscribe((q) => submitted.push(q));
-    cmp.search.subscribe((q) => legacy.push(q));
     const press = (key: string) =>
       input.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
-    return { press, submitted, legacy };
+    return { press, submitted };
   }
 
   it('Enter emits the query on searchSubmit', () => {
@@ -23,16 +21,9 @@ describe('SearchInputComponent outputs', () => {
     expect(submitted).toEqual(['angular']);
   });
 
-  it('keeps emitting the deprecated search alias with the same value', () => {
-    const { press, legacy } = setup();
-    press('Enter');
-    expect(legacy).toEqual(['angular']);
-  });
-
   it('other keys emit nothing', () => {
-    const { press, submitted, legacy } = setup();
+    const { press, submitted } = setup();
     press('a');
     expect(submitted).toEqual([]);
-    expect(legacy).toEqual([]);
   });
 });
