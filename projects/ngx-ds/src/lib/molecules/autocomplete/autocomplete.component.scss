@@ -219,8 +219,8 @@ $sizes: (
   }
 
   &--selected:not(&--disabled) {
-    color: var(--info-700, #1d4ed8);
-    background: var(--info-50, #eff6ff);
+    color: var(--primary-700, #4338ca);
+    background: var(--primary-50, #eef2ff);
   }
 
   &--disabled {
