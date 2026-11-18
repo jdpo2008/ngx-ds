@@ -2,6 +2,7 @@ name: Release
 
 # Publishes @jdpo2008/ngx-ds to npm when a GitHub release is published.
 # The release tag must be `v<version>` and match projects/ngx-ds/package.json.
+# A prerelease version (1.0.0-rc.1) is published to the `next` dist-tag.
 # Requires the repository secret NPM_TOKEN (an npm automation/granular token
 # with publish rights on the @jdpo2008 scope).
 
@@ -51,7 +52,15 @@ jobs:
       - name: Build library
         run: npm run build
 
+      # A prerelease version (1.0.0-rc.1) goes to the `next` dist-tag, a stable one to `latest`.
       - name: Publish
-        run: npm publish ./dist/ngx-ds --access public
+        run: |
+          version=$(node -p "require('./projects/ngx-ds/package.json').version")
+          case "$version" in
+            *-*) tag=next ;;
+            *) tag=latest ;;
+          esac
+          echo "Publishing $version with dist-tag $tag"
+          npm publish ./dist/ngx-ds --access public --tag "$tag"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
