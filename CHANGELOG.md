@@ -4,6 +4,30 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Added
+
+- `disabled` input on Input, Textarea, Select, Dropdown, Autocomplete, Checkbox, Switch, Datepicker, TimePicker and TagInput, as the other form controls already had. The control is disabled when the input or the form disables it.
+- `info` colour on Button, IconButton, MenuButton, Badge, Tag, Avatar, Spinner, ProgressBar, Checkbox, Radio, Switch, RangeSlider and the Table row actions. It uses the `--info-*` and `--fill-info` tokens.
+- `ToastrService.danger()`.
+- OtpInput `errorMessage`: shows the message under the boxes (`role="alert"`, linked with `aria-describedby`) and switches them to the error style.
+- New names for inputs and outputs, in line with the rest of the library: FormField `errorMessage`, ChipGroup `variant="solid"` and `multiple`, NotificationCenter and NotificationItem `dismissed`, Drawer and Modal `dismissible`, Popover `closeOnBackdrop`, Alert `color` (type `AlertColor`).
+
+### Changed
+
+- ChipGroup: the CSS class `.chip-group--filled` is now `.chip-group--solid`. `variant="filled"` still renders it.
+
+### Deprecated
+
+These names still work and will be removed in 1.0:
+
+- Toast and Notification type `'error'`: use `'danger'`, the name every other component uses. `ToastrService.error()`: use `danger()`.
+- OtpInput and FormField `error`: use `errorMessage`.
+- ChipGroup `variant="filled"`: use `"solid"`. ChipGroup `multiSelect`: use `multiple`.
+- NotificationCenter and NotificationItem `dismiss` output: use `dismissed`. Both are emitted.
+- Drawer and Modal `showClose`: use `dismissible`.
+- Popover `closeOnClickOutside`: use `closeOnBackdrop`.
+- Alert `type` and the `AlertType` type: use `color` and `AlertColor`.
+
 ### Removed
 
 - Internal helpers are no longer exported from the package: `parseHex`, `contrastRatio`, `primaryPaletteCss`, `PRIMARY_STEPS`, `monthNames`, `weekdayNames` and `formatDayLabel`. The public colour API is `createPrimaryPalette`, `applyPrimaryColor` and the `PrimaryPalette` / `PrimaryStep` types.

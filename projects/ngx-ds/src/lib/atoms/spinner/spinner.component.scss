@@ -54,6 +54,9 @@
   &--warning {
     border-color: var(--warning-500, #f59e0b);
   }
+  &--info {
+    border-color: var(--info-500, #3b82f6);
+  }
 }
 
 @keyframes ngx-spin {

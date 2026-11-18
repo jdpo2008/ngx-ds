@@ -14,9 +14,11 @@ import {
   untracked,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FieldErrors, fieldHasError } from '../../shared/field-error';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
+
+let nextId = 0;
 
 export type OtpType = 'numeric' | 'alphanumeric';
 export type OtpSize = Size;
@@ -47,13 +49,20 @@ export class OtpInputComponent implements ControlValueAccessor {
   readonly size = input<OtpSize>('md');
   readonly disabled = input<boolean>(false);
   readonly masked = input<boolean>(false);
+  /** Message shown under the boxes. It also switches them to the error style. */
+  readonly errorMessage = input<string>('');
+  /** @deprecated Use `errorMessage`. Removed in 1.0. */
   readonly error = input<boolean>(false);
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
   readonly errors = input<FieldErrors>([]);
   readonly touched = input<boolean>(false);
   readonly hasError = computed(
-    () => this.error() || fieldHasError('', this.errors(), this.touched()),
+    () => this.error() || fieldHasError(this.errorMessage(), this.errors(), this.touched()),
   );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly messageId = `ngx-otp-${nextId++}-message`;
 
   readonly value = model<string>('');
   readonly complete = output<string>();

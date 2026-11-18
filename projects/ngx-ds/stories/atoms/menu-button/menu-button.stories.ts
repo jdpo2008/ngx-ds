@@ -31,6 +31,7 @@ import {
       <ngx-ds-menu-button color="danger">Danger</ngx-ds-menu-button>
       <ngx-ds-menu-button color="success">Success</ngx-ds-menu-button>
       <ngx-ds-menu-button color="warning">Warning</ngx-ds-menu-button>
+      <ngx-ds-menu-button color="info">Info</ngx-ds-menu-button>
     </div>
   `,
 })
@@ -241,7 +242,10 @@ export const Default: Story = {
     label: 'Editar registro',
   },
   argTypes: {
-    color: { control: 'select', options: ['default', 'primary', 'danger', 'success', 'warning'] },
+    color: {
+      control: 'select',
+      options: ['default', 'primary', 'danger', 'success', 'warning', 'info'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     fullWidth: { control: 'boolean' },

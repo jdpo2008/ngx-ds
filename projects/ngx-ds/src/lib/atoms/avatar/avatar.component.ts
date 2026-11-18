@@ -3,7 +3,8 @@ import { Component, ChangeDetectionStrategy, input, computed } from '@angular/co
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShape = 'circle' | 'square';
 export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy';
-export type AvatarColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'neutral';
+export type AvatarColor =
+  'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info' | 'neutral';
 
 @Component({
   selector: 'ngx-ds-avatar',

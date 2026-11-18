@@ -89,7 +89,8 @@ export class DatepickerComponent implements ControlValueAccessor {
   // ── Internal state ────────────────────────────────────────
   readonly #open = signal(false);
   readonly #focused = signal(false);
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   /** Day that owns the roving tabindex in the grid; the visible month follows it. */
   readonly #focusedDate = signal<Date>(startOfDay(new Date()));
   readonly #viewMonth = computed(() => this.#focusedDate().getMonth());
@@ -100,7 +101,7 @@ export class DatepickerComponent implements ControlValueAccessor {
   readonly #weekdays = weekdayNames(this.#locale);
 
   readonly isOpen = this.#open.asReadonly();
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly isFocused = this.#focused.asReadonly();
 
   // ── Derived ───────────────────────────────────────────────
@@ -355,6 +356,6 @@ export class DatepickerComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }

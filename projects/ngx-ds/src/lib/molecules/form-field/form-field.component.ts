@@ -21,6 +21,8 @@ let nextId = 0;
 export class FormFieldComponent {
   readonly label = input<string>('');
   readonly hint = input<string>('');
+  readonly errorMessage = input<string>('');
+  /** @deprecated Use `errorMessage`. Removed in 1.0. */
   readonly error = input<string>('');
   readonly required = input<boolean>(false);
   readonly disabled = input<boolean>(false);
@@ -31,6 +33,7 @@ export class FormFieldComponent {
   readonly fieldId = computed(() => this.for() ?? this.generatedId);
   readonly hintId = computed(() => `${this.fieldId()}-hint`);
   readonly errorId = computed(() => `${this.fieldId()}-error`);
+  readonly errorText = computed(() => this.errorMessage() || this.error());
 
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly renderer = inject(Renderer2);
@@ -44,7 +47,7 @@ export class FormFieldComponent {
         this.renderer.setAttribute(control, 'id', this.fieldId());
       }
 
-      const hasError = this.error().length > 0;
+      const hasError = this.errorText().length > 0;
       const hasHint = this.hint().length > 0;
 
       if (hasError) {

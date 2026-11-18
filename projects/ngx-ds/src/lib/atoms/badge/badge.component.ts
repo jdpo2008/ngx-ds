@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input, computed } from '@angular/co
 import { Size } from '../../shared/size';
 
 export type BadgeSize = Size;
-export type BadgeColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type BadgeColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 export type BadgeVariant = 'solid' | 'soft' | 'outline';
 
 @Component({

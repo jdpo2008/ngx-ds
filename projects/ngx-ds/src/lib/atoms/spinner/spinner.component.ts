@@ -2,7 +2,8 @@ import { Component, ChangeDetectionStrategy, input, computed, inject } from '@an
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg';
-export type SpinnerColor = 'current' | 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type SpinnerColor =
+  'current' | 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 
 @Component({
   selector: 'ngx-ds-spinner',

@@ -31,6 +31,7 @@ class DefaultWrapper {}
       <ngx-ds-progress-bar [value]="60" color="secondary" label="Secondary" [showValue]="true" />
       <ngx-ds-progress-bar [value]="60" color="success" label="Success" [showValue]="true" />
       <ngx-ds-progress-bar [value]="60" color="warning" label="Warning" [showValue]="true" />
+      <ngx-ds-progress-bar [value]="60" color="info" label="Info" [showValue]="true" />
       <ngx-ds-progress-bar [value]="60" color="danger" label="Danger" [showValue]="true" />
     </div>
   `,

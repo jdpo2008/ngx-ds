@@ -39,6 +39,8 @@ export class NotificationCenterComponent {
   // ── Outputs ───────────────────────────────────────────────────────────────
   readonly markRead = output<NgxNotification>();
   readonly markAllRead = output<void>();
+  readonly dismissed = output<NgxNotification>();
+  /** @deprecated Use `dismissed`. Removed in 1.0. */
   readonly dismiss = output<NgxNotification>();
   readonly dismissAll = output<void>();
   readonly action = output<NgxNotification>();
@@ -90,6 +92,7 @@ export class NotificationCenterComponent {
   }
 
   onDismiss(n: NgxNotification): void {
+    this.dismissed.emit(n);
     this.dismiss.emit(n);
   }
 

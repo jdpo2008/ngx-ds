@@ -11,7 +11,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
 
 export type CheckboxSize = Size;
-export type CheckboxColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type CheckboxColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 
 let nextId = 0;
 
@@ -42,8 +42,9 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   readonly id = `ngx-checkbox-${nextId++}`;
 
-  readonly #disabled = signal(false);
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
 
   private onChange: (v: boolean) => void = () => {};
   private onTouched: () => void = () => {};
@@ -52,7 +53,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     const classes = ['checkbox', `checkbox--${this.size()}`, `checkbox--${this.color()}`];
     if (this.checked()) classes.push('checkbox--checked');
     if (this.indeterminate() && !this.checked()) classes.push('checkbox--indeterminate');
-    if (this.#disabled()) classes.push('checkbox--disabled');
+    if (this.isDisabled()) classes.push('checkbox--disabled');
     return classes.join(' ');
   });
 
@@ -73,6 +74,6 @@ export class CheckboxComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }

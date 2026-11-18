@@ -10,10 +10,10 @@ import { AlertComponent } from '../../../src/lib/molecules/alert/alert.component
   imports: [AlertComponent],
   template: `
     <div class="p-6 flex flex-col gap-2 max-w-md">
-      <ngx-ds-alert type="info"> Tu sesión expirará en 10 minutos. </ngx-ds-alert>
-      <ngx-ds-alert type="success"> Los cambios se guardaron correctamente. </ngx-ds-alert>
-      <ngx-ds-alert type="warning"> Este archivo supera el tamaño recomendado. </ngx-ds-alert>
-      <ngx-ds-alert type="danger"> No se pudo completar la operación. </ngx-ds-alert>
+      <ngx-ds-alert color="info"> Tu sesión expirará en 10 minutos. </ngx-ds-alert>
+      <ngx-ds-alert color="success"> Los cambios se guardaron correctamente. </ngx-ds-alert>
+      <ngx-ds-alert color="warning"> Este archivo supera el tamaño recomendado. </ngx-ds-alert>
+      <ngx-ds-alert color="danger"> No se pudo completar la operación. </ngx-ds-alert>
     </div>
   `,
 })
@@ -30,46 +30,48 @@ class DefaultWrapper {}
       <div>
         <p class="text-sm text-gray-500 mb-3">Soft (por defecto)</p>
         <div class="flex flex-col gap-2">
-          <ngx-ds-alert type="info" variant="soft"
+          <ngx-ds-alert color="info" variant="soft"
             >Información importante para el usuario.</ngx-ds-alert
           >
-          <ngx-ds-alert type="success" variant="soft"
+          <ngx-ds-alert color="success" variant="soft"
             >Operación completada exitosamente.</ngx-ds-alert
           >
-          <ngx-ds-alert type="warning" variant="soft"
+          <ngx-ds-alert color="warning" variant="soft"
             >Revisa los datos antes de continuar.</ngx-ds-alert
           >
-          <ngx-ds-alert type="danger" variant="soft">Se produjo un error inesperado.</ngx-ds-alert>
+          <ngx-ds-alert color="danger" variant="soft">Se produjo un error inesperado.</ngx-ds-alert>
         </div>
       </div>
       <div>
         <p class="text-sm text-gray-500 mb-3">Solid</p>
         <div class="flex flex-col gap-2">
-          <ngx-ds-alert type="info" variant="solid"
+          <ngx-ds-alert color="info" variant="solid"
             >Información importante para el usuario.</ngx-ds-alert
           >
-          <ngx-ds-alert type="success" variant="solid"
+          <ngx-ds-alert color="success" variant="solid"
             >Operación completada exitosamente.</ngx-ds-alert
           >
-          <ngx-ds-alert type="warning" variant="solid"
+          <ngx-ds-alert color="warning" variant="solid"
             >Revisa los datos antes de continuar.</ngx-ds-alert
           >
-          <ngx-ds-alert type="danger" variant="solid">Se produjo un error inesperado.</ngx-ds-alert>
+          <ngx-ds-alert color="danger" variant="solid"
+            >Se produjo un error inesperado.</ngx-ds-alert
+          >
         </div>
       </div>
       <div>
         <p class="text-sm text-gray-500 mb-3">Outline</p>
         <div class="flex flex-col gap-2">
-          <ngx-ds-alert type="info" variant="outline"
+          <ngx-ds-alert color="info" variant="outline"
             >Información importante para el usuario.</ngx-ds-alert
           >
-          <ngx-ds-alert type="success" variant="outline"
+          <ngx-ds-alert color="success" variant="outline"
             >Operación completada exitosamente.</ngx-ds-alert
           >
-          <ngx-ds-alert type="warning" variant="outline"
+          <ngx-ds-alert color="warning" variant="outline"
             >Revisa los datos antes de continuar.</ngx-ds-alert
           >
-          <ngx-ds-alert type="danger" variant="outline"
+          <ngx-ds-alert color="danger" variant="outline"
             >Se produjo un error inesperado.</ngx-ds-alert
           >
         </div>
@@ -87,16 +89,16 @@ class VariantsWrapper {}
   imports: [AlertComponent],
   template: `
     <div class="p-6 flex flex-col gap-2">
-      <ngx-ds-alert type="info" title="Actualización disponible">
+      <ngx-ds-alert color="info" title="Actualización disponible">
         Hay una nueva versión de la aplicación. Recarga la página para aplicar los cambios.
       </ngx-ds-alert>
-      <ngx-ds-alert type="success" title="Pago procesado">
+      <ngx-ds-alert color="success" title="Pago procesado">
         Tu pago de $149.00 fue procesado exitosamente. Recibirás un recibo por correo.
       </ngx-ds-alert>
-      <ngx-ds-alert type="warning" title="Cuota casi alcanzada">
+      <ngx-ds-alert color="warning" title="Cuota casi alcanzada">
         Has utilizado el 90% de tu almacenamiento. Considera ampliar tu plan.
       </ngx-ds-alert>
-      <ngx-ds-alert type="danger" title="Error de autenticación">
+      <ngx-ds-alert color="danger" title="Error de autenticación">
         No fue posible verificar tu identidad. Por favor, inicia sesión nuevamente.
       </ngx-ds-alert>
     </div>
@@ -112,12 +114,12 @@ class TitleWrapper {}
   imports: [AlertComponent],
   template: `
     <div class="p-6 flex flex-col gap-2">
-      <ngx-ds-alert type="info" [showIcon]="false" title="Sin icono"
+      <ngx-ds-alert color="info" [showIcon]="false" title="Sin icono"
         >Mensaje informativo sin icono.</ngx-ds-alert
       >
-      <ngx-ds-alert type="success" [showIcon]="false">Éxito sin icono.</ngx-ds-alert>
-      <ngx-ds-alert type="warning" [showIcon]="false">Advertencia sin icono.</ngx-ds-alert>
-      <ngx-ds-alert type="danger" [showIcon]="false">Error sin icono.</ngx-ds-alert>
+      <ngx-ds-alert color="success" [showIcon]="false">Éxito sin icono.</ngx-ds-alert>
+      <ngx-ds-alert color="warning" [showIcon]="false">Advertencia sin icono.</ngx-ds-alert>
+      <ngx-ds-alert color="danger" [showIcon]="false">Error sin icono.</ngx-ds-alert>
     </div>
   `,
 })
@@ -135,7 +137,7 @@ class NoIconWrapper {}
 
       @if (showInfo()) {
         <ngx-ds-alert
-          type="info"
+          color="info"
           title="Bienvenido"
           [dismissible]="true"
           (dismissed)="showInfo.set(false)"
@@ -145,14 +147,14 @@ class NoIconWrapper {}
       }
 
       @if (showSuccess()) {
-        <ngx-ds-alert type="success" [dismissible]="true" (dismissed)="showSuccess.set(false)">
+        <ngx-ds-alert color="success" [dismissible]="true" (dismissed)="showSuccess.set(false)">
           Los cambios se guardaron. Puedes cerrar esta notificación.
         </ngx-ds-alert>
       }
 
       @if (showWarning()) {
         <ngx-ds-alert
-          type="warning"
+          color="warning"
           title="Atención"
           [dismissible]="true"
           (dismissed)="showWarning.set(false)"
@@ -163,7 +165,7 @@ class NoIconWrapper {}
 
       @if (showDanger()) {
         <ngx-ds-alert
-          type="danger"
+          color="danger"
           title="Error"
           [dismissible]="true"
           (dismissed)="showDanger.set(false)"
@@ -194,7 +196,7 @@ class DismissibleWrapper {
   template: `
     <div class="p-6 flex flex-col gap-2 max-w-xl">
       <ngx-ds-alert
-        type="warning"
+        color="warning"
         variant="soft"
         title="Verificación pendiente"
         [dismissible]="true"
@@ -207,7 +209,7 @@ class DismissibleWrapper {
       </ngx-ds-alert>
 
       <ngx-ds-alert
-        type="danger"
+        color="danger"
         variant="outline"
         title="Errores en el formulario"
         [showIcon]="true"
@@ -220,7 +222,7 @@ class DismissibleWrapper {
         </ul>
       </ngx-ds-alert>
 
-      <ngx-ds-alert type="success" variant="soft" title="¡Cuenta creada!" [dismissible]="true">
+      <ngx-ds-alert color="success" variant="soft" title="¡Cuenta creada!" [dismissible]="true">
         Ya puedes iniciar sesión con tus credenciales.
       </ngx-ds-alert>
     </div>

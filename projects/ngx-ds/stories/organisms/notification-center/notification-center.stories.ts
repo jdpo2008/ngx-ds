@@ -38,7 +38,7 @@ const SEED: NgxNotification[] = [
   },
   {
     id: 4,
-    type: 'error',
+    type: 'danger',
     title: 'Error al sincronizar datos',
     description: 'No se pudo conectar con el servidor. Intenta de nuevo.',
     time: minutesAgo(300),
@@ -68,7 +68,7 @@ const SEED: NgxNotification[] = [
         [notifications]="items()"
         (markRead)="onMarkRead($event)"
         (markAllRead)="onMarkAllRead()"
-        (dismiss)="onDismiss($event)"
+        (dismissed)="onDismiss($event)"
         (dismissAll)="onDismissAll()"
         (action)="onAction($event)"
       />

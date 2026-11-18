@@ -82,6 +82,13 @@
     }
   }
 
+  &--info {
+    color: var(--fill-info, #2563eb);
+    &:hover:not(:disabled) {
+      background: var(--info-50, #eff6ff);
+    }
+  }
+
   // ── Icon ───────────────────────────────────────────────────────────────
   &__icon {
     flex-shrink: 0;

@@ -3,7 +3,7 @@ import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type ProgressBarSize = Size;
-export type ProgressBarColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type ProgressBarColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 
 @Component({
   selector: 'ngx-ds-progress-bar',

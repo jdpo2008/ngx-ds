@@ -138,7 +138,7 @@ class SizesWrapper {
       <ngx-ds-drawer
         [(open)]="open"
         title="Acción requerida"
-        [showClose]="false"
+        [dismissible]="false"
         [closeOnBackdrop]="false"
         [closeOnEscape]="false"
       >

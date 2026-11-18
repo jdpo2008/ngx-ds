@@ -68,6 +68,10 @@ class SizesWrapper {}
           <ngx-ds-spinner size="md" color="warning" />
           <span class="text-xs text-gray-500">warning</span>
         </div>
+        <div class="flex flex-col items-center gap-2">
+          <ngx-ds-spinner size="md" color="info" />
+          <span class="text-xs text-gray-500">info</span>
+        </div>
         <div class="flex flex-col items-center gap-2" style="color: #8b5cf6">
           <ngx-ds-spinner size="md" color="current" />
           <span class="text-xs text-gray-500">current</span>

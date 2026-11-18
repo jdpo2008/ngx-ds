@@ -6,7 +6,7 @@ import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type TagSize = Size;
-export type TagColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type TagColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 export type TagVariant = 'solid' | 'outline' | 'soft';
 
 const ICON_SIZE: Record<TagSize, number> = { sm: 12, md: 14, lg: 16 };
