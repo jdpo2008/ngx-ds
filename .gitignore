@@ -49,3 +49,6 @@ storybook-static
 # Claude Code / agent scratch
 .superpowers/
 .claude/settings.local.json
+
+# Visual regression output
+/visual-report

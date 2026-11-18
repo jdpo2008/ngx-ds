@@ -41,8 +41,60 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+          retention-days: 3
+
+  a11y:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
       - name: Accessibility (axe on every story)
         run: npm run test:a11y
+
+  visual:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Same image as `npm run test:visual:docker`, so fonts render like the baselines.
+    # Keep the tag in step with the playwright version in package.json.
+    container: mcr.microsoft.com/playwright:v1.65.1-noble
+    steps:
+      - uses: actions/checkout@v7
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+
+      - name: Visual regression (screenshot every story)
+        run: npm run test:visual
+
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report
+          path: visual-report
+          retention-days: 7
