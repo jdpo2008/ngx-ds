@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NGX_DS_LABELS_EN, provideNgxDsLabels } from '../../shared/labels';
-import { AlertComponent, AlertType, AlertVariant } from './alert.component';
+import { AlertColor, AlertComponent, AlertVariant } from './alert.component';
 
 const classesOf = (x: Element | string) =>
   (typeof x === 'string' ? x.split(' ') : [...x.classList]).sort();
@@ -13,7 +13,7 @@ describe('AlertComponent', () => {
     template: `
       <ngx-ds-alert
         [title]="title()"
-        [type]="type()"
+        [color]="color()"
         [variant]="variant()"
         [showIcon]="showIcon()"
         [dismissible]="dismissible()"
@@ -24,7 +24,7 @@ describe('AlertComponent', () => {
   })
   class Host {
     title = signal('');
-    type = signal<AlertType>('info');
+    color = signal<AlertColor>('info');
     variant = signal<AlertVariant>('soft');
     showIcon = signal(true);
     dismissible = signal(false);
@@ -49,10 +49,10 @@ describe('AlertComponent', () => {
     expect(el.querySelector('.alert__close')).toBeNull();
   });
 
-  it('reflects title, type and variant and can hide the icon', () => {
+  it('reflects title, color and variant and can hide the icon', () => {
     const { el } = setup((h) => {
       h.title.set('Error');
-      h.type.set('danger');
+      h.color.set('danger');
       h.variant.set('outline');
       h.showIcon.set(false);
     });
@@ -76,5 +76,13 @@ describe('AlertComponent', () => {
     TestBed.configureTestingModule({ providers: [provideNgxDsLabels(NGX_DS_LABELS_EN)] });
     const { el } = setup((h) => h.dismissible.set(true));
     expect(el.querySelector('.alert__close')?.getAttribute('aria-label')).toBe('Close alert');
+  });
+
+  it('still accepts the deprecated type input', () => {
+    const fixture = TestBed.createComponent(AlertComponent);
+    fixture.componentRef.setInput('type', 'warning');
+    fixture.detectChanges();
+    const alert = (fixture.nativeElement as HTMLElement).querySelector('[role="alert"]')!;
+    expect(alert.classList).toContain('alert--warning');
   });
 });

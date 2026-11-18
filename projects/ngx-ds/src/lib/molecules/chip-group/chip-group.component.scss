@@ -127,7 +127,7 @@
 }
 
 // Filled
-.chip-group--filled .chip {
+.chip-group--solid .chip {
   background: var(--surface-active, #e5e7eb);
   color: var(--text-secondary, #374151);
   border: 1px solid transparent;

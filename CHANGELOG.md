@@ -4,6 +4,26 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Added
+
+- OtpInput `errorMessage`: shows the message under the boxes (`role="alert"`, linked with `aria-describedby`) and switches them to the error style.
+- New names for inputs and outputs, in line with the rest of the library: FormField `errorMessage`, ChipGroup `variant="solid"` and `multiple`, NotificationCenter and NotificationItem `dismissed`, Drawer and Modal `dismissible`, Popover `closeOnBackdrop`, Alert `color` (type `AlertColor`).
+
+### Changed
+
+- ChipGroup: the CSS class `.chip-group--filled` is now `.chip-group--solid`. `variant="filled"` still renders it.
+
+### Deprecated
+
+These names still work and will be removed in 1.0:
+
+- OtpInput and FormField `error`: use `errorMessage`.
+- ChipGroup `variant="filled"`: use `"solid"`. ChipGroup `multiSelect`: use `multiple`.
+- NotificationCenter and NotificationItem `dismiss` output: use `dismissed`. Both are emitted.
+- Drawer and Modal `showClose`: use `dismissible`.
+- Popover `closeOnClickOutside`: use `closeOnBackdrop`.
+- Alert `type` and the `AlertType` type: use `color` and `AlertColor`.
+
 ## [0.6.0] - 2026-11-18
 
 ### Added

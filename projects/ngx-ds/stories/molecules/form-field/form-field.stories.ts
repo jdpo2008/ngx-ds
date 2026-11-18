@@ -39,7 +39,7 @@ class AutowireWrapper {}
         />
       </ngx-ds-form-field>
 
-      <ngx-ds-form-field label="Con error" error="Este campo es obligatorio">
+      <ngx-ds-form-field label="Con error" errorMessage="Este campo es obligatorio">
         <input
           style="width: 100%; padding: 0.5rem 0.75rem; border: 1.5px solid var(--border-input, #d1d5db); border-radius: 0.375rem; font: inherit;"
         />

@@ -15,7 +15,7 @@
           <h2 class="modal__title">{{ title() }}</h2>
         }
         <ng-content select="[modal-header]" />
-        @if (showClose()) {
+        @if (showCloseButton()) {
           <ngx-ds-icon-button
             class="modal__close"
             [icon]="icons.X"

@@ -68,7 +68,7 @@ const SEED: NgxNotification[] = [
         [notifications]="items()"
         (markRead)="onMarkRead($event)"
         (markAllRead)="onMarkAllRead()"
-        (dismiss)="onDismiss($event)"
+        (dismissed)="onDismiss($event)"
         (dismissAll)="onDismissAll()"
         (action)="onAction($event)"
       />

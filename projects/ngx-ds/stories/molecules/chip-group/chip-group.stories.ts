@@ -20,7 +20,7 @@ const TAGS: ChipItem[] = [
   template: `
     <div class="p-6" style="display:flex; flex-direction:column; gap:1.5rem;">
       <ngx-ds-chip-group [chips]="tags" [(selected)]="sel" variant="soft" />
-      <ngx-ds-chip-group [chips]="tags" [(selected)]="sel" variant="filled" />
+      <ngx-ds-chip-group [chips]="tags" [(selected)]="sel" variant="solid" />
       <ngx-ds-chip-group [chips]="tags" [(selected)]="sel" variant="outline" />
       <ngx-ds-chip-group
         [chips]="tags"

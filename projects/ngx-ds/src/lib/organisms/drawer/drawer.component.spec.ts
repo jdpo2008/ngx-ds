@@ -68,8 +68,8 @@ describe('DrawerComponent', () => {
     expect(cmp.open()).toBe(false);
   });
 
-  it('hides the close button when showClose is false', () => {
-    const { el } = setup({ showClose: false });
+  it('hides the close button when dismissible is false', () => {
+    const { el } = setup({ dismissible: false });
     expect(el.querySelector('.drawer__close')).toBeNull();
   });
 });

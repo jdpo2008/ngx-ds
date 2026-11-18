@@ -6,7 +6,7 @@ import { FormFieldComponent } from './form-field.component';
   standalone: true,
   imports: [FormFieldComponent],
   template: `
-    <ngx-ds-form-field label="Email" [hint]="hint()" [error]="error()" [required]="true">
+    <ngx-ds-form-field label="Email" [hint]="hint()" [errorMessage]="error()" [required]="true">
       <input type="email" />
     </ngx-ds-form-field>
   `,
