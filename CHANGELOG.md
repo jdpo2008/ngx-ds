@@ -4,6 +4,10 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Added
+
+- Visual regression tests: `npm run test:visual` screenshots every Storybook story in the light and dark themes and compares it with the baselines in `visual-baselines/`. CI runs it in the Playwright Docker image. New baselines come from `npm run test:visual:docker -- --update` or the "Update visual baselines" workflow. A story opts out with the `skip-visual` tag.
+
 ## [0.5.0] - 2026-11-18
 
 ### Added

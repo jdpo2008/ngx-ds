@@ -26,6 +26,14 @@ npm run watch
 
 # Build static Storybook
 npm run build-storybook
+
+# Accessibility tests (axe on every story, light + dark) — needs build-storybook first
+npm run test:a11y
+
+# Visual regression (screenshot every story, light + dark, vs visual-baselines/)
+npm run test:visual
+# Regenerate baselines — always in the Playwright Docker image, fonts differ per OS
+npm run test:visual:docker -- --update
 ```
 
 ## Architecture
