@@ -6,4 +6,5 @@ export * from './keyboard';
 export * from './locale';
 export * from './labels';
 export * from './provide';
+export * from './theme-colors';
 export * from './field-error';

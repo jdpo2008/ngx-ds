@@ -8,6 +8,7 @@ export * from './lib/services/confirmation.service';
 export * from './lib/shared/locale';
 export * from './lib/shared/labels';
 export * from './lib/shared/provide';
+export * from './lib/shared/theme-colors';
 
 // ── Directives ───────────────────────────────────────────────
 export * from './lib/directives/focus-trap';
