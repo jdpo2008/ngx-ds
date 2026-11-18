@@ -4,6 +4,8 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-18
+
 ### Added
 
 - Splitter (`ngx-ds-splitter`): two resizable panes, side by side or stacked, projected with `[splitter-start]` and `[splitter-end]`. `size` (percent of the first pane) is two-way bindable and limited by `min` / `max`. The divider follows the WAI-ARIA window splitter pattern: drag it, use the arrow keys, Home / End, or Enter to collapse and restore the first pane. It has `step`, `disabled`, `ariaLabel` and the `resizeEnd` output.
@@ -74,6 +76,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.4.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.4.0
 [0.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.3.0
 [0.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.2.0
 [0.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.1.0
