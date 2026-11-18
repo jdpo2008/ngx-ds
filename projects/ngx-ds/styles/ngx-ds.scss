@@ -4,12 +4,11 @@
 // or load it from your global styles.scss:
 //   @use '@jdpo2008/ngx-ds/styles/ngx-ds';
 //
-// Design tokens (primitives + semantic), opt-in dark theme and deprecated
-// aliases. Everything lives in `@layer base`, so your own unlayered
+// Design tokens (primitives + semantic) and the opt-in dark theme.
+// Everything lives in `@layer base`, so your own unlayered
 // :root overrides always win.
 @use './tokens';
 @use './themes';
-@use './legacy';
 
 @layer base {
   :root {
