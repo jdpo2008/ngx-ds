@@ -8,6 +8,8 @@
     #trigger
     [class]="triggerClasses()"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     role="button"
     [attr.tabindex]="isDisabled() ? -1 : 0"
     [attr.aria-expanded]="isOpen()"
@@ -162,7 +164,7 @@
 </div>
 
 @if (errorText()) {
-  <p class="drp__error">{{ errorText() }}</p>
+  <p [id]="messageId" role="alert" class="drp__error">{{ errorText() }}</p>
 } @else if (hint()) {
-  <p class="drp__hint">{{ hint() }}</p>
+  <p [id]="messageId" class="drp__hint">{{ hint() }}</p>
 }

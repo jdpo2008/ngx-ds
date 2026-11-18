@@ -8,6 +8,8 @@
     #trigger
     [class]="triggerClasses()"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     role="combobox"
     [attr.tabindex]="disabled() ? -1 : 0"
     [attr.aria-controls]="id + '-panel'"
@@ -97,7 +99,7 @@
 </div>
 
 @if (errorText()) {
-  <p class="ms__error">{{ errorText() }}</p>
+  <p [id]="messageId" role="alert" class="ms__error">{{ errorText() }}</p>
 } @else if (hint()) {
-  <p class="ms__hint">{{ hint() }}</p>
+  <p [id]="messageId" class="ms__hint">{{ hint() }}</p>
 }

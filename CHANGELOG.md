@@ -2,6 +2,17 @@
 
 All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follows [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes.
 
+## [Unreleased]
+
+### Added
+
+- Form controls link their error or hint message to the focusable element with `aria-describedby` and set `aria-invalid` while they show an error. The error message of MultiSelect, NumberInput and DateRangePicker now has `role="alert"`, like the other controls.
+- OtpInput accepts Signal Forms errors: it gets the `errors` and `touched` inputs and shows the error style once the field is touched.
+
+### Fixed
+
+- NumberInput shows a red border when it has an error. It used to show only the message.
+
 ## [0.3.0] - 2026-11-18
 
 ### Added

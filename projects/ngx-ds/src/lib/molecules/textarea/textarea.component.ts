@@ -52,6 +52,7 @@ export class TextareaComponent implements ControlValueAccessor {
   readonly value = model<string>('');
 
   readonly id = `ngx-textarea-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Internal state ────────────────────────────────────────────
   readonly #disabled = signal(false);

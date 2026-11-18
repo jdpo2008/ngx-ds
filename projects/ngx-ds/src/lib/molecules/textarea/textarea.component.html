@@ -14,6 +14,8 @@
   <textarea
     class="ngx-textarea__native"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     [rows]="rows()"
     [value]="value()"
     [placeholder]="effectivePlaceholder()"
@@ -29,11 +31,11 @@
 <!-- Footer: error/hint + char count -->
 <div class="ngx-textarea__footer">
   @if (errorText()) {
-    <p class="ngx-textarea__message ngx-textarea__message--error" role="alert">
+    <p [id]="messageId" class="ngx-textarea__message ngx-textarea__message--error" role="alert">
       {{ errorText() }}
     </p>
   } @else if (hint()) {
-    <p class="ngx-textarea__message ngx-textarea__message--hint">{{ hint() }}</p>
+    <p [id]="messageId" class="ngx-textarea__message ngx-textarea__message--hint">{{ hint() }}</p>
   } @else {
     <span></span>
   }

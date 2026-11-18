@@ -86,6 +86,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   readonly searchChange = output<string>();
 
   readonly id = `ngx-autocomplete-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Icons ────────────────────────────────────────────────
   readonly SearchIcon = Search;

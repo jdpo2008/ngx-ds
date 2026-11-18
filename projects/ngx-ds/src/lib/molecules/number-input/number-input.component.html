@@ -17,6 +17,8 @@
     class="number-input__field"
     type="number"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     [value]="value()"
     [min]="min() ?? null"
     [max]="max() ?? null"
@@ -37,7 +39,7 @@
 </div>
 
 @if (errorText()) {
-  <p class="number-input__error">{{ errorText() }}</p>
+  <p [id]="messageId" role="alert" class="number-input__error">{{ errorText() }}</p>
 } @else if (hint()) {
-  <p class="number-input__hint">{{ hint() }}</p>
+  <p [id]="messageId" class="number-input__hint">{{ hint() }}</p>
 }

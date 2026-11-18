@@ -71,6 +71,7 @@ export class SelectComponent implements ControlValueAccessor {
   readonly value = model<SelectValue | SelectValue[] | null>(null);
 
   readonly id = `ngx-select-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Icons ──────────────────────────────────────────────────
   readonly ChevronDown = ChevronDown;

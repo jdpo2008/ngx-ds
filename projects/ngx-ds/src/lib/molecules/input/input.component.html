@@ -21,6 +21,8 @@
   <input
     class="ngx-input__native"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     [type]="effectiveType()"
     [value]="value()"
     [placeholder]="effectivePlaceholder()"
@@ -54,7 +56,9 @@
 
 <!-- Error / Hint -->
 @if (errorText()) {
-  <p class="ngx-input__message ngx-input__message--error" role="alert">{{ errorText() }}</p>
+  <p [id]="messageId" class="ngx-input__message ngx-input__message--error" role="alert">
+    {{ errorText() }}
+  </p>
 } @else if (hint()) {
-  <p class="ngx-input__message ngx-input__message--hint">{{ hint() }}</p>
+  <p [id]="messageId" class="ngx-input__message ngx-input__message--hint">{{ hint() }}</p>
 }

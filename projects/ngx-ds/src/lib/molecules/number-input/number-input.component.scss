@@ -28,6 +28,15 @@
     border-color: var(--primary-500, #6366f1);
     box-shadow: 0 0 0 3px var(--primary-100, #e0e7ff);
   }
+
+  &--error,
+  &--error:focus-within {
+    border-color: var(--danger-500, #ef4444);
+  }
+
+  &--error:focus-within {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+  }
 }
 
 // ── Button ────────────────────────────────────────────────────────────────────

@@ -59,6 +59,7 @@ export class InputComponent implements ControlValueAccessor {
   readonly value = model<string>('');
 
   readonly id = `ngx-input-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Internal state ───────────────────────────────────────────
   readonly #disabled = signal(false);

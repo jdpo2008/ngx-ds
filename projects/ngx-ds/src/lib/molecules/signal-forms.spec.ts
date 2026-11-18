@@ -124,6 +124,7 @@ class Host {
     disabled(p.name, () => this.off());
     disabled(p.qty, () => this.off());
     max(p.qty, 10);
+    required(p.code);
   });
 }
 
@@ -240,6 +241,37 @@ describe('Signal Forms [formField]', () => {
     fixture.detectChanges();
     expect(message()?.textContent?.trim()).toBe('Name is required');
     expect(el.querySelector('ngx-ds-input .ngx-input__field--error')).not.toBeNull();
+  });
+
+  it('links the error message to the control for assistive tech', () => {
+    const { fixture, el } = setup();
+    const input = el.querySelector<HTMLInputElement>('ngx-ds-input input')!;
+    expect(input.getAttribute('aria-invalid')).toBeNull();
+    expect(input.getAttribute('aria-describedby')).toBeNull();
+
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    input.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    const message = el.querySelector('ngx-ds-input .ngx-input__message--error')!;
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    expect(message.id).toBeTruthy();
+    expect(input.getAttribute('aria-describedby')).toBe(message.id);
+  });
+
+  it('shows the error style on NumberInput and OtpInput', () => {
+    const { fixture, el, host } = setup();
+    host.model.update((m) => ({ ...m, qty: 20, code: '' }));
+    fixture.detectChanges();
+    expect(el.querySelector('.number-input--error')).toBeNull();
+    expect(el.querySelector('.otp__box--error')).toBeNull();
+
+    host.f.qty().markAsTouched();
+    host.f.code().markAsTouched();
+    fixture.detectChanges();
+    expect(el.querySelector('.number-input--error')).not.toBeNull();
+    expect(el.querySelector('.otp__box--error')).not.toBeNull();
+    expect(el.querySelector('.otp__box')!.getAttribute('aria-invalid')).toBe('true');
   });
 
   it('marks the error state without text when the error has no message', () => {

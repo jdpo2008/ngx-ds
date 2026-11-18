@@ -9,6 +9,7 @@
       [value]="digits()[i] || ''"
       [attr.autocomplete]="i === 0 ? 'one-time-code' : 'off'"
       [disabled]="isDisabled() || null"
+      [attr.aria-invalid]="hasError() || null"
       [style.width]="boxDim()"
       [style.height]="boxDim()"
       [style.fontSize]="boxFs()"

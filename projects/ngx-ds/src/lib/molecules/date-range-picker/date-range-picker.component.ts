@@ -78,6 +78,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly end = model<Date | null>(null);
 
   readonly id = `ngx-drp-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   readonly CalendarIcon = Calendar;
   readonly ChevronLeft = ChevronLeft;
