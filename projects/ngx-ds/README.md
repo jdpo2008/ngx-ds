@@ -72,6 +72,23 @@ export class AppComponent {
 
 Form controls (Input, Select, Checkbox, Datepicker, …) implement `ControlValueAccessor`, so they also work with `ngModel` and reactive forms. SearchInput is the exception: bind it with `[(value)]`.
 
+They also work with Signal Forms (`@angular/forms/signals`, experimental in Angular 21). Bind them with `[formField]`:
+
+```ts
+import { FormField, form, required } from '@angular/forms/signals';
+
+@Component({
+  imports: [FormField, InputComponent],
+  template: `<ngx-ds-input label="Name" [formField]="f.name" />`,
+})
+export class Profile {
+  model = signal({ name: '' });
+  f = form(this.model, (p) => required(p.name));
+}
+```
+
+The field's value, touched and disabled state stay in sync. The field's `min` and `max` validators also set the limits of NumberInput and RangeSlider, and `max` sets the star count of Rating. Error messages are not shown automatically: pass them with `[errorMessage]`.
+
 ### Toasts and confirmations
 
 Place the hosts once, usually in the root component, and trigger them from the services:

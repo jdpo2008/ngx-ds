@@ -41,8 +41,9 @@ let nextId = 0;
 export class RangeSliderComponent implements ControlValueAccessor {
   readonly id = `ngx-range-slider-${nextId++}`;
   readonly value = model<number>(0);
-  readonly min = input<number>(0);
-  readonly max = input<number>(100);
+  // `undefined` is accepted so Signal Forms can bind the field's min/max.
+  readonly min = input(0, { transform: (v: number | undefined) => v ?? 0 });
+  readonly max = input(100, { transform: (v: number | undefined) => v ?? 100 });
   readonly step = input<number>(1);
   readonly disabled = input<boolean>(false);
   readonly label = input<string>('');

@@ -37,7 +37,8 @@ export class RatingComponent implements ControlValueAccessor {
   readonly i18n = inject(NGX_DS_LABELS);
 
   readonly value = model<number>(0);
-  readonly max = input<number>(5);
+  // `undefined` is accepted so Signal Forms can bind the field's max.
+  readonly max = input(5, { transform: (v: number | undefined) => v ?? 5 });
   readonly size = input<RatingSize>('md');
   readonly readonly = input<boolean>(false);
   readonly disabled = input<boolean>(false);
