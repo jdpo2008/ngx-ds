@@ -2,6 +2,8 @@
 
 An Angular 21 component library: standalone components, a signal-based API, `OnPush` change detection and CSS custom-property design tokens with an opt-in dark theme.
 
+Browse every component in the [Storybook](https://jdpo2008.github.io/ngx-ds/).
+
 ## Install
 
 ```bash
