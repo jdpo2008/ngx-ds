@@ -57,6 +57,7 @@ export * from './lib/molecules/button-group';
 export * from './lib/molecules/avatar-group';
 export * from './lib/molecules/menu';
 export * from './lib/molecules/form-field';
+export * from './lib/molecules/time-picker';
 
 // ── Organisms ─────────────────────────────────────────────────
 export * from './lib/organisms/pagination';
