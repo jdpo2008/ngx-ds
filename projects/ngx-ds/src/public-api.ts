@@ -5,10 +5,15 @@ export * from './lib/services/toast.service';
 export * from './lib/services/confirmation.service';
 
 // ── Locale ───────────────────────────────────────────────────
-export * from './lib/shared/locale';
+export { NGX_DS_LOCALE, provideNgxDsLocale } from './lib/shared/locale';
 export * from './lib/shared/labels';
 export * from './lib/shared/provide';
-export * from './lib/shared/theme-colors';
+export {
+  applyPrimaryColor,
+  createPrimaryPalette,
+  type PrimaryPalette,
+  type PrimaryStep,
+} from './lib/shared/theme-colors';
 
 // ── Directives ───────────────────────────────────────────────
 export * from './lib/directives/focus-trap';

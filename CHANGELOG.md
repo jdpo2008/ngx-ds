@@ -4,6 +4,11 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Removed
+
+- Internal helpers are no longer exported from the package: `parseHex`, `contrastRatio`, `primaryPaletteCss`, `PRIMARY_STEPS`, `monthNames`, `weekdayNames` and `formatDayLabel`. The public colour API is `createPrimaryPalette`, `applyPrimaryColor` and the `PrimaryPalette` / `PrimaryStep` types.
+- `styles/_legacy.scss` and its deprecated aliases (`--color-*`, `--border-color`, `--text-primary`, `--surface-secondary`, `--ngx-color-*`). No component read them since 0.1.0. Use the tokens in `_tokens.scss`, e.g. `--primary-500`, `--border-base`, `--text-base`, `--surface-subtle`.
+
 ## [0.6.0] - 2026-11-18
 
 ### Added
