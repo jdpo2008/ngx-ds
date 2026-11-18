@@ -71,11 +71,12 @@ export class TagInputComponent implements ControlValueAccessor {
   private readonly native = viewChild.required<ElementRef<HTMLInputElement>>('native');
 
   // ── Internal state ───────────────────────────────────────────
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
   readonly text = signal('');
 
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly isFocused = this.#focused.asReadonly();
 
   // ── Derived ──────────────────────────────────────────────────
@@ -126,7 +127,7 @@ export class TagInputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 
   // ── Actions ──────────────────────────────────────────────────

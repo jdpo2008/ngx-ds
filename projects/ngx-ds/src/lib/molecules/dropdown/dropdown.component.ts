@@ -79,11 +79,12 @@ export class DropdownComponent implements ControlValueAccessor {
 
   // ── Internal state ─────────────────────────────────────────
   readonly #open = signal(false);
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
 
   readonly isOpen = this.#open.asReadonly();
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
   readonly hasError = computed(() =>
@@ -215,6 +216,6 @@ export class DropdownComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }
