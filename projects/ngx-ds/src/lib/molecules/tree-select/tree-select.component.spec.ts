@@ -1,0 +1,258 @@
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TreeSelectComponent, TreeSelectNode } from './tree-select.component';
+
+const NODES: TreeSelectNode[] = [
+  {
+    id: 'fruit',
+    label: 'Fruta',
+    children: [
+      { id: 'apple', label: 'Manzana' },
+      { id: 'pear', label: 'Pera' },
+      {
+        id: 'citrus',
+        label: 'Cítricos',
+        children: [
+          { id: 'lemon', label: 'Limón' },
+          { id: 'orange', label: 'Naranja', disabled: true },
+        ],
+      },
+    ],
+  },
+  { id: 'veg', label: 'Verdura', children: [{ id: 'carrot', label: 'Zanahoria' }] },
+  { id: 'bread', label: 'Pan' },
+];
+
+function key(target: HTMLElement, k: string, init: KeyboardEventInit = {}): void {
+  target.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, ...init }));
+}
+
+describe('TreeSelectComponent', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(TreeSelectComponent);
+    fixture.componentRef.setInput('nodes', NODES);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!;
+    const rows = () => Array.from(el.querySelectorAll<HTMLElement>('[role="treeitem"]'));
+    const row = (label: string) =>
+      rows().find((r) => r.querySelector('.ts__row-label')?.textContent?.trim() === label)!;
+    const labels = () => rows().map((r) => r.querySelector('.ts__row-label')!.textContent!.trim());
+    const open = () => {
+      trigger.click();
+      fixture.detectChanges();
+    };
+    const tick = async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, trigger, rows, row, labels, open, tick };
+  }
+
+  it('opens a tree with the top-level nodes and tree semantics', () => {
+    const { el, trigger, rows, labels, open } = setup({ label: 'Categoría' });
+    expect(el.querySelector('.ts__placeholder')?.textContent).toContain('Seleccionar...');
+    expect(trigger.getAttribute('aria-haspopup')).toBe('tree');
+    open();
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(el.querySelector('[role="tree"]')?.getAttribute('aria-label')).toBe('Categoría');
+    expect(labels()).toEqual(['Fruta', 'Verdura', 'Pan']);
+    const first = rows()[0];
+    expect(first.getAttribute('aria-level')).toBe('1');
+    expect(first.getAttribute('aria-expanded')).toBe('false');
+    expect(first.getAttribute('aria-posinset')).toBe('1');
+    expect(first.getAttribute('aria-setsize')).toBe('3');
+    expect(rows()[2].hasAttribute('aria-expanded')).toBe(false);
+  });
+
+  it('single mode: a parent click expands, a leaf click selects and closes', () => {
+    const { fixture, cmp, el, trigger, row, labels, open } = setup();
+    open();
+    row('Fruta').click();
+    fixture.detectChanges();
+    expect(cmp.value()).toBeNull();
+    expect(labels()).toEqual(['Fruta', 'Manzana', 'Pera', 'Cítricos', 'Verdura', 'Pan']);
+    expect(row('Manzana').getAttribute('aria-level')).toBe('2');
+    row('Pera').click();
+    fixture.detectChanges();
+    expect(cmp.value()).toBe('pear');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(el.querySelector('.ts__single')?.textContent).toContain('Pera');
+  });
+
+  it('selectableParents lets a parent be picked; the chevron still expands', () => {
+    const { fixture, cmp, row, labels, open } = setup({ selectableParents: true });
+    open();
+    row('Verdura').querySelector<HTMLElement>('.ts__toggle')!.click();
+    fixture.detectChanges();
+    expect(labels()).toContain('Zanahoria');
+    expect(cmp.value()).toBeNull();
+    row('Verdura').click();
+    expect(cmp.value()).toBe('veg');
+  });
+
+  it('reveals and marks the selected node on open', () => {
+    const { row, open } = setup({ value: 'lemon' });
+    open();
+    expect(row('Limón').getAttribute('aria-selected')).toBe('true');
+    expect(row('Limón').getAttribute('tabindex')).toBe('0');
+    expect(row('Pan').getAttribute('aria-selected')).toBe('false');
+  });
+
+  it('multiple + cascade: checking a parent checks its enabled leaves', () => {
+    const { fixture, cmp, el, row, open } = setup({ multiple: true, expanded: ['fruit'] });
+    open();
+    expect(el.querySelector('[role="tree"]')?.getAttribute('aria-multiselectable')).toBe('true');
+    row('Fruta').click();
+    fixture.detectChanges();
+    // Naranja is disabled, so it stays out.
+    expect(cmp.value()).toEqual(['apple', 'pear', 'lemon']);
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('mixed');
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('mixed');
+    expect(row('Pera').getAttribute('aria-checked')).toBe('true');
+    expect(el.querySelectorAll('.ts__chip').length).toBe(3);
+
+    // A second click unchecks them all; the panel stays open.
+    row('Fruta').click();
+    fixture.detectChanges();
+    expect(cmp.value()).toEqual([]);
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('multiple + cascade: a parent is checked when all its leaves are', () => {
+    const { row, open } = setup({ multiple: true, value: ['carrot'], expanded: ['veg'] });
+    open();
+    expect(row('Verdura').getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('multiple without cascade checks each node on its own', () => {
+    const { fixture, cmp, row, open } = setup({ multiple: true, cascade: false });
+    open();
+    row('Fruta').click();
+    fixture.detectChanges();
+    expect(cmp.value()).toEqual(['fruit']);
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('removes a chip without opening the panel', () => {
+    const { fixture, cmp, el, trigger } = setup({ multiple: true, value: ['apple', 'bread'] });
+    el.querySelector<HTMLButtonElement>('.ts__chip-remove')!.click();
+    fixture.detectChanges();
+    expect(cmp.value()).toEqual(['bread']);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('search keeps the matches and their ancestors, expanded', () => {
+    const { fixture, el, labels, open } = setup({ searchable: true });
+    open();
+    const input = el.querySelector<HTMLInputElement>('.ts__search')!;
+    input.value = 'lim';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(labels()).toEqual(['Fruta', 'Cítricos', 'Limón']);
+
+    input.value = 'xyz';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(el.querySelector('.ts__empty')?.textContent).toContain('Sin resultados');
+  });
+
+  it('a matching parent keeps all its children', () => {
+    const { fixture, el, labels, open } = setup({ searchable: true });
+    open();
+    const input = el.querySelector<HTMLInputElement>('.ts__search')!;
+    input.value = 'cítr';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(labels()).toEqual(['Fruta', 'Cítricos']);
+  });
+
+  it('keyboard: arrows move, Right expands and enters, Left goes to the parent', async () => {
+    const { fixture, cmp, trigger, row, tick } = setup();
+    key(trigger, 'ArrowDown');
+    await tick();
+    expect(document.activeElement).toBe(row('Fruta'));
+
+    key(row('Fruta'), 'ArrowRight');
+    await tick();
+    expect(row('Manzana')).toBeTruthy();
+    key(row('Fruta'), 'ArrowRight');
+    await tick();
+    expect(document.activeElement).toBe(row('Manzana'));
+
+    key(row('Manzana'), 'End');
+    await tick();
+    expect(document.activeElement).toBe(row('Pan'));
+    key(row('Pan'), 'Home');
+    await tick();
+    expect(document.activeElement).toBe(row('Fruta'));
+
+    key(row('Fruta'), 'ArrowDown');
+    await tick();
+    key(row('Manzana'), 'ArrowLeft');
+    await tick();
+    expect(document.activeElement).toBe(row('Fruta'));
+    key(row('Fruta'), 'ArrowLeft');
+    await tick();
+    expect(row('Manzana')).toBeUndefined();
+
+    key(row('Fruta'), 'ArrowDown');
+    await tick();
+    key(row('Verdura'), 'ArrowDown');
+    await tick();
+    key(row('Pan'), 'Enter');
+    fixture.detectChanges();
+    expect(cmp.value()).toBe('bread');
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('Escape closes and returns focus to the trigger', () => {
+    const { fixture, trigger, row, open } = setup();
+    open();
+    row('Pan').focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('ignores disabled nodes and a disabled control', () => {
+    const { fixture, cmp, trigger, row, open } = setup({ expanded: ['fruit', 'citrus'] });
+    open();
+    row('Naranja').click();
+    expect(cmp.value()).toBeNull();
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    trigger.click();
+    fixture.detectChanges();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('works with reactive forms', () => {
+    @Component({
+      standalone: true,
+      imports: [TreeSelectComponent, ReactiveFormsModule],
+      template: `<ngx-ds-tree-select [nodes]="nodes" [multiple]="true" [formControl]="ctrl" />`,
+    })
+    class Host {
+      nodes = NODES;
+      ctrl = new FormControl<string[]>(['apple']);
+    }
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelectorAll('.ts__chip').length).toBe(1);
+
+    el.querySelector<HTMLButtonElement>('.ts__chip-remove')!.click();
+    expect(fixture.componentInstance.ctrl.value).toEqual([]);
+    expect(fixture.componentInstance.ctrl.touched).toBe(true);
+
+    fixture.componentInstance.ctrl.disable();
+    fixture.detectChanges();
+    expect(el.querySelector('[role="combobox"]')?.getAttribute('aria-disabled')).toBe('true');
+  });
+});
