@@ -43,12 +43,22 @@ npm run test:visual:docker -- --update
 
 This is **ngx-ds**, an Angular 21 component library built with `ng-packagr`. The library entry point is `projects/ngx-ds/src/public-api.ts`. Built output goes to `dist/ngx-ds`.
 
+### Branches
+
+Trunk-based. `master` is always releasable and only changes through PRs with green CI. Work happens on short-lived `feat/*`, `fix/*` and `chore/*` branches off `master`. There is no `develop` or `staging` branch: npm dist-tags play that role (`next` for prereleases, `latest` for stable). After 1.0, a `release/<major>.x` branch is cut from its tag only when an older major needs a patch.
+
+### Changelog
+
+Don't edit `CHANGELOG.md` in a PR: add a fragment to `.changes/<branch-name>.md` with `### Added` / `Changed` / `Deprecated` / `Removed` / `Fixed` / `Security` sections (see `.changes/README.md`). Changes that don't affect consumers need none. `npm run changelog` previews the next release notes; CI runs `npm run changelog -- --check`.
+
 ### Releasing
 
 Published to npm as `@jdpo2008/ngx-ds` (the unscoped `ngx-ds` name belongs to someone else).
 
-1. Bump `version` in `projects/ngx-ds/package.json` and add a section to `CHANGELOG.md` (root), via a normal PR.
-2. After merging, create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish` with the `NPM_TOKEN` secret. No `--provenance`: npm only accepts it from public repositories, and this one is private.
+1. On a `chore/release-<version>` branch: bump `version` in `projects/ngx-ds/package.json`, run `npm run changelog -- --release` (moves the fragments into `CHANGELOG.md` under the version and today's date, and deletes them), open a PR and merge it.
+2. Create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish` with the `NPM_TOKEN` secret. No `--provenance`: npm only accepts it from public repositories, and this one is private.
+
+Prereleases (`1.0.0-rc.1`): bump the version only — no `changelog --release`, the fragments stay for the stable version — and mark the GitHub release as a pre-release. The workflow publishes any version with a `-` to the `next` dist-tag instead of `latest`.
 
 ### Schematics (`ng add`)
 

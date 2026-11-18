@@ -26,6 +26,9 @@ jobs:
       - name: Format
         run: npm run format:check
 
+      - name: Changelog fragments
+        run: npm run changelog -- --check
+
       - name: Lint
         run: npm run lint
 
