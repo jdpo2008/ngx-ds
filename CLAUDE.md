@@ -21,6 +21,9 @@ npm run lint
 npm run format:check
 npm run format
 
+# Bundle size of dist/ngx-ds (after npm run build); --base <dir> compares two builds
+npm run size
+
 # Watch build (dev)
 npm run watch
 

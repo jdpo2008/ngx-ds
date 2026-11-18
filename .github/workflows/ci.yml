@@ -47,6 +47,63 @@ jobs:
           path: storybook-static
           retention-days: 3
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ngx-ds-dist
+          path: dist/ngx-ds
+          retention-days: 3
+
+  bundle-size:
+    if: github.event_name == 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ngx-ds-dist
+          path: dist/ngx-ds
+
+      # Build the target branch in a worktree to compare against.
+      - name: Build base
+        run: |
+          git fetch --depth=1 origin "$BASE_SHA"
+          git worktree add ../base "$BASE_SHA"
+          cd ../base
+          npm ci
+          npm run build
+
+      - name: Compare bundle size
+        run: npm run size -- --base ../base/dist/ngx-ds --markdown size.md
+
+      # One comment per PR, updated on every push.
+      - name: Comment on the PR
+        if: always() && hashFiles('size.md') != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          cat size.md >> "$GITHUB_STEP_SUMMARY"
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate             --jq '.[] | select(.body | startswith("<!-- bundle-size -->")) | .id' | head -1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -F body=@size.md
+          else
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -F body=@size.md
+          fi
+
   a11y:
     needs: verify
     runs-on: ubuntu-latest
