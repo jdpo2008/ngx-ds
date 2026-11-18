@@ -64,7 +64,7 @@ $sizes: (
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
 }
 
 // ── Native input ──────────────────────────────────────────────────────────────
@@ -82,7 +82,7 @@ $sizes: (
   line-height: 1.5;
 
   &::placeholder {
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
   }
 
   &:disabled {
@@ -108,7 +108,7 @@ $sizes: (
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   transition: color 0.15s ease;
 
   &:hover {

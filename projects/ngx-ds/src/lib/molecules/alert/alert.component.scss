@@ -3,25 +3,25 @@
 // type → (main-color, soft-bg, soft-border, soft-text)
 $alert-types: (
   'info': (
-    var(--info-500, #3b82f6),
+    var(--fill-info, #2563eb),
     var(--info-50, #eff6ff),
     var(--info-200, #bfdbfe),
     var(--info-800, #1e40af),
   ),
   'success': (
-    var(--success-500, #10b981),
+    var(--fill-success, #047857),
     var(--success-50, #ecfdf5),
     var(--success-200, #a7f3d0),
     var(--success-800, #065f46),
   ),
   'warning': (
-    var(--warning-500, #f59e0b),
+    var(--fill-warning, #b45309),
     var(--warning-50, #fffbeb),
     var(--warning-200, #fde68a),
     var(--warning-800, #92400e),
   ),
   'danger': (
-    var(--danger-500, #ef4444),
+    var(--fill-danger, #dc2626),
     var(--danger-50, #fef2f2),
     var(--danger-200, #fecaca),
     var(--danger-800, #991b1b),

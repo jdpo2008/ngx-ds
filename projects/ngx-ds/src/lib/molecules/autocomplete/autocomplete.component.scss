@@ -85,7 +85,7 @@ $sizes: (
   line-height: 1.5;
 
   &::placeholder {
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
   }
 
   &:disabled {
@@ -99,7 +99,7 @@ $sizes: (
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
 }
 
 // ── Clear button ──────────────────────────────────────────────
@@ -111,7 +111,7 @@ $sizes: (
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   transition: color 0.15s ease;
   &:hover {
     color: var(--text-muted, #6b7280);
@@ -125,7 +125,7 @@ $sizes: (
   top: 50%;
   transform: translateY(-50%);
   font-size: inherit;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   pointer-events: none;
   white-space: nowrap;
   line-height: 1;
@@ -143,7 +143,7 @@ $sizes: (
     font-size: 0.7rem;
     background: var(--surface-base, #fff);
     padding: 0 0.25rem;
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
   }
 
   &--offset {
@@ -151,10 +151,10 @@ $sizes: (
   }
 
   &--focused:not(&--error) {
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
   }
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }
 
@@ -224,7 +224,7 @@ $sizes: (
   }
 
   &--disabled {
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
     cursor: not-allowed;
   }
 }
@@ -241,7 +241,7 @@ $sizes: (
 
 .ngx-autocomplete__check {
   flex-shrink: 0;
-  color: var(--primary-500, #6366f1);
+  color: var(--fill-primary, #4f46e5);
   display: inline-flex;
   align-items: center;
 }
@@ -252,7 +252,7 @@ $sizes: (
   padding: 0.75rem;
   text-align: center;
   font-size: 0.875rem;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
 }
 
 // ── Hint / Error ──────────────────────────────────────────────
@@ -264,6 +264,6 @@ $sizes: (
     color: var(--text-muted, #6b7280);
   }
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }

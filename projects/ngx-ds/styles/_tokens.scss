@@ -69,7 +69,7 @@
     --text-base:        var(--gray-900);
     --text-secondary:   var(--gray-700);
     --text-muted:       var(--gray-500);
-    --text-placeholder: var(--gray-400);
+    --text-placeholder: var(--gray-500); // 4.8:1 on white (AA)
     --text-disabled:    var(--gray-300);
     --text-inverse:     #ffffff;
     --text-on-color:    #ffffff; // text/marks on solid colored fills
@@ -82,6 +82,12 @@
     --surface-active: var(--gray-200);
     --surface-thumb:  #ffffff;         // switch / slider thumbs; same in dark
     --fill-neutral:   var(--gray-500); // solid neutral fills (secondary variants)
+    // Solid fills behind --text-on-color, also safe as text on --surface-base (AA 4.5:1).
+    --fill-primary:   var(--primary-600);
+    --fill-danger:    var(--danger-600);
+    --fill-success:   var(--success-700);
+    --fill-warning:   var(--warning-700);
+    --fill-info:      var(--info-600);
 
     // Borders
     --border-subtle: var(--gray-100);

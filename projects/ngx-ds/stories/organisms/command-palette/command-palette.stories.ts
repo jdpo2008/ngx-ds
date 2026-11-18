@@ -29,7 +29,7 @@ const COMMANDS: CommandItem[] = [
   template: `
     <div class="p-6">
       <ngx-ds-button (click)="open.set(true)">
-        Abrir paleta <kbd style="font-size:0.75rem; margin-left:0.5rem; opacity:0.7;">Ctrl+K</kbd>
+        Abrir paleta <kbd style="font-size:0.75rem; margin-left:0.5rem;">Ctrl+K</kbd>
       </ngx-ds-button>
       <p style="margin-top:1rem; font-size:0.8rem; color:var(--text-muted, #6b7280);">
         También puedes usar <strong>Ctrl+K</strong> desde cualquier lugar.

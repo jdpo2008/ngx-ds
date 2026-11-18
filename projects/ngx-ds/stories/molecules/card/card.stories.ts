@@ -185,7 +185,7 @@ export const Default: Story = {
           </p>
           <div card-footer style="display:flex; gap:0.5rem;">
             <button style="padding:0.375rem 0.75rem; border:1px solid var(--border-input, #d1d5db); border-radius:0.375rem; background:var(--surface-base, #fff); cursor:pointer; font-size:0.8125rem;">Cancelar</button>
-            <button style="padding:0.375rem 0.75rem; border:none; border-radius:0.375rem; background:#3b82f6; color:#fff; cursor:pointer; font-size:0.8125rem;">Aceptar</button>
+            <button style="padding:0.375rem 0.75rem; border:none; border-radius:0.375rem; background:var(--fill-primary, #4f46e5); color:var(--text-on-color, #fff); cursor:pointer; font-size:0.8125rem;">Aceptar</button>
           </div>
         </ngx-ds-card>
       </div>

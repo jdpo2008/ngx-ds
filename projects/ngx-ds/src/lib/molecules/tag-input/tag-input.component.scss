@@ -93,11 +93,11 @@ $sizes: (
   outline: none;
 
   &::placeholder {
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
   }
 
   &:disabled {
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
     cursor: not-allowed;
   }
 
@@ -116,6 +116,6 @@ $sizes: (
   }
 
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }

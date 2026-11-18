@@ -95,7 +95,7 @@ class ColorsWrapper {}
         <ngx-ds-spinner size="sm" color="secondary" />
         <span>Procesando solicitud…</span>
       </div>
-      <div class="flex items-center gap-2 text-sm text-green-600">
+      <div class="flex items-center gap-2 text-sm" style="color: var(--fill-success, #047857)">
         <ngx-ds-spinner size="sm" color="current" />
         <span>Guardando cambios…</span>
       </div>

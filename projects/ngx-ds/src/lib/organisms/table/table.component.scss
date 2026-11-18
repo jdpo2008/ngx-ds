@@ -120,7 +120,7 @@
   }
 
   &--sorted {
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
   }
 
   &--sticky {
@@ -144,7 +144,7 @@
   transition: color 0.15s ease;
 
   &--active {
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
   }
 }
 
@@ -284,10 +284,10 @@
 .ngx-table__bool {
   display: inline-flex;
   align-items: center;
-  color: var(--danger-500, #ef4444);
+  color: var(--fill-danger, #dc2626);
 
   &--true {
-    color: var(--success-500, #10b981);
+    color: var(--fill-success, #047857);
   }
 }
 

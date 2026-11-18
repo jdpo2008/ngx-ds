@@ -68,7 +68,7 @@ $sizes: (
 
   &--disabled {
     background: var(--surface-subtle, #f9fafb);
-    color: var(--text-placeholder, #9ca3af);
+    color: var(--text-placeholder, #6b7280);
     cursor: not-allowed;
   }
 
@@ -91,7 +91,7 @@ $sizes: (
   font-size: inherit;
   line-height: 1;
   white-space: nowrap;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   background: transparent;
   pointer-events: none;
   transition:
@@ -104,16 +104,16 @@ $sizes: (
     top: 0;
     padding: 0 0.25rem;
     font-size: 0.7rem;
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
     background: var(--surface-base, #fff);
   }
 
   &--focused:not(&--error) {
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
   }
 
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }
 
@@ -122,7 +122,7 @@ $sizes: (
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
 }
 
 .ngx-time-picker__display {
@@ -138,7 +138,7 @@ $sizes: (
 
 .ngx-time-picker__placeholder {
   display: block;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
 }
 
 .ngx-time-picker__control {
@@ -161,7 +161,7 @@ $sizes: (
   width: 1.5rem;
   height: 1.5rem;
   padding: 0;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   background: transparent;
   border: none;
   border-radius: 0.25rem;
@@ -268,6 +268,6 @@ $sizes: (
   }
 
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }
