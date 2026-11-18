@@ -6,6 +6,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ### Added
 
+- InlineEdit molecule (`ngx-ds-inline-edit`): text that turns into a field on click. Enter or blur saves, Escape restores the previous value. Supports `multiline` (Ctrl/⌘+Enter saves), `required`, save/cancel buttons (`showActions`), `[(value)]`, `[(editing)]` and reactive forms.
 - Visual regression tests: `npm run test:visual` screenshots every Storybook story in the light and dark themes and compares it with the baselines in `visual-baselines/`. CI runs it in the Playwright Docker image. New baselines come from `npm run test:visual:docker -- --update` or the "Update visual baselines" workflow. A story opts out with the `skip-visual` tag.
 - Bundle size check: `npm run size` reports the size of the built package. On every PR, CI compares it with the target branch, posts the table as a PR comment and fails when the gzipped JavaScript grows more than 5 %.
 - Runtime primary colour: `provideNgxDs({ colors: { primary: '#0d9488' } })` replaces the default indigo. The colour becomes `--primary-600` and the rest of the `--primary-*` scale is generated in OKLCH, for the light and the dark theme. `applyPrimaryColor(color)` changes it at any time (`null` restores indigo), and `createPrimaryPalette(color)` returns the scale. In dev mode, a warning flags a colour too light for white text (below 4.5:1).

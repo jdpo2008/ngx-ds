@@ -1,0 +1,69 @@
+<div [class]="hostClasses()">
+  @if (editing()) {
+    @if (multiline()) {
+      <textarea
+        #field
+        class="ie__field ie__field--textarea"
+        rows="3"
+        [attr.aria-label]="label() || null"
+        [attr.aria-required]="required() || null"
+        [value]="draft()"
+        [placeholder]="placeholder()"
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+        (blur)="onBlur($event)"
+      ></textarea>
+    } @else {
+      <input
+        #field
+        class="ie__field"
+        type="text"
+        [attr.aria-label]="label() || null"
+        [attr.aria-required]="required() || null"
+        [value]="draft()"
+        [placeholder]="placeholder()"
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+        (blur)="onBlur($event)"
+      />
+    }
+    @if (showActions()) {
+      <span class="ie__actions">
+        <button
+          type="button"
+          class="ie__action ie__action--save"
+          [attr.aria-label]="i18n.save"
+          (mousedown)="$event.preventDefault()"
+          (click)="onAction('save')"
+        >
+          <ngx-ds-icon [icon]="icons.Check" [size]="iconSize()" />
+        </button>
+        <button
+          type="button"
+          class="ie__action"
+          [attr.aria-label]="i18n.cancel"
+          (mousedown)="$event.preventDefault()"
+          (click)="onAction('cancel')"
+        >
+          <ngx-ds-icon [icon]="icons.X" [size]="iconSize()" />
+        </button>
+      </span>
+    }
+  } @else {
+    <button
+      #trigger
+      type="button"
+      class="ie__trigger"
+      [disabled]="isDisabled() || null"
+      [attr.aria-label]="triggerLabel() + ': ' + (isEmpty() ? placeholder() : value())"
+      (click)="edit()"
+    >
+      <span class="ie__text" [class.ie__text--placeholder]="isEmpty()">{{
+        isEmpty() ? placeholder() : value()
+      }}</span>
+      <span class="ie__pencil" aria-hidden="true">
+        <ngx-ds-icon [icon]="icons.Pencil" [size]="iconSize()" />
+      </span>
+    </button>
+  }
+</div>
