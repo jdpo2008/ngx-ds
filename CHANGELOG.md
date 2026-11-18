@@ -4,6 +4,8 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-18
+
 ### Added
 
 - `disabled` input on Input, Textarea, Select, Dropdown, Autocomplete, Checkbox, Switch, Datepicker, TimePicker and TagInput, as the other form controls already had. The control is disabled when the input or the form disables it.
@@ -11,6 +13,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 - `ToastrService.danger()`.
 - OtpInput `errorMessage`: shows the message under the boxes (`role="alert"`, linked with `aria-describedby`) and switches them to the error style.
 - New names for inputs and outputs, in line with the rest of the library: FormField `errorMessage`, ChipGroup `variant="solid"` and `multiple`, NotificationCenter and NotificationItem `dismissed`, Drawer and Modal `dismissible`, Popover `closeOnBackdrop`, Alert `color` (type `AlertColor`).
+- Prereleases: a version with a suffix (`1.0.0-rc.1`) is published to the `next` dist-tag, so `npm i @jdpo2008/ngx-ds` keeps installing the latest stable version. Try a prerelease with `npm i @jdpo2008/ngx-ds@next`.
 
 ### Changed
 
@@ -135,6 +138,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.7.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.7.0
 [0.6.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.5.0
 [0.4.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.4.0
