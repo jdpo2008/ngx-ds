@@ -280,7 +280,7 @@ class InteractiveWrapper implements OnDestroy {
           [striped]="true"
           size="lg"
         />
-        <p class="text-xs text-gray-400 mt-1">7.3 GB de 10 GB utilizados</p>
+        <p class="text-xs text-gray-500 mt-1">7.3 GB de 10 GB utilizados</p>
       </div>
 
       <div>

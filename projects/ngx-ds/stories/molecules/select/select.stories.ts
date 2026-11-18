@@ -91,15 +91,15 @@ class FloatingWrapper {
   template: `
     <div class="p-6 flex flex-col gap-4 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-select label="País" size="sm" [options]="countries" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (por defecto)</p>
         <ngx-ds-select label="País" size="md" [options]="countries" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-select label="País" size="lg" [options]="countries" />
       </div>
     </div>
@@ -131,7 +131,7 @@ class SizesWrapper {
         @if (selected().length) {
           <p class="text-gray-800">{{ selected().join(', ') }}</p>
         } @else {
-          <p class="text-gray-400">Ninguno</p>
+          <p class="text-gray-500">Ninguno</p>
         }
       </div>
 

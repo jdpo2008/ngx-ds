@@ -123,7 +123,7 @@ class LabelPositionWrapper {}
           <ngx-ds-checkbox [label]="item.label" [(checked)]="item.checked" />
         }
       </div>
-      <p class="text-xs text-gray-400 mt-3">
+      <p class="text-xs text-gray-500 mt-3">
         Seleccionados: {{ selectedCount() }} / {{ items.length }}
       </p>
     </div>

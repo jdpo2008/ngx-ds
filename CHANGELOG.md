@@ -4,6 +4,19 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Added
+
+- Accessibility tests: `npm run test:a11y` runs axe-core (WCAG 2.2 A/AA) on every Storybook story in the light and dark themes. It runs in CI after the Storybook build. Colour contrast is reported as a warning for now. A story opts out with the `skip-a11y` tag.
+- `ariaLabel` input on Button, Checkbox, Switch, NumberInput and RangeSlider, for controls with no visible label.
+
+### Fixed
+
+- Popover: when the trigger is a native button or link, `aria-expanded` and `aria-haspopup` go on that element and the wrapper is no longer a second focusable button. Enter on a button trigger no longer toggles twice.
+- Datepicker and TimePicker: the clear button is no longer nested inside the trigger, and it is 24 × 24 px.
+- Accessible names for the Pagination arrows, the Table selection checkboxes and page-size select, the OTP digits, the RangeSlider thumbs, the Stepper steps and the Select, Dropdown and MultiSelect comboboxes.
+- Timeline items are list items of the list again. A Table with a sticky header and a max height can be scrolled with the keyboard.
+- RangeSlider and Rating have 24 px touch targets. The UserMenu trigger's accessible name no longer conflicts with the visible initials.
+
 ## [0.4.0] - 2026-11-18
 
 ### Added

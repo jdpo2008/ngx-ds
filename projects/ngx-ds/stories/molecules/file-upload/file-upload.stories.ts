@@ -20,7 +20,7 @@ import {
         (filesChange)="onFiles($event)"
       />
       @if (files.length > 0) {
-        <p class="text-xs text-gray-400 mt-3">{{ files.length }} archivo(s) seleccionado(s)</p>
+        <p class="text-xs text-gray-500 mt-3">{{ files.length }} archivo(s) seleccionado(s)</p>
       }
     </div>
   `,

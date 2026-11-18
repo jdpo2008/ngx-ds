@@ -17,6 +17,7 @@
     class="number-input__field"
     type="number"
     [id]="id"
+    [attr.aria-label]="label() ? null : (ariaLabel() ?? null)"
     [attr.aria-invalid]="hasError() || null"
     [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     [value]="value()"

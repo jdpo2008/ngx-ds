@@ -31,6 +31,8 @@ let nextId = 0;
 })
 export class SwitchComponent implements ControlValueAccessor {
   readonly label = input<string>('');
+  /** Accessible name when there is no visible `label`. */
+  readonly ariaLabel = input<string | undefined>(undefined);
   readonly labelPosition = input<'left' | 'right'>('right');
   readonly size = input<SwitchSize>('md');
   readonly color = input<SwitchColor>('primary');

@@ -22,7 +22,7 @@ import {
         [(value)]="price"
         [showMinMax]="true"
       />
-      <p class="text-xs text-gray-400 mt-3">Precio seleccionado: \${{ price }}</p>
+      <p class="text-xs text-gray-500 mt-3">Precio seleccionado: \${{ price }}</p>
     </div>
   `,
 })
@@ -57,20 +57,25 @@ class ColorsWrapper {}
   template: `
     <div class="p-6" style="max-width: 28rem; display: flex; flex-direction: column; gap: 1.5rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-2">Con mín/máx</p>
-        <ngx-ds-range-slider [showMinMax]="true" [value]="50" />
+        <p class="text-xs text-gray-500 mb-2">Con mín/máx</p>
+        <ngx-ds-range-slider ariaLabel="Con mín/máx" [showMinMax]="true" [value]="50" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Sin valor</p>
-        <ngx-ds-range-slider [showValue]="false" [value]="30" />
+        <p class="text-xs text-gray-500 mb-2">Sin valor</p>
+        <ngx-ds-range-slider ariaLabel="Sin valor" [showValue]="false" [value]="30" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Con paso de 10</p>
-        <ngx-ds-range-slider [step]="10" [value]="40" [showMinMax]="true" />
+        <p class="text-xs text-gray-500 mb-2">Con paso de 10</p>
+        <ngx-ds-range-slider
+          ariaLabel="Con paso de 10"
+          [step]="10"
+          [value]="40"
+          [showMinMax]="true"
+        />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Deshabilitado</p>
-        <ngx-ds-range-slider [disabled]="true" [value]="60" />
+        <p class="text-xs text-gray-500 mb-2">Deshabilitado</p>
+        <ngx-ds-range-slider ariaLabel="Deshabilitado" [disabled]="true" [value]="60" />
       </div>
     </div>
   `,
@@ -94,7 +99,7 @@ class OptionsWrapper {}
         [(values)]="priceRange"
         [showMinMax]="true"
       />
-      <p class="text-xs text-gray-400 mt-3">Rango: \${{ priceRange[0] }} – \${{ priceRange[1] }}</p>
+      <p class="text-xs text-gray-500 mt-3">Rango: \${{ priceRange[0] }} – \${{ priceRange[1] }}</p>
     </div>
   `,
 })
@@ -120,7 +125,7 @@ class DualWrapper {
         [showMinMax]="true"
         color="success"
       />
-      <p class="text-xs text-gray-400 mt-3">Rango: {{ ageRange[0] }} – {{ ageRange[1] }} años</p>
+      <p class="text-xs text-gray-500 mt-3">Rango: {{ ageRange[0] }} – {{ ageRange[1] }} años</p>
     </div>
   `,
 })

@@ -11,6 +11,7 @@ export type TimelineItemStatus = 'completed' | 'active' | 'pending' | 'error';
   templateUrl: './timeline-item.component.html',
   styleUrl: './timeline-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { role: 'listitem' },
 })
 export class TimelineItemComponent {
   readonly title = input<string>('');

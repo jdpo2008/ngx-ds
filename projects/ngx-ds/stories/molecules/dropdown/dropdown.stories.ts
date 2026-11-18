@@ -80,15 +80,15 @@ class FloatingWrapper {
   template: `
     <div class="p-6 flex flex-col gap-4 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-dropdown label="Idioma" size="sm" [options]="langs" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (por defecto)</p>
         <ngx-ds-dropdown label="Idioma" size="md" [options]="langs" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-dropdown label="Idioma" size="lg" [options]="langs" />
       </div>
     </div>

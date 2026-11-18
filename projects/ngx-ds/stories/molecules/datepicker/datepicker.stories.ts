@@ -57,15 +57,15 @@ class FloatingWrapper {}
   template: `
     <div class="p-6 flex flex-col gap-4 max-w-xs">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-datepicker label="Fecha" size="sm" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (por defecto)</p>
         <ngx-ds-datepicker label="Fecha" size="md" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-datepicker label="Fecha" size="lg" />
       </div>
     </div>
@@ -84,7 +84,7 @@ class SizesWrapper {}
       <p class="text-sm font-medium text-gray-700">Restricciones de fecha</p>
 
       <div>
-        <p class="text-xs text-gray-400 mb-1">Solo a partir de hoy (minDate = hoy)</p>
+        <p class="text-xs text-gray-500 mb-1">Solo a partir de hoy (minDate = hoy)</p>
         <ngx-ds-datepicker
           label="Fecha futura"
           [floatingLabel]="true"
@@ -94,7 +94,7 @@ class SizesWrapper {}
       </div>
 
       <div>
-        <p class="text-xs text-gray-400 mb-1">Solo hasta hoy (maxDate = hoy)</p>
+        <p class="text-xs text-gray-500 mb-1">Solo hasta hoy (maxDate = hoy)</p>
         <ngx-ds-datepicker
           label="Fecha pasada"
           [floatingLabel]="true"
@@ -104,7 +104,7 @@ class SizesWrapper {}
       </div>
 
       <div>
-        <p class="text-xs text-gray-400 mb-1">Rango: del 1 al 20 del mes actual</p>
+        <p class="text-xs text-gray-500 mb-1">Rango: del 1 al 20 del mes actual</p>
         <ngx-ds-datepicker
           label="Rango acotado"
           [floatingLabel]="true"
@@ -132,7 +132,7 @@ class MinMaxWrapper {
       <p class="text-sm font-medium text-gray-700">Días inhabilitados</p>
 
       <div>
-        <p class="text-xs text-gray-400 mb-1">Sin fines de semana (0=Dom, 6=Sáb)</p>
+        <p class="text-xs text-gray-500 mb-1">Sin fines de semana (0=Dom, 6=Sáb)</p>
         <ngx-ds-datepicker
           label="Día laborable"
           [floatingLabel]="true"
@@ -142,7 +142,7 @@ class MinMaxWrapper {
       </div>
 
       <div>
-        <p class="text-xs text-gray-400 mb-1">Fechas específicas bloqueadas</p>
+        <p class="text-xs text-gray-500 mb-1">Fechas específicas bloqueadas</p>
         <ngx-ds-datepicker
           label="Disponibilidad"
           [floatingLabel]="true"

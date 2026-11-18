@@ -1,13 +1,14 @@
 <div class="popover">
   <div
+    #trigger
     class="popover__trigger"
-    role="button"
-    [attr.tabindex]="disabled() ? null : 0"
-    [attr.aria-expanded]="open()"
-    aria-haspopup="dialog"
+    [attr.role]="nativeTrigger() ? null : 'button'"
+    [attr.tabindex]="nativeTrigger() || disabled() ? null : 0"
+    [attr.aria-expanded]="nativeTrigger() ? null : open()"
+    [attr.aria-haspopup]="nativeTrigger() ? null : 'dialog'"
     (click)="toggle()"
-    (keydown.enter)="toggle()"
-    (keydown.space)="$event.preventDefault(); toggle()"
+    (keydown.enter)="onTriggerKey($event)"
+    (keydown.space)="onTriggerKey($event)"
   >
     <ng-content select="[popover-trigger]" />
   </div>

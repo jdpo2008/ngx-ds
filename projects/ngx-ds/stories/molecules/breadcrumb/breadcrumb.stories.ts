@@ -62,10 +62,10 @@ class IconsWrapper {
   imports: [BreadcrumbComponent],
   template: `
     <div class="p-6" style="display:flex; flex-direction:column; gap:1rem;">
-      <p class="text-xs text-gray-400">Ruta completa (sin colapso)</p>
+      <p class="text-xs text-gray-500">Ruta completa (sin colapso)</p>
       <ngx-ds-breadcrumb [items]="items" />
 
-      <p class="text-xs text-gray-400 mt-2">Colapsada — máximo 4 ítems</p>
+      <p class="text-xs text-gray-500 mt-2">Colapsada — máximo 4 ítems</p>
       <ngx-ds-breadcrumb [items]="items" [maxItems]="4" />
     </div>
   `,
@@ -89,10 +89,10 @@ class CollapsedWrapper {
   imports: [BreadcrumbComponent],
   template: `
     <div class="p-6" style="display:flex; flex-direction:column; gap:1rem;">
-      <p class="text-xs text-gray-400">Separador "/" (texto)</p>
+      <p class="text-xs text-gray-500">Separador "/" (texto)</p>
       <ngx-ds-breadcrumb [items]="items" separator="/" />
 
-      <p class="text-xs text-gray-400 mt-2">Separador icono Slash</p>
+      <p class="text-xs text-gray-500 mt-2">Separador icono Slash</p>
       <ngx-ds-breadcrumb [items]="items" [separator]="slashIcon" />
     </div>
   `,

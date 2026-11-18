@@ -63,27 +63,27 @@ class SizesWrapper {}
       <div class="flex flex-wrap items-center gap-4">
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="N" color="neutral" size="md" />
-          <span class="text-xs text-gray-400">neutral</span>
+          <span class="text-xs text-gray-500">neutral</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="P" color="primary" size="md" />
-          <span class="text-xs text-gray-400">primary</span>
+          <span class="text-xs text-gray-500">primary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="S" color="secondary" size="md" />
-          <span class="text-xs text-gray-400">secondary</span>
+          <span class="text-xs text-gray-500">secondary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="D" color="danger" size="md" />
-          <span class="text-xs text-gray-400">danger</span>
+          <span class="text-xs text-gray-500">danger</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="OK" color="success" size="md" />
-          <span class="text-xs text-gray-400">success</span>
+          <span class="text-xs text-gray-500">success</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-avatar initials="W" color="warning" size="md" />
-          <span class="text-xs text-gray-400">warning</span>
+          <span class="text-xs text-gray-500">warning</span>
         </div>
       </div>
     </div>
@@ -141,19 +141,19 @@ class ShapesWrapper {}
         <div class="flex flex-wrap items-center gap-6">
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-avatar initials="ON" color="success" size="md" status="online" />
-            <span class="text-xs text-gray-400">online</span>
+            <span class="text-xs text-gray-500">online</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-avatar initials="OF" color="secondary" size="md" status="offline" />
-            <span class="text-xs text-gray-400">offline</span>
+            <span class="text-xs text-gray-500">offline</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-avatar initials="AW" color="warning" size="md" status="away" />
-            <span class="text-xs text-gray-400">away</span>
+            <span class="text-xs text-gray-500">away</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-avatar initials="BS" color="danger" size="md" status="busy" />
-            <span class="text-xs text-gray-400">busy</span>
+            <span class="text-xs text-gray-500">busy</span>
           </div>
         </div>
       </div>

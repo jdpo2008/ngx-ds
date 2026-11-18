@@ -16,7 +16,7 @@
           <button
             class="stepper__bubble"
             [attr.aria-current]="isActive($index) ? 'step' : null"
-            [attr.aria-label]="step.label()"
+            [attr.aria-label]="$index + 1 + '. ' + step.label()"
             [disabled]="!clickable() || null"
             (click)="goTo($index)"
           >

@@ -321,6 +321,7 @@ export class DatepickerComponent implements ControlValueAccessor {
       this.hasError() ? `${base}--error` : '',
       this.isDisabled() ? `${base}--disabled` : '',
       this.floatingLabel() ? `${base}--floating` : '',
+      this.hasValue() && !this.isDisabled() ? `${base}--clearable` : '',
     ]
       .filter(Boolean)
       .join(' ');

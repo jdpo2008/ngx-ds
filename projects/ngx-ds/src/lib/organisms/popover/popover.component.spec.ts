@@ -84,4 +84,39 @@ describe('PopoverComponent', () => {
     click(el.querySelector<HTMLElement>('.outside')!);
     expect(host.open()).toBe(false);
   });
+
+  it('moves the button semantics to a native trigger and toggles once on Enter', async () => {
+    const fixture = TestBed.createComponent(NativeHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const wrapper = el.querySelector<HTMLElement>('.popover__trigger')!;
+    const button = el.querySelector<HTMLButtonElement>('button')!;
+    expect(wrapper.getAttribute('role')).toBeNull();
+    expect(wrapper.getAttribute('tabindex')).toBeNull();
+    expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    // A real button fires `click` on Enter; the keydown must not toggle again.
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    button.click();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.open()).toBe(true);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+  });
 });
+
+@Component({
+  standalone: true,
+  imports: [PopoverComponent],
+  template: `
+    <ngx-ds-popover [(open)]="open">
+      <button popover-trigger type="button">Abrir</button>
+      <p popover-content>Contenido</p>
+    </ngx-ds-popover>
+  `,
+})
+class NativeHost {
+  open = signal(false);
+}

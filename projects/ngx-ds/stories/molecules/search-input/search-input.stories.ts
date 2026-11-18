@@ -20,7 +20,7 @@ import {
         (cleared)="onClear()"
       />
       @if (query) {
-        <p class="text-xs text-gray-400 mt-3">Buscando: "{{ query }}"</p>
+        <p class="text-xs text-gray-500 mt-3">Buscando: "{{ query }}"</p>
       }
     </div>
   `,
@@ -44,15 +44,15 @@ class BasicWrapper {
   template: `
     <div class="p-6" style="max-width: 24rem; display: flex; flex-direction: column; gap: 1rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-search-input size="sm" placeholder="Small..." />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (default)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (default)</p>
         <ngx-ds-search-input size="md" placeholder="Medium..." />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-search-input size="lg" placeholder="Large..." />
       </div>
     </div>
@@ -87,19 +87,19 @@ class LoadingWrapper {}
   template: `
     <div class="p-6" style="max-width: 24rem; display: flex; flex-direction: column; gap: 1rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Normal</p>
+        <p class="text-xs text-gray-500 mb-1">Normal</p>
         <ngx-ds-search-input placeholder="Buscar..." />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Con texto</p>
+        <p class="text-xs text-gray-500 mb-1">Con texto</p>
         <ngx-ds-search-input [value]="'design system'" placeholder="Buscar..." />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Deshabilitado</p>
+        <p class="text-xs text-gray-500 mb-1">Deshabilitado</p>
         <ngx-ds-search-input [disabled]="true" placeholder="No disponible" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Sin botón de limpiar</p>
+        <p class="text-xs text-gray-500 mb-1">Sin botón de limpiar</p>
         <ngx-ds-search-input [clearable]="false" [value]="'texto fijo'" placeholder="Buscar..." />
       </div>
     </div>

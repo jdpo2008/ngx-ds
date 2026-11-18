@@ -149,7 +149,11 @@ class StateLabelsWrapper {
               <p class="text-sm font-medium text-gray-800">{{ pref.label }}</p>
               <p class="text-xs text-gray-500">{{ pref.description }}</p>
             </div>
-            <ngx-ds-switch [(checked)]="pref.enabled" [color]="pref.color" />
+            <ngx-ds-switch
+              [(checked)]="pref.enabled"
+              [color]="pref.color"
+              [ariaLabel]="pref.label"
+            />
           </div>
         }
       </div>

@@ -58,6 +58,7 @@
   [class.ngx-table__wrapper--sticky-head]="stickyHeader()"
   [class.ngx-table__wrapper--attached]="globalFilter() || columnToggle() || showAddButton()"
   [style.maxHeight]="stickyHeader() && maxHeight() ? maxHeight() : null"
+  [attr.tabindex]="stickyHeader() && maxHeight() ? 0 : null"
 >
   <table
     class="ngx-table"
@@ -78,6 +79,7 @@
               <ngx-ds-checkbox
                 [checked]="allSelected()"
                 [indeterminate]="someSelected()"
+                [ariaLabel]="i18n.selectAll"
                 (checkedChange)="toggleAll($event)"
               />
             }
@@ -197,7 +199,11 @@
             @if (selectable()) {
               <td class="ngx-table__td ngx-table__td--checkbox" (click)="$event.stopPropagation()">
                 @if (selectMode() === 'multi') {
-                  <ngx-ds-checkbox [checked]="isSelected(row)" (checkedChange)="toggleRow(row)" />
+                  <ngx-ds-checkbox
+                    [checked]="isSelected(row)"
+                    [ariaLabel]="i18n.selectRow"
+                    (checkedChange)="toggleRow(row)"
+                  />
                 } @else {
                   <button
                     type="button"
@@ -314,6 +320,7 @@
       <span class="ngx-table__label">{{ i18n.rowsPerPage }}</span>
       <select
         class="ngx-table__page-size-select"
+        [attr.aria-label]="i18n.rowsPerPage"
         [value]="effectivePageSize()"
         (change)="onPageSizeChange($event)"
       >

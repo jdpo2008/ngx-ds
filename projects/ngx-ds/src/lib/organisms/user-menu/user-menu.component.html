@@ -1,12 +1,15 @@
 <ngx-ds-popover [placement]="placement()">
   <!-- ── Trigger ─────────────────────────────────────────────────────────── -->
-  <button popover-trigger type="button" class="um__trigger" [attr.aria-label]="user().name">
+  <!-- Name as hidden text, not aria-label: the visible initials must not mismatch it. -->
+  <button popover-trigger type="button" class="um__trigger">
+    <span class="um__sr-only">{{ user().name }}</span>
     <ngx-ds-avatar
       [src]="user().avatarSrc"
       [alt]="user().name"
       [initials]="user().initials ?? ''"
       [color]="user().avatarColor ?? 'primary'"
       [size]="size()"
+      aria-hidden="true"
     />
   </button>
 

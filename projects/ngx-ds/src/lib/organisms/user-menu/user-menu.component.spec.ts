@@ -32,7 +32,7 @@ describe('UserMenuComponent', () => {
 
   it('labels the trigger with the user name', () => {
     const { el } = setup();
-    expect(el.querySelector('.um__trigger')?.getAttribute('aria-label')).toBe('Ana Ruiz');
+    expect(el.querySelector('.um__trigger .um__sr-only')?.textContent?.trim()).toBe('Ana Ruiz');
     expect(el.querySelector('.um__panel')).toBeNull();
   });
 

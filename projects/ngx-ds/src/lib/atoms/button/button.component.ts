@@ -29,6 +29,8 @@ export class ButtonComponent {
   readonly loading = input<boolean>(false);
   readonly rounded = input<boolean>(false);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
+  /** Accessible name for icon-only buttons; set on the native `<button>`. */
+  readonly ariaLabel = input<string | undefined>(undefined);
 
   readonly hostClasses = computed(() => {
     const classes = [

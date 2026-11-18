@@ -18,6 +18,7 @@
         [value]="value()"
         [disabled]="isDisabled() || null"
         [attr.aria-labelledby]="label() ? id + '-label' : null"
+        [attr.aria-label]="label() ? null : ariaLabel() || null"
         (input)="onInput($event)"
         (blur)="onBlur()"
       />
@@ -46,7 +47,7 @@
         [step]="step()"
         [value]="values()[0]"
         [disabled]="isDisabled() || null"
-        [attr.aria-label]="ariaLabelStart() || null"
+        [attr.aria-label]="ariaLabelStart() || i18n.rangeStart"
         (input)="onStartInput($event)"
         (blur)="onBlur()"
       />
@@ -58,7 +59,7 @@
         [step]="step()"
         [value]="values()[1]"
         [disabled]="isDisabled() || null"
-        [attr.aria-label]="ariaLabelEnd() || null"
+        [attr.aria-label]="ariaLabelEnd() || i18n.rangeEnd"
         (input)="onEndInput($event)"
         (blur)="onBlur()"
       />

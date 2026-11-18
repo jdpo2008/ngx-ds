@@ -35,6 +35,10 @@
     transform 0.1s ease;
   line-height: 0;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
 
   &:hover:not(:disabled) {
     transform: scale(1.15);
