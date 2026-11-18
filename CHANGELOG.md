@@ -2,17 +2,17 @@
 
 All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follows [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes.
 
-## [Unreleased]
+## [0.2.0] - 2026-11-17
 
 ### Added
 
-- `ng add @jdpo2008/ngx-ds` schematic. It installs `lucide-angular` and adds the design tokens stylesheet to the application's `styles` in `angular.json`. Use `--project` in a workspace with several applications.
-- Signal Forms support: every form control can be bound with `[formField]`. A spec covers all 18 controls.
-- `provideNgxDs({ locale, labels, theme })` configures the library in one call. An `en-*` locale also selects the English labels, and `theme: 'system'` follows `prefers-color-scheme`.
+- `ng add @jdpo2008/ngx-ds` schematic. It installs `lucide-angular` and adds the design tokens stylesheet to the application's `styles` in `angular.json`. Use `--project` in a workspace with several applications (#32).
+- Signal Forms support: every form control can be bound with `[formField]`. A spec covers all 18 controls (#33).
+- `provideNgxDs({ locale, labels, theme })` configures the library in one call. An `en-*` locale also selects the English labels, and `theme: 'system'` follows `prefers-color-scheme` (#34).
 
 ### Fixed
 
-- NumberInput (`min`, `max`), RangeSlider (`min`, `max`) and Rating (`max`) now accept `undefined`. Before, binding them with `[formField]` failed to compile under strict templates, because Signal Forms binds the field's `min`/`max` (`number | undefined`) to inputs with those names.
+- NumberInput (`min`, `max`), RangeSlider (`min`, `max`) and Rating (`max`) now accept `undefined`. Before, binding them with `[formField]` failed to compile under strict templates, because Signal Forms binds the field's `min`/`max` (`number | undefined`) to inputs with those names (#33).
 
 ## [0.1.0] - 2026-11-17
 
@@ -52,4 +52,5 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.2.0
 [0.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.1.0
