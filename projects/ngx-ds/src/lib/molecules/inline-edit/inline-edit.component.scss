@@ -1,0 +1,171 @@
+@use 'sass:map';
+
+:host {
+  display: block;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+$sizes: (
+  sm: (
+    font: 0.8125rem,
+    pad-y: 0.25rem,
+    pad-x: 0.375rem,
+  ),
+  md: (
+    font: 0.875rem,
+    pad-y: 0.375rem,
+    pad-x: 0.5rem,
+  ),
+  lg: (
+    font: 1rem,
+    pad-y: 0.5rem,
+    pad-x: 0.625rem,
+  ),
+);
+
+.ie {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--text-base, #111827);
+
+  @each $name, $s in $sizes {
+    &--#{$name} {
+      --ie-font: #{map.get($s, font)};
+      --ie-pad: #{map.get($s, pad-y)} #{map.get($s, pad-x)};
+    }
+  }
+
+  &--multiline {
+    align-items: flex-start;
+  }
+}
+
+// Text and field share padding, border width and line height, so switching
+// between them does not move the layout.
+.ie__trigger,
+.ie__field {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: var(--ie-pad);
+  font: inherit;
+  font-size: var(--ie-font);
+  line-height: 1.5;
+  color: inherit;
+  border: 1.5px solid transparent;
+  border-radius: 0.375rem;
+}
+
+.ie__trigger {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  text-align: left;
+  background: transparent;
+  cursor: text;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--surface-hover, #f3f4f6);
+
+    .ie__pencil {
+      opacity: 1;
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--primary-600, #4f46e5);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-600, #4f46e5) 20%, transparent);
+
+    .ie__pencil {
+      opacity: 1;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--text-muted, #6b7280);
+  }
+}
+
+.ie__text {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  &--placeholder {
+    color: var(--text-placeholder, #6b7280);
+  }
+}
+
+.ie__pencil {
+  display: inline-flex;
+  align-self: center;
+  color: var(--text-muted, #6b7280);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  .ie--multiline & {
+    align-self: flex-start;
+    margin-top: 0.2em;
+  }
+}
+
+.ie__field {
+  background: var(--surface-base, #fff);
+  border-color: var(--primary-600, #4f46e5);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-600, #4f46e5) 20%, transparent);
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-placeholder, #6b7280);
+  }
+
+  &--textarea {
+    resize: vertical;
+  }
+}
+
+.ie__actions {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.ie__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: var(--text-secondary, #4b5563);
+  background: var(--surface-base, #fff);
+  border: 1px solid var(--border-base, #e5e7eb);
+  border-radius: 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-hover, #f3f4f6);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-600, #4f46e5);
+    outline-offset: 2px;
+  }
+
+  &--save {
+    color: var(--text-on-color, #fff);
+    background: var(--fill-primary, #4f46e5);
+    border-color: var(--fill-primary, #4f46e5);
+
+    &:hover {
+      background: var(--primary-700, #4338ca);
+    }
+  }
+}
