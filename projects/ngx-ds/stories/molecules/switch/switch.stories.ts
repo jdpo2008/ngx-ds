@@ -34,6 +34,7 @@ class DefaultWrapper {
       <ngx-ds-switch label="Danger" color="danger" [checked]="true" />
       <ngx-ds-switch label="Success" color="success" [checked]="true" />
       <ngx-ds-switch label="Warning" color="warning" [checked]="true" />
+      <ngx-ds-switch label="Info" color="info" [checked]="true" />
     </div>
   `,
 })

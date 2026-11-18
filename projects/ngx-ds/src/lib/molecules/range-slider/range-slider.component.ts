@@ -12,7 +12,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
-export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
 
 // Theme tokens (with fallbacks) so consumers can restyle the slider via CSS.
 const TRACK_COLORS: Record<SliderColor, string> = {
@@ -21,6 +21,7 @@ const TRACK_COLORS: Record<SliderColor, string> = {
   success: 'var(--success-500, #10b981)',
   warning: 'var(--warning-500, #f59e0b)',
   danger: 'var(--danger-500, #ef4444)',
+  info: 'var(--info-500, #3b82f6)',
 };
 
 let nextId = 0;

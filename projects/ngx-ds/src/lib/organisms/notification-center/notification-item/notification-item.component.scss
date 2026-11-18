@@ -63,7 +63,7 @@
 .notif-item--warning .notif-item__icon-wrap {
   background: var(--warning-100, #fef3c7);
 }
-.notif-item--error .notif-item__icon-wrap {
+.notif-item--danger .notif-item__icon-wrap {
   background: var(--danger-100, #fee2e2);
 }
 
@@ -79,7 +79,7 @@
 .notif-item--warning .notif-item__icon {
   color: var(--warning-600, #d97706);
 }
-.notif-item--error .notif-item__icon {
+.notif-item--danger .notif-item__icon {
   color: var(--danger-600, #dc2626);
 }
 

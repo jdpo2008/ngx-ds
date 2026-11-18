@@ -26,6 +26,11 @@ $badge-colors: (
     var(--warning-50, #fffbeb),
     var(--warning-700, #b45309),
   ),
+  'info': (
+    var(--fill-info, #2563eb),
+    var(--info-50, #eff6ff),
+    var(--info-700, #1d4ed8),
+  ),
 );
 
 $badge-sizes: (

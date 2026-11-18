@@ -7,11 +7,11 @@ import { NGX_DS_LOCALE } from '../../../shared/locale';
 import type { NgxNotification, NotificationType } from '../notification.types';
 import { NGX_DS_LABELS, NgxDsLabels } from '../../../shared/labels';
 
-const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
+const TYPE_ICONS: Record<Exclude<NotificationType, 'error'>, LucideIconData> = {
   info: Info,
   success: CheckCircle,
   warning: AlertTriangle,
-  error: AlertCircle,
+  danger: AlertCircle,
 };
 
 function relativeTime(
@@ -54,7 +54,13 @@ export class NotificationItemComponent {
 
   readonly XIcon = X;
 
-  readonly typeIcon = computed(() => TYPE_ICONS[this.notification().type]);
+  /** The notification type, with the deprecated `'error'` mapped to `'danger'`. */
+  readonly type = computed(() => {
+    const type = this.notification().type;
+    return type === 'error' ? 'danger' : type;
+  });
+
+  readonly typeIcon = computed(() => TYPE_ICONS[this.type()]);
   readonly #locale = inject(NGX_DS_LOCALE);
   readonly timeLabel = computed(() =>
     relativeTime(this.notification().time, this.#locale, this.i18n),
@@ -62,7 +68,7 @@ export class NotificationItemComponent {
 
   readonly hostClasses = computed(() => {
     const n = this.notification();
-    const cls = [`notif-item notif-item--${n.type}`];
+    const cls = [`notif-item notif-item--${this.type()}`];
     if (!n.read) cls.push('notif-item--unread');
     return cls.join(' ');
   });
