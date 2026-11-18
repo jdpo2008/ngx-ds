@@ -34,7 +34,7 @@ class DefaultWrapper {
   }
 
   showError(): void {
-    this.toastrService.error('Ha ocurrido un error inesperado', 'Error');
+    this.toastrService.danger('Ha ocurrido un error inesperado', 'Error');
   }
 
   showWarning(): void {
@@ -67,7 +67,7 @@ class AllTypesWrapper {
 
   showAll(): void {
     this.toastrService.success('Archivo guardado correctamente', 'Éxito', 8000);
-    this.toastrService.error('No se pudo conectar al servidor', 'Error', 8000);
+    this.toastrService.danger('No se pudo conectar al servidor', 'Error', 8000);
     this.toastrService.warning('El formulario tiene campos vacíos', 'Advertencia', 8000);
     this.toastrService.info('Hay una nueva versión disponible', 'Información', 8000);
   }

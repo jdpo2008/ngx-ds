@@ -35,6 +35,7 @@ class DefaultWrapper {
       <ngx-ds-checkbox label="Danger" color="danger" [checked]="true" />
       <ngx-ds-checkbox label="Success" color="success" [checked]="true" />
       <ngx-ds-checkbox label="Warning" color="warning" [checked]="true" />
+      <ngx-ds-checkbox label="Info" color="info" [checked]="true" />
     </div>
   `,
 })

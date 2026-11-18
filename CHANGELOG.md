@@ -4,6 +4,15 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+### Added
+
+- `info` colour on Button, IconButton, MenuButton, Badge, Tag, Avatar, Spinner, ProgressBar, Checkbox, Radio, Switch, RangeSlider and the Table row actions. It uses the `--info-*` and `--fill-info` tokens.
+- `ToastrService.danger()`.
+
+### Deprecated
+
+- The `'error'` type of Toast and Notification. Use `'danger'`, the name every other component uses. `'error'` still works and shows the danger style; it will be removed in 1.0. `ToastrService.error()` is deprecated in favour of `danger()`.
+
 ## [0.6.0] - 2026-11-18
 
 ### Added

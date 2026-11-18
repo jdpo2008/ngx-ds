@@ -26,6 +26,10 @@ $avatar-colors: (
     var(--warning-100, #fef3c7),
     var(--warning-800, #92400e),
   ),
+  'info': (
+    var(--info-100, #dbeafe),
+    var(--info-800, #1e40af),
+  ),
 );
 
 $avatar-sizes: (

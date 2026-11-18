@@ -201,7 +201,7 @@
   --toast-accent: var(--success-500, #10b981);
 }
 
-.toast--error {
+.toast--danger {
   --toast-accent: var(--danger-500, #ef4444);
 }
 
@@ -214,7 +214,7 @@
 }
 
 .toast--success,
-.toast--error,
+.toast--danger,
 .toast--warning,
 .toast--info {
   border-left: 4px solid var(--toast-accent);

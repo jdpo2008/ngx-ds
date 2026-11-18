@@ -6,7 +6,7 @@ import { Size } from '../../shared/size';
 
 export type ButtonVariant = 'solid' | 'outline';
 export type ButtonSize = Size;
-export type ButtonColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type ButtonColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 
 const ICON_SIZE: Record<ButtonSize, number> = { sm: 14, md: 16, lg: 20 };
 const SPINNER_SIZE: Record<ButtonSize, SpinnerSize> = { sm: 'xs', md: 'sm', lg: 'md' };

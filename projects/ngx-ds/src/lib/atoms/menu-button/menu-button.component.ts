@@ -3,7 +3,7 @@ import { LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../icon/icon.component';
 import { Size } from '../../shared/size';
 
-export type MenuButtonColor = 'default' | 'primary' | 'danger' | 'success' | 'warning';
+export type MenuButtonColor = 'default' | 'primary' | 'danger' | 'success' | 'warning' | 'info';
 export type MenuButtonSize = Size;
 
 const ICON_SIZE: Record<MenuButtonSize, number> = { sm: 14, md: 16, lg: 18 };

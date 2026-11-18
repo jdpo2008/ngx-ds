@@ -42,6 +42,7 @@ class BasicWrapper {
       <ngx-ds-range-slider label="Secondary" color="secondary" [value]="50" />
       <ngx-ds-range-slider label="Success" color="success" [value]="85" />
       <ngx-ds-range-slider label="Warning" color="warning" [value]="40" />
+      <ngx-ds-range-slider label="Info" color="info" [value]="40" />
       <ngx-ds-range-slider label="Danger" color="danger" [value]="25" />
     </div>
   `,
@@ -167,7 +168,7 @@ export const Default: Story = {
     showMinMax: { control: 'boolean' },
     color: {
       control: 'radio',
-      options: ['primary', 'secondary', 'success', 'warning', 'danger'],
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'info'],
     },
   },
   render: (args) => ({
