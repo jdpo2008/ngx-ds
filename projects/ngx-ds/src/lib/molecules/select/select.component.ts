@@ -83,11 +83,12 @@ export class SelectComponent implements ControlValueAccessor {
   // ── Internal state ─────────────────────────────────────────
   readonly #open = signal(false);
   readonly #search = signal('');
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
 
   readonly isOpen = this.#open.asReadonly();
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly searchText = this.#search.asReadonly();
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
@@ -286,6 +287,6 @@ export class SelectComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }

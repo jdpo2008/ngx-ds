@@ -62,11 +62,12 @@ export class InputComponent implements ControlValueAccessor {
   readonly messageId = `${this.id}-message`;
 
   // ── Internal state ───────────────────────────────────────────
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
   readonly #showPassword = signal(false);
 
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly isFocused = this.#focused.asReadonly();
 
   readonly eyeIcon = computed(() => (this.#showPassword() ? EyeOff : Eye));
@@ -152,6 +153,6 @@ export class InputComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }

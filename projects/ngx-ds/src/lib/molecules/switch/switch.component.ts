@@ -43,8 +43,9 @@ export class SwitchComponent implements ControlValueAccessor {
 
   readonly id = `ngx-switch-${nextId++}`;
 
-  readonly #disabled = signal(false);
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
 
   private onChange: (v: boolean) => void = () => {};
   private onTouched: () => void = () => {};
@@ -52,7 +53,7 @@ export class SwitchComponent implements ControlValueAccessor {
   readonly hostClasses = computed(() => {
     const classes = ['switch', `switch--${this.size()}`, `switch--${this.color()}`];
     if (this.checked()) classes.push('switch--checked');
-    if (this.#disabled()) classes.push('switch--disabled');
+    if (this.isDisabled()) classes.push('switch--disabled');
     return classes.join(' ');
   });
 
@@ -75,6 +76,6 @@ export class SwitchComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }

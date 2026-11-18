@@ -8,6 +8,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 - `info` colour on Button, IconButton, MenuButton, Badge, Tag, Avatar, Spinner, ProgressBar, Checkbox, Radio, Switch, RangeSlider and the Table row actions. It uses the `--info-*` and `--fill-info` tokens.
 - `ToastrService.danger()`.
+- `disabled` input on Input, Textarea, Select, Dropdown, Autocomplete, Checkbox, Switch, Datepicker, TimePicker and TagInput, as the other form controls already had. The control is disabled when the input or the form disables it.
 
 ### Deprecated
 
