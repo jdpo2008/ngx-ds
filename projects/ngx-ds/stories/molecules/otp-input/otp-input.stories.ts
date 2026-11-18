@@ -94,7 +94,7 @@ class AlphanumericWrapper {
       </div>
       <div>
         <p class="text-xs text-gray-500 mb-2">Error</p>
-        <ngx-ds-otp-input [error]="true" />
+        <ngx-ds-otp-input errorMessage="El código no es válido" />
       </div>
       <div>
         <p class="text-xs text-gray-500 mb-2">Enmascarado (PIN)</p>
@@ -127,7 +127,7 @@ export const Default: Story = {
     size: 'md' as OtpSize,
     disabled: false,
     masked: false,
-    error: false,
+    errorMessage: '',
   },
   argTypes: {
     length: { control: 'number' },
@@ -135,7 +135,7 @@ export const Default: Story = {
     size: { control: 'radio', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     masked: { control: 'boolean' },
-    error: { control: 'boolean' },
+    errorMessage: { control: 'text' },
   },
   render: (args) => ({
     props: args,
@@ -147,7 +147,7 @@ export const Default: Story = {
           [size]="size"
           [disabled]="disabled"
           [masked]="masked"
-          [error]="error"
+          [errorMessage]="errorMessage"
         />
       </div>
     `,
@@ -191,7 +191,10 @@ export const States: Story = {
   imports: [OtpInputComponent, ReactiveFormsModule],
   template: `
     <div class="p-6 space-y-4">
-      <ngx-ds-otp-input [formControl]="code" [error]="code.invalid && code.touched" />
+      <ngx-ds-otp-input
+        [formControl]="code"
+        [errorMessage]="code.invalid && code.touched ? 'Introduce los 6 dígitos' : ''"
+      />
       <p class="text-sm text-gray-500">
         value: <code>{{ code.value || '—' }}</code> · valid: {{ code.valid }} · touched:
         {{ code.touched }}

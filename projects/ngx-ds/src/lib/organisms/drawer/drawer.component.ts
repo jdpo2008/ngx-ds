@@ -39,7 +39,11 @@ export class DrawerComponent implements OnDestroy {
   readonly side = input<DrawerSide>('right');
   readonly size = input<DrawerSize>('md');
   readonly title = input<string>('');
-  readonly showClose = input<boolean>(true);
+  /** Shows the close button in the header. */
+  readonly dismissible = input<boolean>(true);
+  /** @deprecated Use `dismissible`. Removed in 1.0. */
+  readonly showClose = input<boolean | undefined>(undefined);
+  readonly showCloseButton = computed(() => this.showClose() ?? this.dismissible());
   readonly closeOnBackdrop = input<boolean>(true);
   readonly closeOnEscape = input<boolean>(true);
 

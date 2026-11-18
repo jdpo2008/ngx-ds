@@ -63,3 +63,12 @@
 
   -moz-appearance: textfield;
 }
+
+// ── Error message ─────────────────────────────────────────────────────────────
+
+.otp__message {
+  margin: 0.375rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--fill-danger, #dc2626);
+}

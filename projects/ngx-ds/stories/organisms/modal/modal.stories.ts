@@ -122,7 +122,7 @@ class SizesWrapper {
       <ngx-ds-modal
         [(open)]="open"
         title="Acción requerida"
-        [showClose]="false"
+        [dismissible]="false"
         [closeOnBackdrop]="false"
         [closeOnEscape]="false"
       >

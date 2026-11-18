@@ -36,7 +36,9 @@ export class PopoverComponent {
 
   readonly open = model<boolean>(false);
   readonly placement = input<PopoverPlacement>('bottom');
-  readonly closeOnClickOutside = input<boolean>(true);
+  readonly closeOnBackdrop = input<boolean>(true);
+  /** @deprecated Use `closeOnBackdrop`. Removed in 1.0. */
+  readonly closeOnClickOutside = input<boolean | undefined>(undefined);
   readonly closeOnEscape = input<boolean>(true);
   readonly disabled = input<boolean>(false);
   readonly ariaLabel = input<string | undefined>(undefined);
@@ -82,7 +84,7 @@ export class PopoverComponent {
     });
 
     setupClickOutside(() => {
-      if (!this.open() || !this.closeOnClickOutside()) return;
+      if (!this.open() || !(this.closeOnClickOutside() ?? this.closeOnBackdrop())) return;
       this.close();
     });
   }

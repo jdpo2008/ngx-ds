@@ -11,8 +11,10 @@
   <ng-content />
 </div>
 
-@if (error()) {
-  <p [id]="errorId()" class="ngx-ff__message ngx-ff__message--error" role="alert">{{ error() }}</p>
+@if (errorText()) {
+  <p [id]="errorId()" class="ngx-ff__message ngx-ff__message--error" role="alert">
+    {{ errorText() }}
+  </p>
 } @else if (hint()) {
   <p [id]="hintId()" class="ngx-ff__message ngx-ff__message--hint">{{ hint() }}</p>
 }

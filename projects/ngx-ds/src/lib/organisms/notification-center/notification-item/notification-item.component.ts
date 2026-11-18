@@ -47,6 +47,8 @@ export class NotificationItemComponent {
   readonly notification = input.required<NgxNotification>();
 
   readonly markRead = output<NgxNotification>();
+  readonly dismissed = output<NgxNotification>();
+  /** @deprecated Use `dismissed`. Removed in 1.0. */
   readonly dismiss = output<NgxNotification>();
   readonly action = output<NgxNotification>();
 
@@ -77,6 +79,7 @@ export class NotificationItemComponent {
 
   onDismiss(event: MouseEvent): void {
     event.stopPropagation();
+    this.dismissed.emit(this.notification());
     this.dismiss.emit(this.notification());
   }
 
