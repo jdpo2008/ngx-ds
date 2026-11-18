@@ -1,0 +1,51 @@
+@if (label()) {
+  <label class="ngx-tag-input__label" [for]="id">{{ label() }}</label>
+}
+
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+<div [class]="fieldClasses()" (click)="focusInput()">
+  @if (value().length) {
+    <ul class="ngx-tag-input__tags" [attr.aria-label]="label() || null">
+      @for (tag of value(); track $index; let i = $index) {
+        <li class="ngx-tag-input__tag">
+          <ngx-ds-tag
+            [label]="tag"
+            size="sm"
+            color="primary"
+            [dismissible]="!isDisabled()"
+            (dismissed)="remove(i)"
+          />
+        </li>
+      }
+    </ul>
+  }
+
+  <input
+    #native
+    class="ngx-tag-input__native"
+    type="text"
+    autocomplete="off"
+    [id]="id"
+    [value]="text()"
+    [placeholder]="effectivePlaceholder()"
+    [disabled]="isDisabled()"
+    [readOnly]="isFull()"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+    (paste)="onPaste($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+</div>
+
+@if (errorText()) {
+  <p [id]="messageId" class="ngx-tag-input__message ngx-tag-input__message--error" role="alert">
+    {{ errorText() }}
+  </p>
+} @else if (hint()) {
+  <p [id]="messageId" class="ngx-tag-input__message ngx-tag-input__message--hint">
+    {{ hint() }}
+  </p>
+}

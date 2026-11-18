@@ -6,6 +6,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ### Added
 
+- TagInput (`ngx-ds-tag-input`): text field that turns what you type into tags. The value is a `string[]`. Enter or a comma adds a tag, Backspace on an empty field removes the last one, and pasted text is split by the separators. It has `separators`, `maxTags`, `allowDuplicates`, `addOnBlur`, the `added` / `removed` outputs, `ControlValueAccessor` and Signal Forms `errors` / `touched`.
 - TimePicker (`ngx-ds-time-picker`): time field with hour and minute columns. The value is a 24-hour `HH:mm` string. It has 12-hour display with AM/PM, `minuteStep`, `minTime` / `maxTime`, keyboard navigation, `ControlValueAccessor` and Signal Forms `errors` / `touched`.
 - Form controls link their error or hint message to the focusable element with `aria-describedby` and set `aria-invalid` while they show an error. The error message of MultiSelect, NumberInput and DateRangePicker now has `role="alert"`, like the other controls.
 - OtpInput accepts Signal Forms errors: it gets the `errors` and `touched` inputs and shows the error style once the field is touched.
