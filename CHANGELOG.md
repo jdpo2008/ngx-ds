@@ -8,6 +8,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 - OtpInput `errorMessage`: shows the message under the boxes (`role="alert"`, linked with `aria-describedby`) and switches them to the error style.
 - New names for inputs and outputs, in line with the rest of the library: FormField `errorMessage`, ChipGroup `variant="solid"` and `multiple`, NotificationCenter and NotificationItem `dismissed`, Drawer and Modal `dismissible`, Popover `closeOnBackdrop`, Alert `color` (type `AlertColor`).
+- `disabled` input on Input, Textarea, Select, Dropdown, Autocomplete, Checkbox, Switch, Datepicker, TimePicker and TagInput, as the other form controls already had. The control is disabled when the input or the form disables it.
 
 ### Changed
 

@@ -109,11 +109,12 @@ export class TimePickerComponent implements ControlValueAccessor {
   // ── Internal state ────────────────────────────────────────
   readonly #open = signal(false);
   readonly #focused = signal(false);
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #injector = inject(Injector);
 
   readonly isOpen = this.#open.asReadonly();
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly isFocused = this.#focused.asReadonly();
 
   readonly #total = computed(() => parseTime(this.value()));
@@ -382,6 +383,6 @@ export class TimePickerComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }
