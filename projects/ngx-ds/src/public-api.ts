@@ -58,6 +58,7 @@ export * from './lib/molecules/avatar-group';
 export * from './lib/molecules/menu';
 export * from './lib/molecules/form-field';
 export * from './lib/molecules/time-picker';
+export * from './lib/molecules/tag-input';
 
 // ── Organisms ─────────────────────────────────────────────────
 export * from './lib/organisms/pagination';
