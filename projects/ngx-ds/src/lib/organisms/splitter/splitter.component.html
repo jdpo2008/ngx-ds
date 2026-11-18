@@ -1,0 +1,35 @@
+<div
+  class="splitter"
+  [class.splitter--vertical]="!isHorizontal()"
+  [class.splitter--dragging]="isDragging()"
+  [style.grid-template-columns]="isHorizontal() ? template() : null"
+  [style.grid-template-rows]="isHorizontal() ? null : template()"
+>
+  <div class="splitter__pane" [id]="paneId">
+    <ng-content select="[splitter-start]" />
+  </div>
+
+  <div
+    class="splitter__handle"
+    role="separator"
+    [attr.tabindex]="disabled() ? null : 0"
+    [attr.aria-label]="ariaLabel() || i18n.resizePanels"
+    [attr.aria-orientation]="separatorOrientation()"
+    [attr.aria-controls]="paneId"
+    [attr.aria-valuenow]="current()"
+    [attr.aria-valuemin]="min()"
+    [attr.aria-valuemax]="max()"
+    [attr.aria-disabled]="disabled() || null"
+    (keydown)="onKeydown($event)"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerUp($event)"
+  >
+    <span class="splitter__grip" aria-hidden="true"></span>
+  </div>
+
+  <div class="splitter__pane">
+    <ng-content select="[splitter-end]" />
+  </div>
+</div>

@@ -138,6 +138,9 @@ export interface NgxDsLabels {
   pauseAutoplay: string;
   playAutoplay: string;
   lightbox: string;
+
+  // ── Splitter ──────────────────────────────────────────────
+  resizePanels: string;
 }
 
 export const NGX_DS_LABELS_ES: NgxDsLabels = {
@@ -261,6 +264,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   pauseAutoplay: 'Pausar la reproducción automática',
   playAutoplay: 'Reanudar la reproducción automática',
   lightbox: 'Visor de imágenes',
+  resizePanels: 'Redimensionar paneles',
 };
 
 export const NGX_DS_LABELS_EN: NgxDsLabels = {
@@ -384,6 +388,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   pauseAutoplay: 'Pause autoplay',
   playAutoplay: 'Resume autoplay',
   lightbox: 'Image viewer',
+  resizePanels: 'Resize panels',
 };
 
 export const NGX_DS_LABELS = new InjectionToken<NgxDsLabels>('NGX_DS_LABELS', {
