@@ -2,6 +2,12 @@
 
 All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follows [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes.
 
+## [Unreleased]
+
+### Added
+
+- `ng add @jdpo2008/ngx-ds` schematic. It installs `lucide-angular` and adds the design tokens stylesheet to the application's `styles` in `angular.json`. Use `--project` in a workspace with several applications.
+
 ## [0.1.0] - 2026-11-17
 
 First public release.

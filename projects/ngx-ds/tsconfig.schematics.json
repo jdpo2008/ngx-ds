@@ -1,0 +1,20 @@
+/* Compiles the ng-add schematic to CommonJS next to the built library (run after ng-packagr). */
+{
+  "compilerOptions": {
+    "rootDir": "schematics",
+    "outDir": "../../dist/ngx-ds/schematics",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "types": ["node"],
+    "strict": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": ["schematics/**/*.cts"],
+  "exclude": ["schematics/**/*.spec.ts"]
+}
