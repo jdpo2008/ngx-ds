@@ -26,17 +26,11 @@ describe('OtpInput errorMessage', () => {
     expect(box.getAttribute('aria-describedby')).toBe(message.id);
     expect(box.getAttribute('aria-invalid')).toBe('true');
   });
-
-  it('keeps the deprecated error boolean: error style without a message', () => {
-    const { el } = create(OtpInputComponent, { length: 4, error: true });
-    expect(el.querySelector('input')!.getAttribute('aria-invalid')).toBe('true');
-    expect(el.querySelector('.otp__message')).toBeNull();
-  });
 });
 
 describe('FormField errorMessage', () => {
-  it.each(['errorMessage', 'error'])('shows the message set with %s', (name) => {
-    const { el } = create(FormFieldComponent, { [name]: 'Obligatorio' });
+  it('shows the message', () => {
+    const { el } = create(FormFieldComponent, { errorMessage: 'Obligatorio' });
     expect(el.querySelector('[role="alert"]')?.textContent).toContain('Obligatorio');
   });
 });
@@ -47,20 +41,16 @@ describe('ChipGroup renames', () => {
     { value: 'b', label: 'B' },
   ];
 
-  it.each(['solid', 'filled'])('variant %s uses the solid style', (variant) => {
-    const { el } = create(ChipGroupComponent, { chips, variant });
+  it('variant solid uses the solid style', () => {
+    const { el } = create(ChipGroupComponent, { chips, variant: 'solid' });
     expect(el.querySelector('.chip-group--solid')).not.toBeNull();
-    expect(el.querySelector('.chip-group--filled')).toBeNull();
   });
 
-  it.each([{ multiple: false }, { multiSelect: false }, { multiple: true, multiSelect: false }])(
-    'selects a single chip with %o',
-    (inputs) => {
-      const { cmp } = create(ChipGroupComponent, { chips, selected: ['a'], ...inputs });
-      cmp.toggle(chips[1]);
-      expect(cmp.selected()).toEqual(['b']);
-    },
-  );
+  it('selects a single chip with multiple false', () => {
+    const { cmp } = create(ChipGroupComponent, { chips, selected: ['a'], multiple: false });
+    cmp.toggle(chips[1]);
+    expect(cmp.selected()).toEqual(['b']);
+  });
 
   it('selects several chips by default', () => {
     const { cmp } = create(ChipGroupComponent, { chips, selected: ['a'] });
@@ -70,16 +60,15 @@ describe('ChipGroup renames', () => {
 });
 
 describe('NotificationItem dismissed', () => {
-  it('emits dismissed and the deprecated dismiss', () => {
+  it('emits dismissed', () => {
     const notification: NgxNotification = { id: 1, type: 'info', title: 'Hola' };
     const { cmp, el } = create(NotificationItemComponent, { notification });
     const got: string[] = [];
     cmp.dismissed.subscribe(() => got.push('dismissed'));
-    cmp.dismiss.subscribe(() => got.push('dismiss'));
     el.querySelector<HTMLElement>(
       '.notif-item__dismiss button, button.notif-item__dismiss',
     )!.click();
-    expect(got).toEqual(['dismissed', 'dismiss']);
+    expect(got).toEqual(['dismissed']);
   });
 });
 
@@ -92,8 +81,8 @@ describe.each([
     expect(el.querySelector(selector)).not.toBeNull();
   });
 
-  it.each([{ dismissible: false }, { showClose: false }])('hides it with %o', (inputs) => {
-    const { el } = create(component as Type<unknown>, { open: true, ...inputs });
+  it('hides it with dismissible false', () => {
+    const { el } = create(component as Type<unknown>, { open: true, dismissible: false });
     expect(el.querySelector(selector)).toBeNull();
   });
 
@@ -114,10 +103,7 @@ describe('Popover closeOnBackdrop', () => {
     expect(clickOutside({})).toBe(false);
   });
 
-  it.each([{ closeOnBackdrop: false }, { closeOnClickOutside: false }])(
-    'stays open with %o',
-    (inputs) => {
-      expect(clickOutside(inputs)).toBe(true);
-    },
-  );
+  it('stays open with closeOnBackdrop false', () => {
+    expect(clickOutside({ closeOnBackdrop: false })).toBe(true);
+  });
 });

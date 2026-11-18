@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
-/** Toast colour. `'error'` is a deprecated alias of `'danger'` and will be removed in 1.0. */
-export type ToastType = 'success' | 'danger' | 'warning' | 'info' | 'error';
+/** Toast colour. */
+export type ToastType = 'success' | 'danger' | 'warning' | 'info';
 export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 
 export interface ToastOptions {
@@ -33,7 +33,7 @@ export class ToastrService {
     const toast: Toast = {
       ...options,
       id,
-      type: options.type === 'error' ? 'danger' : options.type || 'info',
+      type: options.type || 'info',
       duration: options.duration || 5000,
       position: options.position || 'top-right',
       timestamp: Date.now(),
@@ -57,11 +57,6 @@ export class ToastrService {
 
   danger(message: string, title?: string, duration?: number): string {
     return this.show({ message, type: 'danger', title, duration });
-  }
-
-  /** @deprecated Use `danger()`. Will be removed in 1.0. */
-  error(message: string, title?: string, duration?: number): string {
-    return this.danger(message, title, duration);
   }
 
   warning(message: string, title?: string, duration?: number): string {

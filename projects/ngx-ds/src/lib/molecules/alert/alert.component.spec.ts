@@ -77,12 +77,4 @@ describe('AlertComponent', () => {
     const { el } = setup((h) => h.dismissible.set(true));
     expect(el.querySelector('.alert__close')?.getAttribute('aria-label')).toBe('Close alert');
   });
-
-  it('still accepts the deprecated type input', () => {
-    const fixture = TestBed.createComponent(AlertComponent);
-    fixture.componentRef.setInput('type', 'warning');
-    fixture.detectChanges();
-    const alert = (fixture.nativeElement as HTMLElement).querySelector('[role="alert"]')!;
-    expect(alert.classList).toContain('alert--warning');
-  });
 });

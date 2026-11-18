@@ -22,8 +22,7 @@ export interface ChipItem {
 }
 
 export type ChipGroupSize = Size;
-/** `'filled'` is a deprecated alias of `'solid'`, removed in 1.0. */
-export type ChipGroupVariant = 'solid' | 'outline' | 'soft' | 'filled';
+export type ChipGroupVariant = 'solid' | 'outline' | 'soft';
 
 @Component({
   selector: 'ngx-ds-chip-group',
@@ -48,9 +47,6 @@ export class ChipGroupComponent implements ControlValueAccessor {
   readonly selectable = input<boolean>(true);
   readonly removable = input<boolean>(false);
   readonly multiple = input<boolean>(true);
-  /** @deprecated Use `multiple`. Removed in 1.0. */
-  readonly multiSelect = input<boolean | undefined>(undefined);
-  readonly isMultiple = computed(() => this.multiSelect() ?? this.multiple());
   readonly size = input<ChipGroupSize>('md');
   readonly variant = input<ChipGroupVariant>('soft');
   readonly disabled = input<boolean>(false);
@@ -62,8 +58,7 @@ export class ChipGroupComponent implements ControlValueAccessor {
   readonly XIcon = X;
 
   readonly hostClasses = computed(
-    () =>
-      `chip-group chip-group--${this.size()} chip-group--${this.variant() === 'filled' ? 'solid' : this.variant()}`,
+    () => `chip-group chip-group--${this.size()} chip-group--${this.variant()}`,
   );
 
   isSelected(chip: ChipItem): boolean {
@@ -78,9 +73,9 @@ export class ChipGroupComponent implements ControlValueAccessor {
 
     let next: (string | number)[];
     if (idx >= 0) {
-      next = this.isMultiple() ? current.filter((v) => v !== chip.value) : [];
+      next = this.multiple() ? current.filter((v) => v !== chip.value) : [];
     } else {
-      next = this.isMultiple() ? [...current, chip.value] : [chip.value];
+      next = this.multiple() ? [...current, chip.value] : [chip.value];
     }
 
     this.selected.set(next);

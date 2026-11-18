@@ -12,8 +12,6 @@ import { IconComponent } from '../../atoms/icon/icon.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type AlertColor = 'info' | 'success' | 'warning' | 'danger';
-/** @deprecated Use `AlertColor`. Removed in 1.0. */
-export type AlertType = AlertColor;
 export type AlertVariant = 'solid' | 'soft' | 'outline';
 
 const TYPE_ICONS: Record<AlertColor, LucideIconData> = {
@@ -36,9 +34,6 @@ export class AlertComponent {
 
   readonly title = input<string>('');
   readonly color = input<AlertColor>('info');
-  /** @deprecated Use `color`. Removed in 1.0. */
-  readonly type = input<AlertColor | undefined>(undefined);
-  readonly effectiveColor = computed(() => this.type() ?? this.color());
   readonly variant = input<AlertVariant>('soft');
   readonly showIcon = input<boolean>(true);
   readonly dismissible = input<boolean>(false);
@@ -50,10 +45,10 @@ export class AlertComponent {
 
   readonly closeIcon = X;
 
-  readonly typeIcon = computed(() => TYPE_ICONS[this.effectiveColor()]);
+  readonly typeIcon = computed(() => TYPE_ICONS[this.color()]);
 
   readonly hostClasses = computed(() =>
-    ['alert', `alert--${this.effectiveColor()}`, `alert--${this.variant()}`].join(' '),
+    ['alert', `alert--${this.color()}`, `alert--${this.variant()}`].join(' '),
   );
 
   close(): void {
