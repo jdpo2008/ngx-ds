@@ -1,0 +1,137 @@
+:host {
+  display: contents;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.9);
+  touch-action: pan-y;
+  animation: lightbox-in 0.18s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.lightbox__dialog {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.lightbox__toolbar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.lightbox__counter {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.lightbox__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 4rem 4.5rem 2rem;
+  box-sizing: border-box;
+
+  @media (max-width: 640px) {
+    padding: 4rem 0.5rem 1.5rem;
+  }
+}
+
+.lightbox__image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  flex: 0 1 auto;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  user-select: none;
+}
+
+.lightbox__caption {
+  max-width: 48rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lightbox__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.24);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.lightbox__close {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  width: 3rem;
+  height: 3rem;
+  transform: translateY(-50%);
+
+  &--prev {
+    left: 1rem;
+  }
+
+  &--next {
+    right: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}

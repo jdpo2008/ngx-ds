@@ -1,0 +1,65 @@
+@if (open() && item(); as img) {
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- backdrop click is a mouse shortcut; keyboard users close with Escape -->
+  <div
+    class="lightbox"
+    (click)="$event.target === $event.currentTarget && close()"
+    (pointerdown)="onPointerDown($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerCancel()"
+  >
+    <div
+      class="lightbox__dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="i18n.lightbox"
+      ngxFocusTrap
+      tabindex="-1"
+      (keydown)="onKeydown($event)"
+    >
+      <div class="lightbox__toolbar">
+        @if (count() > 1) {
+          <span class="lightbox__counter" aria-live="polite">
+            {{ i18n.slideOf(current() + 1, count()) }}
+          </span>
+        }
+        <button
+          type="button"
+          class="lightbox__btn lightbox__close"
+          [attr.aria-label]="i18n.close"
+          (click)="close()"
+        >
+          <ngx-ds-icon [icon]="icons.X" [size]="20" />
+        </button>
+      </div>
+
+      <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- clicks around the image close it, like the backdrop -->
+      <figure class="lightbox__figure" (click)="$event.target === $event.currentTarget && close()">
+        <img class="lightbox__image" [src]="img.src" [alt]="img.alt" draggable="false" />
+        @if (img.caption) {
+          <figcaption class="lightbox__caption">{{ img.caption }}</figcaption>
+        }
+      </figure>
+
+      @if (count() > 1) {
+        <button
+          type="button"
+          class="lightbox__btn lightbox__nav lightbox__nav--prev"
+          [disabled]="!canPrev()"
+          [attr.aria-label]="i18n.prevSlide"
+          (click)="prev()"
+        >
+          <ngx-ds-icon [icon]="icons.ChevronLeft" [size]="24" />
+        </button>
+        <button
+          type="button"
+          class="lightbox__btn lightbox__nav lightbox__nav--next"
+          [disabled]="!canNext()"
+          [attr.aria-label]="i18n.nextSlide"
+          (click)="next()"
+        >
+          <ngx-ds-icon [icon]="icons.ChevronRight" [size]="24" />
+        </button>
+      }
+    </div>
+  </div>
+}

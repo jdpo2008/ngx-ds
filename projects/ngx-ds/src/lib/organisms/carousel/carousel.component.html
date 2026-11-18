@@ -1,0 +1,100 @@
+<section
+  class="carousel"
+  role="region"
+  [attr.aria-roledescription]="i18n.carousel"
+  [attr.aria-label]="ariaLabel() || i18n.carousel"
+  (keydown)="onKeydown($event)"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  (focusin)="onFocusIn()"
+  (focusout)="onFocusOut($event)"
+>
+  <div
+    class="carousel__viewport"
+    [style.aspect-ratio]="aspectRatio()"
+    (pointerdown)="onPointerDown($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerCancel()"
+  >
+    <div
+      class="carousel__track"
+      [style.transform]="trackTransform()"
+      [attr.aria-live]="isPlaying() ? 'off' : 'polite'"
+    >
+      @for (item of items(); track $index; let i = $index) {
+        <div
+          class="carousel__slide"
+          role="group"
+          [attr.aria-roledescription]="i18n.slide"
+          [attr.aria-label]="i18n.slideOf(i + 1, count())"
+          [attr.aria-hidden]="i !== current() || null"
+          [attr.inert]="i !== current() ? '' : null"
+        >
+          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- optional mouse shortcut; itemClick is a convenience output -->
+          <img
+            class="carousel__image"
+            [class.carousel__image--contain]="fit() === 'contain'"
+            [src]="item.src"
+            [alt]="item.alt"
+            [attr.loading]="i === 0 ? null : 'lazy'"
+            draggable="false"
+            (click)="onItemClick(item, i)"
+          />
+          @if (item.caption) {
+            <p class="carousel__caption">{{ item.caption }}</p>
+          }
+        </div>
+      }
+    </div>
+
+    @if (showArrows() && count() > 1) {
+      <button
+        type="button"
+        class="carousel__arrow carousel__arrow--prev"
+        [disabled]="!canPrev()"
+        [attr.aria-label]="i18n.prevSlide"
+        (click)="prev()"
+      >
+        <ngx-ds-icon [icon]="icons.ChevronLeft" [size]="20" />
+      </button>
+      <button
+        type="button"
+        class="carousel__arrow carousel__arrow--next"
+        [disabled]="!canNext()"
+        [attr.aria-label]="i18n.nextSlide"
+        (click)="next()"
+      >
+        <ngx-ds-icon [icon]="icons.ChevronRight" [size]="20" />
+      </button>
+    }
+  </div>
+
+  @if ((showIndicators() && count() > 1) || hasAutoplay()) {
+    <div class="carousel__controls">
+      @if (hasAutoplay()) {
+        <button
+          type="button"
+          class="carousel__play"
+          [attr.aria-label]="isUserPaused() ? i18n.playAutoplay : i18n.pauseAutoplay"
+          (click)="toggleAutoplay()"
+        >
+          <ngx-ds-icon [icon]="isUserPaused() ? icons.Play : icons.Pause" [size]="14" />
+        </button>
+      }
+      @if (showIndicators() && count() > 1) {
+        <div class="carousel__dots">
+          @for (item of items(); track $index; let i = $index) {
+            <button
+              type="button"
+              class="carousel__dot"
+              [class.carousel__dot--active]="i === current()"
+              [attr.aria-label]="i18n.goToSlide(i + 1)"
+              [attr.aria-current]="i === current() || null"
+              (click)="goTo(i)"
+            ></button>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

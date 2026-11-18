@@ -127,6 +127,17 @@ export interface NgxDsLabels {
   // ── Confirmation ──────────────────────────────────────────
   confirm: string;
   cancel: string;
+
+  // ── Carousel / Lightbox ───────────────────────────────────
+  carousel: string;
+  slide: string;
+  prevSlide: string;
+  nextSlide: string;
+  goToSlide: (n: number) => string;
+  slideOf: (n: number, total: number) => string;
+  pauseAutoplay: string;
+  playAutoplay: string;
+  lightbox: string;
 }
 
 export const NGX_DS_LABELS_ES: NgxDsLabels = {
@@ -240,6 +251,16 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
 
   confirm: 'Confirmar',
   cancel: 'Cancelar',
+
+  carousel: 'Carrusel',
+  slide: 'Diapositiva',
+  prevSlide: 'Diapositiva anterior',
+  nextSlide: 'Diapositiva siguiente',
+  goToSlide: (n) => `Ir a la diapositiva ${n}`,
+  slideOf: (n, total) => `${n} de ${total}`,
+  pauseAutoplay: 'Pausar la reproducción automática',
+  playAutoplay: 'Reanudar la reproducción automática',
+  lightbox: 'Visor de imágenes',
 };
 
 export const NGX_DS_LABELS_EN: NgxDsLabels = {
@@ -353,6 +374,16 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
 
   confirm: 'Confirm',
   cancel: 'Cancel',
+
+  carousel: 'Carousel',
+  slide: 'Slide',
+  prevSlide: 'Previous slide',
+  nextSlide: 'Next slide',
+  goToSlide: (n) => `Go to slide ${n}`,
+  slideOf: (n, total) => `${n} of ${total}`,
+  pauseAutoplay: 'Pause autoplay',
+  playAutoplay: 'Resume autoplay',
+  lightbox: 'Image viewer',
 };
 
 export const NGX_DS_LABELS = new InjectionToken<NgxDsLabels>('NGX_DS_LABELS', {
