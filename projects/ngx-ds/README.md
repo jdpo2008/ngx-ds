@@ -128,8 +128,24 @@ bootstrapApplication(AppComponent, {
 | `locale` | `'es-ES'` | Month and weekday names, date and number formatting. An `en-*` locale also switches the labels to English.                                                |
 | `labels` | —         | Overrides individual labels. Missing keys come from the locale's set.                                                                                     |
 | `theme`  | —         | `'light'`, `'dark'` or `'system'` (follows `prefers-color-scheme` and updates live). Sets `data-theme` on `<html>`. Omit it to manage the theme yourself. |
+| `colors` | —         | `{ primary: '#0d9488' }` replaces the default indigo. See [Brand colour](#brand-colour).                                                                  |
 
 `provideNgxDsLocale()` and `provideNgxDsLabels()` still work for setting one thing at a time.
+
+### Brand colour
+
+`colors.primary` takes a `#rgb` or `#rrggbb` colour. It becomes `--primary-600` (buttons, focus rings, selected states) and the rest of the `--primary-*` scale is generated from it in OKLCH, for the light and the dark theme. Pick a colour dark enough for white text: in dev mode, ngx-ds warns when the contrast is below 4.5:1.
+
+To change it at runtime, for example per tenant:
+
+```ts
+import { applyPrimaryColor } from '@jdpo2008/ngx-ds';
+
+applyPrimaryColor('#e11d48'); // switch
+applyPrimaryColor(null); // back to indigo
+```
+
+`createPrimaryPalette(color)` returns the generated scale if you need the values elsewhere.
 
 ## Components
 

@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { NGX_DS_LABELS, NGX_DS_LABELS_EN, NGX_DS_LABELS_ES } from './labels';
 import { NGX_DS_LOCALE } from './locale';
 import { NgxDsConfig, provideNgxDs } from './provide';
+import { applyPrimaryColor } from './theme-colors';
 
 async function setup(config?: NgxDsConfig) {
   TestBed.configureTestingModule({ providers: [provideNgxDs(config)] });
@@ -37,6 +38,8 @@ describe('provideNgxDs', () => {
   afterEach(() => {
     document.documentElement.removeAttribute('data-theme');
     window.matchMedia = matchMedia;
+    applyPrimaryColor(null);
+    vi.restoreAllMocks();
   });
 
   it('keeps the defaults when called without options', async () => {
@@ -91,5 +94,24 @@ describe('provideNgxDs', () => {
     window.matchMedia = undefined as unknown as typeof window.matchMedia;
     const { html } = await setup({ theme: 'system' });
     expect(html.hasAttribute('data-theme')).toBe(false);
+  });
+
+  it('applies a primary colour', async () => {
+    await setup({ colors: { primary: '#0d9488' } });
+    expect(document.getElementById('ngx-ds-primary')?.textContent).toContain(
+      '--primary-600:#0d9488;',
+    );
+  });
+
+  it('warns in dev mode when white text on the primary colour has low contrast', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    await setup({ colors: { primary: '#fde047' } });
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('below the 4.5:1'));
+  });
+
+  it('does not warn for a dark enough primary colour', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    await setup({ colors: { primary: '#0f766e' } });
+    expect(warn).not.toHaveBeenCalled();
   });
 });
