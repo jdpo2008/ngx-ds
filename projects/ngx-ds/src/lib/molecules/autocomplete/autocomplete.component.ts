@@ -95,12 +95,13 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   // ── Internal state ────────────────────────────────────────
   readonly #open = signal(false);
   readonly #inputText = signal('');
-  readonly #disabled = signal(false);
+  readonly disabled = input<boolean>(false);
+  readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
 
   readonly isOpen = this.#open.asReadonly();
   readonly inputText = this.#inputText.asReadonly();
-  readonly isDisabled = this.#disabled.asReadonly();
+  readonly isDisabled = computed(() => this.disabled() || this.#cvaDisabled());
   readonly isFocused = this.#focused.asReadonly();
 
   private searchTimer: ReturnType<typeof setTimeout> | null = null;
@@ -300,6 +301,6 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
-    this.#disabled.set(disabled);
+    this.#cvaDisabled.set(disabled);
   }
 }
