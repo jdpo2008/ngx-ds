@@ -39,9 +39,6 @@ export class ModalComponent implements OnDestroy {
   readonly title = input<string>('');
   /** Shows the close button in the header. */
   readonly dismissible = input<boolean>(true);
-  /** @deprecated Use `dismissible`. Removed in 1.0. */
-  readonly showClose = input<boolean | undefined>(undefined);
-  readonly showCloseButton = computed(() => this.showClose() ?? this.dismissible());
   readonly closeOnBackdrop = input<boolean>(true);
   readonly closeOnEscape = input<boolean>(true);
 

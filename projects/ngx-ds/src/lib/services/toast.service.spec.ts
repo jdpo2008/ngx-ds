@@ -31,12 +31,6 @@ describe('ToastrService', () => {
     expect(service.toasts()[0].title).toBe('Hecho');
   });
 
-  it('maps the deprecated error type and helper to danger', () => {
-    service.error('ko');
-    service.show({ message: 'ko', type: 'error' });
-    expect(service.toasts().map((t) => t.type)).toEqual(['danger', 'danger']);
-  });
-
   it('removes a toast automatically after its duration', () => {
     service.show({ message: 'temporal', duration: 1000 });
     expect(service.toasts()).toHaveLength(1);

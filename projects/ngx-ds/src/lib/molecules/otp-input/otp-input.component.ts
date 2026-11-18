@@ -51,13 +51,11 @@ export class OtpInputComponent implements ControlValueAccessor {
   readonly masked = input<boolean>(false);
   /** Message shown under the boxes. It also switches them to the error style. */
   readonly errorMessage = input<string>('');
-  /** @deprecated Use `errorMessage`. Removed in 1.0. */
-  readonly error = input<boolean>(false);
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
   readonly errors = input<FieldErrors>([]);
   readonly touched = input<boolean>(false);
-  readonly hasError = computed(
-    () => this.error() || fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
   );
   readonly errorText = computed(() =>
     fieldErrorText(this.errorMessage(), this.errors(), this.touched()),

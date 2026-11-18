@@ -37,10 +37,9 @@ export class ToastComponent {
   }
 
   getIconPath(type: ToastType | undefined): string {
-    const defaultType: ToastType = 'info';
-    const effectiveType = type === 'error' ? 'danger' : type || defaultType;
+    const effectiveType: ToastType = type || 'info';
     // Return icon SVG path based on type
-    const icons: Record<Exclude<ToastType, 'error'>, string> = {
+    const icons: Record<ToastType, string> = {
       success: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
       danger: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
       warning:

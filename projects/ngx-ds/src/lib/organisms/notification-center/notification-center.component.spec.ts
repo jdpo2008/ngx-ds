@@ -51,18 +51,10 @@ describe('NotificationCenterComponent', () => {
     expect(el.querySelectorAll('ngx-ds-notification-item').length).toBe(3);
   });
 
-  it('styles danger notifications, and maps the deprecated error type to danger', () => {
-    const { el, run, cmp } = setup([
-      { id: 1, type: 'danger', title: 'a' },
-      { id: 2, type: 'error', title: 'b' },
-    ]);
+  it('styles danger notifications', () => {
+    const { el, run, cmp } = setup([{ id: 1, type: 'danger', title: 'a' }]);
     run(() => cmp.togglePanel());
-    const items = el.querySelectorAll('.notif-item');
-    expect(items.length).toBe(2);
-    items.forEach((item) => {
-      expect(item.classList).toContain('notif-item--danger');
-      expect(item.classList).not.toContain('notif-item--error');
-    });
+    expect(el.querySelector('.notif-item')!.classList).toContain('notif-item--danger');
   });
 
   it('filters to unread notifications', () => {

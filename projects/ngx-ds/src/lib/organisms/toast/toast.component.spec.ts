@@ -49,7 +49,7 @@ describe('ToastComponent', () => {
 
   it('removes a toast with the close button', () => {
     const { service, el, render } = setup();
-    service.error('Fallo');
+    service.danger('Fallo');
     render();
     el.querySelector<HTMLElement>('.toast__close')!.click();
     render();
