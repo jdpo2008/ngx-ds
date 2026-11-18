@@ -2,11 +2,11 @@
 
 All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follows [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes.
 
-## [Unreleased]
+## [0.3.0] - 2026-11-18
 
 ### Added
 
-- Form controls show Signal Forms validation errors automatically. Once the field is touched, Input, Textarea, NumberInput, Select, Dropdown, Autocomplete, MultiSelect, Datepicker and DateRangePicker show the first error's `message` and switch to the error style. An explicit `errorMessage` still takes priority. The controls get two new inputs, `errors` and `touched`, which `[formField]` sets.
+- Form controls show Signal Forms validation errors automatically. Once the field is touched, Input, Textarea, NumberInput, Select, Dropdown, Autocomplete, MultiSelect, Datepicker and DateRangePicker show the first error's `message` and switch to the error style. An explicit `errorMessage` still takes priority. The controls get two new inputs, `errors` and `touched`, which `[formField]` sets (#37).
 
 ## [0.2.0] - 2026-11-17
 
@@ -58,5 +58,6 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.3.0
 [0.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.2.0
 [0.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.1.0

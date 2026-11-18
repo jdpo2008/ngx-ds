@@ -1,6 +1,6 @@
 {
   "name": "@jdpo2008/ngx-ds",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Angular 21 component library: standalone signal-based components with design tokens and an opt-in dark theme.",
   "license": "MIT",
   "keywords": [
