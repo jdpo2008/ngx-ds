@@ -4,6 +4,8 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-18
+
 ### Added
 
 - InlineEdit molecule (`ngx-ds-inline-edit`): text that turns into a field on click. Enter or blur saves, Escape restores the previous value. Supports `multiline` (Ctrl/⌘+Enter saves), `required`, save/cancel buttons (`showActions`), `[(value)]`, `[(editing)]` and reactive forms.
@@ -104,6 +106,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.6.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.5.0
 [0.4.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.4.0
 [0.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.3.0
