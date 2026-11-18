@@ -8,6 +8,7 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 - `ng add @jdpo2008/ngx-ds` schematic. It installs `lucide-angular` and adds the design tokens stylesheet to the application's `styles` in `angular.json`. Use `--project` in a workspace with several applications.
 - Signal Forms support: every form control can be bound with `[formField]`. A spec covers all 18 controls.
+- `provideNgxDs({ locale, labels, theme })` configures the library in one call. An `en-*` locale also selects the English labels, and `theme: 'system'` follows `prefers-color-scheme`.
 
 ### Fixed
 

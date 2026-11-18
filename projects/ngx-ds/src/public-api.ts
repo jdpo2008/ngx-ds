@@ -7,6 +7,7 @@ export * from './lib/services/confirmation.service';
 // ── Locale ───────────────────────────────────────────────────
 export * from './lib/shared/locale';
 export * from './lib/shared/labels';
+export * from './lib/shared/provide';
 
 // ── Directives ───────────────────────────────────────────────
 export * from './lib/directives/focus-trap';
