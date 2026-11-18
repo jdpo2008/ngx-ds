@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { FieldTree, FormField, email, form, required } from '@angular/forms/signals';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -191,44 +193,52 @@ class StatesWrapper {}
 @Component({
   selector: 'inp-signal-wrapper',
   standalone: true,
-  imports: [InputComponent],
+  imports: [InputComponent, FormField, JsonPipe],
   template: `
     <div class="p-6 flex flex-col gap-4 max-w-sm">
       <p class="text-sm font-medium text-gray-700 mb-1">
-        Signal Forms — <code class="text-xs bg-gray-100 px-1 rounded">[(value)]</code>
+        Signal Forms — <code class="text-xs bg-gray-100 px-1 rounded">[formField]</code>
       </p>
 
       <ngx-ds-input
         label="Nombre"
         [floatingLabel]="true"
-        [(value)]="name"
+        [formField]="f.name"
+        [errorMessage]="errorOf(f.name)"
         placeholder="Tu nombre"
       />
       <ngx-ds-input
         label="Email"
         type="email"
         [floatingLabel]="true"
-        [(value)]="email"
+        [formField]="f.email"
+        [errorMessage]="errorOf(f.email)"
         placeholder="tu@email.com"
         [iconLeft]="mailIcon"
       />
 
       <div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm space-y-1">
-        <p class="text-gray-500 text-xs font-medium mb-1">Estado del signal</p>
-        <p>
-          Nombre: <span class="font-medium text-gray-800">{{ name() || '—' }}</span>
-        </p>
-        <p>
-          Email: <span class="font-medium text-gray-800">{{ email() || '—' }}</span>
-        </p>
+        <p class="text-gray-500 text-xs font-medium mb-1">Modelo</p>
+        <pre class="text-xs">{{ model() | json }}</pre>
+        <p class="text-xs">Válido: {{ f().valid() ? 'sí' : 'no' }}</p>
       </div>
     </div>
   `,
 })
 class SignalFormWrapper {
-  name = signal('');
-  email = signal('');
+  model = signal({ name: '', email: '' });
+  f = form(this.model, (p) => {
+    required(p.name, { message: 'El nombre es obligatorio' });
+    required(p.email, { message: 'El email es obligatorio' });
+    email(p.email, { message: 'Email no válido' });
+  });
   mailIcon = Mail;
+
+  /** First error message, shown once the field has been touched. */
+  errorOf(field: FieldTree<string>): string {
+    const state = field();
+    return state.touched() ? (state.errors()[0]?.message ?? '') : '';
+  }
 }
 
 // ── Template Form Wrapper ─────────────────────────────────────────────────────

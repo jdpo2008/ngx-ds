@@ -7,6 +7,11 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 ### Added
 
 - `ng add @jdpo2008/ngx-ds` schematic. It installs `lucide-angular` and adds the design tokens stylesheet to the application's `styles` in `angular.json`. Use `--project` in a workspace with several applications.
+- Signal Forms support: every form control can be bound with `[formField]`. A spec covers all 18 controls.
+
+### Fixed
+
+- NumberInput (`min`, `max`), RangeSlider (`min`, `max`) and Rating (`max`) now accept `undefined`. Before, binding them with `[formField]` failed to compile under strict templates, because Signal Forms binds the field's `min`/`max` (`number | undefined`) to inputs with those names.
 
 ## [0.1.0] - 2026-11-17
 

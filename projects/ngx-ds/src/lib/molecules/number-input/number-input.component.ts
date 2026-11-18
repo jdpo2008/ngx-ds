@@ -39,8 +39,9 @@ export class NumberInputComponent implements ControlValueAccessor {
   readonly i18n = inject(NGX_DS_LABELS);
 
   readonly value = model<number>(0);
-  readonly min = input<number | null>(null);
-  readonly max = input<number | null>(null);
+  // `undefined` is accepted so Signal Forms can bind the field's min/max.
+  readonly min = input(null, { transform: (v: number | null | undefined) => v ?? null });
+  readonly max = input(null, { transform: (v: number | null | undefined) => v ?? null });
   readonly step = input<number>(1);
   readonly size = input<NumberInputSize>('md');
   readonly label = input<string>('');
