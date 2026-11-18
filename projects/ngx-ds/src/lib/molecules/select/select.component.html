@@ -154,8 +154,8 @@
 }
 
 <!-- Hint / Error -->
-@if (hasError()) {
-  <p class="ngx-select__message ngx-select__message--error" role="alert">{{ errorMessage() }}</p>
+@if (errorText()) {
+  <p class="ngx-select__message ngx-select__message--error" role="alert">{{ errorText() }}</p>
 } @else if (hint()) {
   <p class="ngx-select__message ngx-select__message--hint">{{ hint() }}</p>
 }

@@ -79,9 +79,9 @@
 }
 
 <!-- Hint / Error -->
-@if (hasError()) {
+@if (errorText()) {
   <p class="ngx-dropdown__message ngx-dropdown__message--error" role="alert">
-    {{ errorMessage() }}
+    {{ errorText() }}
   </p>
 } @else if (hint()) {
   <p class="ngx-dropdown__message ngx-dropdown__message--hint">{{ hint() }}</p>

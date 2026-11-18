@@ -96,8 +96,8 @@
   }
 </div>
 
-@if (errorMessage()) {
-  <p class="ms__error">{{ errorMessage() }}</p>
+@if (errorText()) {
+  <p class="ms__error">{{ errorText() }}</p>
 } @else if (hint()) {
   <p class="ms__hint">{{ hint() }}</p>
 }

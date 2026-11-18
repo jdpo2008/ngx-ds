@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { ChevronDown, X, Check } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
@@ -55,6 +56,9 @@ export class MultiSelectComponent implements ControlValueAccessor {
   readonly label = input<string>('');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
   readonly size = input<MultiSelectSize>('md');
   readonly searchable = input<boolean>(true);
   readonly maxSelected = input<number | null>(null);
@@ -90,10 +94,17 @@ export class MultiSelectComponent implements ControlValueAccessor {
     return max === null || this.value().length < max;
   });
 
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
+
   readonly triggerClasses = computed(() => {
     const base = `ms__trigger ms__trigger--${this.size()}`;
     if (this.#open()) return base + ' ms__trigger--open';
-    if (this.errorMessage()) return base + ' ms__trigger--error';
+    if (this.hasError()) return base + ' ms__trigger--error';
     return base;
   });
 

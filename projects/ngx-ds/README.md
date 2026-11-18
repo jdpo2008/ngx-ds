@@ -83,11 +83,11 @@ import { FormField, form, required } from '@angular/forms/signals';
 })
 export class Profile {
   model = signal({ name: '' });
-  f = form(this.model, (p) => required(p.name));
+  f = form(this.model, (p) => required(p.name, { message: 'Name is required' }));
 }
 ```
 
-The field's value, touched and disabled state stay in sync. The field's `min` and `max` validators also set the limits of NumberInput and RangeSlider, and `max` sets the star count of Rating. Error messages are not shown automatically: pass them with `[errorMessage]`.
+The field's value, touched and disabled state stay in sync. The field's `min` and `max` validators also set the limits of NumberInput and RangeSlider, and `max` sets the star count of Rating. Once the field is touched, its errors show automatically: Input, Textarea, NumberInput, Select, Dropdown, Autocomplete, MultiSelect, Datepicker and DateRangePicker show the first error's `message` and switch to the error style. An error without a `message` only switches the style. An explicit `[errorMessage]` takes priority.
 
 ### Toasts and confirmations
 

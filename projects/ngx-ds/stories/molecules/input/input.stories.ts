@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { FieldTree, FormField, email, form, required } from '@angular/forms/signals';
+import { FormField, email, form, required } from '@angular/forms/signals';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -204,7 +204,6 @@ class StatesWrapper {}
         label="Nombre"
         [floatingLabel]="true"
         [formField]="f.name"
-        [errorMessage]="errorOf(f.name)"
         placeholder="Tu nombre"
       />
       <ngx-ds-input
@@ -212,7 +211,6 @@ class StatesWrapper {}
         type="email"
         [floatingLabel]="true"
         [formField]="f.email"
-        [errorMessage]="errorOf(f.email)"
         placeholder="tu@email.com"
         [iconLeft]="mailIcon"
       />
@@ -233,12 +231,6 @@ class SignalFormWrapper {
     email(p.email, { message: 'Email no válido' });
   });
   mailIcon = Mail;
-
-  /** First error message, shown once the field has been touched. */
-  errorOf(field: FieldTree<string>): string {
-    const state = field();
-    return state.touched() ? (state.errors()[0]?.message ?? '') : '';
-  }
 }
 
 // ── Template Form Wrapper ─────────────────────────────────────────────────────

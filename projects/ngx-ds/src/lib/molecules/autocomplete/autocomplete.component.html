@@ -91,9 +91,9 @@
 }
 
 <!-- Error / Hint -->
-@if (hasError()) {
+@if (errorText()) {
   <p class="ngx-autocomplete__message ngx-autocomplete__message--error" role="alert">
-    {{ errorMessage() }}
+    {{ errorText() }}
   </p>
 } @else if (hint()) {
   <p class="ngx-autocomplete__message ngx-autocomplete__message--hint">{{ hint() }}</p>

@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { ChevronDown, ChevronUp, Check, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
@@ -60,6 +61,9 @@ export class DropdownComponent implements ControlValueAccessor {
   readonly size = input<DropdownSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
 
   // ── Value ─────────────────────────────────────────────────
   readonly value = model<DropdownValue | null>(null);
@@ -81,7 +85,12 @@ export class DropdownComponent implements ControlValueAccessor {
   readonly isDisabled = this.#disabled.asReadonly();
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
-  readonly hasError = computed(() => this.errorMessage().length > 0);
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
 
   readonly hasValue = computed(() => this.value() !== null && this.value() !== undefined);
 

@@ -28,9 +28,9 @@
 
 <!-- Footer: error/hint + char count -->
 <div class="ngx-textarea__footer">
-  @if (hasError()) {
+  @if (errorText()) {
     <p class="ngx-textarea__message ngx-textarea__message--error" role="alert">
-      {{ errorMessage() }}
+      {{ errorText() }}
     </p>
   } @else if (hint()) {
     <p class="ngx-textarea__message ngx-textarea__message--hint">{{ hint() }}</p>

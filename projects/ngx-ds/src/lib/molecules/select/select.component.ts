@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { ChevronDown, ChevronUp, Check, X, Search } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
@@ -62,6 +63,9 @@ export class SelectComponent implements ControlValueAccessor {
   readonly size = input<SelectSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
 
   // ── Value ─────────────────────────────────────────────────
   readonly value = model<SelectValue | SelectValue[] | null>(null);
@@ -86,7 +90,12 @@ export class SelectComponent implements ControlValueAccessor {
   readonly searchText = this.#search.asReadonly();
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
-  readonly hasError = computed(() => this.errorMessage().length > 0);
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
 
   // ── Derived ────────────────────────────────────────────────
   readonly selectedValues = computed<SelectValue[]>(() => {

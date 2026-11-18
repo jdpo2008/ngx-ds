@@ -53,8 +53,8 @@
 </div>
 
 <!-- Error / Hint -->
-@if (hasError()) {
-  <p class="ngx-input__message ngx-input__message--error" role="alert">{{ errorMessage() }}</p>
+@if (errorText()) {
+  <p class="ngx-input__message ngx-input__message--error" role="alert">{{ errorText() }}</p>
 } @else if (hint()) {
   <p class="ngx-input__message ngx-input__message--hint">{{ hint() }}</p>
 }
