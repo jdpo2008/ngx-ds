@@ -5,3 +5,4 @@ export * from './size';
 export * from './keyboard';
 export * from './locale';
 export * from './labels';
+export * from './provide';

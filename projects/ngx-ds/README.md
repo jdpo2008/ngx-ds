@@ -46,7 +46,7 @@ Every color is a CSS custom property (`--primary-600`, `--text-base`, `--surface
 }
 ```
 
-The dark theme is opt-in. Set `data-theme="dark"` on `<html>` or add the `dark` class to an ancestor.
+The dark theme is opt-in. Set `data-theme="dark"` on `<html>`, add the `dark` class to an ancestor, or use the `theme` option of `provideNgxDs()` (see [Configuration](#configuration)).
 
 ## Usage
 
@@ -111,17 +111,25 @@ const ok = await confirmation.confirm({
 });
 ```
 
-### Language
+### Configuration
 
-Labels default to Spanish and dates to `es-ES`. To switch app-wide:
+Labels default to Spanish and dates to `es-ES`. Configure the library app-wide with `provideNgxDs()`:
 
 ```ts
-import { NGX_DS_LABELS_EN, provideNgxDsLabels, provideNgxDsLocale } from '@jdpo2008/ngx-ds';
+import { provideNgxDs } from '@jdpo2008/ngx-ds';
 
 bootstrapApplication(AppComponent, {
-  providers: [provideNgxDsLabels(NGX_DS_LABELS_EN), provideNgxDsLocale('en-US')],
+  providers: [provideNgxDs({ locale: 'en-US', labels: { close: 'Dismiss' }, theme: 'system' })],
 });
 ```
+
+| Option   | Default   | Effect                                                                                                                                                    |
+| -------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `locale` | `'es-ES'` | Month and weekday names, date and number formatting. An `en-*` locale also switches the labels to English.                                                |
+| `labels` | —         | Overrides individual labels. Missing keys come from the locale's set.                                                                                     |
+| `theme`  | —         | `'light'`, `'dark'` or `'system'` (follows `prefers-color-scheme` and updates live). Sets `data-theme` on `<html>`. Omit it to manage the theme yourself. |
+
+`provideNgxDsLocale()` and `provideNgxDsLabels()` still work for setting one thing at a time.
 
 ## Components
 

@@ -106,7 +106,7 @@ function logNextSteps(): Rule {
     );
     context.logger.info(
       'ngx-ds: labels default to Spanish and dates to es-ES. For English, add ' +
-        "provideNgxDsLabels(NGX_DS_LABELS_EN) and provideNgxDsLocale('en-US') to your providers.",
+        "provideNgxDs({ locale: 'en-US' }) to your providers.",
     );
   };
 }
