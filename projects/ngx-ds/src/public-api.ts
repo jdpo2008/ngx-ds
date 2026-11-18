@@ -81,3 +81,4 @@ export * from './lib/organisms/context-menu';
 export * from './lib/organisms/sidebar';
 export * from './lib/organisms/carousel';
 export * from './lib/organisms/lightbox';
+export * from './lib/organisms/splitter';
