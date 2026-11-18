@@ -4,6 +4,8 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-18
+
 ### Added
 
 - Accessibility tests: `npm run test:a11y` runs axe-core (WCAG 2.2 A/AA) on every Storybook story in the light and dark themes. It runs in CI after the Storybook build and fails on any violation, colour contrast included. A story opts out with the `skip-a11y` tag.
@@ -94,6 +96,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[0.5.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.5.0
 [0.4.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.4.0
 [0.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.3.0
 [0.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.2.0
