@@ -1,0 +1,141 @@
+@if (label()) {
+  <label class="ts__label" [id]="id + '-label'" [for]="id">{{ label() }}</label>
+}
+
+<div class="ts">
+  <!-- Trigger -->
+  <div
+    #trigger
+    [class]="triggerClasses()"
+    [id]="id"
+    role="combobox"
+    aria-haspopup="tree"
+    [attr.aria-labelledby]="label() ? id + '-label' : null"
+    [attr.aria-label]="label() ? null : (placeholder() ?? i18n.selectPlaceholder)"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-controls]="isOpen() ? panelId : null"
+    [attr.aria-disabled]="isDisabled() || null"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+    [attr.tabindex]="isDisabled() ? -1 : 0"
+    (click)="toggleOpen()"
+    (keydown)="onTriggerKeydown($event)"
+  >
+    <div class="ts__value">
+      @if (selectedNodes().length === 0) {
+        <span class="ts__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
+      } @else if (multiple()) {
+        @for (node of selectedNodes(); track node.id) {
+          <span class="ts__chip">
+            {{ node.label }}
+            @if (!isDisabled()) {
+              <button
+                type="button"
+                class="ts__chip-remove"
+                [attr.aria-label]="i18n.removeChip(node.label)"
+                (click)="remove(node.id, $event)"
+              >
+                <ngx-ds-icon [icon]="icons.X" [size]="12" />
+              </button>
+            }
+          </span>
+        }
+      } @else {
+        <span class="ts__single">{{ selectedNodes()[0].label }}</span>
+      }
+    </div>
+    <ngx-ds-icon
+      [icon]="icons.ChevronDown"
+      [size]="16"
+      class="ts__arrow"
+      [class.ts__arrow--open]="isOpen()"
+    />
+  </div>
+
+  <!-- Panel -->
+  @if (isOpen()) {
+    <div class="ts__dropdown">
+      @if (searchable()) {
+        <div class="ts__search-wrap">
+          <input
+            class="ts__search"
+            type="text"
+            [placeholder]="i18n.searchPlaceholder"
+            [attr.aria-label]="i18n.search"
+            [value]="search()"
+            (input)="onSearch($event)"
+            (keydown)="onSearchKeydown($event)"
+          />
+        </div>
+      }
+
+      <div
+        class="ts__tree"
+        role="tree"
+        [id]="panelId"
+        [attr.aria-label]="label() || placeholder() || i18n.selectPlaceholder"
+        [attr.aria-multiselectable]="multiple() || null"
+      >
+        @for (row of rows(); track row.node.id; let i = $index) {
+          @let state = checkState(row.node);
+          <div
+            class="ts__row"
+            role="treeitem"
+            [id]="rowDomId(i)"
+            [class.ts__row--selected]="!multiple() && state === 'checked'"
+            [class.ts__row--disabled]="row.node.disabled"
+            [style.padding-left.rem]="0.5 + (row.level - 1) * 1.25"
+            [attr.aria-level]="row.level"
+            [attr.aria-setsize]="row.setsize"
+            [attr.aria-posinset]="row.posinset"
+            [attr.aria-expanded]="row.hasChildren ? row.expanded : null"
+            [attr.aria-selected]="multiple() ? null : state === 'checked'"
+            [attr.aria-checked]="multiple() ? ariaChecked(row.node) : null"
+            [attr.aria-disabled]="row.node.disabled || null"
+            [attr.tabindex]="focusableId() === row.node.id ? 0 : -1"
+            (click)="activate(row)"
+            (keydown)="onRowKeydown($event, row, i)"
+          >
+            <span
+              class="ts__toggle"
+              [class.ts__toggle--expanded]="row.expanded"
+              [class.ts__toggle--hidden]="!row.hasChildren"
+              aria-hidden="true"
+              (click)="$event.stopPropagation(); toggleExpand(row.node)"
+            >
+              <ngx-ds-icon [icon]="icons.ChevronRight" [size]="14" />
+            </span>
+
+            @if (multiple()) {
+              <span
+                class="ts__check"
+                [class.ts__check--on]="state !== 'unchecked'"
+                aria-hidden="true"
+              >
+                @if (state === 'checked') {
+                  <ngx-ds-icon [icon]="icons.Check" [size]="12" />
+                } @else if (state === 'mixed') {
+                  <ngx-ds-icon [icon]="icons.Minus" [size]="12" />
+                }
+              </span>
+            }
+
+            <span class="ts__row-label">{{ row.node.label }}</span>
+
+            @if (!multiple() && state === 'checked') {
+              <ngx-ds-icon class="ts__row-mark" [icon]="icons.Check" [size]="14" />
+            }
+          </div>
+        } @empty {
+          <div class="ts__empty">{{ i18n.noResults }}</div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+@if (errorText()) {
+  <p [id]="messageId" role="alert" class="ts__error">{{ errorText() }}</p>
+} @else if (hint()) {
+  <p [id]="messageId" class="ts__hint">{{ hint() }}</p>
+}

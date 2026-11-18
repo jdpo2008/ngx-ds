@@ -61,6 +61,7 @@ export * from './lib/molecules/form-field';
 export * from './lib/molecules/time-picker';
 export * from './lib/molecules/tag-input';
 export * from './lib/molecules/inline-edit';
+export * from './lib/molecules/tree-select';
 
 // ── Organisms ─────────────────────────────────────────────────
 export * from './lib/organisms/pagination';
