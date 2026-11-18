@@ -38,6 +38,9 @@ export interface NgxDsLabels {
   rangeStart: string;
   rangeEnd: string;
   removeTag: (label: string) => string;
+  /** Accessible name of the InlineEdit trigger: "Edit <label>". */
+  edit: (label: string) => string;
+  save: string;
   removeChip: (label: string) => string;
   rating: string;
   ratingStar: (n: number) => string;
@@ -175,6 +178,8 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   rangeStart: 'Valor mínimo',
   rangeEnd: 'Valor máximo',
   removeTag: (label) => `Eliminar ${label}`,
+  edit: (label) => (label ? `Editar ${label}` : 'Editar'),
+  save: 'Guardar',
   removeChip: (label) => `Quitar ${label}`,
   rating: 'Valoración',
   ratingStar: (n) => `${n} estrella${n > 1 ? 's' : ''}`,
@@ -302,6 +307,8 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   rangeStart: 'Minimum value',
   rangeEnd: 'Maximum value',
   removeTag: (label) => `Remove ${label}`,
+  edit: (label) => (label ? `Edit ${label}` : 'Edit'),
+  save: 'Save',
   removeChip: (label) => `Remove ${label}`,
   rating: 'Rating',
   ratingStar: (n) => `${n} star${n > 1 ? 's' : ''}`,
