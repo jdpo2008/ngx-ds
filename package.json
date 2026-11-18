@@ -12,6 +12,7 @@
     "build-storybook": "ng run ngx-ds:build-storybook",
     "test:a11y": "node scripts/storybook-a11y.mjs",
     "test:visual": "node scripts/storybook-visual.mjs",
+    "size": "node scripts/bundle-size.mjs",
     "test:visual:docker": "node scripts/visual-docker.mjs",
     "lint": "ng lint",
     "format": "prettier --write \"projects/ngx-ds/{src,stories,schematics}/**/*.{ts,cts,mts,html,scss,mdx}\"",
