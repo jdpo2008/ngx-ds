@@ -69,6 +69,14 @@ export interface NgxDsLabels {
   nextMonth: string;
   selectDateRange: string;
 
+  // ── Time ──────────────────────────────────────────────────
+  timePlaceholder: string;
+  selectTime: string;
+  clearTime: string;
+  hours: string;
+  minutes: string;
+  timePeriod: string;
+
   // ── Pagination / table ────────────────────────────────────
   pagination: string;
   prevPage: string;
@@ -179,6 +187,13 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   nextMonth: 'Mes siguiente',
   selectDateRange: 'Seleccionar rango de fechas',
 
+  timePlaceholder: 'HH:MM',
+  selectTime: 'Seleccionar hora',
+  clearTime: 'Limpiar hora',
+  hours: 'Horas',
+  minutes: 'Minutos',
+  timePeriod: 'AM/PM',
+
   pagination: 'Paginación',
   prevPage: 'Página anterior',
   nextPage: 'Página siguiente',
@@ -284,6 +299,13 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   prevMonth: 'Previous month',
   nextMonth: 'Next month',
   selectDateRange: 'Select date range',
+
+  timePlaceholder: 'HH:MM',
+  selectTime: 'Select time',
+  clearTime: 'Clear time',
+  hours: 'Hours',
+  minutes: 'Minutes',
+  timePeriod: 'AM/PM',
 
   pagination: 'Pagination',
   prevPage: 'Previous page',
