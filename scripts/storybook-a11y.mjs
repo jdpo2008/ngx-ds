@@ -8,12 +8,13 @@
 //   --filter <text>       only stories whose id contains <text>
 //   --verbose             print axe's explanation for each failing node
 //   --warn <rules>        comma-separated axe rule ids reported as warnings only
+//   --json <file>         also write every violation (all nodes) to <file>
 //
 // A story opts out with the `skip-a11y` tag: `tags: ['skip-a11y']`.
 // Exits with code 1 when a story has violations other than warnings.
 
 import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, stat, writeFile } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
@@ -26,6 +27,7 @@ const { values: args } = parseArgs({
     filter: { type: 'string', default: '' },
     verbose: { type: 'boolean', default: false },
     warn: { type: 'string', default: '' },
+    json: { type: 'string', default: '' },
   },
 });
 
@@ -112,6 +114,18 @@ await browser.close();
 server.close();
 
 failures.sort((a, b) => a.story.id.localeCompare(b.story.id) || a.theme.localeCompare(b.theme));
+if (args.json) {
+  const report = failures.map(({ story, theme, violations }) => ({
+    story: story.id,
+    theme,
+    violations: violations.map((v) => ({
+      id: v.id,
+      impact: v.impact,
+      nodes: v.nodes.map((n) => ({ target: n.target, html: n.html, data: n.any?.[0]?.data })),
+    })),
+  }));
+  await writeFile(args.json, JSON.stringify(report, null, 2));
+}
 for (const { story, theme, violations } of failures) {
   console.log(`\n✗ ${story.title} › ${story.name} [${theme}]  (${story.id})`);
   for (const v of violations) {

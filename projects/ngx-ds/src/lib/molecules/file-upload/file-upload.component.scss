@@ -29,7 +29,7 @@
     background: rgba(59, 130, 246, 0.04);
 
     .upload-icon {
-      color: var(--primary-500, #6366f1);
+      color: var(--fill-primary, #4f46e5);
     }
   }
 
@@ -53,7 +53,7 @@
 // ── Zone text ─────────────────────────────────────────────────────────────
 
 .upload-icon {
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   transition: color 0.15s ease;
   margin-bottom: 0.25rem;
 }
@@ -98,7 +98,7 @@
     background: rgba(239, 68, 68, 0.04);
 
     .upload-file__meta {
-      color: var(--danger-500, #ef4444);
+      color: var(--fill-danger, #dc2626);
     }
   }
 }
@@ -111,10 +111,10 @@
   flex-shrink: 0;
 
   &--done {
-    color: var(--success-500, #10b981);
+    color: var(--fill-success, #047857);
   }
   &--error {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 }
 

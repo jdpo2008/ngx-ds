@@ -425,7 +425,7 @@ class VariantsWrapper {
     <ng-template #statusTpl let-value>
       <span
         style="display:inline-flex;align-items:center;gap:0.375rem;font-size:0.75rem;font-weight:500;"
-        [style.color]="value ? '#16a34a' : '#dc2626'"
+        [style.color]="value ? 'var(--fill-success, #047857)' : 'var(--fill-danger, #dc2626)'"
       >
         <span
           style="width:6px;height:6px;border-radius:50%;flex-shrink:0;"
@@ -528,7 +528,7 @@ class StickyWrapper {
         (pageChange)="onPage($event)"
         (sortChange)="onSort($event)"
       />
-      <p style="font-size: 0.8125rem; color: var(--text-placeholder, #9ca3af);">
+      <p style="font-size: 0.8125rem; color: var(--text-placeholder, #6b7280);">
         Simulando servidor — página {{ currentPage() }}, {{ pageSize() }} por página
         @if (currentSort()) {
           — orden: <strong>{{ currentSort()!.column }}</strong> {{ currentSort()!.direction }}

@@ -251,7 +251,7 @@ class ClickableWrapper {
           <div
             style="padding: 1.25rem; border: 1.5px solid rgba(239,68,68,0.4); border-radius: 0.5rem; background: rgba(239,68,68,0.04); margin-top: 0.5rem;"
           >
-            <p style="font-size: 0.875rem; color: #ef4444; margin: 0;">
+            <p style="font-size: 0.875rem; color: var(--fill-danger, #dc2626); margin: 0;">
               El código postal ingresado no corresponde a la región seleccionada.
             </p>
           </div>

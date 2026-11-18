@@ -159,7 +159,7 @@ class InteractiveWrapper {
         ? 'bg-green-100 text-green-700'
         : i % 3 === 1
           ? 'bg-yellow-100 text-yellow-700'
-          : 'bg-gray-100 text-gray-500',
+          : 'bg-gray-100 text-gray-700',
   }));
 
   page = signal(1);

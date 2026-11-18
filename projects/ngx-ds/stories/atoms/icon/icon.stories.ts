@@ -190,8 +190,8 @@ class SizesWrapper {
   template: `
     <div class="p-6 space-y-4">
       <p class="text-sm text-gray-500 mb-4">
-        Color via propiedad <code class="bg-gray-100 px-1 rounded text-xs">color</code> o heredado
-        de CSS
+        Color via propiedad
+        <code class="bg-gray-100 text-gray-700 px-1 rounded text-xs">color</code> o heredado de CSS
       </p>
       <div class="flex flex-wrap items-center gap-6">
         <div class="flex flex-col items-center gap-2">

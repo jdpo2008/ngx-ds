@@ -149,6 +149,7 @@ class RequirementsWrapper {}
             min="1"
             max="32"
             class="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
+            style="background: var(--surface-base, #fff); color: var(--text-base, #111827)"
             (input)="minLen.set(+$any($event.target).value)"
           />
           Longitud mínima

@@ -55,28 +55,28 @@
   }
 
   &--primary {
-    color: var(--primary-500, #6366f1);
+    color: var(--fill-primary, #4f46e5);
     &:hover:not(:disabled) {
       background: var(--primary-50, #eef2ff);
     }
   }
 
   &--danger {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
     &:hover:not(:disabled) {
       background: var(--danger-50, #fef2f2);
     }
   }
 
   &--success {
-    color: var(--success-500, #10b981);
+    color: var(--fill-success, #047857);
     &:hover:not(:disabled) {
       background: var(--success-50, #ecfdf5);
     }
   }
 
   &--warning {
-    color: var(--warning-500, #f59e0b);
+    color: var(--fill-warning, #b45309);
     &:hover:not(:disabled) {
       background: var(--warning-50, #fffbeb);
     }

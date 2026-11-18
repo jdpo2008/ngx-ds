@@ -33,7 +33,9 @@ const PHOTOS: CarouselItem[] = [
   template: `
     <div style="max-width: 720px; padding: 1.5rem">
       <ngx-ds-carousel [items]="photos" [(index)]="index" />
-      <p style="margin-top: 1rem; font-size: 0.875rem; color: #6b7280">Índice: {{ index() }}</p>
+      <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted, #6b7280)">
+        Índice: {{ index() }}
+      </p>
     </div>
   `,
 })
@@ -83,7 +85,7 @@ class ContainWrapper {
   template: `
     <div style="max-width: 720px; padding: 1.5rem">
       <ngx-ds-carousel [items]="photos" [(index)]="index" (itemClick)="open.set(true)" />
-      <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280">
+      <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted, #6b7280)">
         Haz clic en una imagen para verla a pantalla completa.
       </p>
       <ngx-ds-lightbox [items]="photos" [(open)]="open" [(index)]="index" />

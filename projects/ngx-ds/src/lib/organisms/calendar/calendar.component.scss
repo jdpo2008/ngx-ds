@@ -61,7 +61,7 @@
   text-align: center;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--text-placeholder, #9ca3af);
+  color: var(--text-placeholder, #6b7280);
   padding: 0.25rem 0;
 }
 
@@ -99,16 +99,16 @@
   }
 
   &--other {
-    color: var(--text-disabled, #d1d5db);
+    color: var(--text-muted, #6b7280);
   }
 
   &--today {
-    color: var(--primary-600, #4f46e5);
+    color: var(--fill-primary, #4f46e5);
     font-weight: 700;
   }
 
   &--selected {
-    background: var(--primary-500, #6366f1);
+    background: var(--fill-primary, #4f46e5);
     color: var(--text-on-color, #fff);
     font-weight: 600;
   }

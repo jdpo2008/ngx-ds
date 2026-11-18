@@ -57,8 +57,8 @@
     />
   </div>
 
-  <!-- Hex input -->
-  <div class="cp__hex-row">
+  <!-- Hex input (the label wraps it, so "HEX" counts as the disabled control's label) -->
+  <label class="cp__hex-row">
     <input
       type="text"
       class="cp__hex-input"
@@ -70,5 +70,5 @@
       (input)="onHexInput($event)"
     />
     <span class="cp__hex-label">HEX</span>
-  </div>
+  </label>
 </div>

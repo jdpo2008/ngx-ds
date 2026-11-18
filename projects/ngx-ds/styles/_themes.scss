@@ -63,6 +63,11 @@
     --surface-hover:  #1f2937;
     --surface-active: #374151;
     --fill-neutral:   #9ca3af; // lighter so dark --text-on-color stays readable
+    --fill-primary:   var(--primary-500);
+    --fill-danger:    var(--danger-500);
+    --fill-success:   var(--success-500);
+    --fill-warning:   var(--warning-500);
+    --fill-info:      var(--info-500);
 
     // Borders
     --border-subtle: #1f2937;

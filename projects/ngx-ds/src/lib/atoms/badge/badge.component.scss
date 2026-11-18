@@ -2,7 +2,7 @@
 
 $badge-colors: (
   'primary': (
-    var(--primary-500, #6366f1),
+    var(--fill-primary, #4f46e5),
     var(--info-50, #eff6ff),
     var(--info-700, #1d4ed8),
   ),
@@ -12,17 +12,17 @@ $badge-colors: (
     var(--text-secondary, #374151),
   ),
   'danger': (
-    var(--danger-500, #ef4444),
+    var(--fill-danger, #dc2626),
     var(--danger-50, #fef2f2),
     var(--danger-700, #b91c1c),
   ),
   'success': (
-    var(--success-500, #10b981),
+    var(--fill-success, #047857),
     var(--success-50, #ecfdf5),
     var(--success-700, #047857),
   ),
   'warning': (
-    var(--warning-500, #f59e0b),
+    var(--fill-warning, #b45309),
     var(--warning-50, #fffbeb),
     var(--warning-700, #b45309),
   ),

@@ -6,8 +6,13 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ### Added
 
-- Accessibility tests: `npm run test:a11y` runs axe-core (WCAG 2.2 A/AA) on every Storybook story in the light and dark themes. It runs in CI after the Storybook build. Colour contrast is reported as a warning for now. A story opts out with the `skip-a11y` tag.
+- Accessibility tests: `npm run test:a11y` runs axe-core (WCAG 2.2 A/AA) on every Storybook story in the light and dark themes. It runs in CI after the Storybook build and fails on any violation, colour contrast included. A story opts out with the `skip-a11y` tag.
+- Semantic fill tokens `--fill-primary`, `--fill-danger`, `--fill-success`, `--fill-warning` and `--fill-info`: solid backgrounds behind `--text-on-color`, also safe as text on `--surface-base`. They meet WCAG AA in both themes.
 - `ariaLabel` input on Button, Checkbox, Switch, NumberInput and RangeSlider, for controls with no visible label.
+
+### Changed
+
+- Colour contrast meets WCAG AA in both themes. `--text-placeholder` is now gray-500 in the light theme, so placeholders and floating labels reach 4.5:1. Button, MenuButton, Tag, Badge, Alert, PasswordStrength, the selected days and chips, the Stepper and the notification badge use the new fill tokens, as do the error, focus and active text colours of the form controls and Tabs. In the light theme these are a shade darker than before; the dark theme is unchanged. Days from other months in Calendar, Datepicker and DateRangePicker use `--text-muted`.
 
 ### Fixed
 

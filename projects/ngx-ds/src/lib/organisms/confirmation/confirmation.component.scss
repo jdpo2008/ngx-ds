@@ -61,15 +61,15 @@
   justify-content: center;
 
   &--info {
-    color: var(--info-500, #3b82f6);
+    color: var(--fill-info, #2563eb);
   }
 
   &--warning {
-    color: var(--warning-500, #f59e0b);
+    color: var(--fill-warning, #b45309);
   }
 
   &--danger {
-    color: var(--danger-500, #ef4444);
+    color: var(--fill-danger, #dc2626);
   }
 
   svg {

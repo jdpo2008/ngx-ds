@@ -32,19 +32,19 @@ class LabeledWrapper {}
   template: `
     <div class="p-6" style="max-width: 28rem; display:flex; flex-direction:column; gap:1.5rem;">
       <div>
-        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #6b7280);margin:0 0 0.5rem;">
           Solid
         </p>
         <ngx-ds-divider variant="solid" />
       </div>
       <div>
-        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #6b7280);margin:0 0 0.5rem;">
           Dashed
         </p>
         <ngx-ds-divider variant="dashed" />
       </div>
       <div>
-        <p style="font-size:0.75rem;color:var(--text-placeholder, #9ca3af);margin:0 0 0.5rem;">
+        <p style="font-size:0.75rem;color:var(--text-placeholder, #6b7280);margin:0 0 0.5rem;">
           Dotted
         </p>
         <ngx-ds-divider variant="dotted" />
