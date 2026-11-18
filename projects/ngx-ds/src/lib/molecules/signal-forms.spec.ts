@@ -119,7 +119,8 @@ class Host {
     pet: 'dog',
   });
   f = form(this.model, (p) => {
-    required(p.name);
+    required(p.name, { message: 'Name is required' });
+    required(p.bio);
     disabled(p.name, () => this.off());
     disabled(p.qty, () => this.off());
     max(p.qty, 10);
@@ -224,5 +225,31 @@ describe('Signal Forms [formField]', () => {
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(host.f.name().invalid()).toBe(true);
+  });
+
+  it('shows the field error message once the field is touched', () => {
+    const { fixture, el } = setup();
+    const input = el.querySelector<HTMLInputElement>('ngx-ds-input input')!;
+    const message = () => el.querySelector('ngx-ds-input .ngx-input__message--error');
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(message()).toBeNull();
+
+    input.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    expect(message()?.textContent?.trim()).toBe('Name is required');
+    expect(el.querySelector('ngx-ds-input .ngx-input__field--error')).not.toBeNull();
+  });
+
+  it('marks the error state without text when the error has no message', () => {
+    const { fixture, el } = setup();
+    const area = el.querySelector<HTMLTextAreaElement>('ngx-ds-textarea textarea')!;
+    area.value = '';
+    area.dispatchEvent(new Event('input'));
+    area.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    expect(el.querySelector('ngx-ds-textarea .ngx-textarea__field--error')).not.toBeNull();
+    expect(el.querySelector('ngx-ds-textarea .ngx-textarea__message--error')).toBeNull();
   });
 });

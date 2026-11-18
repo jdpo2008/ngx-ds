@@ -2,6 +2,12 @@
 
 All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follows [Semantic Versioning](https://semver.org/). Until 1.0.0, minor versions may contain breaking changes.
 
+## [Unreleased]
+
+### Added
+
+- Form controls show Signal Forms validation errors automatically. Once the field is touched, Input, Textarea, NumberInput, Select, Dropdown, Autocomplete, MultiSelect, Datepicker and DateRangePicker show the first error's `message` and switch to the error style. An explicit `errorMessage` still takes priority. The controls get two new inputs, `errors` and `touched`, which `[formField]` sets.
+
 ## [0.2.0] - 2026-11-17
 
 ### Added

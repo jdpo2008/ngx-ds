@@ -36,8 +36,8 @@
   </button>
 </div>
 
-@if (errorMessage()) {
-  <p class="number-input__error">{{ errorMessage() }}</p>
+@if (errorText()) {
+  <p class="number-input__error">{{ errorText() }}</p>
 } @else if (hint()) {
   <p class="number-input__hint">{{ hint() }}</p>
 }

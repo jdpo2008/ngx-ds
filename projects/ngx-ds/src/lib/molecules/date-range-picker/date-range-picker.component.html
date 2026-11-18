@@ -161,8 +161,8 @@
   }
 </div>
 
-@if (errorMessage()) {
-  <p class="drp__error">{{ errorMessage() }}</p>
+@if (errorText()) {
+  <p class="drp__error">{{ errorText() }}</p>
 } @else if (hint()) {
   <p class="drp__hint">{{ hint() }}</p>
 }

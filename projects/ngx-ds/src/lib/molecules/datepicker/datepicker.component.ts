@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { Calendar, X, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import {
@@ -63,6 +64,9 @@ export class DatepickerComponent implements ControlValueAccessor {
   readonly size = input<DatepickerSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabledDates = input<Date[]>([]);
@@ -100,7 +104,12 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   // ── Derived ───────────────────────────────────────────────
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
-  readonly hasError = computed(() => this.errorMessage().length > 0);
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
   readonly hasValue = computed(() => this.value() !== null);
 
   readonly isFloating = computed(() => this.#focused() || this.hasValue());

@@ -13,6 +13,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LucideIconData, Search, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
@@ -61,6 +62,9 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   readonly size = input<AutocompleteSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
   readonly iconLeft = input<LucideIconData | undefined>(undefined);
   /** Show loading spinner — set true while fetching async results */
   readonly loading = input<boolean>(false);
@@ -103,7 +107,12 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
 
   // ── Derived ──────────────────────────────────────────────
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
-  readonly hasError = computed(() => this.errorMessage().length > 0);
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
   readonly hasValue = computed(() => this.value() !== null && this.value() !== undefined);
 
   readonly selectedOption = computed(() => {

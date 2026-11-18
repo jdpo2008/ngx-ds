@@ -9,6 +9,7 @@ import {
   inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { LucideIconData, Eye, EyeOff } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
@@ -47,6 +48,9 @@ export class InputComponent implements ControlValueAccessor {
   readonly size = input<InputSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
   readonly iconLeft = input<LucideIconData | undefined>(undefined);
   readonly iconRight = input<LucideIconData | undefined>(undefined);
   readonly readonly = input<boolean>(false);
@@ -72,7 +76,12 @@ export class InputComponent implements ControlValueAccessor {
   // ── Derived ──────────────────────────────────────────────────
   readonly isFloating = computed(() => this.#focused() || this.value().length > 0);
 
-  readonly hasError = computed(() => this.errorMessage().length > 0);
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
 

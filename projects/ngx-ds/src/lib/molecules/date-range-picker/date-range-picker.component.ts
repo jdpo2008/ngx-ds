@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import {
@@ -64,6 +65,9 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly size = input<DateRangePickerSize>('md');
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
@@ -108,11 +112,18 @@ export class DateRangePickerComponent implements ControlValueAccessor {
     return '';
   });
 
+  readonly hasError = computed(() =>
+    fieldHasError(this.errorMessage(), this.errors(), this.touched()),
+  );
+  readonly errorText = computed(() =>
+    fieldErrorText(this.errorMessage(), this.errors(), this.touched()),
+  );
+
   readonly triggerClasses = computed(() => {
     const base = `drp__trigger drp__trigger--${this.size()}`;
     if (this.isDisabled()) return base + ' drp__trigger--disabled';
     if (this.#open()) return base + ' drp__trigger--open';
-    if (this.errorMessage()) return base + ' drp__trigger--error';
+    if (this.hasError()) return base + ' drp__trigger--error';
     return base;
   });
 
