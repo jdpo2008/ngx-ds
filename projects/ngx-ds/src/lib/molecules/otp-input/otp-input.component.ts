@@ -14,6 +14,7 @@ import {
   untracked,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FieldErrors, fieldHasError } from '../../shared/field-error';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -47,6 +48,12 @@ export class OtpInputComponent implements ControlValueAccessor {
   readonly disabled = input<boolean>(false);
   readonly masked = input<boolean>(false);
   readonly error = input<boolean>(false);
+  /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
+  readonly errors = input<FieldErrors>([]);
+  readonly touched = input<boolean>(false);
+  readonly hasError = computed(
+    () => this.error() || fieldHasError('', this.errors(), this.touched()),
+  );
 
   readonly value = model<string>('');
   readonly complete = output<string>();
@@ -73,7 +80,7 @@ export class OtpInputComponent implements ControlValueAccessor {
     return [
       b,
       `${b}--${this.size()}`,
-      this.error() ? `${b}--error` : '',
+      this.hasError() ? `${b}--error` : '',
       this.isDisabled() ? `${b}--disabled` : '',
     ]
       .filter(Boolean)

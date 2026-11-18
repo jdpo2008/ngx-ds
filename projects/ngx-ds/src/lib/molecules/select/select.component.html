@@ -10,6 +10,8 @@
   (click)="togglePanel()"
   (keydown)="onTriggerKeydown($event)"
   [attr.id]="id"
+  [attr.aria-invalid]="hasError() || null"
+  [attr.aria-describedby]="errorText() || hint() ? messageId : null"
   role="combobox"
   [attr.tabindex]="isDisabled() ? -1 : 0"
   [attr.aria-controls]="id + '-panel'"
@@ -155,7 +157,9 @@
 
 <!-- Hint / Error -->
 @if (errorText()) {
-  <p class="ngx-select__message ngx-select__message--error" role="alert">{{ errorText() }}</p>
+  <p [id]="messageId" class="ngx-select__message ngx-select__message--error" role="alert">
+    {{ errorText() }}
+  </p>
 } @else if (hint()) {
-  <p class="ngx-select__message ngx-select__message--hint">{{ hint() }}</p>
+  <p [id]="messageId" class="ngx-select__message ngx-select__message--hint">{{ hint() }}</p>
 }

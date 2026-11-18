@@ -22,6 +22,8 @@
     #nativeInput
     class="ngx-autocomplete__native"
     [id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     type="text"
     [value]="inputText()"
     [placeholder]="
@@ -92,9 +94,15 @@
 
 <!-- Error / Hint -->
 @if (errorText()) {
-  <p class="ngx-autocomplete__message ngx-autocomplete__message--error" role="alert">
+  <p
+    [id]="messageId"
+    class="ngx-autocomplete__message ngx-autocomplete__message--error"
+    role="alert"
+  >
     {{ errorText() }}
   </p>
 } @else if (hint()) {
-  <p class="ngx-autocomplete__message ngx-autocomplete__message--hint">{{ hint() }}</p>
+  <p [id]="messageId" class="ngx-autocomplete__message ngx-autocomplete__message--hint">
+    {{ hint() }}
+  </p>
 }

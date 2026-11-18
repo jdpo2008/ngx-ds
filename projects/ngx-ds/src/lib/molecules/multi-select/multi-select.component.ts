@@ -65,6 +65,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
   readonly disabled = input<boolean>(false);
 
   readonly id = `ngx-multi-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   protected readonly ChevronDownIcon = ChevronDown;
   protected readonly XIcon = X;

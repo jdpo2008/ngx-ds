@@ -69,6 +69,7 @@ export class DropdownComponent implements ControlValueAccessor {
   readonly value = model<DropdownValue | null>(null);
 
   readonly id = `ngx-dropdown-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Icons ──────────────────────────────────────────────────
   readonly ChevronDown = ChevronDown;

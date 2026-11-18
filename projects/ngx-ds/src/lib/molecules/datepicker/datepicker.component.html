@@ -10,6 +10,8 @@
   (click)="togglePanel()"
   (keydown)="onTriggerKeydown($event)"
   [attr.id]="id"
+  [attr.aria-invalid]="hasError() || null"
+  [attr.aria-describedby]="errorText() || hint() ? messageId : null"
   role="button"
   [attr.tabindex]="isDisabled() ? -1 : 0"
   [attr.aria-expanded]="isOpen()"
@@ -123,9 +125,9 @@
 
 <!-- Error / Hint -->
 @if (errorText()) {
-  <p class="ngx-datepicker__message ngx-datepicker__message--error" role="alert">
+  <p [id]="messageId" class="ngx-datepicker__message ngx-datepicker__message--error" role="alert">
     {{ errorText() }}
   </p>
 } @else if (hint()) {
-  <p class="ngx-datepicker__message ngx-datepicker__message--hint">{{ hint() }}</p>
+  <p [id]="messageId" class="ngx-datepicker__message ngx-datepicker__message--hint">{{ hint() }}</p>
 }

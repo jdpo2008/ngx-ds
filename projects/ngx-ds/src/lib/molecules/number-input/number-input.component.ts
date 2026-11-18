@@ -62,6 +62,7 @@ export class NumberInputComponent implements ControlValueAccessor {
   readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
   readonly id = `ngx-number-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   protected readonly PlusIcon = Plus;
   protected readonly MinusIcon = Minus;
@@ -78,7 +79,10 @@ export class NumberInputComponent implements ControlValueAccessor {
     return !this.isDisabled() && (max === null || this.value() < max);
   });
 
-  readonly hostClasses = computed(() => `number-input number-input--${this.size()}`);
+  readonly hostClasses = computed(
+    () =>
+      `number-input number-input--${this.size()}` + (this.hasError() ? ' number-input--error' : ''),
+  );
 
   decrement(): void {
     if (!this.canDecrement()) return;

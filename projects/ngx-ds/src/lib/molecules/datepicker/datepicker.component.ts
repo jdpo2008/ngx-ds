@@ -78,6 +78,7 @@ export class DatepickerComponent implements ControlValueAccessor {
   readonly value = model<Date | null>(null);
 
   readonly id = `ngx-datepicker-${nextId++}`;
+  readonly messageId = `${this.id}-message`;
 
   // ── Icons ────────────────────────────────────────────────
   readonly CalendarIcon = Calendar;
