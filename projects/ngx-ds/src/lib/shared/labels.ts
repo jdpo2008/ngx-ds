@@ -34,6 +34,9 @@ export interface NgxDsLabels {
   increment: string;
   decrement: string;
   otpGroup: string;
+  otpDigit: (n: number, total: number) => string;
+  rangeStart: string;
+  rangeEnd: string;
   removeTag: (label: string) => string;
   removeChip: (label: string) => string;
   rating: string;
@@ -168,6 +171,9 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   increment: 'Incrementar',
   decrement: 'Decrementar',
   otpGroup: 'Código de verificación',
+  otpDigit: (n, total) => `Dígito ${n} de ${total}`,
+  rangeStart: 'Valor mínimo',
+  rangeEnd: 'Valor máximo',
   removeTag: (label) => `Eliminar ${label}`,
   removeChip: (label) => `Quitar ${label}`,
   rating: 'Valoración',
@@ -292,6 +298,9 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   increment: 'Increment',
   decrement: 'Decrement',
   otpGroup: 'Verification code',
+  otpDigit: (n, total) => `Digit ${n} of ${total}`,
+  rangeStart: 'Minimum value',
+  rangeEnd: 'Maximum value',
   removeTag: (label) => `Remove ${label}`,
   removeChip: (label) => `Remove ${label}`,
   rating: 'Rating',

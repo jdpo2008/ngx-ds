@@ -11,19 +11,19 @@ import { PasswordStrengthComponent } from '../../../src/lib/molecules/password-s
   template: `
     <div class="p-6 flex flex-col gap-6 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Débil — "abc"</p>
+        <p class="text-xs text-gray-500 mb-1">Débil — "abc"</p>
         <ngx-ds-password-strength password="abc" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Regular — "abc12345"</p>
+        <p class="text-xs text-gray-500 mb-1">Regular — "abc12345"</p>
         <ngx-ds-password-strength password="abc12345" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Buena — "Abc12345"</p>
+        <p class="text-xs text-gray-500 mb-1">Buena — "Abc12345"</p>
         <ngx-ds-password-strength password="Abc12345" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Fuerte — "Abc12345!@#"</p>
+        <p class="text-xs text-gray-500 mb-1">Fuerte — "Abc12345!@#"</p>
         <ngx-ds-password-strength password="Abc12345!@#" [requireSpecial]="true" />
       </div>
     </div>
@@ -41,7 +41,7 @@ class LevelsWrapper {}
     <div class="p-6 flex flex-col gap-8 max-w-sm">
       <div>
         <p class="text-xs font-semibold text-gray-600 mb-1">Solo longitud mínima (6)</p>
-        <p class="text-xs text-gray-400 mb-2">
+        <p class="text-xs text-gray-500 mb-2">
           minLength=6, requireUppercase=false, requireNumbers=false
         </p>
         <ngx-ds-password-strength
@@ -57,7 +57,7 @@ class LevelsWrapper {}
         <p class="text-xs font-semibold text-gray-600 mb-1">
           Con mayúsculas y números (sin especiales)
         </p>
-        <p class="text-xs text-gray-400 mb-2">
+        <p class="text-xs text-gray-500 mb-2">
           minLength=8, requireUppercase=true, requireNumbers=true
         </p>
         <ngx-ds-password-strength
@@ -72,7 +72,7 @@ class LevelsWrapper {}
 
       <div>
         <p class="text-xs font-semibold text-gray-600 mb-1">Con longitud máxima</p>
-        <p class="text-xs text-gray-400 mb-2">minLength=8, maxLength=16</p>
+        <p class="text-xs text-gray-500 mb-2">minLength=8, maxLength=16</p>
         <ngx-ds-password-strength
           password="Hola1234!toolargepassword"
           [minLength]="8"
@@ -84,7 +84,7 @@ class LevelsWrapper {}
 
       <div>
         <p class="text-xs font-semibold text-gray-600 mb-1">Todos los criterios activos</p>
-        <p class="text-xs text-gray-400 mb-2">
+        <p class="text-xs text-gray-500 mb-2">
           minLength=12, requireUppercase, requireNumbers, requireSpecial
         </p>
         <ngx-ds-password-strength
@@ -110,15 +110,15 @@ class ConfiguredWrapper {}
   template: `
     <div class="p-6 flex flex-col gap-6 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Sin cumplir — "abc"</p>
+        <p class="text-xs text-gray-500 mb-1">Sin cumplir — "abc"</p>
         <ngx-ds-password-strength password="abc" [showRequirements]="true" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Parcialmente — "Abc12345"</p>
+        <p class="text-xs text-gray-500 mb-2">Parcialmente — "Abc12345"</p>
         <ngx-ds-password-strength password="Abc12345" [showRequirements]="true" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Todos cumplidos — "Abc12345!@"</p>
+        <p class="text-xs text-gray-500 mb-2">Todos cumplidos — "Abc12345!@"</p>
         <ngx-ds-password-strength
           password="Abc12345!@"
           [requireSpecial]="true"
@@ -186,7 +186,7 @@ class RequirementsWrapper {}
         />
         <button
           type="button"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 text-gray-500 hover:text-gray-700"
           (click)="visible.set(!visible())"
           aria-label="Mostrar u ocultar contraseña"
         >
@@ -333,7 +333,7 @@ class RealWorldWrapper {
   readonly submitClass = () =>
     this.canSubmit()
       ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-      : 'bg-gray-100 text-gray-400 cursor-not-allowed';
+      : 'bg-gray-100 text-gray-500 cursor-not-allowed';
 }
 
 // ── Meta ──────────────────────────────────────────────────────────────────────

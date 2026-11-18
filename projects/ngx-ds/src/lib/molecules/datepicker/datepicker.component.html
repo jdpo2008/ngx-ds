@@ -3,40 +3,42 @@
   <label [for]="id" class="ngx-datepicker__label">{{ label() }}</label>
 }
 
-<!-- Field trigger -->
-<div
-  #trigger
-  [class]="fieldClasses()"
-  (click)="togglePanel()"
-  (keydown)="onTriggerKeydown($event)"
-  [attr.id]="id"
-  [attr.aria-invalid]="hasError() || null"
-  [attr.aria-describedby]="errorText() || hint() ? messageId : null"
-  role="button"
-  [attr.tabindex]="isDisabled() ? -1 : 0"
-  [attr.aria-expanded]="isOpen()"
-  [attr.aria-disabled]="isDisabled()"
->
-  <!-- Floating label -->
-  @if (floatingLabel() && label()) {
-    <span [class]="floatLabelClasses()">{{ label() }}</span>
-  }
-
-  <!-- Calendar icon -->
-  <span class="ngx-datepicker__icon" aria-hidden="true">
-    <ngx-ds-icon [icon]="CalendarIcon" [size]="iconSize()" />
-  </span>
-
-  <!-- Display value -->
-  <span class="ngx-datepicker__display">
-    @if (displayValue()) {
-      <span class="ngx-datepicker__value">{{ displayValue() }}</span>
-    } @else {
-      <span class="ngx-datepicker__placeholder">{{ placeholder() ?? i18n.datePlaceholder }}</span>
+<!-- Field trigger. The clear button is a sibling: a button inside
+     role="button" would be a nested interactive control. -->
+<div class="ngx-datepicker__control">
+  <div
+    #trigger
+    [class]="fieldClasses()"
+    (click)="togglePanel()"
+    (keydown)="onTriggerKeydown($event)"
+    [attr.id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+    role="button"
+    [attr.tabindex]="isDisabled() ? -1 : 0"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-disabled]="isDisabled()"
+  >
+    <!-- Floating label -->
+    @if (floatingLabel() && label()) {
+      <span [class]="floatLabelClasses()">{{ label() }}</span>
     }
-  </span>
 
-  <!-- Clear button -->
+    <!-- Calendar icon -->
+    <span class="ngx-datepicker__icon" aria-hidden="true">
+      <ngx-ds-icon [icon]="CalendarIcon" [size]="iconSize()" />
+    </span>
+
+    <!-- Display value -->
+    <span class="ngx-datepicker__display">
+      @if (displayValue()) {
+        <span class="ngx-datepicker__value">{{ displayValue() }}</span>
+      } @else {
+        <span class="ngx-datepicker__placeholder">{{ placeholder() ?? i18n.datePlaceholder }}</span>
+      }
+    </span>
+  </div>
+
   @if (hasValue() && !isDisabled()) {
     <button
       type="button"

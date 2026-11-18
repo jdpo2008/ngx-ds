@@ -121,7 +121,7 @@
 .slider__rail--range {
   --slider-fill-from: 0%;
   --slider-fill-to: 100%;
-  height: 1.125rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
 }
@@ -130,6 +130,8 @@
   position: absolute;
   left: 0;
   width: 100%;
+  // Taller box for a 24px hit area (WCAG 2.5.8); the track keeps its height.
+  height: 1.5rem;
   background: transparent;
   pointer-events: none;
 

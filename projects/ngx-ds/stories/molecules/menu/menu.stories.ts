@@ -14,7 +14,7 @@ import type { MenuItem } from '../../../src/lib/molecules/menu/menu.types';
     <div class="p-6">
       <ngx-ds-menu [items]="items" ariaLabel="Acciones" (itemClick)="onClick($event)" />
       @if (lastClicked) {
-        <p class="text-xs text-gray-400 mt-3">Último click: {{ lastClicked }}</p>
+        <p class="text-xs text-gray-500 mt-3">Último click: {{ lastClicked }}</p>
       }
     </div>
   `,
@@ -44,7 +44,7 @@ class BasicWrapper {
     <div class="p-6">
       <ngx-ds-menu [items]="items" ariaLabel="Archivo" (itemClick)="onClick($event)" />
       @if (lastClicked) {
-        <p class="text-xs text-gray-400 mt-3">Último click: {{ lastClicked }}</p>
+        <p class="text-xs text-gray-500 mt-3">Último click: {{ lastClicked }}</p>
       }
     </div>
   `,

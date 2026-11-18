@@ -18,19 +18,19 @@ import {
       <div class="flex flex-wrap items-center gap-6">
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="xs" color="primary" />
-          <span class="text-xs text-gray-400">xs</span>
+          <span class="text-xs text-gray-500">xs</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="sm" color="primary" />
-          <span class="text-xs text-gray-400">sm</span>
+          <span class="text-xs text-gray-500">sm</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="primary" />
-          <span class="text-xs text-gray-400">md</span>
+          <span class="text-xs text-gray-500">md</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="lg" color="primary" />
-          <span class="text-xs text-gray-400">lg</span>
+          <span class="text-xs text-gray-500">lg</span>
         </div>
       </div>
     </div>
@@ -50,27 +50,27 @@ class SizesWrapper {}
       <div class="flex flex-wrap items-center gap-6">
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="primary" />
-          <span class="text-xs text-gray-400">primary</span>
+          <span class="text-xs text-gray-500">primary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="secondary" />
-          <span class="text-xs text-gray-400">secondary</span>
+          <span class="text-xs text-gray-500">secondary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="danger" />
-          <span class="text-xs text-gray-400">danger</span>
+          <span class="text-xs text-gray-500">danger</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="success" />
-          <span class="text-xs text-gray-400">success</span>
+          <span class="text-xs text-gray-500">success</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-spinner size="md" color="warning" />
-          <span class="text-xs text-gray-400">warning</span>
+          <span class="text-xs text-gray-500">warning</span>
         </div>
         <div class="flex flex-col items-center gap-2" style="color: #8b5cf6">
           <ngx-ds-spinner size="md" color="current" />
-          <span class="text-xs text-gray-400">current</span>
+          <span class="text-xs text-gray-500">current</span>
         </div>
       </div>
     </div>

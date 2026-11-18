@@ -97,7 +97,7 @@ import {
   template: `
     <div class="p-6 flex items-center gap-4">
       <ngx-ds-icon [icon]="icon" [size]="size" [color]="color" [strokeWidth]="strokeWidth" />
-      <span class="text-sm text-gray-400">Plus — {{ size }}px — strokeWidth {{ strokeWidth }}</span>
+      <span class="text-sm text-gray-500">Plus — {{ size }}px — strokeWidth {{ strokeWidth }}</span>
     </div>
   `,
 })
@@ -121,31 +121,31 @@ class DefaultWrapper {
         <div class="flex flex-wrap items-end gap-6">
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="12" />
-            <span class="text-xs text-gray-400">12px</span>
+            <span class="text-xs text-gray-500">12px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="16" />
-            <span class="text-xs text-gray-400">16px</span>
+            <span class="text-xs text-gray-500">16px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="20" />
-            <span class="text-xs text-gray-400">20px</span>
+            <span class="text-xs text-gray-500">20px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="24" />
-            <span class="text-xs text-gray-400">24px</span>
+            <span class="text-xs text-gray-500">24px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" />
-            <span class="text-xs text-gray-400">32px</span>
+            <span class="text-xs text-gray-500">32px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="48" />
-            <span class="text-xs text-gray-400">48px</span>
+            <span class="text-xs text-gray-500">48px</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="64" />
-            <span class="text-xs text-gray-400">64px</span>
+            <span class="text-xs text-gray-500">64px</span>
           </div>
         </div>
       </div>
@@ -154,23 +154,23 @@ class DefaultWrapper {
         <div class="flex flex-wrap items-end gap-6">
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" [strokeWidth]="1" />
-            <span class="text-xs text-gray-400">1</span>
+            <span class="text-xs text-gray-500">1</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" [strokeWidth]="1.5" />
-            <span class="text-xs text-gray-400">1.5</span>
+            <span class="text-xs text-gray-500">1.5</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" [strokeWidth]="2" />
-            <span class="text-xs text-gray-400">2</span>
+            <span class="text-xs text-gray-500">2</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" [strokeWidth]="2.5" />
-            <span class="text-xs text-gray-400">2.5</span>
+            <span class="text-xs text-gray-500">2.5</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <ngx-ds-icon [icon]="icon" [size]="32" [strokeWidth]="3" />
-            <span class="text-xs text-gray-400">3</span>
+            <span class="text-xs text-gray-500">3</span>
           </div>
         </div>
       </div>
@@ -196,37 +196,37 @@ class SizesWrapper {
       <div class="flex flex-wrap items-center gap-6">
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#3b82f6" />
-          <span class="text-xs text-gray-400">Primary</span>
+          <span class="text-xs text-gray-500">Primary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#6b7280" />
-          <span class="text-xs text-gray-400">Secondary</span>
+          <span class="text-xs text-gray-500">Secondary</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#ef4444" />
-          <span class="text-xs text-gray-400">Danger</span>
+          <span class="text-xs text-gray-500">Danger</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#10b981" />
-          <span class="text-xs text-gray-400">Success</span>
+          <span class="text-xs text-gray-500">Success</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#f59e0b" />
-          <span class="text-xs text-gray-400">Warning</span>
+          <span class="text-xs text-gray-500">Warning</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#8b5cf6" />
-          <span class="text-xs text-gray-400">Purple</span>
+          <span class="text-xs text-gray-500">Purple</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <ngx-ds-icon [icon]="icon" [size]="32" color="#ec4899" />
-          <span class="text-xs text-gray-400">Pink</span>
+          <span class="text-xs text-gray-500">Pink</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <span class="text-orange-500" style="display:inline-flex">
             <ngx-ds-icon [icon]="icon" [size]="32" />
           </span>
-          <span class="text-xs text-gray-400">currentColor</span>
+          <span class="text-xs text-gray-500">currentColor</span>
         </div>
       </div>
     </div>
@@ -245,100 +245,100 @@ class ColorsWrapper {
   template: `
     <div class="p-6 space-y-8">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Acciones</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Acciones</p>
         <div class="flex flex-wrap gap-4">
           @for (item of actions; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Navegación</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Navegación</p>
         <div class="flex flex-wrap gap-4">
           @for (item of navigation; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Feedback</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Feedback</p>
         <div class="flex flex-wrap gap-4">
           @for (item of feedback; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
           Comunicación
         </p>
         <div class="flex flex-wrap gap-4">
           @for (item of communication; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Archivos</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Archivos</p>
         <div class="flex flex-wrap gap-4">
           @for (item of files; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
           Usuarios & Auth
         </p>
         <div class="flex flex-wrap gap-4">
           @for (item of users; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Media</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Media</p>
         <div class="flex flex-wrap gap-4">
           @for (item of media; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>
       </div>
 
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Sistema</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">Sistema</p>
         <div class="flex flex-wrap gap-4">
           @for (item of system; track item.name) {
             <div class="flex flex-col items-center gap-1.5 w-16">
               <ngx-ds-icon [icon]="item.icon" [size]="24" color="#374151" />
-              <span class="text-xs text-gray-400 text-center leading-tight">{{ item.name }}</span>
+              <span class="text-xs text-gray-500 text-center leading-tight">{{ item.name }}</span>
             </div>
           }
         </div>

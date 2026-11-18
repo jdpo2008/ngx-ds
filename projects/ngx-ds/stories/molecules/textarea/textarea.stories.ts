@@ -82,15 +82,15 @@ class FloatingWrapper {}
   template: `
     <div class="p-6 flex flex-col gap-5 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-textarea label="Small" size="sm" placeholder="Texto pequeño" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (por defecto)</p>
         <ngx-ds-textarea label="Medium" size="md" placeholder="Texto medio" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-textarea label="Large" size="lg" placeholder="Texto grande" />
       </div>
     </div>
@@ -107,11 +107,11 @@ class SizesWrapper {}
   template: `
     <div class="p-6 flex flex-col gap-4 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">resize="none" — no se puede redimensionar</p>
+        <p class="text-xs text-gray-500 mb-1">resize="none" — no se puede redimensionar</p>
         <ngx-ds-textarea label="Sin resize" resize="none" placeholder="Tamaño fijo" [rows]="3" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">resize="vertical" (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">resize="vertical" (por defecto)</p>
         <ngx-ds-textarea
           label="Vertical"
           resize="vertical"
@@ -120,7 +120,7 @@ class SizesWrapper {}
         />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">resize="horizontal"</p>
+        <p class="text-xs text-gray-500 mb-1">resize="horizontal"</p>
         <ngx-ds-textarea
           label="Horizontal"
           resize="horizontal"
@@ -129,7 +129,7 @@ class SizesWrapper {}
         />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">resize="both"</p>
+        <p class="text-xs text-gray-500 mb-1">resize="both"</p>
         <ngx-ds-textarea
           label="Ambos"
           resize="both"

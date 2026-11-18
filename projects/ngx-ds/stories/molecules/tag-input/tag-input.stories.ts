@@ -22,7 +22,7 @@ import { TagInputComponent } from '../../../src/lib/molecules/tag-input/tag-inpu
         (removed)="log('eliminada: ' + $event)"
       />
       <p class="text-sm text-gray-500">Valor: {{ tags().join(' · ') || '—' }}</p>
-      <p class="text-xs text-gray-400">Último evento: {{ last() }}</p>
+      <p class="text-xs text-gray-500">Último evento: {{ last() }}</p>
     </div>
   `,
 })

@@ -32,7 +32,7 @@ import { RadioComponent } from '../../../src/lib/molecules/radio/radio.component
         (valueSelect)="select('c')"
         [checked]="selected() === 'c'"
       />
-      <p class="text-xs text-gray-400 mt-2">Seleccionado: {{ selected() }}</p>
+      <p class="text-xs text-gray-500 mt-2">Seleccionado: {{ selected() }}</p>
     </div>
   `,
 })
@@ -168,7 +168,7 @@ class LabelPositionWrapper {}
           [checked]="size() === 'xlarge'"
         />
       </div>
-      <p class="text-xs text-gray-400">Talla seleccionada: {{ size() }}</p>
+      <p class="text-xs text-gray-500">Talla seleccionada: {{ size() }}</p>
     </div>
   `,
 })
@@ -198,7 +198,7 @@ class HorizontalWrapper {
             />
           }
         </div>
-        <p class="text-xs text-gray-400 mt-3">
+        <p class="text-xs text-gray-500 mt-3">
           Plan seleccionado: <strong>{{ selectedPlanLabel() }}</strong>
         </p>
       </div>
@@ -230,7 +230,7 @@ class InteractiveWrapper {
       @for (opt of options; track opt) {
         <ngx-ds-radio name="ngm" [value]="opt" [label]="opt" [(ngModel)]="choice" />
       }
-      <p class="text-xs text-gray-400 mt-2">Seleccionado: {{ choice }}</p>
+      <p class="text-xs text-gray-500 mt-2">Seleccionado: {{ choice }}</p>
     </div>
   `,
 })

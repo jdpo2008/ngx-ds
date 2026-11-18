@@ -31,6 +31,8 @@ let nextId = 0;
 })
 export class CheckboxComponent implements ControlValueAccessor {
   readonly label = input<string>('');
+  /** Accessible name when there is no visible `label`. */
+  readonly ariaLabel = input<string | undefined>(undefined);
   readonly size = input<CheckboxSize>('md');
   readonly color = input<CheckboxColor>('primary');
   readonly indeterminate = input<boolean>(false);

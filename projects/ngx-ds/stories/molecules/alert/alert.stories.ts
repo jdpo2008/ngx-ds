@@ -173,7 +173,7 @@ class NoIconWrapper {}
       }
 
       @if (!showInfo() && !showSuccess() && !showWarning() && !showDanger()) {
-        <p class="text-sm text-gray-400 italic">Todas las alertas han sido cerradas.</p>
+        <p class="text-sm text-gray-500 italic">Todas las alertas han sido cerradas.</p>
       }
     </div>
   `,

@@ -6,7 +6,7 @@
     color="secondary"
     [disabled]="currentPage() === 1"
     (click)="prev()"
-    [attr.aria-label]="i18n.prevPage"
+    [ariaLabel]="i18n.prevPage"
   >
     <span class="pagination__arrow pagination__arrow--prev" aria-hidden="true"></span>
   </ngx-ds-button>
@@ -34,7 +34,7 @@
     color="secondary"
     [disabled]="currentPage() === totalPages()"
     (click)="next()"
-    [attr.aria-label]="i18n.nextPage"
+    [ariaLabel]="i18n.nextPage"
   >
     <span class="pagination__arrow pagination__arrow--next" aria-hidden="true"></span>
   </ngx-ds-button>

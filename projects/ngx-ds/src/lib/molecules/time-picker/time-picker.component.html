@@ -3,36 +3,41 @@
   <label [for]="id" class="ngx-time-picker__label">{{ label() }}</label>
 }
 
-<!-- Field trigger -->
-<div
-  #trigger
-  [class]="fieldClasses()"
-  (click)="togglePanel()"
-  (keydown)="onTriggerKeydown($event)"
-  [attr.id]="id"
-  [attr.aria-invalid]="hasError() || null"
-  [attr.aria-describedby]="errorText() || hint() ? messageId : null"
-  role="button"
-  aria-haspopup="dialog"
-  [attr.tabindex]="isDisabled() ? -1 : 0"
-  [attr.aria-expanded]="isOpen()"
-  [attr.aria-disabled]="isDisabled()"
->
-  @if (floatingLabel() && label()) {
-    <span [class]="floatLabelClasses()">{{ label() }}</span>
-  }
-
-  <span class="ngx-time-picker__icon" aria-hidden="true">
-    <ngx-ds-icon [icon]="ClockIcon" [size]="iconSize()" />
-  </span>
-
-  <span class="ngx-time-picker__display">
-    @if (displayValue()) {
-      <span class="ngx-time-picker__value">{{ displayValue() }}</span>
-    } @else {
-      <span class="ngx-time-picker__placeholder">{{ placeholder() ?? i18n.timePlaceholder }}</span>
+<!-- Field trigger. The clear button is a sibling: a button inside
+     role="button" would be a nested interactive control. -->
+<div class="ngx-time-picker__control">
+  <div
+    #trigger
+    [class]="fieldClasses()"
+    (click)="togglePanel()"
+    (keydown)="onTriggerKeydown($event)"
+    [attr.id]="id"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+    role="button"
+    aria-haspopup="dialog"
+    [attr.tabindex]="isDisabled() ? -1 : 0"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-disabled]="isDisabled()"
+  >
+    @if (floatingLabel() && label()) {
+      <span [class]="floatLabelClasses()">{{ label() }}</span>
     }
-  </span>
+
+    <span class="ngx-time-picker__icon" aria-hidden="true">
+      <ngx-ds-icon [icon]="ClockIcon" [size]="iconSize()" />
+    </span>
+
+    <span class="ngx-time-picker__display">
+      @if (displayValue()) {
+        <span class="ngx-time-picker__value">{{ displayValue() }}</span>
+      } @else {
+        <span class="ngx-time-picker__placeholder">{{
+          placeholder() ?? i18n.timePlaceholder
+        }}</span>
+      }
+    </span>
+  </div>
 
   @if (hasValue() && !isDisabled()) {
     <button

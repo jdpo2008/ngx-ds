@@ -7,8 +7,10 @@ import {
   computed,
   signal,
   forwardRef,
+  inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type SliderColor = 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
 
@@ -40,6 +42,7 @@ let nextId = 0;
 })
 export class RangeSliderComponent implements ControlValueAccessor {
   readonly id = `ngx-range-slider-${nextId++}`;
+  readonly i18n = inject(NGX_DS_LABELS);
   readonly value = model<number>(0);
   // `undefined` is accepted so Signal Forms can bind the field's min/max.
   readonly min = input(0, { transform: (v: number | undefined) => v ?? 0 });
@@ -54,6 +57,8 @@ export class RangeSliderComponent implements ControlValueAccessor {
   readonly range = input<boolean>(false);
   readonly values = model<[number, number]>([0, 100]);
   readonly minGap = input<number>(0);
+  /** Accessible name for the single slider when there is no visible `label`. */
+  readonly ariaLabel = input<string>('');
   readonly ariaLabelStart = input<string>('');
   readonly ariaLabelEnd = input<string>('');
 

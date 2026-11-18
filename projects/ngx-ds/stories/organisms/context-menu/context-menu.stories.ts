@@ -21,7 +21,7 @@ import type { MenuItem } from '../../../src/lib/molecules/menu/menu.types';
         </div>
       </ngx-ds-context-menu>
       @if (lastClicked) {
-        <p class="text-xs text-gray-400 mt-3">Último click: {{ lastClicked }}</p>
+        <p class="text-xs text-gray-500 mt-3">Último click: {{ lastClicked }}</p>
       }
     </div>
   `,

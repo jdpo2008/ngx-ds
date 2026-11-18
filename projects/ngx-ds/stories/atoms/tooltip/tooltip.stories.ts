@@ -42,12 +42,14 @@ class PlacementsWrapper {}
     <div class="p-10" style="display:flex; align-items:center; justify-content:center; gap:1rem;">
       <ngx-ds-icon-button
         [icon]="icons.Info"
+        ariaLabel="Más información"
         variant="ghost"
         color="primary"
         ngxTooltip="Más información sobre este campo"
       />
       <ngx-ds-icon-button
         [icon]="icons.Trash2"
+        ariaLabel="Eliminar"
         variant="ghost"
         color="danger"
         ngxTooltip="Eliminar permanentemente"
@@ -55,6 +57,7 @@ class PlacementsWrapper {}
       />
       <ngx-ds-icon-button
         [icon]="icons.Settings"
+        ariaLabel="Configuración"
         variant="ghost"
         ngxTooltip="Configuración avanzada"
         tooltipPlacement="right"

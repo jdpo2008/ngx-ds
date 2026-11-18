@@ -1,4 +1,9 @@
-<button [type]="type()" [class]="hostClasses()" [disabled]="disabled() || loading() || null">
+<button
+  [type]="type()"
+  [class]="hostClasses()"
+  [disabled]="disabled() || loading() || null"
+  [attr.aria-label]="ariaLabel() ?? null"
+>
   @if (loading()) {
     <ngx-ds-spinner class="btn__icon" [size]="spinnerSize()" color="current" />
   } @else if (iconLeft()) {

@@ -18,7 +18,7 @@ import {
       <p class="text-sm text-gray-500 mb-3">Código de 6 dígitos numérico</p>
       <ngx-ds-otp-input [(value)]="code" (complete)="onComplete($event)" />
       @if (code) {
-        <p class="text-xs text-gray-400 mt-3">Valor: {{ code }}</p>
+        <p class="text-xs text-gray-500 mt-3">Valor: {{ code }}</p>
       }
       @if (completed) {
         <p class="text-xs text-green-600 mt-1">¡Código completo!</p>
@@ -44,15 +44,15 @@ class BasicWrapper {
   template: `
     <div class="p-6" style="display: flex; flex-direction: column; gap: 1.5rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-2">Small</p>
+        <p class="text-xs text-gray-500 mb-2">Small</p>
         <ngx-ds-otp-input size="sm" [length]="4" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Medium (default)</p>
+        <p class="text-xs text-gray-500 mb-2">Medium (default)</p>
         <ngx-ds-otp-input size="md" [length]="6" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Large</p>
+        <p class="text-xs text-gray-500 mb-2">Large</p>
         <ngx-ds-otp-input size="lg" [length]="6" />
       </div>
     </div>
@@ -71,7 +71,7 @@ class SizesWrapper {}
       <p class="text-sm text-gray-500 mb-3">Código alfanumérico de 8 caracteres</p>
       <ngx-ds-otp-input type="alphanumeric" [length]="8" [(value)]="code" />
       @if (code) {
-        <p class="text-xs text-gray-400 mt-3">Valor: {{ code }}</p>
+        <p class="text-xs text-gray-500 mt-3">Valor: {{ code }}</p>
       }
     </div>
   `,
@@ -89,19 +89,19 @@ class AlphanumericWrapper {
   template: `
     <div class="p-6" style="display: flex; flex-direction: column; gap: 1.5rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-2">Normal</p>
+        <p class="text-xs text-gray-500 mb-2">Normal</p>
         <ngx-ds-otp-input />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Error</p>
+        <p class="text-xs text-gray-500 mb-2">Error</p>
         <ngx-ds-otp-input [error]="true" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Enmascarado (PIN)</p>
+        <p class="text-xs text-gray-500 mb-2">Enmascarado (PIN)</p>
         <ngx-ds-otp-input [masked]="true" [length]="4" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Deshabilitado</p>
+        <p class="text-xs text-gray-500 mb-2">Deshabilitado</p>
         <ngx-ds-otp-input [disabled]="true" />
       </div>
     </div>

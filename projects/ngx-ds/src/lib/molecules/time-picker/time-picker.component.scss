@@ -141,19 +141,41 @@ $sizes: (
   color: var(--text-placeholder, #9ca3af);
 }
 
+.ngx-time-picker__control {
+  position: relative;
+}
+
+// Room for the absolutely positioned clear button.
+.ngx-time-picker__field.ngx-time-picker__field--clearable {
+  padding-right: 2.25rem;
+}
+
+// 24×24 hit area (WCAG 2.5.8) around the icon.
 .ngx-time-picker__clear {
+  position: absolute;
+  top: 50%;
+  right: 0.375rem;
   display: inline-flex;
-  flex-shrink: 0;
   align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
   color: var(--text-placeholder, #9ca3af);
   background: transparent;
   border: none;
+  border-radius: 0.25rem;
+  transform: translateY(-50%);
   cursor: pointer;
   transition: color 0.15s ease;
 
   &:hover {
     color: var(--text-muted, #6b7280);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-500, #6366f1);
+    outline-offset: 1px;
   }
 }
 

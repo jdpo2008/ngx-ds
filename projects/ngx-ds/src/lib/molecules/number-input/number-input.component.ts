@@ -46,6 +46,8 @@ export class NumberInputComponent implements ControlValueAccessor {
   readonly step = input<number>(1);
   readonly size = input<NumberInputSize>('md');
   readonly label = input<string>('');
+  /** Accessible name when there is no visible `label`. */
+  readonly ariaLabel = input<string | undefined>(undefined);
   readonly hint = input<string>('');
   readonly errorMessage = input<string>('');
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */

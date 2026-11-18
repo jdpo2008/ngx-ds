@@ -10,6 +10,7 @@
       [attr.autocomplete]="i === 0 ? 'one-time-code' : 'off'"
       [disabled]="isDisabled() || null"
       [attr.aria-invalid]="hasError() || null"
+      [attr.aria-label]="i18n.otpDigit(i + 1, indices().length)"
       [style.width]="boxDim()"
       [style.height]="boxDim()"
       [style.fontSize]="boxFs()"

@@ -87,7 +87,7 @@ class MultipleWrapper {}
   template: `
     <div class="p-6" style="max-width: 38rem; display: flex; flex-direction: column; gap: 2.5rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-2 font-medium">
+        <p class="text-xs text-gray-500 mb-2 font-medium">
           Default — tarjetas con borde individual
         </p>
         <ngx-ds-accordion variant="default">
@@ -104,7 +104,7 @@ class MultipleWrapper {}
       </div>
 
       <div>
-        <p class="text-xs text-gray-400 mb-2 font-medium">
+        <p class="text-xs text-gray-500 mb-2 font-medium">
           Flush — separadores, borde exterior compartido
         </p>
         <ngx-ds-accordion variant="flush">
@@ -121,7 +121,7 @@ class MultipleWrapper {}
       </div>
 
       <div>
-        <p class="text-xs text-gray-400 mb-2 font-medium">Ghost — sin bordes, fondo en hover</p>
+        <p class="text-xs text-gray-500 mb-2 font-medium">Ghost — sin bordes, fondo en hover</p>
         <ngx-ds-accordion variant="ghost">
           <ngx-ds-accordion-item label="Primer elemento"
             >Contenido del primer elemento.</ngx-ds-accordion-item
@@ -148,7 +148,7 @@ class VariantsWrapper {}
   template: `
     <div class="p-6" style="max-width: 38rem; display: flex; flex-direction: column; gap: 2rem;">
       <div>
-        <p class="text-xs text-gray-400 mb-2">Small</p>
+        <p class="text-xs text-gray-500 mb-2">Small</p>
         <ngx-ds-accordion size="sm">
           <ngx-ds-accordion-item label="Elemento sm">Contenido pequeño.</ngx-ds-accordion-item>
           <ngx-ds-accordion-item label="Otro elemento sm"
@@ -157,7 +157,7 @@ class VariantsWrapper {}
         </ngx-ds-accordion>
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Medium (default)</p>
+        <p class="text-xs text-gray-500 mb-2">Medium (default)</p>
         <ngx-ds-accordion size="md">
           <ngx-ds-accordion-item label="Elemento md">Contenido mediano.</ngx-ds-accordion-item>
           <ngx-ds-accordion-item label="Otro elemento md"
@@ -166,7 +166,7 @@ class VariantsWrapper {}
         </ngx-ds-accordion>
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-2">Large</p>
+        <p class="text-xs text-gray-500 mb-2">Large</p>
         <ngx-ds-accordion size="lg">
           <ngx-ds-accordion-item label="Elemento lg">Contenido grande.</ngx-ds-accordion-item>
           <ngx-ds-accordion-item label="Otro elemento lg"

@@ -70,19 +70,19 @@ class FloatingWrapper {}
   template: `
     <div class="p-6 flex flex-col gap-5 max-w-sm">
       <div>
-        <p class="text-xs text-gray-400 mb-1">Small</p>
+        <p class="text-xs text-gray-500 mb-1">Small</p>
         <ngx-ds-input label="Small" size="sm" placeholder="Texto pequeño" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Medium (por defecto)</p>
+        <p class="text-xs text-gray-500 mb-1">Medium (por defecto)</p>
         <ngx-ds-input label="Medium" size="md" placeholder="Texto medio" />
       </div>
       <div>
-        <p class="text-xs text-gray-400 mb-1">Large</p>
+        <p class="text-xs text-gray-500 mb-1">Large</p>
         <ngx-ds-input label="Large" size="lg" placeholder="Texto grande" />
       </div>
 
-      <p class="text-xs text-gray-400 mt-2 mb-1">Floating label por tamaño</p>
+      <p class="text-xs text-gray-500 mt-2 mb-1">Floating label por tamaño</p>
       <ngx-ds-input size="sm" label="Small float" [floatingLabel]="true" placeholder="..." />
       <ngx-ds-input size="md" label="Medium float" [floatingLabel]="true" placeholder="..." />
       <ngx-ds-input size="lg" label="Large float" [floatingLabel]="true" placeholder="..." />
@@ -120,7 +120,7 @@ class SizesWrapper {}
         placeholder="nombre.usuario"
       />
 
-      <p class="text-xs text-gray-400 mt-2 mb-1">Floating label con icono</p>
+      <p class="text-xs text-gray-500 mt-2 mb-1">Floating label con icono</p>
       <ngx-ds-input
         label="Email"
         type="email"
@@ -170,7 +170,7 @@ class IconsWrapper {
       <ngx-ds-input label="Deshabilitado" placeholder="No editable" [disabled]="true" />
       <ngx-ds-input label="Solo lectura" value="Valor de solo lectura" [readonly]="true" />
 
-      <p class="text-xs text-gray-400 mt-2 mb-1">Floating label + estados</p>
+      <p class="text-xs text-gray-500 mt-2 mb-1">Floating label + estados</p>
       <ngx-ds-input
         label="Con error"
         [floatingLabel]="true"

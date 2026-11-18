@@ -304,7 +304,7 @@ class RoundedWrapper {
       <p class="text-sm text-gray-500 mb-3">Todos los colores — Solid y Outline</p>
       <div class="grid gap-4">
         <div class="flex items-center gap-4">
-          <span class="text-xs text-gray-400 w-20">Primary</span>
+          <span class="text-xs text-gray-500 w-20">Primary</span>
           <ngx-ds-icon-button
             variant="solid"
             color="primary"
@@ -333,7 +333,7 @@ class RoundedWrapper {
           />
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-xs text-gray-400 w-20">Secondary</span>
+          <span class="text-xs text-gray-500 w-20">Secondary</span>
           <ngx-ds-icon-button
             variant="solid"
             color="secondary"
@@ -362,7 +362,7 @@ class RoundedWrapper {
           />
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-xs text-gray-400 w-20">Danger</span>
+          <span class="text-xs text-gray-500 w-20">Danger</span>
           <ngx-ds-icon-button
             variant="solid"
             color="danger"
@@ -391,7 +391,7 @@ class RoundedWrapper {
           />
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-xs text-gray-400 w-20">Success</span>
+          <span class="text-xs text-gray-500 w-20">Success</span>
           <ngx-ds-icon-button
             variant="solid"
             color="success"
@@ -420,7 +420,7 @@ class RoundedWrapper {
           />
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-xs text-gray-400 w-20">Warning</span>
+          <span class="text-xs text-gray-500 w-20">Warning</span>
           <ngx-ds-icon-button
             variant="solid"
             color="warning"

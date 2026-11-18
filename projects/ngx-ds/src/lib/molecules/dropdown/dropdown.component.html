@@ -13,6 +13,7 @@
   [attr.aria-invalid]="hasError() || null"
   [attr.aria-describedby]="errorText() || hint() ? messageId : null"
   role="combobox"
+  [attr.aria-label]="label() || null"
   [attr.tabindex]="isDisabled() ? -1 : 0"
   [attr.aria-controls]="id + '-panel'"
   [attr.aria-expanded]="isOpen()"

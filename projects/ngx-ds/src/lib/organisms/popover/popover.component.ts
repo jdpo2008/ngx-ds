@@ -1,15 +1,24 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  afterNextRender,
   computed,
+  effect,
   input,
   model,
   output,
   inject,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { NGX_DS_LABELS } from '../../shared/labels';
+
+// A projected trigger that is already interactive (e.g. <ngx-ds-button>) handles
+// focus and keyboard itself; the wrapper must not be a second, nested button.
+const INTERACTIVE = 'button, a[href], input, select, textarea, [tabindex]';
 
 export type PopoverPlacement =
   'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
@@ -35,6 +44,10 @@ export class PopoverComponent {
   readonly opened = output<void>();
   readonly closed = output<void>();
 
+  private readonly triggerRef = viewChild.required<ElementRef<HTMLElement>>('trigger');
+  /** The interactive element projected as trigger, if any. */
+  readonly nativeTrigger = signal<HTMLElement | null>(null);
+
   readonly panelClasses = computed(() => `popover__panel popover__panel--${this.placement()}`);
 
   toggle(): void {
@@ -44,7 +57,26 @@ export class PopoverComponent {
     else this.closed.emit();
   }
 
+  /** Keyboard toggle for a non-interactive trigger; native ones fire `click`. */
+  onTriggerKey(event: Event): void {
+    if (this.nativeTrigger()) return;
+    event.preventDefault();
+    this.toggle();
+  }
+
   constructor() {
+    afterNextRender(() => {
+      const el = this.triggerRef().nativeElement.querySelector<HTMLElement>(INTERACTIVE);
+      this.nativeTrigger.set(el);
+    });
+
+    effect(() => {
+      const el = this.nativeTrigger();
+      if (!el) return;
+      el.setAttribute('aria-haspopup', 'dialog');
+      el.setAttribute('aria-expanded', String(this.open()));
+    });
+
     setupEscapeClose(() => {
       if (this.open() && this.closeOnEscape()) this.close();
     });

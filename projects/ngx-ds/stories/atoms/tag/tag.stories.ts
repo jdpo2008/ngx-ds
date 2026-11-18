@@ -176,7 +176,7 @@ class IconsWrapper {
           />
         }
       </div>
-      <p class="text-xs text-gray-400 mt-2">Haz clic en la × para descartar un tag.</p>
+      <p class="text-xs text-gray-500 mt-2">Haz clic en la × para descartar un tag.</p>
     </div>
   `,
 })

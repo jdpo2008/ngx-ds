@@ -10,8 +10,8 @@ import { NumberInputComponent } from '../../../src/lib/molecules/number-input/nu
     <div class="p-6" style="display:flex; flex-direction:column; gap:1.5rem;">
       <ngx-ds-number-input label="Cantidad" [(value)]="qty" [min]="0" [max]="100" />
       <ngx-ds-number-input label="Precio" [(value)]="price" [step]="0.5" hint="Incremento de 0.5" />
-      <ngx-ds-number-input size="sm" [(value)]="qty" [min]="0" />
-      <ngx-ds-number-input size="lg" [(value)]="qty" [min]="0" />
+      <ngx-ds-number-input size="sm" ariaLabel="Cantidad (sm)" [(value)]="qty" [min]="0" />
+      <ngx-ds-number-input size="lg" ariaLabel="Cantidad (lg)" [(value)]="qty" [min]="0" />
       <ngx-ds-number-input label="Deshabilitado" [value]="5" [disabled]="true" />
       <p style="font-size:0.8rem; color:var(--text-muted, #6b7280);">Qty: {{ qty() }}</p>
     </div>
