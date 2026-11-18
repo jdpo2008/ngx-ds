@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NgxDsNgAdd",
+  "title": "ngx-ds ng-add",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The application to set up.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  }
+}

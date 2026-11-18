@@ -5,14 +5,24 @@ An Angular 21 component library: standalone components, a signal-based API, `OnP
 ## Install
 
 ```bash
+ng add @jdpo2008/ngx-ds
+```
+
+`ng add` installs the package and `lucide-angular`, and adds the design tokens stylesheet to the `styles` of your application in `angular.json`. In a workspace with several applications, pass `--project <name>`.
+
+To set it up by hand instead:
+
+```bash
 npm install @jdpo2008/ngx-ds lucide-angular
 ```
+
+then load the stylesheet as described in [Styles](#styles).
 
 Peer dependencies: `@angular/common`, `@angular/core`, `@angular/forms` and `@angular/platform-browser` 21, and `lucide-angular` 1.
 
 ## Styles
 
-Load the design tokens once, globally. Add the stylesheet to `angular.json`:
+`ng add` does this for you. Otherwise, load the design tokens once, globally. Add the stylesheet to `angular.json`:
 
 ```json
 "styles": ["node_modules/@jdpo2008/ngx-ds/styles/ngx-ds.scss", "src/styles.scss"]

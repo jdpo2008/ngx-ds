@@ -45,6 +45,9 @@ jobs:
       - name: Test
         run: npx ng test --watch=false
 
+      - name: Test schematics
+        run: npm run test:schematics
+
       - name: Build library
         run: npm run build
 

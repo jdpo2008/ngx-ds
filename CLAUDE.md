@@ -39,6 +39,14 @@ Published to npm as `@jdpo2008/ngx-ds` (the unscoped `ngx-ds` name belongs to so
 1. Bump `version` in `projects/ngx-ds/package.json` and add a section to `CHANGELOG.md` (root), via a normal PR.
 2. After merging, create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish` with the `NPM_TOKEN` secret. No `--provenance`: npm only accepts it from public repositories, and this one is private.
 
+### Schematics (`ng add`)
+
+`projects/ngx-ds/schematics/` holds the `ng add` schematic (`collection.json`, `ng-add/index.cts`, `ng-add/schema.json`). It adds `lucide-angular` and prepends `styles/ngx-ds.scss` to the app's `styles`.
+
+- The source is `.cts`: the built package is `"type": "module"`, and `npm pack` drops a nested `package.json`, so the schematic must compile to `.cjs`.
+- `npm run build` runs ng-packagr, then `tsc -p projects/ngx-ds/tsconfig.schematics.json`. ng-packagr copies the JSON files as assets.
+- Tests: `npm run test:schematics` (Vitest with `schematics/vitest.config.mts`, separate from `ng test`). They import the `.cts` source directly.
+
 Consumers load `styles/ngx-ds.scss` (tokens, no Tailwind). `styles/index.scss` adds the Tailwind directives for Storybook only.
 
 ### Component tiers
