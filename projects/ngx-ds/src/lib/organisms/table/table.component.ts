@@ -42,7 +42,7 @@ export type ColumnAlign = 'left' | 'center' | 'right';
 export type ColumnType = 'text' | 'number' | 'date' | 'boolean' | 'badge' | 'custom';
 export type SortDirection = 'asc' | 'desc';
 export type SelectMode = 'single' | 'multi';
-export type ActionColor = 'default' | 'primary' | 'danger' | 'success' | 'warning';
+export type ActionColor = 'default' | 'primary' | 'danger' | 'success' | 'warning' | 'info';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: consumers type rows loosely by default
 export interface TableAction<T = any> {

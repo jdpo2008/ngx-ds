@@ -1,4 +1,7 @@
-export type NotificationType = 'info' | 'success' | 'warning' | 'error';
+/**
+ * Notification colour. `'error'` is a deprecated alias of `'danger'` and will be removed in 1.0.
+ */
+export type NotificationType = 'info' | 'success' | 'warning' | 'danger' | 'error';
 
 export interface NgxNotification {
   id: string | number;

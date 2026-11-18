@@ -38,7 +38,7 @@ const SEED: NgxNotification[] = [
   },
   {
     id: 4,
-    type: 'error',
+    type: 'danger',
     title: 'Error al sincronizar datos',
     description: 'No se pudo conectar con el servidor. Intenta de nuevo.',
     time: minutesAgo(300),

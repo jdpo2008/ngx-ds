@@ -630,7 +630,10 @@ export const Default: Story = {
   argTypes: {
     variant: { control: 'select', options: ['solid', 'outline'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    color: { control: 'select', options: ['primary', 'secondary', 'danger', 'success', 'warning'] },
+    color: {
+      control: 'select',
+      options: ['primary', 'secondary', 'danger', 'success', 'warning', 'info'],
+    },
     disabled: { control: 'boolean' },
     rounded: { control: 'boolean' },
     bordered: { control: 'boolean' },

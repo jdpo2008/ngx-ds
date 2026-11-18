@@ -11,7 +11,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
 
 export type RadioSize = Size;
-export type RadioColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type RadioColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 export type RadioValue = string | number;
 
 let nextId = 0;

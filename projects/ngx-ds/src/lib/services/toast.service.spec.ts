@@ -24,11 +24,17 @@ describe('ToastrService', () => {
 
   it('typed helpers set the type and title', () => {
     service.success('ok', 'Hecho');
-    service.error('ko');
+    service.danger('ko');
     service.warning('cuidado');
     service.info('dato');
-    expect(service.toasts().map((t) => t.type)).toEqual(['success', 'error', 'warning', 'info']);
+    expect(service.toasts().map((t) => t.type)).toEqual(['success', 'danger', 'warning', 'info']);
     expect(service.toasts()[0].title).toBe('Hecho');
+  });
+
+  it('maps the deprecated error type and helper to danger', () => {
+    service.error('ko');
+    service.show({ message: 'ko', type: 'error' });
+    expect(service.toasts().map((t) => t.type)).toEqual(['danger', 'danger']);
   });
 
   it('removes a toast automatically after its duration', () => {

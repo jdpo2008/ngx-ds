@@ -11,7 +11,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
 
 export type CheckboxSize = Size;
-export type CheckboxColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+export type CheckboxColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 
 let nextId = 0;
 

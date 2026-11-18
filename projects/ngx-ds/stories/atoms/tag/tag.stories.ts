@@ -39,6 +39,7 @@ class DefaultWrapper {
           <ngx-ds-tag label="Danger" color="danger" variant="soft" />
           <ngx-ds-tag label="Success" color="success" variant="soft" />
           <ngx-ds-tag label="Warning" color="warning" variant="soft" />
+          <ngx-ds-tag label="Info" color="info" variant="soft" />
         </div>
       </div>
       <div>
@@ -49,6 +50,7 @@ class DefaultWrapper {
           <ngx-ds-tag label="Danger" color="danger" variant="solid" />
           <ngx-ds-tag label="Success" color="success" variant="solid" />
           <ngx-ds-tag label="Warning" color="warning" variant="solid" />
+          <ngx-ds-tag label="Info" color="info" variant="solid" />
         </div>
       </div>
       <div>
@@ -59,6 +61,7 @@ class DefaultWrapper {
           <ngx-ds-tag label="Danger" color="danger" variant="outline" />
           <ngx-ds-tag label="Success" color="success" variant="outline" />
           <ngx-ds-tag label="Warning" color="warning" variant="outline" />
+          <ngx-ds-tag label="Info" color="info" variant="outline" />
         </div>
       </div>
     </div>

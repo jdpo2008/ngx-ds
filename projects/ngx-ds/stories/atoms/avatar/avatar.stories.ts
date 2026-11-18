@@ -85,6 +85,10 @@ class SizesWrapper {}
           <ngx-ds-avatar initials="W" color="warning" size="md" />
           <span class="text-xs text-gray-500">warning</span>
         </div>
+        <div class="flex flex-col items-center gap-2">
+          <ngx-ds-avatar initials="I" color="info" size="md" />
+          <span class="text-xs text-gray-500">info</span>
+        </div>
       </div>
     </div>
   `,

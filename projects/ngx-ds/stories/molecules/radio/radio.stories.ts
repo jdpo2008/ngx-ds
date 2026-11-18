@@ -56,6 +56,7 @@ class DefaultWrapper {
       <ngx-ds-radio name="col" value="danger" label="Danger" color="danger" />
       <ngx-ds-radio name="col" value="success" label="Success" color="success" />
       <ngx-ds-radio name="col" value="warning" label="Warning" color="warning" />
+      <ngx-ds-radio name="col" value="info" label="Info" color="info" />
     </div>
   `,
 })

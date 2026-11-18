@@ -4,6 +4,7 @@ $btn-colors: (
   'danger': var(--fill-danger, #dc2626),
   'success': var(--fill-success, #047857),
   'warning': var(--fill-warning, #b45309),
+  'info': var(--fill-info, #2563eb),
 );
 
 .btn {

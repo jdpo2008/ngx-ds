@@ -24,6 +24,7 @@ import { Plus, Trash2, Check, ArrowRight, Download, Send } from 'lucide-angular'
           <ngx-ds-button variant="solid" color="danger">Danger</ngx-ds-button>
           <ngx-ds-button variant="solid" color="success">Success</ngx-ds-button>
           <ngx-ds-button variant="solid" color="warning">Warning</ngx-ds-button>
+          <ngx-ds-button variant="solid" color="info">Info</ngx-ds-button>
         </div>
       </div>
       <div>
@@ -34,6 +35,7 @@ import { Plus, Trash2, Check, ArrowRight, Download, Send } from 'lucide-angular'
           <ngx-ds-button variant="outline" color="danger">Danger</ngx-ds-button>
           <ngx-ds-button variant="outline" color="success">Success</ngx-ds-button>
           <ngx-ds-button variant="outline" color="warning">Warning</ngx-ds-button>
+          <ngx-ds-button variant="outline" color="info">Info</ngx-ds-button>
         </div>
       </div>
     </div>
@@ -343,7 +345,10 @@ export const Default: Story = {
   argTypes: {
     variant: { control: 'select', options: ['solid', 'outline'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
-    color: { control: 'select', options: ['primary', 'secondary', 'danger', 'success', 'warning'] },
+    color: {
+      control: 'select',
+      options: ['primary', 'secondary', 'danger', 'success', 'warning', 'info'],
+    },
     disabled: { control: 'boolean' },
     rounded: { control: 'boolean' },
     loading: { control: 'boolean' },
