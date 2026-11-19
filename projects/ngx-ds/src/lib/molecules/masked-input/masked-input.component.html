@@ -1,0 +1,41 @@
+<!-- Static label (non-floating) -->
+@if (!floatingLabel() && label()) {
+  <label [for]="id" class="ngx-input__label">{{ label() }}</label>
+}
+
+<div [class]="fieldClasses()">
+  @if (floatingLabel() && label()) {
+    <label [for]="id" [class]="floatLabelClasses()">{{ label() }}</label>
+  }
+
+  @if (iconLeft()) {
+    <span class="ngx-input__icon ngx-input__icon--left" aria-hidden="true">
+      <ngx-ds-icon [icon]="iconLeft()!" [size]="iconSize()" />
+    </span>
+  }
+
+  <input
+    class="ngx-input__native"
+    type="text"
+    [id]="id"
+    [attr.inputmode]="inputMode()"
+    [attr.autocomplete]="autocomplete()"
+    [attr.aria-invalid]="hasError() || null"
+    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+    [value]="display()"
+    [placeholder]="effectivePlaceholder()"
+    [disabled]="isDisabled() || null"
+    [attr.readonly]="readonly() || null"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+</div>
+
+@if (errorText()) {
+  <p [id]="messageId" class="ngx-input__message ngx-input__message--error" role="alert">
+    {{ errorText() }}
+  </p>
+} @else if (hint()) {
+  <p [id]="messageId" class="ngx-input__message ngx-input__message--hint">{{ hint() }}</p>
+}
