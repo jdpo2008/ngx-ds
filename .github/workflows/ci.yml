@@ -60,7 +60,7 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
       pull-requests: write
@@ -91,6 +91,15 @@ jobs:
       - name: Compare bundle size
         run: npm run size -- --base ../base/dist/ngx-ds --markdown size.md
 
+      # What a consumer app pays per component after tree-shaking (builds small Angular apps).
+      - name: Install dependencies
+        if: ${{ !cancelled() }}
+        run: npm ci
+
+      - name: Compare consumer bundle size
+        if: ${{ !cancelled() }}
+        run: npm run size:consumer -- --base ../base/dist/ngx-ds --markdown consumer.md
+
       # One comment per PR, updated on every push.
       - name: Comment on the PR
         if: always() && hashFiles('size.md') != ''
@@ -99,6 +108,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
         run: |
+          if [ -f consumer.md ]; then printf '\n' >> size.md; cat consumer.md >> size.md; fi
           cat size.md >> "$GITHUB_STEP_SUMMARY"
           id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate             --jq '.[] | select(.body | startswith("<!-- bundle-size -->")) | .id' | head -1)
           if [ -n "$id" ]; then
