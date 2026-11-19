@@ -90,3 +90,4 @@ export * from './lib/organisms/sidebar';
 export * from './lib/organisms/carousel';
 export * from './lib/organisms/lightbox';
 export * from './lib/organisms/splitter';
+export * from './lib/organisms/navbar';
