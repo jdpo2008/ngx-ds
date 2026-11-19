@@ -4,6 +4,18 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-19
+
+### Added
+
+- `DescriptionListComponent` (`ngx-ds-description-list`): label/value pairs for detail views, rendered as a semantic `<dl>`. Horizontal or vertical layout, several columns that collapse on narrow screens, sizes, dividers, a placeholder for empty values and per-item copy-to-clipboard buttons (`copied` output).
+- `copy` and `copied` entries in `NGX_DS_LABELS` (ES and EN).
+- `MaskedInputComponent` (`ngx-ds-masked-input`): text field that formats input with a mask such as `(999) 999-9999` (tokens `9`, `a`, `A`, `*`). Same look and options as `ngx-ds-input`, works with reactive, template-driven and Signal Forms, stores the raw value (or the formatted one with `keepLiterals`) and reports a `mask` validation error while incomplete.
+- `NavbarComponent` (`ngx-ds-navbar`): top application bar with `[navbar-brand]` and `[navbar-actions]` slots, navigation links with active state and badges, an optional `sticky` mode, and a menu toggle when the bar is narrower than 768px.
+- `openMenu` and `closeMenu` keys in `NgxDsLabels`.
+- `StatCardComponent` (`ngx-ds-stat-card`): metric tile for dashboards with label, value, percentage change (green or red, with `invertTrend` for metrics where lower is better), optional icon, `loading` placeholders and a `[stat-footer]` slot.
+- `increase`, `decrease` and `noChange` keys in `NgxDsLabels`.
+
 ## [1.0.0] - 2026-11-19
 
 ### Removed
@@ -152,6 +164,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.1.0
 [1.0.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.0.0
 [0.7.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.7.0
 [0.6.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.6.0
