@@ -70,6 +70,89 @@ describe('TooltipDirective', () => {
     expect(tip()).toBeNull();
   });
 
+  it('shows a single tooltip when hover and focus both fire', () => {
+    const { btn } = setup();
+    btn.dispatchEvent(new Event('focusin'));
+    btn.dispatchEvent(new Event('mouseenter'));
+    vi.advanceTimersByTime(100);
+    expect(document.body.querySelectorAll('.ngx-tooltip').length).toBe(1);
+    btn.dispatchEvent(new Event('mouseenter'));
+    vi.advanceTimersByTime(100);
+    expect(document.body.querySelectorAll('.ngx-tooltip').length).toBe(1);
+    btn.dispatchEvent(new Event('mouseleave'));
+    expect(document.body.querySelectorAll('.ngx-tooltip').length).toBe(0);
+  });
+
+  describe('positioning', () => {
+    const rect = (left: number, top: number, width: number, height: number) =>
+      ({ left, top, width, height, right: left + width, bottom: top + height }) as DOMRect;
+
+    /** Host at (100, 100) 40×20, tooltip 60×10, viewport 1000×800. */
+    function place(placement: string, host = rect(100, 100, 40, 20)) {
+      const fixture = TestBed.createComponent(PlacedHost);
+      fixture.componentInstance.placement.set(placement);
+      fixture.detectChanges();
+      const btn = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+      vi.spyOn(btn, 'getBoundingClientRect').mockReturnValue(host);
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: HTMLElement,
+      ) {
+        return this === btn ? host : rect(0, 0, 60, 10);
+      });
+      vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(1000);
+      vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(800);
+      btn.dispatchEvent(new Event('mouseenter'));
+      vi.advanceTimersByTime(0);
+      vi.advanceTimersByTime(20); // requestAnimationFrame
+      const tip = document.body.querySelector<HTMLElement>('.ngx-tooltip')!;
+      return { left: tip.style.left, top: tip.style.top };
+    }
+
+    @Component({
+      standalone: true,
+      imports: [TooltipDirective],
+      template: `<button ngxTooltip="Tip" [tooltipPlacement]="$any(placement())" [tooltipDelay]="0">
+        X
+      </button>`,
+    })
+    class PlacedHost {
+      placement = signal('top');
+    }
+
+    afterEach(() => vi.restoreAllMocks());
+
+    it('centres above the host by default', () => {
+      expect(place('top')).toEqual({ left: '90px', top: '82px' });
+    });
+
+    it('centres below the host', () => {
+      expect(place('bottom')).toEqual({ left: '90px', top: '128px' });
+    });
+
+    it('sits to the left and to the right of the host', () => {
+      expect(place('left')).toEqual({ left: '32px', top: '105px' });
+      document.body.querySelectorAll('ngx-ds-tooltip-box').forEach((n) => n.remove());
+      expect(place('right')).toEqual({ left: '148px', top: '105px' });
+    });
+
+    it('stays inside the viewport', () => {
+      expect(place('top', rect(0, 0, 10, 10))).toEqual({ left: '8px', top: '8px' });
+      document.body.querySelectorAll('ngx-ds-tooltip-box').forEach((n) => n.remove());
+      expect(place('bottom', rect(990, 790, 10, 10))).toEqual({ left: '932px', top: '782px' });
+    });
+
+    it('skips positioning when hidden before the frame runs', () => {
+      const fixture = TestBed.createComponent(PlacedHost);
+      fixture.detectChanges();
+      const btn = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+      btn.dispatchEvent(new Event('mouseenter'));
+      vi.advanceTimersByTime(0);
+      btn.dispatchEvent(new Event('mouseleave'));
+      expect(() => vi.advanceTimersByTime(20)).not.toThrow();
+      expect(document.body.querySelector('.ngx-tooltip')).toBeNull();
+    });
+  });
+
   it('cleans up when the host is destroyed', () => {
     const { fixture, btn, tip } = setup();
     btn.dispatchEvent(new Event('mouseenter'));

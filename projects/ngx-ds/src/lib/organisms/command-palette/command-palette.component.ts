@@ -73,7 +73,8 @@ export class CommandPaletteComponent {
     return Array.from(cats.entries()).map(([cat, items]) => ({ cat, items }));
   });
 
-  readonly flatItems = computed(() => this.filteredItems());
+  /** Items in the order they are rendered (grouped by category), which the cursor follows. */
+  readonly flatItems = computed(() => this.categories().flatMap((group) => group.items));
 
   readonly listboxId = `ngx-cp-listbox-${nextId++}`;
 

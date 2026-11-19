@@ -40,7 +40,12 @@ export class TooltipDirective implements OnDestroy {
 
   show(): void {
     if (!this.ngxTooltip() || this.tooltipDisabled()) return;
-    this.timer = setTimeout(() => this._create(), this.tooltipDelay());
+    // Hover and focus can both fire: never stack a second tooltip on the first.
+    if (this.timer || this.compRef) return;
+    this.timer = setTimeout(() => {
+      this.timer = null;
+      this._create();
+    }, this.tooltipDelay());
   }
 
   hide(): void {
