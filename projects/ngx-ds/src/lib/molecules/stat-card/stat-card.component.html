@@ -1,0 +1,34 @@
+<div class="stat" [attr.aria-busy]="loading() || null">
+  <div class="stat__header">
+    <span class="stat__label">{{ label() }}</span>
+    @if (icon(); as ic) {
+      <span class="stat__icon" aria-hidden="true">
+        <ngx-ds-icon [icon]="ic" [size]="20" />
+      </span>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="stat__skeleton stat__skeleton--value"></div>
+    <div class="stat__skeleton stat__skeleton--delta"></div>
+  } @else {
+    <div class="stat__value">{{ value() }}</div>
+
+    @if (delta() !== null) {
+      <div class="stat__change">
+        <span class="stat__delta" [class]="'stat__delta stat__delta--' + sentiment()">
+          <ngx-ds-icon [icon]="trendIcon()" [size]="14" aria-hidden="true" />
+          <span class="stat__sr">{{ trendText() }}</span>
+          {{ deltaText() }}
+        </span>
+        @if (deltaLabel()) {
+          <span class="stat__delta-label">{{ deltaLabel() }}</span>
+        }
+      </div>
+    }
+  }
+
+  <div class="stat__footer">
+    <ng-content select="[stat-footer]" />
+  </div>
+</div>
