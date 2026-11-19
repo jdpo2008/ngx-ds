@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  linkedSignal,
   inject,
   input,
   model,
@@ -218,8 +219,8 @@ export class TableComponent<T extends object = Record<string, unknown>> {
 
   // ── Internal signals ──────────────────────────────────────────────────────
   readonly #internalSort = signal<TableSort | null>(null);
-  readonly #internalPage = signal(1);
-  readonly #internalPageSize = signal(10);
+  readonly #internalPage = linkedSignal(() => this.page());
+  readonly #internalPageSize = linkedSignal(() => this.pageSize());
 
   // ── Effective state ───────────────────────────────────────────────────────
   readonly effectiveSort = computed(() => (this.clientSide() ? this.#internalSort() : this.sort()));
