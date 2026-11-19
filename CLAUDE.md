@@ -157,6 +157,7 @@ Also in `shared/`: `Size` type (`'sm' | 'md' | 'lg'`) for size inputs, and `day-
 
 - `atoms/icon`, `atoms/kbd`, `organisms/accordion` use inline template and/or styles.
 - `atoms/tooltip` is a directive (`tooltip.directive.ts`) plus `tooltip-box.component.ts`.
+- `molecules/masked-input` has no `.scss` of its own: it reuses `../input/input.component.scss` so both fields look the same. Its mask logic lives in `mask.ts`.
 
 ### Adding a new component (checklist)
 

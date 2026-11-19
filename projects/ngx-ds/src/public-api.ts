@@ -68,6 +68,7 @@ export * from './lib/molecules/tag-input';
 export * from './lib/molecules/inline-edit';
 export * from './lib/molecules/tree-select';
 export * from './lib/molecules/stat-card';
+export * from './lib/molecules/masked-input';
 
 // ── Organisms ─────────────────────────────────────────────────
 export * from './lib/organisms/pagination';

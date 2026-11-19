@@ -1,0 +1,113 @@
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MaskedInputComponent } from './masked-input.component';
+import { applyMask, caretAfter, extractRaw, maskGuide } from './mask';
+
+const PHONE = '(999) 999-9999';
+
+describe('mask helpers', () => {
+  it('formats raw input and only writes literals before a character', () => {
+    expect(applyMask('5', PHONE).masked).toBe('(5');
+    expect(applyMask('555', PHONE).masked).toBe('(555');
+    expect(applyMask('5551', PHONE).masked).toBe('(555) 1');
+    expect(applyMask('555123456799', PHONE)).toEqual({
+      masked: '(555) 123-4567',
+      raw: '5551234567',
+    });
+  });
+
+  it('drops characters that do not fit their slot and upper-cases A', () => {
+    expect(applyMask('5x5', '99').raw).toBe('55');
+    expect(applyMask('es12', 'AA99').masked).toBe('ES12');
+    expect(applyMask('1a', 'a9').raw).toBe('a');
+  });
+
+  it('reads pasted text and ignores a literal prefix with digits', () => {
+    expect(extractRaw('(555) 123-4567', PHONE)).toBe('5551234567');
+    expect(extractRaw('+34 612', '+34 999 999 999')).toBe('612');
+  });
+
+  it('places the caret after the n-th accepted character', () => {
+    expect(caretAfter('(555) 1', PHONE, 4)).toBe(7);
+    expect(caretAfter('(555) 1', PHONE, 3)).toBe(4);
+    expect(caretAfter('(555) 1', PHONE, 0)).toBe(0);
+  });
+
+  it('builds a guide placeholder', () => {
+    expect(maskGuide('99/99/9999')).toBe('__/__/____');
+  });
+});
+
+describe('MaskedInputComponent', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(MaskedInputComponent);
+    fixture.componentRef.setInput('mask', PHONE);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const native = () => el.querySelector<HTMLInputElement>('input')!;
+    const type = (text: string) => {
+      native().value = text;
+      native().setSelectionRange(text.length, text.length);
+      native().dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, native, type };
+  }
+
+  it('formats typing and stores the raw value', () => {
+    const { cmp, native, type } = setup();
+    type('5551234');
+    expect(native().value).toBe('(555) 123-4');
+    expect(cmp.value()).toBe('5551234');
+    expect(cmp.isComplete()).toBe(false);
+    type('(555) 123-45678');
+    expect(cmp.value()).toBe('5551234567');
+    expect(cmp.isComplete()).toBe(true);
+  });
+
+  it('keeps the literals in the value with keepLiterals', () => {
+    const { cmp, type } = setup({ keepLiterals: true });
+    type('5551234567');
+    expect(cmp.value()).toBe('(555) 123-4567');
+  });
+
+  it('rejects a key that does not fit and keeps the caret in place', () => {
+    const { cmp, native, type } = setup();
+    type('555');
+    type('(555x');
+    expect(native().value).toBe('(555');
+    expect(native().selectionStart).toBe(4);
+    expect(cmp.value()).toBe('555');
+  });
+
+  it('uses the mask guide as placeholder and a numeric keyboard', () => {
+    const { native } = setup();
+    expect(native().placeholder).toBe('(___) ___-____');
+    expect(native().getAttribute('inputmode')).toBe('numeric');
+  });
+
+  it('works with reactive forms and reports incomplete values', () => {
+    @Component({
+      standalone: true,
+      imports: [MaskedInputComponent, ReactiveFormsModule],
+      template: `<ngx-ds-masked-input mask="99/99/9999" [formControl]="ctrl" />`,
+    })
+    class Host {
+      readonly ctrl = new FormControl('01052026');
+    }
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    const native = (fixture.nativeElement as HTMLElement).querySelector('input')!;
+    expect(native.value).toBe('01/05/2026');
+    expect(fixture.componentInstance.ctrl.valid).toBe(true);
+
+    native.value = '01/05';
+    native.dispatchEvent(new Event('input'));
+    expect(fixture.componentInstance.ctrl.value).toBe('0105');
+    expect(fixture.componentInstance.ctrl.errors).toEqual({
+      mask: { requiredLength: 8, actualLength: 4 },
+    });
+  });
+});
