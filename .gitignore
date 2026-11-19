@@ -52,3 +52,6 @@ storybook-static
 
 # Visual regression output
 /visual-report
+
+# Playwright MCP screenshots and logs
+/.playwright-mcp
