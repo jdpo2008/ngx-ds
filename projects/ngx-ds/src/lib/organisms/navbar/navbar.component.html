@@ -1,0 +1,62 @@
+<ng-template #links>
+  @for (item of items(); track item.id) {
+    <button
+      type="button"
+      class="navbar__link"
+      [class.navbar__link--active]="activeId() === item.id"
+      [disabled]="item.disabled"
+      [attr.aria-current]="activeId() === item.id ? 'page' : null"
+      (click)="onItemClick(item)"
+    >
+      @if (item.icon) {
+        <ngx-ds-icon [icon]="item.icon" [size]="18" class="navbar__link-icon" />
+      }
+      <span class="navbar__link-label">{{ item.label }}</span>
+      @if (item.badge !== undefined) {
+        <ngx-ds-badge size="sm" [count]="badgeCount(item)" [label]="badgeLabel(item)" />
+      }
+    </button>
+  }
+</ng-template>
+
+<header class="navbar">
+  <div class="navbar__bar">
+    @if (items().length) {
+      <button
+        #toggle
+        type="button"
+        class="navbar__toggle"
+        [attr.aria-expanded]="menuOpen()"
+        [attr.aria-controls]="panelId"
+        [attr.aria-label]="menuOpen() ? i18n.closeMenu : i18n.openMenu"
+        (click)="toggleMenu()"
+      >
+        <ngx-ds-icon [icon]="menuOpen() ? closeIcon : menuIcon" [size]="20" />
+      </button>
+    }
+
+    <div class="navbar__brand">
+      <ng-content select="[navbar-brand]" />
+    </div>
+
+    @if (items().length) {
+      <nav class="navbar__nav" [attr.aria-label]="ariaLabel() ?? i18n.mainNavigation">
+        <ng-container [ngTemplateOutlet]="links" />
+      </nav>
+    }
+
+    <div class="navbar__actions">
+      <ng-content select="[navbar-actions]" />
+    </div>
+  </div>
+
+  @if (menuOpen() && items().length) {
+    <nav
+      class="navbar__panel"
+      [id]="panelId"
+      [attr.aria-label]="ariaLabel() ?? i18n.mainNavigation"
+    >
+      <ng-container [ngTemplateOutlet]="links" />
+    </nav>
+  }
+</header>

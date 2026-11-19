@@ -102,6 +102,8 @@ export interface NgxDsLabels {
   mainNavigation: string;
   expandMenu: string;
   collapseMenu: string;
+  openMenu: string;
+  closeMenu: string;
 
   // ── Command palette ───────────────────────────────────────
   commandPalette: string;
@@ -237,6 +239,8 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   mainNavigation: 'Navegación principal',
   expandMenu: 'Expandir menú',
   collapseMenu: 'Colapsar menú',
+  openMenu: 'Abrir menú',
+  closeMenu: 'Cerrar menú',
 
   commandPalette: 'Paleta de comandos',
   commandPlaceholder: 'Buscar comandos...',
@@ -366,6 +370,8 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   mainNavigation: 'Main navigation',
   expandMenu: 'Expand menu',
   collapseMenu: 'Collapse menu',
+  openMenu: 'Open menu',
+  closeMenu: 'Close menu',
 
   commandPalette: 'Command palette',
   commandPlaceholder: 'Search commands...',
