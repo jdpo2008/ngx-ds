@@ -4,6 +4,20 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-19
+
+### Removed
+
+The names deprecated in 0.7.0 are gone. Use the new names:
+
+- Toast and Notification type `'error'`: use `'danger'`. `ToastrService.error()`: use `danger()`.
+- OtpInput and FormField `error`: use `errorMessage`. OtpInput no longer has an error style without a message: set `errorMessage`, or bind it with Signal Forms.
+- ChipGroup `variant="filled"`: use `"solid"`. ChipGroup `multiSelect`: use `multiple`.
+- NotificationCenter and NotificationItem `dismiss` output: use `dismissed`.
+- Drawer and Modal `showClose`: use `dismissible`.
+- Popover `closeOnClickOutside`: use `closeOnBackdrop`.
+- Alert `type` and the `AlertType` type: use `color` and `AlertColor`.
+
 ## [0.7.0] - 2026-11-18
 
 ### Added
@@ -138,6 +152,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.0.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.0.0
 [0.7.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.7.0
 [0.6.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.5.0
