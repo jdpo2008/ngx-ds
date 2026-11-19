@@ -24,6 +24,9 @@ npm run format
 # Bundle size of dist/ngx-ds (after npm run build); --base <dir> compares two builds
 npm run size
 
+# What each component adds (gzip) to a minimal production Angular app; --base <dir> compares
+npm run size:consumer
+
 # Watch build (dev)
 npm run watch
 
