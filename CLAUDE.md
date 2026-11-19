@@ -58,7 +58,7 @@ Published to npm as `@jdpo2008/ngx-ds` (the unscoped `ngx-ds` name belongs to so
 1. On a `chore/release-<version>` branch: bump `version` in `projects/ngx-ds/package.json`, run `npm run changelog -- --release` (moves the fragments into `CHANGELOG.md` under the version and today's date, and deletes them), open a PR and merge it.
 2. Create a GitHub release with tag `v<version>`. `.github/workflows/release.yml` checks that the tag matches the version, runs lint, tests and the build, then runs `npm publish` with the `NPM_TOKEN` secret. No `--provenance`: npm only accepts it from public repositories, and this one is private.
 
-Prereleases (`1.0.0-rc.1`): bump the version only — no `changelog --release`, the fragments stay for the stable version — and mark the GitHub release as a pre-release. The workflow publishes any version with a `-` to the `next` dist-tag instead of `latest`.
+Prereleases (`1.0.0-rc.1`): bump the version only — no `changelog --release`, the fragments stay for the stable version — and mark the GitHub release as a pre-release. The workflow publishes any version with a `-` to the `next` dist-tag instead of `latest`. After a stable release it also moves `next` to that version, so `next` is never older than `latest`.
 
 ### Schematics (`ng add`)
 
