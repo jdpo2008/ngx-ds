@@ -1,0 +1,31 @@
+<dl [class]="classes()" [style.--dl-columns]="columns()">
+  @for (item of items(); track $index) {
+    <div class="dl__item" [class.dl__item--full]="item.fullWidth">
+      <dt class="dl__term">{{ item.label }}</dt>
+      <dd class="dl__desc">
+        @if (isEmpty(item)) {
+          <span class="dl__value dl__value--empty">{{ emptyValue() }}</span>
+        } @else {
+          <span class="dl__value">{{ item.value }}</span>
+          @if (item.copyable) {
+            <button
+              type="button"
+              class="dl__copy"
+              [class.dl__copy--done]="copiedIndex() === $index"
+              [attr.aria-label]="i18n.copy(item.label)"
+              (click)="copy(item, $index)"
+            >
+              <ngx-ds-icon
+                [icon]="copiedIndex() === $index ? checkIcon : copyIcon"
+                [size]="14"
+                aria-hidden="true"
+              />
+            </button>
+          }
+        }
+      </dd>
+    </div>
+  }
+</dl>
+
+<span class="dl__status" aria-live="polite">{{ copiedIndex() !== null ? i18n.copied : '' }}</span>

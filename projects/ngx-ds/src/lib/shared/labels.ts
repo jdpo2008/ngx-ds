@@ -52,6 +52,9 @@ export interface NgxDsLabels {
   removeFile: string;
   fileTooLarge: (maxMb: number) => string;
   closeAlert: string;
+  /** Accessible name of a copy button: "Copy <label>". */
+  copy: (label: string) => string;
+  copied: string;
 
   // ── Password strength ─────────────────────────────────────
   passwordRequirements: string;
@@ -198,6 +201,8 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   removeFile: 'Eliminar archivo',
   fileTooLarge: (mb) => `Supera el máximo de ${mb} MB`,
   closeAlert: 'Cerrar alerta',
+  copy: (label) => `Copiar ${label}`,
+  copied: 'Copiado',
 
   passwordRequirements: 'Requisitos de contraseña',
   passwordStrength: 'Fortaleza',
@@ -333,6 +338,8 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   removeFile: 'Remove file',
   fileTooLarge: (mb) => `Exceeds the ${mb} MB limit`,
   closeAlert: 'Close alert',
+  copy: (label) => `Copy ${label}`,
+  copied: 'Copied',
 
   passwordRequirements: 'Password requirements',
   passwordStrength: 'Strength',
