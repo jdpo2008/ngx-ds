@@ -2,18 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
   model,
-  OnDestroy,
   output,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { ChevronLeft, ChevronRight, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { setupEscapeClose } from '../../shared/escape-close';
+import { setupOverlay } from '../../shared/overlay-stack';
 import { NGX_DS_LABELS } from '../../shared/labels';
 import { CarouselItem, stepIndex } from '../carousel/carousel.types';
 
@@ -28,9 +26,8 @@ const SWIPE_THRESHOLD = 40;
   styleUrl: './lightbox.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LightboxComponent implements OnDestroy {
+export class LightboxComponent {
   readonly i18n = inject(NGX_DS_LABELS);
-  private readonly doc = inject(DOCUMENT);
   protected readonly icons = { ChevronLeft, ChevronRight, X };
 
   // ── Inputs ───────────────────────────────────────────────────
@@ -55,16 +52,10 @@ export class LightboxComponent implements OnDestroy {
   );
 
   constructor() {
-    effect(() => {
-      this.doc.body.style.overflow = this.open() ? 'hidden' : '';
-    });
+    const isTop = setupOverlay(this.open);
     setupEscapeClose(() => {
-      if (this.open()) this.close();
+      if (this.open() && isTop()) this.close();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.doc.body.style.overflow = '';
   }
 
   close(): void {

@@ -55,7 +55,8 @@ export class StepperComponent {
   }
 
   goTo(index: number): void {
-    if (!this.clickable()) return;
+    if (!this.clickable() || index === this.active()) return;
+    if (index < 0 || index >= this.steps().length) return;
     this.active.set(index);
     this.stepChange.emit(index);
   }

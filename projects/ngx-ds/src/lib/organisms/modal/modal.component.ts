@@ -2,17 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
   model,
-  OnDestroy,
   output,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { X } from 'lucide-angular';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { setupEscapeClose } from '../../shared/escape-close';
+import { setupOverlay } from '../../shared/overlay-stack';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -26,10 +24,8 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
   styleUrl: './modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ModalComponent implements OnDestroy {
+export class ModalComponent {
   readonly i18n = inject(NGX_DS_LABELS);
-
-  private readonly doc = inject(DOCUMENT);
 
   protected readonly icons = { X };
 
@@ -49,17 +45,10 @@ export class ModalComponent implements OnDestroy {
   readonly panelClasses = computed(() => `modal modal--${this.size()}`);
 
   constructor() {
-    effect(() => {
-      this.doc.body.style.overflow = this.open() ? 'hidden' : '';
-    });
-
+    const isTop = setupOverlay(this.open);
     setupEscapeClose(() => {
-      if (this.open() && this.closeOnEscape()) this.close();
+      if (this.open() && this.closeOnEscape() && isTop()) this.close();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.doc.body.style.overflow = '';
   }
 
   close(): void {
