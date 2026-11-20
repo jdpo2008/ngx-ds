@@ -5,7 +5,7 @@
   </div>
 
   @if (icon()) {
-    <div class="empty-state__icon">
+    <div class="empty-state__icon" aria-hidden="true">
       <ngx-ds-icon [icon]="icon()!" [size]="iconSize()" />
     </div>
   }

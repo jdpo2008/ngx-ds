@@ -7,6 +7,7 @@ import { Component, ChangeDetectionStrategy, input, computed } from '@angular/co
   templateUrl: './button-group.component.html',
   styleUrl: './button-group.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.btn-group-host--full-width]': 'fullWidth()' },
 })
 export class ButtonGroupComponent {
   readonly ariaLabel = input<string>('');

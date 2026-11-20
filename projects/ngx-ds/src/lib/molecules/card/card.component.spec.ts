@@ -38,3 +38,33 @@ describe('CardComponent', () => {
     expect(el.querySelector('.card__footer button')?.textContent).toBe('OK');
   });
 });
+
+describe('CardComponent behaviour', () => {
+  @Component({
+    standalone: true,
+    imports: [CardComponent],
+    template: `<ngx-ds-card><p>Solo cuerpo</p></ngx-ds-card>`,
+  })
+  class BodyOnlyHost {}
+
+  it('hides the header and footer when nothing is projected into them', () => {
+    const fixture = TestBed.createComponent(BodyOnlyHost);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(getComputedStyle(el.querySelector('.card__header')!).display).toBe('none');
+    expect(getComputedStyle(el.querySelector('.card__footer')!).display).toBe('none');
+    expect(getComputedStyle(el.querySelector('.card__body')!).display).not.toBe('none');
+  });
+
+  it('updates the modifiers when the inputs change', () => {
+    const fixture = TestBed.createComponent(CardComponent);
+    fixture.componentRef.setInput('shadow', 'none');
+    fixture.componentRef.setInput('padding', 'lg');
+    fixture.componentRef.setInput('bordered', false);
+    fixture.detectChanges();
+    const card = (fixture.nativeElement as HTMLElement).querySelector('.card')!;
+    expect(card.classList).toContain('card--shadow-none');
+    expect(card.classList).toContain('card--pad-lg');
+    expect(card.classList).not.toContain('card--bordered');
+  });
+});

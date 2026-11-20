@@ -3,6 +3,11 @@
   font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
 }
 
+// The inner row can only span what the host gives it.
+:host(.btn-group-host--full-width) {
+  display: block;
+}
+
 // Acoplamiento intencional a los internos de ngx-ds-button (.btn) para colapsar
 // bordes/radios entre botones agrupados — aceptable dentro de la propia librería.
 
