@@ -21,6 +21,13 @@ const ICON_SIZES: Record<NumberInputSize, number> = { sm: 14, md: 16, lg: 18 };
 
 let nextId = 0;
 
+function decimals(n: number): number {
+  if (!isFinite(n)) return 0;
+  const [mantissa, exp] = String(n).split('e');
+  const frac = mantissa.split('.')[1]?.length ?? 0;
+  return Math.max(0, frac - Number(exp ?? 0));
+}
+
 @Component({
   selector: 'ngx-ds-number-input',
   standalone: true,
@@ -88,7 +95,7 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   decrement(): void {
     if (!this.canDecrement()) return;
-    const next = this.value() - this.step();
+    const next = this.#round(this.value() - this.step());
     const min = this.min();
     const clamped = min !== null ? Math.max(next, min) : next;
     this.setValue(clamped);
@@ -96,20 +103,33 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   increment(): void {
     if (!this.canIncrement()) return;
-    const next = this.value() + this.step();
+    const next = this.#round(this.value() + this.step());
     const max = this.max();
     const clamped = max !== null ? Math.min(next, max) : next;
     this.setValue(clamped);
   }
 
   onInputChange(event: Event): void {
-    const raw = (event.target as HTMLInputElement).value;
-    const n = parseFloat(raw);
-    if (isNaN(n)) return;
-    const min = this.min();
-    const max = this.max();
-    const clamped = min !== null && n < min ? min : max !== null && n > max ? max : n;
-    this.setValue(clamped);
+    const field = event.target as HTMLInputElement;
+    const n = parseFloat(field.value);
+    if (!isNaN(n)) {
+      const min = this.min();
+      const max = this.max();
+      this.setValue(min !== null && n < min ? min : max !== null && n > max ? max : n);
+    }
+    // The [value] binding doesn't rewrite the field when the signal keeps the same value
+    // (a clamped entry equal to the current value, or text that isn't a number).
+    field.value = String(this.value());
+  }
+
+  onBlur(): void {
+    this.#onTouched();
+  }
+
+  /** Rounds to the decimals of the value or the step, so 0.1 + 0.2 gives 0.3. */
+  #round(n: number): number {
+    const p = Math.max(decimals(this.value()), decimals(this.step()));
+    return Math.round(n * 10 ** p) / 10 ** p;
   }
 
   private setValue(v: number): void {

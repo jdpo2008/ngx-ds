@@ -54,18 +54,23 @@ export class TabsComponent {
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
 
+  /** The tab shown: `active`, or the first enabled tab when `active` is disabled or out of range. */
+  readonly selectedIndex = computed(() => {
+    const tabs = this.tabs();
+    const active = this.active();
+    if (tabs[active] && !tabs[active].disabled()) return active;
+    const first = tabs.findIndex((t) => !t.disabled());
+    return first >= 0 ? first : active;
+  });
+
   constructor() {
-    effect(
-      () => {
-        const idx = this.active();
-        const tabs = this.tabs();
-        tabs.forEach((tab, i) => {
-          tab.setActive(i === idx);
-          tab.setIds(this.panelId(i), this.tabId(i));
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const idx = this.selectedIndex();
+      this.tabs().forEach((tab, i) => {
+        tab.setActive(i === idx);
+        tab.setIds(this.panelId(i), this.tabId(i));
+      });
+    });
   }
 
   select(index: number): void {
@@ -81,10 +86,10 @@ export class TabsComponent {
     let next: number;
     switch (event.key) {
       case 'ArrowRight':
-        next = this.nextEnabled(this.active(), 1);
+        next = this.nextEnabled(this.selectedIndex(), 1);
         break;
       case 'ArrowLeft':
-        next = this.nextEnabled(this.active(), -1);
+        next = this.nextEnabled(this.selectedIndex(), -1);
         break;
       case 'Home':
         next = this.nextEnabled(-1, 1);
@@ -110,6 +115,6 @@ export class TabsComponent {
       i = (i + dir + count) % count;
       if (!tabs[i]?.disabled()) return i;
     }
-    return this.active();
+    return this.selectedIndex();
   }
 }

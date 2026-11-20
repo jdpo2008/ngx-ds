@@ -9,9 +9,9 @@ import { TabContentDirective } from './tab-content.directive';
   imports: [NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (lazy()) {
-      @if (_activatedOnce()) {
-        <ng-container [ngTemplateOutlet]="contentTpl()!.templateRef" />
+    @if (contentTpl(); as tpl) {
+      @if (!lazy() || _activatedOnce()) {
+        <ng-container [ngTemplateOutlet]="tpl.templateRef" />
       }
     } @else {
       <ng-content />

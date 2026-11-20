@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TreeSelectComponent, TreeSelectNode } from './tree-select.component';
+import { TreeSelectComponent, TreeSelectNode, TreeSelectValue } from './tree-select.component';
 
 const NODES: TreeSelectNode[] = [
   {
@@ -254,5 +254,224 @@ describe('TreeSelectComponent', () => {
     fixture.componentInstance.ctrl.disable();
     fixture.detectChanges();
     expect(el.querySelector('[role="combobox"]')?.getAttribute('aria-disabled')).toBe('true');
+  });
+});
+
+describe('TreeSelectComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(TreeSelectComponent);
+    fixture.componentRef.setInput('nodes', NODES);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    const cmp = fixture.componentInstance;
+    const changes: TreeSelectValue[] = [];
+    const touched = vi.fn();
+    cmp.registerOnChange((v) => changes.push(v));
+    cmp.registerOnTouched(touched);
+    fixture.detectChanges();
+    document.body.appendChild(fixture.nativeElement);
+    const el = fixture.nativeElement as HTMLElement;
+    const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!;
+    const render = () => fixture.detectChanges();
+    const rows = () => Array.from(el.querySelectorAll<HTMLElement>('[role="treeitem"]'));
+    const row = (label: string) =>
+      rows().find((r) => r.querySelector('.ts__row-label')?.textContent?.trim() === label)!;
+    const labels = () => rows().map((r) => r.querySelector('.ts__row-label')!.textContent!.trim());
+    const open = () => {
+      trigger.click();
+      render();
+    };
+    const tick = async () => {
+      render();
+      await fixture.whenStable();
+    };
+    const q = (s: string) => el.querySelector<HTMLElement>(s);
+    return {
+      fixture,
+      cmp,
+      el,
+      trigger,
+      render,
+      rows,
+      row,
+      labels,
+      open,
+      tick,
+      q,
+      changes,
+      touched,
+    };
+  }
+
+  afterEach(() => document.body.replaceChildren());
+
+  it('Escape and outside clicks mark touched only when they close the panel', () => {
+    const { cmp, open, render, touched } = setup();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    document.body.click();
+    expect(touched).not.toHaveBeenCalled();
+    open();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalledTimes(1);
+    open();
+    document.body.click();
+    render();
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalledTimes(2);
+  });
+
+  it('Tab on a row closes the panel and marks touched', () => {
+    const { cmp, open, row, render, touched } = setup();
+    open();
+    key(row('Pan'), 'Tab');
+    render();
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalledOnce();
+  });
+
+  it('Enter on the trigger opens and focuses the first row; Enter again closes', async () => {
+    const { cmp, trigger, rows, tick } = setup();
+    trigger.focus();
+    key(trigger, 'Enter');
+    await tick();
+    expect(cmp.isOpen()).toBe(true);
+    expect(document.activeElement).toBe(rows()[0]);
+    key(trigger, 'Enter');
+    await tick();
+    expect(cmp.isOpen()).toBe(false);
+  });
+
+  it('ArrowDown on an open trigger moves focus into the tree', async () => {
+    const { trigger, open, rows, tick } = setup();
+    open();
+    key(trigger, 'ArrowDown');
+    await tick();
+    expect(document.activeElement).toBe(rows()[0]);
+  });
+
+  it('keys from a chip remove button do not open the panel', () => {
+    const { cmp, q } = setup({ multiple: true, value: ['apple'] });
+    key(q('.ts__chip-remove')!, 'Enter');
+    expect(cmp.isOpen()).toBe(false);
+  });
+
+  it('Home and End jump to the first and last row', async () => {
+    const { open, row, rows, tick } = setup();
+    open();
+    key(row('Verdura'), 'End');
+    await tick();
+    expect(document.activeElement).toBe(rows().at(-1));
+    key(rows().at(-1)!, 'Home');
+    await tick();
+    expect(document.activeElement).toBe(rows()[0]);
+  });
+
+  it('ArrowDown in the search box focuses the first match', async () => {
+    const { el, open, render, tick, row } = setup({ searchable: true });
+    open();
+    const search = el.querySelector<HTMLInputElement>('.ts__search')!;
+    search.value = 'zanah';
+    search.dispatchEvent(new Event('input'));
+    render();
+    key(search, 'a');
+    key(search, 'ArrowDown');
+    await tick();
+    expect(document.activeElement).toBe(row('Verdura'));
+  });
+
+  it('a search with no matches shows the empty text', () => {
+    const { el, open, render, rows, q } = setup({ searchable: true });
+    open();
+    const search = el.querySelector<HTMLInputElement>('.ts__search')!;
+    search.value = 'zzz';
+    search.dispatchEvent(new Event('input'));
+    render();
+    expect(rows().length).toBe(0);
+    expect(q('.ts__empty')!.textContent!.trim()).toBe('Sin resultados');
+  });
+
+  it('closing clears the search', () => {
+    const { cmp, el, open, render } = setup({ searchable: true });
+    open();
+    const search = el.querySelector<HTMLInputElement>('.ts__search')!;
+    search.value = 'pan';
+    search.dispatchEvent(new Event('input'));
+    render();
+    document.body.click();
+    expect(cmp.search()).toBe('');
+  });
+
+  it('multiple: Enter toggles the row and keeps the panel open', () => {
+    const { cmp, open, row, render } = setup({ multiple: true });
+    open();
+    key(row('Pan'), 'Enter');
+    render();
+    expect(cmp.value()).toEqual(['bread']);
+    expect(cmp.isOpen()).toBe(true);
+    key(row('Pan'), ' ');
+    expect(cmp.value()).toEqual([]);
+  });
+
+  it('multiple: a partly checked parent is mixed', () => {
+    const { open, row } = setup({
+      multiple: true,
+      value: ['lemon'],
+      expanded: ['fruit', 'citrus'],
+    });
+    open();
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('mixed');
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('mixed');
+    expect(row('Limón').getAttribute('aria-checked')).toBe('true');
+    expect(row('Pan').getAttribute('aria-checked')).toBe('false');
+    expect(row('Cítricos').querySelector('.ts__check--on')).not.toBeNull();
+  });
+
+  it('chips skip ids that are not in the tree', () => {
+    const { el } = setup({ multiple: true, value: ['ghost', 'pear'] });
+    const chips = Array.from(el.querySelectorAll('.ts__chip')).map((c) => c.textContent!.trim());
+    expect(chips).toEqual(['Pera']);
+  });
+
+  it('writeValue(null) gives [] in multiple mode and null in single mode', () => {
+    const multi = setup({ multiple: true });
+    multi.cmp.writeValue(null);
+    expect(multi.cmp.value()).toEqual([]);
+    const single = setup();
+    single.cmp.writeValue(undefined);
+    expect(single.cmp.value()).toBeNull();
+  });
+
+  it('a form-disabled control cannot open or remove chips', () => {
+    const { cmp, trigger, render, el, changes } = setup({ multiple: true, value: ['apple'] });
+    cmp.setDisabledState(true);
+    render();
+    expect(el.querySelector('.ts__chip-remove')).toBeNull();
+    trigger.click();
+    expect(cmp.isOpen()).toBe(false);
+    cmp.remove('apple', new MouseEvent('click'));
+    expect(cmp.value()).toEqual(['apple']);
+    expect(changes).toEqual([]);
+  });
+
+  it('label, hint and error', () => {
+    const { fixture, trigger, render, q } = setup({ label: 'Categoría', hint: 'Elige una' });
+    expect(trigger.getAttribute('aria-labelledby')).toBe(q('.ts__label')!.id);
+    expect(trigger.getAttribute('aria-label')).toBeNull();
+    expect(trigger.getAttribute('aria-describedby')).toBe(q('.ts__hint')!.id);
+    fixture.componentRef.setInput('errorMessage', 'Obligatoria');
+    render();
+    expect(q('.ts__hint')).toBeNull();
+    expect(q('.ts__error')!.textContent!.trim()).toBe('Obligatoria');
+    expect(trigger.getAttribute('aria-invalid')).toBe('true');
+    expect(trigger.className).toContain('ts__trigger--error');
+  });
+
+  it('without a label, the placeholder names the trigger and the tree', () => {
+    const { trigger, open, q } = setup({ placeholder: 'Elige categoría', size: 'sm' });
+    expect(trigger.getAttribute('aria-label')).toBe('Elige categoría');
+    expect(trigger.className).toContain('ts__trigger--sm');
+    open();
+    expect(q('[role="tree"]')!.getAttribute('aria-label')).toBe('Elige categoría');
+    expect(trigger.getAttribute('aria-controls')).toBe(q('[role="tree"]')!.id);
   });
 });

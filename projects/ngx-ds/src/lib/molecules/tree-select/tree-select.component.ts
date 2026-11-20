@@ -279,6 +279,7 @@ export class TreeSelectComponent implements ControlValueAccessor {
   }
 
   close(focusTrigger: boolean): void {
+    if (this.#open()) this.onTouched();
     this.#open.set(false);
     this.#search.set('');
     this.#active.set(null);
@@ -349,6 +350,7 @@ export class TreeSelectComponent implements ControlValueAccessor {
 
   remove(id: TreeSelectId, event: Event): void {
     event.stopPropagation();
+    if (this.isDisabled()) return;
     this.#commit(this.selectedIds().filter((v) => v !== id));
   }
 
