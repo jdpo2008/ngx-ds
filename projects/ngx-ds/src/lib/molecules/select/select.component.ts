@@ -160,6 +160,7 @@ export class SelectComponent implements ControlValueAccessor {
   constructor() {
     setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
+      if (!this.#open()) return;
       this.#open.set(false);
       this.#search.set('');
       this.onTouched();

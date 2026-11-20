@@ -313,5 +313,13 @@ describe('SelectComponent', () => {
       expect(cmp.searchText()).toBe('');
       expect(touched).toHaveBeenCalled();
     });
+
+    it('does not mark touched on outside clicks while closed', () => {
+      const { cmp } = render();
+      const touched = vi.fn();
+      cmp.registerOnTouched(touched);
+      document.body.click();
+      expect(touched).not.toHaveBeenCalled();
+    });
   });
 });
