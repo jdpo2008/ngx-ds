@@ -63,3 +63,71 @@ describe('SwitchComponent', () => {
     });
   });
 });
+
+describe('SwitchComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(SwitchComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    const cmp = fixture.componentInstance;
+    const changes: boolean[] = [];
+    const touched = vi.fn();
+    cmp.registerOnChange((v) => changes.push(v));
+    cmp.registerOnTouched(touched);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const native = el.querySelector('input')!;
+    const label = el.querySelector('label')!;
+    const render = () => fixture.detectChanges();
+    const q = (s: string) => el.querySelector<HTMLElement>(s);
+    return { fixture, cmp, el, native, label, render, q, changes, touched };
+  }
+
+  it('a click reports the value, marks touched and updates aria-checked', () => {
+    const { native, render, changes, touched } = setup();
+    native.click();
+    render();
+    expect(changes).toEqual([true]);
+    expect(touched).toHaveBeenCalledOnce();
+    expect(native.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('marks touched on blur', () => {
+    const { native, touched } = setup();
+    native.dispatchEvent(new Event('blur'));
+    expect(touched).toHaveBeenCalledOnce();
+  });
+
+  it('aria-label falls back to ariaLabel when there is no label', () => {
+    const { native } = setup({ ariaLabel: 'Notificaciones' });
+    expect(native.getAttribute('aria-label')).toBe('Notificaciones');
+  });
+
+  it('the state labels follow the value', () => {
+    const { native, render, q } = setup({ labelOn: 'Sí', labelOff: 'No' });
+    expect(q('.switch__state-label')!.textContent!.trim()).toBe('No');
+    native.click();
+    render();
+    expect(q('.switch__state-label')!.textContent!.trim()).toBe('Sí');
+  });
+
+  it('only labelOn shows nothing while off', () => {
+    const { q } = setup({ labelOn: 'Sí' });
+    expect(q('.switch__state-label')).toBeNull();
+  });
+
+  it('the label goes on the requested side', () => {
+    const { label } = setup({ label: 'Wifi', labelPosition: 'left' });
+    const children = Array.from(label.children).map((c) => c.className);
+    expect(children.indexOf('switch__label')).toBeLessThan(children.indexOf('switch__track'));
+  });
+
+  it('size, color and disabled set the classes; a form-disabled control disables the input', () => {
+    const { cmp, native, label, render } = setup({ size: 'sm', color: 'success' });
+    expect(label.className).toContain('switch--sm');
+    expect(label.className).toContain('switch--success');
+    cmp.setDisabledState(true);
+    render();
+    expect(native.disabled).toBe(true);
+    expect(label.className).toContain('switch--disabled');
+  });
+});
