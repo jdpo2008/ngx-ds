@@ -56,3 +56,60 @@ describe('AvatarGroupComponent', () => {
     expect(el.querySelector('.avatar-group__count')).toBeNull();
   });
 });
+
+describe('AvatarGroupComponent behaviour', () => {
+  @Component({
+    standalone: true,
+    imports: [AvatarGroupComponent, AvatarComponent],
+    template: `
+      <ngx-ds-avatar-group [max]="max()" [size]="size()">
+        @for (n of names(); track n) {
+          <ngx-ds-avatar [initials]="n" />
+        }
+      </ngx-ds-avatar-group>
+    `,
+  })
+  class GroupHost {
+    max = signal<number | null>(2);
+    size = signal<'sm' | 'lg'>('sm');
+    names = signal(['AB', 'CD', 'EF', 'GH']);
+  }
+
+  function setup() {
+    const fixture = TestBed.createComponent(GroupHost);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const shown = () =>
+      Array.from(el.querySelectorAll<HTMLElement>('ngx-ds-avatar')).map(
+        (a) => getComputedStyle(a).display !== 'none',
+      );
+    return { fixture, el, shown };
+  }
+
+  it('really hides the avatars past max, not only marks them hidden', () => {
+    const { shown } = setup();
+    expect(shown()).toEqual([true, true, false, false]);
+  });
+
+  it('updates the overflow count when avatars are added or max changes', () => {
+    const { fixture, el, shown } = setup();
+    const count = () => el.querySelector('.avatar-group__count')?.textContent?.trim() ?? null;
+    expect(count()).toBe('+2');
+    fixture.componentInstance.names.update((n) => [...n, 'IJ']);
+    fixture.detectChanges();
+    expect(count()).toBe('+3');
+    fixture.componentInstance.max.set(null);
+    fixture.detectChanges();
+    expect(count()).toBeNull();
+    expect(shown()).toEqual([true, true, true, true, true]);
+  });
+
+  it('sizes the overflow count like the avatars', () => {
+    const { fixture, el } = setup();
+    fixture.componentInstance.size.set('lg');
+    fixture.detectChanges();
+    expect(el.querySelector('.avatar-group__count')!.classList).toContain(
+      'avatar-group__count--lg',
+    );
+  });
+});

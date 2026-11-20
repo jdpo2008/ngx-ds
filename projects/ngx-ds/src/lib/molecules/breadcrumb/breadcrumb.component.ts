@@ -48,9 +48,13 @@ export class BreadcrumbComponent {
     const max = this.maxItems();
     if (!max || all.length <= max) return all;
 
+    const ellipsis: BreadcrumbItem = { label: '…', disabled: true };
+    // Only room for one crumb: it must be the current page.
+    if (max === 1) return [ellipsis, all[all.length - 1]];
+
     // Show first + ellipsis + last (max-1) items
     const keep = max - 1;
-    return [all[0], { label: '…', disabled: true }, ...all.slice(all.length - keep)];
+    return [all[0], ellipsis, ...all.slice(all.length - keep)];
   });
 
   protected isLast(index: number): boolean {
