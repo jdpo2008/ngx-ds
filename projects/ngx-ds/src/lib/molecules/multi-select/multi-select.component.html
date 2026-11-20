@@ -12,7 +12,8 @@
     [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     role="combobox"
     [attr.aria-label]="label() || null"
-    [attr.tabindex]="disabled() ? -1 : 0"
+    [attr.tabindex]="isDisabled() ? -1 : 0"
+    [attr.aria-disabled]="isDisabled() || null"
     [attr.aria-controls]="id + '-panel'"
     [attr.aria-expanded]="isOpen()"
     (click)="toggleOpen()"
@@ -23,17 +24,19 @@
         <span class="ms__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
       }
       @for (val of value(); track val) {
-        @let label = selectedLabels()[$index];
+        @let label = chipLabel(val);
         <span class="ms__chip">
           {{ label }}
-          <button
-            type="button"
-            class="ms__chip-remove"
-            (click)="removeChip(val, $event)"
-            [attr.aria-label]="i18n.removeChip(label)"
-          >
-            <ngx-ds-icon [icon]="XIcon" [size]="12" />
-          </button>
+          @if (!isDisabled()) {
+            <button
+              type="button"
+              class="ms__chip-remove"
+              (click)="removeChip(val, $event)"
+              [attr.aria-label]="i18n.removeChip(label)"
+            >
+              <ngx-ds-icon [icon]="XIcon" [size]="12" />
+            </button>
+          }
         </span>
       }
     </div>
@@ -78,7 +81,9 @@
             role="option"
             tabindex="-1"
             [attr.aria-selected]="isSelected(option)"
-            [attr.aria-disabled]="option.disabled || null"
+            [attr.aria-disabled]="
+              option.disabled || (!canSelectMore() && !isSelected(option)) || null
+            "
             (click)="toggleOption(option)"
             (keydown)="onOptionKeydown($event, option)"
           >

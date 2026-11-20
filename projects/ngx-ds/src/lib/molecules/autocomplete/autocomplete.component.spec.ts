@@ -123,3 +123,194 @@ describe('AutocompleteComponent', () => {
     });
   });
 });
+
+describe('AutocompleteComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(AutocompleteComponent);
+    if (!('options' in inputs)) fixture.componentRef.setInput('options', OPTIONS);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    const cmp = fixture.componentInstance;
+    const changes: (AutocompleteValue | null)[] = [];
+    const touched = vi.fn();
+    cmp.registerOnChange((v) => changes.push(v));
+    cmp.registerOnTouched(touched);
+    fixture.detectChanges();
+    document.body.appendChild(fixture.nativeElement);
+    const el = fixture.nativeElement as HTMLElement;
+    const native = el.querySelector<HTMLInputElement>('input')!;
+    const render = () => fixture.detectChanges();
+    const type = (text: string) => {
+      native.value = text;
+      native.dispatchEvent(new Event('input'));
+      render();
+    };
+    const focus = () => {
+      native.dispatchEvent(new Event('focus'));
+      render();
+    };
+    const options = () => Array.from(el.querySelectorAll<HTMLElement>('.ngx-autocomplete__option'));
+    const q = (s: string) => el.querySelector<HTMLElement>(s);
+    return { fixture, cmp, el, native, render, type, focus, options, q, changes, touched };
+  }
+
+  afterEach(() => {
+    vi.useRealTimers();
+    document.body.replaceChildren();
+  });
+
+  it('escapes option labels instead of rendering them as HTML', () => {
+    const { el, type, options, fixture } = setup({
+      options: [{ label: '<img src=x onerror="alert(1)">Madrid', value: 'x' }],
+      showAllOnFocus: true,
+    });
+    type('mad');
+    expect(el.querySelector('.ngx-autocomplete__panel img')).toBeNull();
+    expect(options()[0].textContent!.trim()).toBe('<img src=x onerror="alert(1)">Madrid');
+    expect(el.querySelector('mark')!.textContent).toBe('Mad');
+    type('');
+    fixture.detectChanges();
+    expect(el.querySelector('.ngx-autocomplete__panel img')).toBeNull();
+    expect(options()[0].textContent!.trim()).toContain('<img');
+  });
+
+  it('a click elsewhere does nothing while the field is not in use', () => {
+    const { cmp, native, render, touched } = setup({ allowCustom: false });
+    cmp.writeValue('mad');
+    document.body.click();
+    render();
+    expect(touched).not.toHaveBeenCalled();
+    expect(native.value).toBe('Madrid');
+  });
+
+  it('an outside click closes, restores the selected label and marks touched', () => {
+    const { cmp, native, type, render, touched } = setup();
+    cmp.writeValue('bcn');
+    render();
+    type('Barc');
+    expect(cmp.isOpen()).toBe(true);
+    document.body.click();
+    render();
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalledOnce();
+    expect(native.value).toBe('');
+  });
+
+  it('an outside click clears unmatched text unless allowCustom', () => {
+    const { fixture, native, type, render } = setup();
+    type('zzz');
+    document.body.click();
+    render();
+    expect(native.value).toBe('');
+    fixture.componentRef.setInput('allowCustom', true);
+    type('zzz');
+    document.body.click();
+    render();
+    expect(native.value).toBe('zzz');
+  });
+
+  it('disabled options are marked and cannot be picked', () => {
+    const { cmp, type, options, render } = setup({
+      options: [...OPTIONS, { label: 'Mallorca', value: 'pmi', disabled: true }],
+    });
+    type('mallorca');
+    expect(options()[0].getAttribute('aria-disabled')).toBe('true');
+    options()[0].dispatchEvent(new Event('mousedown'));
+    render();
+    expect(cmp.value()).toBeNull();
+  });
+
+  it('showAllOnFocus lists every option on focus', () => {
+    const { focus, options, cmp } = setup({ showAllOnFocus: true });
+    focus();
+    expect(cmp.isFocused()).toBe(true);
+    expect(options().length).toBe(3);
+  });
+
+  it('a disabled control ignores focus, option picks and clear', () => {
+    const { cmp, render, native, q } = setup();
+    cmp.writeValue('mad');
+    cmp.setDisabledState(true);
+    render();
+    expect(native.disabled).toBe(true);
+    expect(q('.ngx-autocomplete__clear')).toBeNull();
+    cmp.onFocus();
+    expect(cmp.isOpen()).toBe(false);
+    cmp.onOptionSelect(OPTIONS[2]);
+    cmp.onClear(new Event('mousedown'));
+    expect(cmp.value()).toBe('mad');
+  });
+
+  it('loading shows the spinner and the searching text, and hides clear', () => {
+    const { fixture, cmp, q, type, render } = setup({ options: [] });
+    cmp.writeValue('zzz');
+    fixture.componentRef.setInput('loading', true);
+    type('abc');
+    expect(q('.ngx-autocomplete__spinner')).not.toBeNull();
+    expect(q('.ngx-autocomplete__clear')).toBeNull();
+    expect(q('.ngx-autocomplete__loading-text')!.textContent).toContain('Buscando...');
+    expect(q('.ngx-autocomplete__empty')).toBeNull();
+    fixture.componentRef.setInput('loading', false);
+    fixture.componentRef.setInput('noResultsText', 'Nada');
+    render();
+    expect(q('.ngx-autocomplete__empty')!.textContent).toContain('Nada');
+  });
+
+  it('emits searchChange at once with debounceMs 0, and "" on clear', () => {
+    const { cmp, type, q, render } = setup({ debounceMs: 0 });
+    const searches: string[] = [];
+    cmp.searchChange.subscribe((s) => searches.push(s));
+    type('mad');
+    expect(searches).toEqual(['mad']);
+    cmp.onOptionSelect(OPTIONS[0]);
+    render();
+    q('.ngx-autocomplete__clear')!.dispatchEvent(new Event('mousedown'));
+    expect(searches).toEqual(['mad', '']);
+  });
+
+  it('a pending search is cancelled on destroy', () => {
+    vi.useFakeTimers();
+    const { fixture, cmp, type } = setup({ debounceMs: 100 });
+    const searches: string[] = [];
+    cmp.searchChange.subscribe((s) => searches.push(s));
+    type('m');
+    fixture.destroy();
+    vi.advanceTimersByTime(200);
+    expect(searches).toEqual([]);
+  });
+
+  it('options that arrive after the value fill in its label', () => {
+    const { fixture, cmp, native, render } = setup({ options: [] });
+    cmp.writeValue('agp');
+    render();
+    expect(native.value).toBe('');
+    fixture.componentRef.setInput('options', OPTIONS);
+    render();
+    expect(native.value).toBe('Málaga');
+    cmp.writeValue(null);
+    render();
+    expect(native.value).toBe('');
+  });
+
+  it('floating label, hint and error', () => {
+    const { fixture, q, native, focus, render } = setup({
+      label: 'Ciudad',
+      floatingLabel: true,
+      hint: 'Escribe una ciudad',
+      size: 'lg',
+    });
+    const float = () => q('.ngx-autocomplete__float-label')!;
+    expect(float().className).not.toContain('--active');
+    expect(native.placeholder).toBe('');
+    expect(native.getAttribute('aria-describedby')).toBe(q('.ngx-autocomplete__message--hint')!.id);
+    focus();
+    expect(float().className).toContain('ngx-autocomplete__float-label--active');
+    expect(float().className).toContain('ngx-autocomplete__float-label--focused');
+    expect(q('.ngx-autocomplete__field')!.className).toContain('ngx-autocomplete__field--lg');
+    fixture.componentRef.setInput('errorMessage', 'Obligatoria');
+    render();
+    expect(float().className).toContain('ngx-autocomplete__float-label--error');
+    expect(native.getAttribute('aria-invalid')).toBe('true');
+    expect(q('.ngx-autocomplete__message--hint')).toBeNull();
+    expect(q('.ngx-autocomplete__message--error')!.textContent!.trim()).toBe('Obligatoria');
+  });
+});

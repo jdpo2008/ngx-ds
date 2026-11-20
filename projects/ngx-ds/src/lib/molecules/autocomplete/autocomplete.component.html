@@ -71,6 +71,7 @@
           [class.ngx-autocomplete__option--disabled]="option.disabled"
           role="option"
           [attr.aria-selected]="isSelected(option.value)"
+          [attr.aria-disabled]="option.disabled || null"
           (mousedown)="onOptionSelect(option)"
         >
           <span [innerHTML]="getHighlightedLabel(option.label)"></span>
