@@ -310,7 +310,8 @@ export class DatepickerComponent implements ControlValueAccessor {
     return (
       (minD !== null && date < minD) ||
       (maxD !== null && date > maxD) ||
-      dDays.includes(date.getDay())
+      dDays.includes(date.getDay()) ||
+      this.disabledDates().some((d) => isSameDay(d, date))
     );
   }
 

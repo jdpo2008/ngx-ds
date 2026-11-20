@@ -183,3 +183,139 @@ describe('TimePickerComponent with Signal Forms', () => {
     expect(el.querySelector('[role="button"]')!.getAttribute('aria-describedby')).toBe(alert.id);
   });
 });
+
+describe('TimePickerComponent edge cases', () => {
+  afterEach(() => document.body.replaceChildren());
+
+  it('a minute picked before an hour uses the first hour that allows it', async () => {
+    const { cmp, open, option, render } = await setup({ minTime: '09:10', minuteStep: 5 });
+    await open();
+    option(1, '05').click();
+    await render();
+    expect(cmp.value()).toBe('10:05');
+    expect(cmp.isOpen()).toBe(false);
+  });
+
+  it('a minute no hour allows is ignored', async () => {
+    const { cmp, open, option, render } = await setup({ minTime: '10:00', maxTime: '10:00' });
+    await open();
+    option(1, '05').click();
+    await render();
+    expect(cmp.value()).toBeNull();
+    expect(cmp.isOpen()).toBe(true);
+  });
+
+  it('minuteStep is clamped to 1–60', async () => {
+    const { fixture, open, column, render } = await setup({ minuteStep: 0 });
+    await open();
+    expect(column(1).length).toBe(60);
+    fixture.componentRef.setInput('minuteStep', 90);
+    await render();
+    expect(column(1).map((o) => o.textContent!.trim())).toEqual(['00']);
+  });
+
+  it('12-hour: PM before an hour switches the hour column', async () => {
+    const { cmp, open, option, column, render } = await setup({ hourFormat: '12' });
+    await open();
+    option(2, 'PM').click();
+    await render();
+    expect(cmp.value()).toBeNull();
+    expect(option(2, 'PM').getAttribute('aria-selected')).toBe('true');
+    option(0, '3').click();
+    await render();
+    expect(cmp.value()).toBe('15:00');
+    expect(column(0)[0].textContent!.trim()).toBe('12');
+  });
+
+  it('12-hour: a period with no allowed hour is disabled', async () => {
+    const { cmp, open, option, render } = await setup(
+      { hourFormat: '12', minTime: '13:00' },
+      '14:00',
+    );
+    await open();
+    const am = option(2, 'AM');
+    expect(am.getAttribute('aria-disabled')).toBe('true');
+    am.click();
+    await render();
+    expect(cmp.value()).toBe('14:00');
+    expect(option(2, 'PM').getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('12-hour: switching period keeps the value when the new hour is not allowed', async () => {
+    const { cmp, open, option, render } = await setup(
+      { hourFormat: '12', maxTime: '12:00' },
+      '02:30',
+    );
+    expect(cmp.displayValue()).toBe('2:30 AM');
+    await open();
+    option(2, 'PM').click();
+    await render();
+    expect(cmp.value()).toBe('02:30');
+  });
+
+  it('ArrowUp moves up the column and other keys do nothing', async () => {
+    const { open, press } = await setup({}, '10:00');
+    await open();
+    await press('ArrowUp');
+    expect(document.activeElement!.textContent!.trim()).toBe('09');
+    await press('a');
+    expect(document.activeElement!.textContent!.trim()).toBe('09');
+  });
+
+  it('Enter opens; keys from nested elements are ignored', async () => {
+    const { cmp, el, trigger } = await setup();
+    el.querySelector('.ngx-time-picker__placeholder')!.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    );
+    expect(cmp.isOpen()).toBe(false);
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+    expect(cmp.isOpen()).toBe(false);
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(cmp.isOpen()).toBe(true);
+  });
+
+  it('an outside click closes and marks touched only when open', async () => {
+    const { cmp, open } = await setup();
+    const touched = vi.fn();
+    cmp.registerOnTouched(touched);
+    document.body.click();
+    expect(touched).not.toHaveBeenCalled();
+    await open();
+    document.body.click();
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalledOnce();
+  });
+
+  it('a disabled control ignores clear and option picks', async () => {
+    const { cmp } = await setup({}, '08:00');
+    cmp.setDisabledState(true);
+    cmp.clearValue(new Event('click'));
+    cmp.select('hour', { value: 9, label: '09', disabled: false, selected: false });
+    cmp.select('minute', { value: 30, label: '30', disabled: false, selected: false });
+    cmp.select('period', { value: 12, label: 'PM', disabled: false, selected: false });
+    expect(cmp.value()).toBe('08:00');
+  });
+
+  it('floating label, hint and error classes', async () => {
+    const { fixture, el, trigger, open, render } = await setup({
+      label: 'Hora',
+      floatingLabel: true,
+      hint: 'Entre 9 y 17',
+      size: 'lg',
+    });
+    const float = () => el.querySelector('.ngx-time-picker__float-label')!;
+    expect(float().className).not.toContain('--active');
+    expect(el.querySelector('.ngx-time-picker__message--hint')!.textContent!.trim()).toBe(
+      'Entre 9 y 17',
+    );
+    await open();
+    expect(float().className).toContain('ngx-time-picker__float-label--active');
+    expect(float().className).toContain('ngx-time-picker__float-label--focused');
+    expect(trigger.className).toContain('ngx-time-picker__field--lg');
+    fixture.componentRef.setInput('errorMessage', 'Fuera de horario');
+    await render();
+    expect(float().className).toContain('ngx-time-picker__float-label--error');
+    expect(trigger.className).toContain('ngx-time-picker__field--error');
+    expect(el.querySelector('.ngx-time-picker__message--hint')).toBeNull();
+  });
+});
