@@ -53,6 +53,8 @@ export interface NgxDsLabels {
   fileUploadPrompt: string;
   removeFile: string;
   fileTooLarge: (maxMb: number) => string;
+  /** FileUpload error for a file that does not match `accept`. */
+  fileTypeNotAllowed: string;
   closeAlert: string;
   /** Accessible name of a copy button: "Copy <label>". */
   copy: (label: string) => string;
@@ -205,6 +207,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   fileUploadPrompt: 'Arrastra archivos aquí o haz clic para seleccionar',
   removeFile: 'Eliminar archivo',
   fileTooLarge: (mb) => `Supera el máximo de ${mb} MB`,
+  fileTypeNotAllowed: 'Tipo de archivo no permitido',
   closeAlert: 'Cerrar alerta',
   copy: (label) => `Copiar ${label}`,
   copied: 'Copiado',
@@ -344,6 +347,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   fileUploadPrompt: 'Drag files here or click to select',
   removeFile: 'Remove file',
   fileTooLarge: (mb) => `Exceeds the ${mb} MB limit`,
+  fileTypeNotAllowed: 'File type not allowed',
   closeAlert: 'Close alert',
   copy: (label) => `Copy ${label}`,
   copied: 'Copied',

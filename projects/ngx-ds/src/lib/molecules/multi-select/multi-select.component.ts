@@ -90,6 +90,17 @@ export class MultiSelectComponent implements ControlValueAccessor {
       .map((o) => o.label),
   );
 
+  readonly #labelByValue = computed(
+    () => new Map(this.options().map((o) => [o.value, o.label] as const)),
+  );
+
+  /** Label for a selected value, matched by value (not by position). */
+  chipLabel(val: string | number): string {
+    return this.#labelByValue().get(val) ?? String(val);
+  }
+
+  readonly isDisabled = computed(() => this.disabled() || this.#disabledInt());
+
   readonly canSelectMore = computed(() => {
     const max = this.maxSelected();
     return max === null || this.value().length < max;
@@ -151,17 +162,18 @@ export class MultiSelectComponent implements ControlValueAccessor {
     if (!this.isOpen()) return;
     this.#open.set(false);
     this.#search.set('');
+    this.#onTouched();
     this.triggerRef()?.nativeElement.focus();
   }
 
   toggleOpen(): void {
-    if (this.disabled() || this.#disabledInt()) return;
+    if (this.isDisabled()) return;
     this.#open.update((v) => !v);
     if (!this.#open()) this.#search.set('');
   }
 
   toggleOption(option: MultiSelectOption): void {
-    if (option.disabled) return;
+    if (option.disabled || this.isDisabled()) return;
     const current = this.value();
     const idx = current.indexOf(option.value);
     let next: (string | number)[];
@@ -178,6 +190,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
 
   removeChip(val: string | number, event: MouseEvent): void {
     event.stopPropagation();
+    if (this.isDisabled()) return;
     const next = this.value().filter((v) => v !== val);
     this.value.set(next);
     this.#onChange(next);
@@ -198,6 +211,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
       if (!this.#open()) return;
       this.#open.set(false);
       this.#search.set('');
+      this.#onTouched();
     });
   }
 

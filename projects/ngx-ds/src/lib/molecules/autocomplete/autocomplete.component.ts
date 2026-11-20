@@ -34,6 +34,15 @@ const ICON_SIZE: Record<AutocompleteSize, number> = { sm: 14, md: 16, lg: 18 };
 
 let nextId = 0;
 
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+const escapeHtml = (text: string) => text.replace(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
+
 @Component({
   selector: 'ngx-ds-autocomplete',
   standalone: true,
@@ -244,17 +253,25 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
 
   getHighlightedLabel(label: string): SafeHtml {
     const text = this.#inputText().trim();
-    if (!text) return label;
+    if (!text) return this.sanitizer.bypassSecurityTrustHtml(escapeHtml(label));
     const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const highlighted = label.replace(
-      new RegExp(`(${escaped})`, 'gi'),
-      '<mark class="ngx-autocomplete__highlight">$1</mark>',
-    );
+    // With a capture group, split puts the matches at the odd indexes. Every
+    // part is escaped: labels may come from user data (async search results).
+    const highlighted = label
+      .split(new RegExp(`(${escaped})`, 'gi'))
+      .map((part, i) =>
+        i % 2
+          ? `<mark class="ngx-autocomplete__highlight">${escapeHtml(part)}</mark>`
+          : escapeHtml(part),
+      )
+      .join('');
     return this.sanitizer.bypassSecurityTrustHtml(highlighted);
   }
 
   // ── Helpers ───────────────────────────────────────────────
   private closeAndRestore(): void {
+    // Clicks elsewhere on the page only matter while the user is in the field.
+    if (!this.#open() && !this.#focused()) return;
     this.#focused.set(false);
     this.#open.set(false);
     const selected = this.selectedOption();

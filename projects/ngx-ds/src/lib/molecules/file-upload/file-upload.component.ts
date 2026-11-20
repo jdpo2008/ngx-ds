@@ -131,7 +131,9 @@ export class FileUploadComponent {
     const maxSizeMb = this.maxSizeMb();
     let error: string | undefined;
 
-    if (maxSizeMb !== undefined && file.size > maxSizeMb * 1024 * 1024) {
+    if (!this.#accepts(file)) {
+      error = this.i18n.fileTypeNotAllowed;
+    } else if (maxSizeMb !== undefined && file.size > maxSizeMb * 1024 * 1024) {
       error = this.i18n.fileTooLarge(maxSizeMb);
     }
 
@@ -146,9 +148,29 @@ export class FileUploadComponent {
     };
   }
 
+  /**
+   * Checks `accept` like the browser does (`.ext`, `type/*`, `type/subtype`).
+   * The file dialog filters by it, but dropped files skip that filter.
+   */
+  #accepts(file: File): boolean {
+    const tokens = this.accept()
+      .split(',')
+      .map((t) => t.trim().toLowerCase())
+      .filter(Boolean);
+    if (!tokens.length) return true;
+    const name = file.name.toLowerCase();
+    const type = file.type.toLowerCase();
+    return tokens.some((t) => {
+      if (t.startsWith('.')) return name.endsWith(t);
+      if (t.endsWith('/*')) return type.startsWith(t.slice(0, -1));
+      return type === t;
+    });
+  }
+
   // ── Remove ────────────────────────────────────────────────────────────────
 
   removeFile(id: string): void {
+    if (this.disabled()) return;
     this.files.update((list) => list.filter((f) => f.id !== id));
     this.filesChange.emit(this.files());
   }
