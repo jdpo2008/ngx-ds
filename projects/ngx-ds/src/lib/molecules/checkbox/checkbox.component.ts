@@ -57,6 +57,10 @@ export class CheckboxComponent implements ControlValueAccessor {
     return classes.join(' ');
   });
 
+  onBlur(): void {
+    this.onTouched();
+  }
+
   onNativeChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.checked.set(input.checked);

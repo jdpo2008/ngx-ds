@@ -1,11 +1,15 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  DestroyRef,
+  ElementRef,
+  inject,
   input,
   output,
   signal,
   computed,
   forwardRef,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Size } from '../../shared/size';
@@ -15,6 +19,9 @@ export type RadioColor = 'primary' | 'secondary' | 'danger' | 'success' | 'warni
 export type RadioValue = string | number;
 
 let nextId = 0;
+
+/** Every live radio, so selecting one can update the others in its group. */
+const radios = new Set<RadioComponent>();
 
 @Component({
   selector: 'ngx-ds-radio',
@@ -54,6 +61,9 @@ export class RadioComponent implements ControlValueAccessor {
   readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
   readonly isChecked = computed(() => this.checked() ?? this.#modelValue() === this.value());
 
+  private readonly native = viewChild.required<ElementRef<HTMLInputElement>>('native');
+  readonly #host: HTMLElement = inject(ElementRef).nativeElement;
+
   private onChange: (v: RadioValue) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -64,13 +74,35 @@ export class RadioComponent implements ControlValueAccessor {
     return classes.join(' ');
   });
 
+  constructor() {
+    radios.add(this);
+    inject(DestroyRef).onDestroy(() => radios.delete(this));
+  }
+
   onSelect(): void {
     if (this.isDisabled()) return;
     const value = this.value();
-    this.#modelValue.set(value);
+    const group = this.#group();
+    // A shared FormControl (or no form at all) never writes back to the
+    // other radios, so tell them which value is now selected.
+    for (const radio of group) radio.#modelValue.set(value);
     this.onChange(value);
     this.onTouched();
     this.valueSelect.emit(value);
+    // The browser has already moved the native check. Put every radio of the
+    // group back to its own state: with [checked] the parent decides, and the
+    // next change detection applies its answer.
+    for (const radio of group) radio.native().nativeElement.checked = radio.isChecked();
+  }
+
+  onBlur(): void {
+    this.onTouched();
+  }
+
+  /** Radios with the same name in the same form (the native group), this one included. */
+  #group(): RadioComponent[] {
+    const form = this.#host.closest('form');
+    return [...radios].filter((r) => r.name() === this.name() && r.#host.closest('form') === form);
   }
 
   writeValue(value: RadioValue | null): void {

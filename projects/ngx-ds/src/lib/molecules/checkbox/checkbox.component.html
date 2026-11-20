@@ -8,6 +8,7 @@
     [indeterminate]="indeterminate() && !checked()"
     [disabled]="isDisabled()"
     (change)="onNativeChange($event)"
+    (blur)="onBlur()"
   />
 
   @if (labelPosition() === 'left' && label()) {

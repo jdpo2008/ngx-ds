@@ -59,6 +59,10 @@ export class SwitchComponent implements ControlValueAccessor {
 
   readonly activeLabel = computed(() => (this.checked() ? this.labelOn() : this.labelOff()));
 
+  onBlur(): void {
+    this.onTouched();
+  }
+
   onNativeChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.checked.set(input.checked);
