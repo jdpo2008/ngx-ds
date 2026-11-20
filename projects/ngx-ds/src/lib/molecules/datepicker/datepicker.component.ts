@@ -193,6 +193,7 @@ export class DatepickerComponent implements ControlValueAccessor {
   constructor() {
     setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
+      if (!this.#open()) return;
       this.#open.set(false);
       this.#focused.set(false);
       this.onTouched();

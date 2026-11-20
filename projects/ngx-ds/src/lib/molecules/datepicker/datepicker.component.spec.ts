@@ -89,3 +89,29 @@ describe('DatepickerComponent keyboard navigation', () => {
     expect(cmp.isOpen()).toBe(true);
   });
 });
+
+describe('DatepickerComponent outside click', () => {
+  function setup() {
+    const fixture = TestBed.createComponent(DatepickerComponent);
+    fixture.detectChanges();
+    const cmp = fixture.componentInstance;
+    const touched = vi.fn();
+    cmp.registerOnTouched(touched);
+    return { fixture, cmp, touched };
+  }
+
+  it('closes the open panel and marks touched', () => {
+    const { fixture, cmp, touched } = setup();
+    cmp.togglePanel();
+    fixture.detectChanges();
+    document.body.click();
+    expect(cmp.isOpen()).toBe(false);
+    expect(touched).toHaveBeenCalled();
+  });
+
+  it('does not mark touched while closed', () => {
+    const { touched } = setup();
+    document.body.click();
+    expect(touched).not.toHaveBeenCalled();
+  });
+});
