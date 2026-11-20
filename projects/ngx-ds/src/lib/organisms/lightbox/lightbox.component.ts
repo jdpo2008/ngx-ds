@@ -43,6 +43,7 @@ export class LightboxComponent implements OnDestroy {
   readonly closed = output<void>();
 
   #pointerStart: number | null = null;
+  #swiped = false;
 
   // ── Derived ──────────────────────────────────────────────────
   readonly count = computed(() => this.items().length);
@@ -86,7 +87,17 @@ export class LightboxComponent implements OnDestroy {
     event.preventDefault();
   }
 
+  /** Closes on clicks on the backdrop or around the image, but not after a swipe. */
+  onBackdropClick(event: MouseEvent): void {
+    // A drag that ends outside the image fires `click` on the backdrop.
+    const swiped = this.#swiped;
+    this.#swiped = false;
+    if (swiped || event.target !== event.currentTarget) return;
+    this.close();
+  }
+
   onPointerDown(event: PointerEvent): void {
+    this.#swiped = false;
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     this.#pointerStart = event.clientX;
   }
@@ -96,6 +107,7 @@ export class LightboxComponent implements OnDestroy {
     const delta = event.clientX - this.#pointerStart;
     this.#pointerStart = null;
     if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+    this.#swiped = true;
     if (delta < 0) this.next();
     else this.prev();
   }

@@ -134,6 +134,7 @@ export class DropdownComponent implements ControlValueAccessor {
   constructor() {
     setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
+      if (!this.#open()) return;
       this.#open.set(false);
       this.onTouched();
     });

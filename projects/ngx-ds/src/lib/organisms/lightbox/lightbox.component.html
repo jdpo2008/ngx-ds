@@ -2,7 +2,7 @@
   <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- backdrop click is a mouse shortcut; keyboard users close with Escape -->
   <div
     class="lightbox"
-    (click)="$event.target === $event.currentTarget && close()"
+    (click)="onBackdropClick($event)"
     (pointerdown)="onPointerDown($event)"
     (pointerup)="onPointerUp($event)"
     (pointercancel)="onPointerCancel()"
@@ -33,7 +33,7 @@
       </div>
 
       <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- clicks around the image close it, like the backdrop -->
-      <figure class="lightbox__figure" (click)="$event.target === $event.currentTarget && close()">
+      <figure class="lightbox__figure" (click)="onBackdropClick($event)">
         <img class="lightbox__image" [src]="img.src" [alt]="img.alt" draggable="false" />
         @if (img.caption) {
           <figcaption class="lightbox__caption">{{ img.caption }}</figcaption>
