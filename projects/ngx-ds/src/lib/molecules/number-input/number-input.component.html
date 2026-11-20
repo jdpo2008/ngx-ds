@@ -26,6 +26,7 @@
     [step]="step()"
     [disabled]="isDisabled() || null"
     (change)="onInputChange($event)"
+    (blur)="onBlur()"
   />
 
   <button
