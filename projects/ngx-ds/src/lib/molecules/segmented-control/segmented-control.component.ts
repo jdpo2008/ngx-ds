@@ -54,9 +54,13 @@ export class SegmentedControlComponent implements ControlValueAccessor {
   }
 
   select(option: SegmentOption): void {
-    if (this.isDisabled() || option.disabled) return;
+    if (this.isDisabled() || option.disabled || this.isSelected(option)) return;
     this.value.set(option.value);
     this.#onChange(option.value);
+    this.#onTouched();
+  }
+
+  onFocusOut(): void {
     this.#onTouched();
   }
 
