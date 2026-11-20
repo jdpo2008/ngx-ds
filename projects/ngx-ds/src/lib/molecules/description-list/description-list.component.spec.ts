@@ -70,3 +70,57 @@ describe('DescriptionListComponent', () => {
     expect(fixture.componentInstance.copiedIndex()).toBeNull();
   });
 });
+
+describe('DescriptionListComponent behaviour', () => {
+  function render(items: DescriptionItem[]) {
+    const fixture = TestBed.createComponent(DescriptionListComponent);
+    fixture.componentRef.setInput('items', items);
+    fixture.detectChanges();
+    return { fixture, el: fixture.nativeElement as HTMLElement };
+  }
+
+  afterEach(() => vi.useRealTimers());
+
+  it('shows 0 as a value, not as empty', () => {
+    const { el } = render([{ label: 'Saldo', value: 0 }]);
+    expect(el.querySelector('.dl__value')!.textContent).toBe('0');
+    expect(el.querySelector('.dl__value--empty')).toBeNull();
+  });
+
+  it('does not offer copying for an empty value', () => {
+    const { el } = render([{ label: 'ID', value: '', copyable: true }]);
+    expect(el.querySelector('.dl__copy')).toBeNull();
+  });
+
+  it('copies, announces it and clears the feedback after a while', async () => {
+    vi.useFakeTimers();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const { fixture, el } = render([{ label: 'ID', value: 'usr_1', copyable: true }]);
+    const spy = vi.fn();
+    fixture.componentInstance.copied.subscribe(spy);
+    el.querySelector<HTMLButtonElement>('.dl__copy')!.click();
+    await vi.advanceTimersByTimeAsync(0);
+    fixture.detectChanges();
+    expect(writeText).toHaveBeenCalledWith('usr_1');
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(el.querySelector('.dl__status')!.textContent).not.toBe('');
+    await vi.advanceTimersByTimeAsync(2000);
+    fixture.detectChanges();
+    expect(el.querySelector('.dl__status')!.textContent).toBe('');
+  });
+
+  it('gives no feedback when the clipboard is denied', async () => {
+    const writeText = vi.fn().mockRejectedValue(new Error('denied'));
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const { fixture, el } = render([{ label: 'ID', value: 'usr_1', copyable: true }]);
+    const spy = vi.fn();
+    fixture.componentInstance.copied.subscribe(spy);
+    el.querySelector<HTMLButtonElement>('.dl__copy')!.click();
+    await Promise.resolve();
+    await Promise.resolve();
+    fixture.detectChanges();
+    expect(spy).not.toHaveBeenCalled();
+    expect(el.querySelector('.dl__copy--done')).toBeNull();
+  });
+});

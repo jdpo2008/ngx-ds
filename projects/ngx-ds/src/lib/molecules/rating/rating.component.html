@@ -4,6 +4,7 @@
 
 <div
   class="rating"
+  role="group"
   [class.rating--disabled]="isDisabled()"
   [class.rating--readonly]="readonly()"
   (mouseleave)="onLeave()"
@@ -18,6 +19,7 @@
       (mouseenter)="onHover(star)"
       (click)="onClick(star)"
       [attr.aria-label]="i18n.ratingStar(star)"
+      [attr.aria-pressed]="star === value()"
     >
       <ngx-ds-icon [icon]="StarIcon" [size]="iconSize()" />
     </button>

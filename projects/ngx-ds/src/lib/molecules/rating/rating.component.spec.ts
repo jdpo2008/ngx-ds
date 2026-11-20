@@ -81,3 +81,66 @@ describe('RatingComponent', () => {
     });
   });
 });
+
+describe('RatingComponent behaviour', () => {
+  function render(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(RatingComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const stars = () => Array.from(el.querySelectorAll<HTMLButtonElement>('.rating__star'));
+    return { fixture, el, stars };
+  }
+
+  it('exposes the stars as a labelled group', () => {
+    const { el } = render({ label: 'Calidad' });
+    const group = el.querySelector('.rating')!;
+    expect(group.getAttribute('role')).toBe('group');
+    expect(group.getAttribute('aria-label')).toBe('Calidad');
+  });
+
+  it('tells assistive tech which star is the current value', () => {
+    const { fixture, stars } = render({ value: 3 });
+    expect(stars().map((s) => s.getAttribute('aria-pressed'))).toEqual([
+      'false',
+      'false',
+      'true',
+      'false',
+      'false',
+    ]);
+    stars()[0].click();
+    fixture.detectChanges();
+    expect(stars()[0].getAttribute('aria-pressed')).toBe('true');
+    expect(stars()[2].getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('previews the hovered value and restores the real one on leave', () => {
+    const { fixture, el, stars } = render({ value: 1 });
+    const filled = () => stars().filter((s) => s.classList.contains('rating__star--filled')).length;
+    stars()[3].dispatchEvent(new Event('mouseenter'));
+    fixture.detectChanges();
+    expect(filled()).toBe(4);
+    el.querySelector('.rating')!.dispatchEvent(new Event('mouseleave'));
+    fixture.detectChanges();
+    expect(filled()).toBe(1);
+  });
+
+  it('a form-disabled rating ignores clicks', () => {
+    @Component({
+      standalone: true,
+      imports: [RatingComponent, ReactiveFormsModule],
+      template: `<ngx-ds-rating [formControl]="ctrl" />`,
+    })
+    class FormHost {
+      ctrl = new FormControl({ value: 2, disabled: true });
+    }
+    const fixture = TestBed.createComponent(FormHost);
+    fixture.detectChanges();
+    const star = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '.rating__star',
+    )!;
+    expect(star.disabled).toBe(true);
+    star.click();
+    expect(fixture.componentInstance.ctrl.value).toBe(2);
+  });
+});
