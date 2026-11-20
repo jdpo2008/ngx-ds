@@ -46,7 +46,7 @@
         }
       } @else {
         <span class="ngx-select__tag"
-          >{{ selectedValues().length }} seleccionados
+          >{{ i18n.selectedCount(selectedValues().length) }}
           @if (!isDisabled()) {
             <button
               type="button"

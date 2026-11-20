@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { NGX_DS_LABELS_EN, provideNgxDsLabels } from '../../shared/labels';
 import { SelectComponent, SelectOption } from './select.component';
 
 const OPTIONS: SelectOption[] = [
@@ -227,12 +228,23 @@ describe('SelectComponent', () => {
       fixture.detectChanges();
       const tags = qa('.ngx-select__tag');
       expect(tags.length).toBe(1);
-      expect(tags[0].textContent).toContain('3');
+      expect(tags[0].textContent!.trim()).toBe('3 seleccionados');
+      expect(cmp.displayText()).toBe('3 seleccionados');
       const clear = tags[0].querySelector<HTMLButtonElement>('.ngx-select__tag-remove')!;
       expect(clear.getAttribute('aria-label')).toBe('Limpiar selección');
       clear.click();
       expect(cmp.value()).toBeNull();
       expect(changes).toEqual([null]);
+    });
+
+    it('translates the summary tag', () => {
+      TestBed.configureTestingModule({ providers: [provideNgxDsLabels(NGX_DS_LABELS_EN)] });
+      const options = [...OPTIONS.slice(0, 2), { value: 'pt', label: 'Portugal' }];
+      const { fixture, cmp, qa } = render({ multiple: true, options });
+      cmp.writeValue(['es', 'fr', 'pt']);
+      fixture.detectChanges();
+      expect(qa('.ngx-select__tag')[0].textContent!.trim()).toBe('3 selected');
+      expect(cmp.displayText()).toBe('3 selected');
     });
 
     it('hides the remove buttons when disabled', () => {

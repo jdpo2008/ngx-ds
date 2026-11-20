@@ -17,6 +17,8 @@ export interface NgxDsLabels {
   selectPlaceholder: string;
   selectAll: string;
   clearSelection: string;
+  /** Text of the Select tag when more than two options are selected. */
+  selectedCount: (n: number) => string;
   noResults: string;
   noOptions: string;
   loading: string;
@@ -168,6 +170,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   selectPlaceholder: 'Seleccionar...',
   selectAll: 'Seleccionar todos',
   clearSelection: 'Limpiar selección',
+  selectedCount: (n) => `${n} seleccionados`,
   noResults: 'Sin resultados',
   noOptions: 'Sin opciones',
   loading: 'Cargando...',
@@ -305,6 +308,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   selectPlaceholder: 'Select...',
   selectAll: 'Select all',
   clearSelection: 'Clear selection',
+  selectedCount: (n) => `${n} selected`,
   noResults: 'No results',
   noOptions: 'No options',
   loading: 'Loading...',

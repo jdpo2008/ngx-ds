@@ -124,7 +124,7 @@ export class SelectComponent implements ControlValueAccessor {
           .map((v) => this.options().find((o) => o.value === v)?.label ?? String(v))
           .join(', ');
       }
-      return `${vals.length} seleccionados`;
+      return this.i18n.selectedCount(vals.length);
     }
 
     return this.options().find((o) => o.value === vals[0])?.label ?? String(vals[0]);
