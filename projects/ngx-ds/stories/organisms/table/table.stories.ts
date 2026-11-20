@@ -405,7 +405,7 @@ class VariantsWrapper {
       <span [style]="badgeStyle(row.role)">{{ row.role }}</span>
     </ng-template>
 
-    <ng-template #scoreTpl let-value>
+    <ng-template #scoreTpl let-value="value">
       <div style="display:flex;align-items:center;gap:0.5rem;min-width:120px;">
         <div
           style="flex:1;height:6px;background:var(--surface-active, #e5e7eb);border-radius:9999px;overflow:hidden;"
@@ -422,7 +422,7 @@ class VariantsWrapper {
       </div>
     </ng-template>
 
-    <ng-template #statusTpl let-value>
+    <ng-template #statusTpl let-value="value">
       <span
         style="display:inline-flex;align-items:center;gap:0.375rem;font-size:0.75rem;font-weight:500;"
         [style.color]="value ? 'var(--fill-success, #047857)' : 'var(--fill-danger, #dc2626)'"
@@ -773,6 +773,7 @@ class ColumnVisibilityWrapper {
         [clientSide]="true"
         [paginated]="true"
         [pageSize]="5"
+        [pageSizeOptions]="[5, 10]"
         [globalFilter]="true"
         addLabel="Nuevo usuario"
         (addClick)="onAdd()"
