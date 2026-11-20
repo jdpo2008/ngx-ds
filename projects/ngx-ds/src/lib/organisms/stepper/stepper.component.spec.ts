@@ -76,3 +76,62 @@ describe('StepperComponent', () => {
     expect(host.changes).toEqual([2]);
   });
 });
+
+describe('StepperComponent behaviour', () => {
+  function setup(clickable = true) {
+    const fixture = TestBed.createComponent(Host);
+    fixture.componentInstance.clickable.set(clickable);
+    fixture.detectChanges();
+    const host = fixture.componentInstance;
+    const el = fixture.nativeElement as HTMLElement;
+    const steps = () => Array.from(el.querySelectorAll<HTMLElement>('ngx-ds-step'));
+    const bubbles = () => Array.from(el.querySelectorAll<HTMLButtonElement>('.stepper__bubble'));
+    const run = (fn: () => void) => {
+      fn();
+      fixture.detectChanges();
+    };
+    return { fixture, host, el, steps, bubbles, run };
+  }
+
+  it('clicking the current step emits nothing', () => {
+    const { host, bubbles, run } = setup();
+    run(() => bubbles()[0].click());
+    expect(host.changes).toEqual([]);
+  });
+
+  it('goTo ignores an index outside the steps', () => {
+    const { host, steps, run } = setup();
+    run(() => host.stepper().goTo(5));
+    run(() => host.stepper().goTo(-1));
+    expect(host.active()).toBe(0);
+    expect(host.changes).toEqual([]);
+    expect(steps()[0].hasAttribute('hidden')).toBe(false);
+  });
+
+  it('completed steps show a check and the line before the active step is done', () => {
+    const { host, el, run } = setup();
+    run(() => host.active.set(2));
+    const items = Array.from(el.querySelectorAll('.stepper__item'));
+    expect(items.map((i) => i.classList.contains('is-completed'))).toEqual([true, true, false]);
+    expect(items[0].querySelector('ngx-ds-icon')).not.toBeNull();
+    expect(items[2].querySelector('.stepper__bubble')!.textContent!.trim()).toBe('3');
+  });
+
+  it('labels each bubble with its number and step label', () => {
+    const { bubbles } = setup();
+    expect(bubbles().map((b) => b.getAttribute('aria-label'))).toEqual([
+      '1. Cuenta',
+      '2. Perfil',
+      '3. Confirmar',
+    ]);
+  });
+
+  it('canGoNext and canGoPrev follow the active step', () => {
+    const { host, run } = setup();
+    expect(host.stepper().canGoPrev()).toBe(false);
+    expect(host.stepper().canGoNext()).toBe(true);
+    run(() => host.active.set(2));
+    expect(host.stepper().canGoPrev()).toBe(true);
+    expect(host.stepper().canGoNext()).toBe(false);
+  });
+});
