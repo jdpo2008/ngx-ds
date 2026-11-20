@@ -7,13 +7,38 @@
   display: flex;
   gap: 1rem;
   padding-bottom: 1.5rem;
+}
 
-  &:last-child {
+// Compact variant: tighter rows and a smaller dot. Before the last-child rule,
+// which must still win (same specificity).
+:host-context(.timeline--compact) {
+  .timeline-item {
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .timeline-item__dot {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .timeline-item__body {
+    padding-top: 0.125rem;
+  }
+
+  .timeline-item__description {
+    font-size: 0.8125rem;
+  }
+}
+
+// Each item is its own host, so "last" is the host among its siblings.
+:host(:last-child) {
+  .timeline-item {
     padding-bottom: 0;
+  }
 
-    .timeline-item__line {
-      display: none;
-    }
+  .timeline-item__line {
+    display: none;
   }
 }
 

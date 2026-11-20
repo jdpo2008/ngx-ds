@@ -53,3 +53,27 @@ export const Default: Story = {
     moduleMetadata: { imports: [Wrapper] },
   }),
 };
+
+@Component({
+  selector: 'timeline-compact-wrapper',
+  standalone: true,
+  imports: [TimelineComponent, TimelineItemComponent],
+  template: `
+    <div class="p-6" style="max-width:480px;">
+      <ngx-ds-timeline variant="compact">
+        <ngx-ds-timeline-item title="Commit subido" time="09:12" status="completed" />
+        <ngx-ds-timeline-item title="Tests" time="09:14" status="error" description="2 fallos" />
+        <ngx-ds-timeline-item title="Revisión" status="active" />
+        <ngx-ds-timeline-item title="Despliegue" status="pending" />
+      </ngx-ds-timeline>
+    </div>
+  `,
+})
+class CompactWrapper {}
+
+export const Compact: Story = {
+  render: () => ({
+    template: `<timeline-compact-wrapper />`,
+    moduleMetadata: { imports: [CompactWrapper] },
+  }),
+};
