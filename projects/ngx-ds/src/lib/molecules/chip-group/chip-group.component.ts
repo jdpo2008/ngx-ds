@@ -85,6 +85,11 @@ export class ChipGroupComponent implements ControlValueAccessor {
 
   remove(chip: ChipItem, event: Event): void {
     event.stopPropagation();
+    if (this.isSelected(chip)) {
+      const next = this.selected().filter((v) => v !== chip.value);
+      this.selected.set(next);
+      this.#onChange(next);
+    }
     this.removed.emit(chip);
   }
 

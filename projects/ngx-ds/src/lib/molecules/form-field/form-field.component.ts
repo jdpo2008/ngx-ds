@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   input,
+  signal,
 } from '@angular/core';
 
 let nextId = 0;
@@ -28,7 +29,10 @@ export class FormFieldComponent {
 
   private readonly generatedId = `ngx-ff-${nextId++}`;
 
-  readonly fieldId = computed(() => this.for() ?? this.generatedId);
+  /** The id the projected control brought with it, if any. */
+  readonly #controlId = signal<string | null>(null);
+
+  readonly fieldId = computed(() => this.for() ?? this.#controlId() ?? this.generatedId);
   readonly hintId = computed(() => `${this.fieldId()}-hint`);
   readonly errorId = computed(() => `${this.fieldId()}-error`);
   readonly errorText = computed(() => this.errorMessage());
@@ -41,8 +45,18 @@ export class FormFieldComponent {
       const control = this.host.nativeElement.querySelector('input, select, textarea');
       if (!control) return;
 
-      if (!control.getAttribute('id')) {
+      const ownId = control.getAttribute('id');
+      if (ownId) {
+        // Keep the control's id and point the label and messages at it.
+        if (!this.for()) this.#controlId.set(ownId);
+      } else {
         this.renderer.setAttribute(control, 'id', this.fieldId());
+      }
+
+      if (this.required()) {
+        this.renderer.setAttribute(control, 'aria-required', 'true');
+      } else {
+        this.renderer.removeAttribute(control, 'aria-required');
       }
 
       const hasError = this.errorText().length > 0;

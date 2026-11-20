@@ -7,7 +7,7 @@ export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-
 export interface ToastOptions {
   message: string;
   type?: ToastType;
-  duration?: number; // in milliseconds, default 5000
+  duration?: number; // in milliseconds, default 5000; 0 keeps it until closed
   position?: ToastPosition;
   title?: string;
 }
@@ -34,7 +34,7 @@ export class ToastrService {
       ...options,
       id,
       type: options.type || 'info',
-      duration: options.duration || 5000,
+      duration: options.duration ?? 5000,
       position: options.position || 'top-right',
       timestamp: Date.now(),
     };

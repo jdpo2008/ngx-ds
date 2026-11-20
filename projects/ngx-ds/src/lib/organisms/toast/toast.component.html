@@ -2,7 +2,11 @@
   @if (getToastsByPosition(position).length > 0) {
     <div class="toast-container" [class]="'toast-container--' + position">
       @for (toast of getToastsByPosition(position); track toast.id) {
-        <div class="toast" [class]="'toast--' + toast.type">
+        <div
+          class="toast"
+          [class]="'toast--' + toast.type"
+          [attr.role]="toast.type === 'danger' ? 'alert' : 'status'"
+        >
           <div class="toast__icon">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
