@@ -65,3 +65,46 @@ describe('BreadcrumbComponent', () => {
     expect(setup().el.querySelector('nav')?.getAttribute('aria-label')).toBe('Breadcrumb');
   });
 });
+
+describe('BreadcrumbComponent behaviour', () => {
+  function render(inputs: Record<string, unknown>) {
+    const fixture = TestBed.createComponent(BreadcrumbComponent);
+    fixture.componentRef.setInput('items', ITEMS);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    return {
+      fixture,
+      el,
+      labels: () =>
+        Array.from(el.querySelectorAll('.breadcrumb__crumb')).map((c) => c.textContent?.trim()),
+    };
+  }
+
+  it('maxItems 1 still marks the real current page, not the ellipsis', () => {
+    const { el, labels } = render({ maxItems: 1 });
+    expect(labels()).toEqual(['…', 'Ajustes']);
+    expect(el.querySelector('[aria-current="page"]')?.textContent?.trim()).toBe('Ajustes');
+  });
+
+  it('maxItems 2 keeps the first and the current page', () => {
+    expect(render({ maxItems: 2 }).labels()).toEqual(['Inicio', '…', 'Ajustes']);
+  });
+
+  it('a string separator is drawn between crumbs but not after the last', () => {
+    const { el } = render({ separator: '/' });
+    const seps = Array.from(el.querySelectorAll('.breadcrumb__separator'));
+    expect(seps.length).toBe(ITEMS.length - 1);
+    expect(seps.every((s) => s.textContent?.trim() === '/')).toBe(true);
+  });
+
+  it('a disabled item does not emit itemClick', () => {
+    const { fixture, el } = render({
+      items: [{ label: 'A' }, { label: 'B', disabled: true }, { label: 'C' }],
+    });
+    const spy = vi.fn();
+    fixture.componentInstance.itemClick.subscribe(spy);
+    el.querySelectorAll<HTMLElement>('.breadcrumb__crumb').forEach((c) => c.click());
+    expect(spy.mock.calls.map((c) => c[0].label)).toEqual(['A']);
+  });
+});

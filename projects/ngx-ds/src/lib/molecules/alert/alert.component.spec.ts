@@ -78,3 +78,27 @@ describe('AlertComponent', () => {
     expect(el.querySelector('.alert__close')?.getAttribute('aria-label')).toBe('Close alert');
   });
 });
+
+describe('AlertComponent behaviour', () => {
+  it('closing removes the alert and emits once', () => {
+    const fixture = TestBed.createComponent(AlertComponent);
+    fixture.componentRef.setInput('dismissible', true);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const spy = vi.fn();
+    fixture.componentInstance.dismissed.subscribe(spy);
+    el.querySelector<HTMLButtonElement>('.alert__close')!.click();
+    fixture.detectChanges();
+    expect(el.querySelector('.alert')).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('is not dismissible by default and shows the color icon', () => {
+    const fixture = TestBed.createComponent(AlertComponent);
+    fixture.componentRef.setInput('color', 'danger');
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.alert__close')).toBeNull();
+    expect(el.querySelector('.alert__icon')?.getAttribute('aria-hidden')).toBe('true');
+  });
+});
