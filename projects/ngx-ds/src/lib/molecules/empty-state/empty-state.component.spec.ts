@@ -43,3 +43,29 @@ describe('EmptyStateComponent', () => {
     expect(el.querySelector('.empty-state__action button')?.textContent).toBe('Reintentar');
   });
 });
+
+describe('EmptyStateComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown>) {
+    const fixture = TestBed.createComponent(EmptyStateComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  it('hides the decorative icon from assistive tech', () => {
+    const el = setup({ icon: Inbox, title: 'Sin datos' });
+    expect(el.querySelector('.empty-state__icon')!.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('sizes the icon by size', () => {
+    const width = (size: string) =>
+      setup({ icon: Inbox, size }).querySelector('.empty-state__icon svg')!.getAttribute('width');
+    expect([width('sm'), width('md'), width('lg')]).toEqual(['32', '48', '64']);
+  });
+
+  it('hides the illustration and action slots when they are empty', () => {
+    const el = setup({ title: 'Nada' });
+    expect(getComputedStyle(el.querySelector('.empty-state__illustration')!).display).toBe('none');
+    expect(getComputedStyle(el.querySelector('.empty-state__action')!).display).toBe('none');
+  });
+});
