@@ -32,3 +32,27 @@ describe('SkeletonComponent', () => {
     expect(setup({ lines: 0 }).length).toBe(1);
   });
 });
+
+describe('SkeletonComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(SkeletonComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  it('is hidden from assistive technology', () => {
+    expect(setup().getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('a circle given only a width stays round', () => {
+    const line = setup({ variant: 'circle', width: '3rem' }).querySelector<HTMLElement>('div')!;
+    expect(line.style.width).toBe('3rem');
+    expect(line.style.height).toBe('3rem');
+  });
+
+  it('a single text line keeps the full width', () => {
+    const line = setup({ variant: 'text', width: '8rem' }).querySelector<HTMLElement>('div')!;
+    expect(line.style.width).toBe('8rem');
+  });
+});

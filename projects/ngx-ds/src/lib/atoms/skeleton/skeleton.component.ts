@@ -8,6 +8,8 @@ export type SkeletonVariant = 'rect' | 'circle' | 'text';
   templateUrl: './skeleton.component.html',
   styleUrl: './skeleton.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Placeholder shapes carry no content.
+  host: { 'aria-hidden': 'true' },
 })
 export class SkeletonComponent {
   readonly variant = input<SkeletonVariant>('rect');
@@ -34,6 +36,7 @@ export class SkeletonComponent {
   }
 
   protected lineHeight(): string {
+    if (this.variant() === 'circle') return this.width();
     return this.variant() === 'text' ? '0.875rem' : this.height();
   }
 }
