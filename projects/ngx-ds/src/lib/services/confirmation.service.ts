@@ -32,7 +32,9 @@ export class ConfirmationService {
 
   private resolveCallback?: (confirmed: boolean) => void;
 
+  /** Opens the dialog. A dialog that is still open is cancelled first (its promise resolves `false`). */
   confirm(options: ConfirmationOptions): Promise<boolean> {
+    this.#settle(false);
     return new Promise((resolve) => {
       this.resolveCallback = resolve;
       this._state.set({
@@ -46,22 +48,23 @@ export class ConfirmationService {
   }
 
   handleConfirm(): void {
-    if (this.resolveCallback) {
-      this.resolveCallback(true);
-      this.resolveCallback = undefined;
-    }
+    this.#settle(true);
     this.close();
   }
 
   handleCancel(): void {
-    if (this.resolveCallback) {
-      this.resolveCallback(false);
-      this.resolveCallback = undefined;
-    }
     this.close();
   }
 
+  /** Closes the dialog; a pending `confirm()` resolves `false`. */
   close(): void {
+    this.#settle(false);
     this._state.update((state) => ({ ...state, isOpen: false }));
+  }
+
+  #settle(confirmed: boolean): void {
+    const resolve = this.resolveCallback;
+    this.resolveCallback = undefined;
+    resolve?.(confirmed);
   }
 }

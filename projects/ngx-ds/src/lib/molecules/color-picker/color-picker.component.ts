@@ -4,12 +4,23 @@ import {
   computed,
   forwardRef,
   input,
+  linkedSignal,
   model,
   signal,
   inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NGX_DS_LABELS } from '../../shared/labels';
+
+const DEFAULT_COLOR = '#6366f1';
+
+/** `#rgb` / `#rrggbb` in any case → `#rrggbb` lower-case; anything else → null. */
+function normalizeHex(value: string | null | undefined): string | null {
+  const v = (value ?? '').trim().toLowerCase();
+  if (/^#[0-9a-f]{6}$/.test(v)) return v;
+  if (/^#[0-9a-f]{3}$/.test(v)) return `#${v[1]}${v[1]}${v[2]}${v[2]}${v[3]}${v[3]}`;
+  return null;
+}
 
 function hexToHsl(hex: string): [number, number, number] {
   let r = 0,
@@ -85,71 +96,81 @@ export class ColorPickerComponent implements ControlValueAccessor {
   readonly i18n = inject(NGX_DS_LABELS);
 
   readonly id = `ngx-color-picker-${nextId++}`;
-  readonly value = model<string>('#6366f1');
+  readonly value = model<string>(DEFAULT_COLOR);
   readonly label = input<string>('');
   readonly disabled = input<boolean>(false);
   readonly #formDisabled = signal(false);
   readonly isDisabled = computed(() => this.disabled() || this.#formDisabled());
 
-  readonly #h = signal(234);
-  readonly #s = signal(89);
-  readonly #l = signal(60);
+  /** The current colour as `#rrggbb` (the default when `value` is not a valid hex). */
+  readonly hexValue = computed(() => normalizeHex(this.value()) ?? DEFAULT_COLOR);
 
-  readonly hue = this.#h.asReadonly();
-  readonly saturation = this.#s.asReadonly();
-  readonly lightness = this.#l.asReadonly();
+  /**
+   * Slider positions follow `value`, but keep the previous ones when they still produce the same
+   * hex, so a hue chosen at 0 % saturation is not lost.
+   */
+  readonly #hsl = linkedSignal<string, [number, number, number]>({
+    source: this.hexValue,
+    computation: (hex, previous) =>
+      previous && hslToHex(...previous.value) === hex ? previous.value : hexToHsl(hex),
+  });
 
-  readonly hexValue = computed(() => hslToHex(this.#h(), this.#s(), this.#l()));
+  readonly hue = computed(() => this.#hsl()[0]);
+  readonly saturation = computed(() => this.#hsl()[1]);
+  readonly lightness = computed(() => this.#hsl()[2]);
 
-  readonly #hexInput = signal(this.value());
-
+  /** Text in the hex field: what the user typed until it is valid, then the current value. */
+  readonly #hexInput = linkedSignal(() => this.hexValue());
   readonly hexInput = this.#hexInput.asReadonly();
 
   readonly gradientStyle = computed(
     () =>
-      `linear-gradient(to right, hsl(${this.#h()}, 0%, ${this.#l()}%), hsl(${this.#h()}, 100%, ${this.#l()}%))`,
+      `linear-gradient(to right, hsl(${this.hue()}, 0%, ${this.lightness()}%), hsl(${this.hue()}, 100%, ${this.lightness()}%))`,
   );
 
   readonly lightnessStyle = computed(
     () =>
-      `linear-gradient(to right, hsl(${this.#h()}, ${this.#s()}%, 0%), hsl(${this.#h()}, ${this.#s()}%, 50%), hsl(${this.#h()}, ${this.#s()}%, 100%))`,
+      `linear-gradient(to right, hsl(${this.hue()}, ${this.saturation()}%, 0%), hsl(${this.hue()}, ${this.saturation()}%, 50%), hsl(${this.hue()}, ${this.saturation()}%, 100%))`,
   );
 
   readonly previewStyle = computed(() => `background: ${this.hexValue()}`);
 
   onHueChange(event: Event): void {
-    this.#h.set(Number((event.target as HTMLInputElement).value));
-    this.#syncHex();
+    this.#setChannel(0, event);
   }
 
   onSatChange(event: Event): void {
-    this.#s.set(Number((event.target as HTMLInputElement).value));
-    this.#syncHex();
+    this.#setChannel(1, event);
   }
 
   onLightChange(event: Event): void {
-    this.#l.set(Number((event.target as HTMLInputElement).value));
-    this.#syncHex();
+    this.#setChannel(2, event);
   }
 
   onHexInput(event: Event): void {
     const raw = (event.target as HTMLInputElement).value;
+    const hex = normalizeHex(raw);
+    if (hex) this.#emit(hex);
+    // Keep the text as typed while editing; blur shows the normalized value.
     this.#hexInput.set(raw);
-    if (/^#[0-9a-fA-F]{6}$/.test(raw) || /^#[0-9a-fA-F]{3}$/.test(raw)) {
-      const [h, s, l] = hexToHsl(raw);
-      this.#h.set(h);
-      this.#s.set(s);
-      this.#l.set(l);
-      this.#syncHex();
-    }
   }
 
-  #syncHex(): void {
-    const hex = this.hexValue();
-    this.value.set(hex);
-    this.#hexInput.set(hex);
-    this.#onChange(hex);
+  onBlur(): void {
+    this.#hexInput.set(this.hexValue());
     this.#onTouched();
+  }
+
+  #setChannel(index: 0 | 1 | 2, event: Event): void {
+    const hsl = [...this.#hsl()] as [number, number, number];
+    hsl[index] = Number((event.target as HTMLInputElement).value);
+    const hex = hslToHex(...hsl);
+    this.#emit(hex);
+    this.#hsl.set(hsl);
+  }
+
+  #emit(hex: string): void {
+    this.value.set(hex);
+    this.#onChange(hex);
   }
 
   // ── CVA ──────────────────────────────────────────────────────────────────
@@ -158,15 +179,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
   #onTouched: () => void = () => {};
 
   writeValue(v: string | null): void {
-    const hex = v || '#6366f1';
-    this.value.set(hex);
-    this.#hexInput.set(hex);
-    if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-      const [h, s, l] = hexToHsl(hex);
-      this.#h.set(h);
-      this.#s.set(s);
-      this.#l.set(l);
-    }
+    this.value.set(normalizeHex(v) ?? DEFAULT_COLOR);
   }
   registerOnChange(fn: (v: string) => void): void {
     this.#onChange = fn;

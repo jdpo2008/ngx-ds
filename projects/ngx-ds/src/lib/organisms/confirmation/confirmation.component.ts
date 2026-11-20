@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { setupEscapeClose } from '../../shared/escape-close';
+import { setupOverlay } from '../../shared/overlay-stack';
 
 @Component({
   selector: 'ngx-ds-confirmation',
@@ -20,8 +21,9 @@ export class ConfirmationComponent {
   readonly closeOnBackdrop = input<boolean>(true);
 
   constructor() {
+    const isTop = setupOverlay(computed(() => this.state().isOpen));
     setupEscapeClose(() => {
-      if (this.state().isOpen) this.onCancel();
+      if (this.state().isOpen && isTop()) this.onCancel();
     });
   }
 
