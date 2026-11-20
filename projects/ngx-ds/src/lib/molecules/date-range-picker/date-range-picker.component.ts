@@ -89,6 +89,8 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   readonly #viewMonth = signal(new Date().getMonth());
   readonly #viewYear = signal(new Date().getFullYear());
   readonly #picking = signal<'start' | 'end'>('start'); // which end we're setting next
+  /** Range when the panel opened; restored if it closes before the end is picked. */
+  #committed: DateRange = { start: null, end: null };
   /** Day that owns the roving tabindex; always inside one of the two visible months. */
   readonly #focusedDate = signal<Date>(startOfDay(new Date()));
   readonly #injector = inject(Injector);
@@ -283,21 +285,33 @@ export class DateRangePickerComponent implements ControlValueAccessor {
     if (event.target !== event.currentTarget) return;
     if (isActivationKey(event) || (event.key === 'ArrowDown' && !this.isOpen())) {
       event.preventDefault();
-      if (this.isOpen()) this.#open.set(false);
+      if (this.isOpen()) this.#cancel();
       else this.openCalendar();
     }
   }
 
   #closeOnEscape(): void {
     if (!this.isOpen()) return;
-    this.#open.set(false);
+    this.#cancel();
     this.triggerRef()?.nativeElement.focus();
+  }
+
+  /** Closes without a full pick: a half-picked range goes back to what it was. */
+  #cancel(): void {
+    this.#open.set(false);
+    this.#hover.set(null);
+    if (this.#picking() === 'end') {
+      this.start.set(this.#committed.start);
+      this.end.set(this.#committed.end);
+      this.#picking.set('start');
+    }
   }
 
   openCalendar(): void {
     if (this.isDisabled()) return;
     this.#open.set(true);
     this.#picking.set('start');
+    this.#committed = { start: this.start(), end: this.end() };
     const focus = startOfDay(this.start() ?? new Date());
     this.#setView(new Date(focus.getFullYear(), focus.getMonth(), 1));
     this.#focusedDate.set(focus);
@@ -316,7 +330,8 @@ export class DateRangePickerComponent implements ControlValueAccessor {
     setupEscapeClose(() => this.#closeOnEscape());
     setupClickOutside(() => {
       if (!this.#open()) return;
-      this.#open.set(false);
+      this.#cancel();
+      this.#onTouched();
     });
   }
 

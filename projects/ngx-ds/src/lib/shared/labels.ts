@@ -78,6 +78,8 @@ export interface NgxDsLabels {
   clearDate: string;
   prevMonth: string;
   nextMonth: string;
+  /** Datepicker button that selects today. */
+  today: string;
   selectDateRange: string;
 
   // ── Time ──────────────────────────────────────────────────
@@ -225,6 +227,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   clearDate: 'Limpiar fecha',
   prevMonth: 'Mes anterior',
   nextMonth: 'Mes siguiente',
+  today: 'Hoy',
   selectDateRange: 'Seleccionar rango de fechas',
 
   timePlaceholder: 'HH:MM',
@@ -363,6 +366,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   clearDate: 'Clear date',
   prevMonth: 'Previous month',
   nextMonth: 'Next month',
+  today: 'Today',
   selectDateRange: 'Select date range',
 
   timePlaceholder: 'HH:MM',
