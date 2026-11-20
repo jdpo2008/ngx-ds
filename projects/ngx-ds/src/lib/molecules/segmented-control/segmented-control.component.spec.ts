@@ -70,3 +70,77 @@ describe('SegmentedControlComponent', () => {
     });
   });
 });
+
+describe('SegmentedControlComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(SegmentedControlComponent);
+    fixture.componentRef.setInput('options', OPTIONS);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    const cmp = fixture.componentInstance;
+    const changes: (string | number | null)[] = [];
+    const touched = vi.fn();
+    cmp.registerOnChange((v) => changes.push(v));
+    cmp.registerOnTouched(touched);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const group = el.querySelector<HTMLElement>('.segmented')!;
+    const buttons = () => Array.from(el.querySelectorAll<HTMLButtonElement>('.segmented__option'));
+    const pressed = () => buttons().map((b) => b.getAttribute('aria-pressed'));
+    const render = () => fixture.detectChanges();
+    return { fixture, cmp, group, buttons, pressed, render, changes, touched };
+  }
+
+  it('size, fullWidth and disabled set the classes', () => {
+    const { fixture, group, render } = setup({ size: 'sm', fullWidth: true });
+    expect(group.className).toContain('segmented--sm');
+    expect(group.className).toContain('segmented--full');
+    fixture.componentRef.setInput('disabled', true);
+    render();
+    expect(group.className).toContain('segmented--disabled');
+  });
+
+  it('the disabled input disables every option', () => {
+    const { cmp, buttons, changes } = setup({ value: 'day', disabled: true });
+    expect(buttons().every((b) => b.disabled)).toBe(true);
+    cmp.select(OPTIONS[1]);
+    expect(cmp.value()).toBe('day');
+    expect(changes).toEqual([]);
+  });
+
+  it('a click reports the value to the form', () => {
+    const { buttons, changes, touched } = setup();
+    buttons()[1].click();
+    expect(changes).toEqual(['week']);
+    expect(touched).toHaveBeenCalled();
+  });
+
+  it('choosing the option already selected reports nothing', () => {
+    const { buttons, changes } = setup({ value: 'week' });
+    buttons()[1].click();
+    expect(changes).toEqual([]);
+  });
+
+  it('focus leaving the group marks it touched', () => {
+    const { buttons, touched } = setup();
+    buttons()[0].dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    expect(touched).toHaveBeenCalledOnce();
+  });
+
+  it('writeValue presses the matching option; an unknown value presses none', () => {
+    const { cmp, pressed, render } = setup();
+    expect(pressed()).toEqual(['false', 'false', 'false']);
+    cmp.writeValue('week');
+    render();
+    expect(pressed()).toEqual(['false', 'true', 'false']);
+    cmp.writeValue('year');
+    render();
+    expect(pressed()).toEqual(['false', 'false', 'false']);
+  });
+
+  it('a disabled option is marked and cannot be clicked', () => {
+    const { buttons, changes } = setup();
+    expect(buttons()[2].classList).toContain('segmented__option--disabled');
+    buttons()[2].click();
+    expect(changes).toEqual([]);
+  });
+});

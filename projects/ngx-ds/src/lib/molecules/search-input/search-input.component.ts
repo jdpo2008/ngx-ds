@@ -7,6 +7,8 @@ import {
   signal,
   computed,
   inject,
+  viewChild,
+  ElementRef,
 } from '@angular/core';
 import { Search, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
@@ -41,6 +43,8 @@ export class SearchInputComponent {
   readonly searchSubmit = output<string>();
   readonly cleared = output<void>();
 
+  private readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
+
   protected readonly focused = signal(false);
   protected readonly searchIcon = Search;
   protected readonly clearIcon = X;
@@ -68,12 +72,15 @@ export class SearchInputComponent {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter') return;
+    // Enter that confirms an IME composition is not a search.
+    if (event.key !== 'Enter' || event.isComposing) return;
     this.searchSubmit.emit(this.value());
   }
 
   protected clear(): void {
     this.value.set('');
     this.cleared.emit();
+    // The clear button disappears with the text: keep focus in the field.
+    this.field().nativeElement.focus();
   }
 }

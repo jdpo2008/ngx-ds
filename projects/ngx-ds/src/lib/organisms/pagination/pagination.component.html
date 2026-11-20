@@ -4,7 +4,7 @@
     size="sm"
     variant="outline"
     color="secondary"
-    [disabled]="currentPage() === 1"
+    [disabled]="currentPage() <= 1"
     (click)="prev()"
     [ariaLabel]="i18n.prevPage"
   >
@@ -32,7 +32,7 @@
     size="sm"
     variant="outline"
     color="secondary"
-    [disabled]="currentPage() === totalPages()"
+    [disabled]="currentPage() >= totalPages()"
     (click)="next()"
     [ariaLabel]="i18n.nextPage"
   >
