@@ -39,3 +39,39 @@ describe('TagComponent', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('TagComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(TagComponent);
+    fixture.componentRef.setInput('label', 'Angular');
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return { fixture, el: fixture.nativeElement as HTMLElement };
+  }
+
+  it('places the left icon before the label and the right icon after it, hidden from AT', () => {
+    const { el } = setup({ iconLeft: Star, iconRight: Star });
+    const parts = Array.from(el.querySelector('.tag')!.children).map((c) => c.className);
+    expect(parts).toEqual(['tag__icon', 'tag__label', 'tag__icon']);
+    el.querySelectorAll('ngx-ds-icon').forEach((i) =>
+      expect(i.getAttribute('aria-hidden')).toBe('true'),
+    );
+  });
+
+  it('keeps the remove button name in sync with the label', () => {
+    const { fixture, el } = setup({ dismissible: true });
+    fixture.componentRef.setInput('label', 'React');
+    fixture.detectChanges();
+    expect(el.querySelector('.tag__label')?.textContent).toBe('React');
+    expect(el.querySelector('.tag__dismiss')?.getAttribute('aria-label')).toBe('Eliminar React');
+    expect(el.querySelector('.tag__dismiss')?.getAttribute('type')).toBe('button');
+  });
+
+  it('applies each color and variant class', () => {
+    const { el } = setup({ color: 'warning', variant: 'outline', size: 'lg' });
+    const cls = el.querySelector('.tag')!.classList;
+    expect(cls).toContain('tag--warning');
+    expect(cls).toContain('tag--outline');
+    expect(cls).toContain('tag--lg');
+  });
+});

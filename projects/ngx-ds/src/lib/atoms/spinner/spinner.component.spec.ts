@@ -15,7 +15,7 @@ describe('SpinnerComponent', () => {
 
   it('announces loading with the default classes', () => {
     const el = setup();
-    expect(el.getAttribute('aria-label')).toBe('Cargando...');
+    expect(el.textContent?.trim()).toBe('Cargando...');
     expect(classesOf(el)).toEqual(classesOf('spinner spinner--md spinner--current'));
   });
 
@@ -27,6 +27,15 @@ describe('SpinnerComponent', () => {
 
   it('uses the English label when provided', () => {
     TestBed.configureTestingModule({ providers: [provideNgxDsLabels(NGX_DS_LABELS_EN)] });
-    expect(setup().getAttribute('aria-label')).toBe('Loading...');
+    expect(setup().textContent?.trim()).toBe('Loading...');
+  });
+});
+
+describe('SpinnerComponent behaviour', () => {
+  it('puts the loading text inside the live region so screen readers announce it', () => {
+    const fixture = TestBed.createComponent(SpinnerComponent);
+    fixture.detectChanges();
+    const status = (fixture.nativeElement as HTMLElement).querySelector('[role="status"]')!;
+    expect(status.textContent?.trim()).toBe('Cargando...');
   });
 });

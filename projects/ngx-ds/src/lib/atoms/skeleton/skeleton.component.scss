@@ -27,8 +27,6 @@
   &--circle {
     border-radius: 50%;
     flex-shrink: 0;
-    // width & height are set inline; force equal dimensions
-    aspect-ratio: 1;
   }
 
   &--text {
