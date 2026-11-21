@@ -59,3 +59,41 @@ describe('ProgressBarComponent', () => {
     expect(classesOf(track)).toEqual(classesOf('progress progress--md progress--success'));
   });
 });
+
+describe('ProgressBarComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(ProgressBarComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    return {
+      fixture,
+      el,
+      track: el.querySelector<HTMLElement>('[role="progressbar"]')!,
+      bar: el.querySelector<HTMLElement>('.progress__bar')!,
+    };
+  }
+
+  it('keeps aria-valuenow inside the min/max range', () => {
+    expect(setup({ value: 150 }).track.getAttribute('aria-valuenow')).toBe('100');
+    expect(setup({ value: -5 }).track.getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('does not produce NaN when max is zero', () => {
+    const { bar, el } = setup({ value: 0, max: 0, showValue: true });
+    expect(bar.style.width).toBe('0%');
+    expect(el.querySelector('.progress__value')?.textContent).toBe('0%');
+  });
+
+  it('updates the width and value as the input changes', () => {
+    const { fixture, bar, track } = setup({ value: 10 });
+    fixture.componentRef.setInput('value', 70);
+    fixture.detectChanges();
+    expect(bar.style.width).toBe('70%');
+    expect(track.getAttribute('aria-valuenow')).toBe('70');
+  });
+
+  it('uses the visible label as the accessible name', () => {
+    expect(setup({ label: 'Subida' }).track.getAttribute('aria-label')).toBe('Subida');
+  });
+});

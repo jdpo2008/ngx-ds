@@ -26,9 +26,13 @@ export class ProgressBarComponent {
   readonly rounded = input<boolean>(true);
   readonly indeterminate = input<boolean>(false);
 
-  readonly percentage = computed(() =>
-    Math.min(100, Math.max(0, (this.value() / this.max()) * 100)),
-  );
+  /** The value kept inside [0, max], as aria-valuenow must be. */
+  readonly clampedValue = computed(() => Math.min(this.max(), Math.max(0, this.value())));
+
+  readonly percentage = computed(() => {
+    const max = this.max();
+    return max > 0 ? (this.clampedValue() / max) * 100 : 0;
+  });
 
   readonly displayValue = computed(() => `${Math.round(this.percentage())}%`);
 

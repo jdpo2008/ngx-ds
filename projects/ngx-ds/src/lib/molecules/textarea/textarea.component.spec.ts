@@ -76,3 +76,57 @@ describe('TextareaComponent', () => {
     });
   });
 });
+
+describe('TextareaComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(TextareaComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const native = el.querySelector('textarea')!;
+    return { fixture, cmp: fixture.componentInstance, el, native };
+  }
+
+  it('links the label and the hint to the field', () => {
+    const { el, native } = setup({ label: 'Notas', hint: 'Opcional' });
+    expect(el.querySelector('label')?.getAttribute('for')).toBe(native.id);
+    const hint = el.querySelector('.ngx-textarea__message--hint')!;
+    expect(native.getAttribute('aria-describedby')).toBe(hint.id);
+    expect(native.hasAttribute('aria-invalid')).toBe(false);
+  });
+
+  it('marks the field invalid and describes it with the error', () => {
+    const { el, native } = setup({ errorMessage: 'Obligatorio' });
+    expect(native.getAttribute('aria-invalid')).toBe('true');
+    expect(native.getAttribute('aria-describedby')).toBe(el.querySelector('[role="alert"]')!.id);
+  });
+
+  it('shows Signal Forms errors only once touched', () => {
+    const { fixture, el } = setup({ errors: [{ kind: 'required', message: 'Rellénalo' }] });
+    expect(el.querySelector('[role="alert"]')).toBeNull();
+    fixture.componentRef.setInput('touched', true);
+    fixture.detectChanges();
+    expect(el.querySelector('[role="alert"]')?.textContent).toContain('Rellénalo');
+  });
+
+  it('hides the placeholder behind a floating label until focused', () => {
+    const { fixture, el, native } = setup({
+      label: 'Notas',
+      floatingLabel: true,
+      placeholder: 'Escribe',
+    });
+    expect(native.placeholder).toBe('');
+    expect(el.querySelector('.ngx-textarea__float-label--active')).toBeNull();
+    native.dispatchEvent(new Event('focus'));
+    fixture.detectChanges();
+    expect(native.placeholder).toBe('Escribe');
+    expect(el.querySelector('.ngx-textarea__float-label--active')).not.toBeNull();
+  });
+
+  it('reflects readonly and the disabled input', () => {
+    const { native, el } = setup({ readonly: true, disabled: true });
+    expect(native.readOnly).toBe(true);
+    expect(native.disabled).toBe(true);
+    expect(el.querySelector('.ngx-textarea__field--disabled')).not.toBeNull();
+  });
+});

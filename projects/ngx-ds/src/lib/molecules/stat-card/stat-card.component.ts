@@ -36,8 +36,15 @@ export class StatCardComponent {
   /** Shows placeholders instead of the value and change. */
   readonly loading = input<boolean>(false);
 
-  readonly trend = computed<StatTrend>(() => {
+  /** The change rounded to one decimal, as shown (drops noise like 12.499999). */
+  readonly #shownDelta = computed(() => {
     const d = this.delta();
+    return d === null ? null : Math.round(d * 10) / 10;
+  });
+
+  readonly trend = computed<StatTrend>(() => {
+    // From the shown value, so a change that rounds to 0% reads as no change.
+    const d = this.#shownDelta();
     if (d === null || d === 0) return 'neutral';
     return d > 0 ? 'up' : 'down';
   });
@@ -54,10 +61,9 @@ export class StatCardComponent {
   });
 
   readonly deltaText = computed(() => {
-    const d = this.delta();
+    const d = this.#shownDelta();
     if (d === null) return '';
-    // Round to one decimal to drop floating point noise (12.499999 → 12.5).
-    const abs = Math.round(Math.abs(d) * 10) / 10;
+    const abs = Math.abs(d);
     const sign = d > 0 ? '+' : d < 0 ? '−' : '';
     return `${sign}${abs}%`;
   });
