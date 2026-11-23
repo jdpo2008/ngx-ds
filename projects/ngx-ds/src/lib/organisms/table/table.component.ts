@@ -224,7 +224,10 @@ export class TableComponent<T extends object = Record<string, unknown>> {
 
   // ── Effective state ───────────────────────────────────────────────────────
   readonly effectiveSort = computed(() => (this.clientSide() ? this.#internalSort() : this.sort()));
-  readonly effectivePage = computed(() => (this.clientSide() ? this.#internalPage() : this.page()));
+  /** Client-side, the page is clamped so shrinking data never leaves an empty page. */
+  readonly effectivePage = computed(() =>
+    this.clientSide() ? Math.min(this.#internalPage(), this.totalPages()) : this.page(),
+  );
   readonly effectivePageSize = computed(() =>
     this.clientSide() ? this.#internalPageSize() : this.pageSize(),
   );
@@ -284,20 +287,28 @@ export class TableComponent<T extends object = Record<string, unknown>> {
 
     const sort = this.#internalSort();
     if (sort) {
+      const collator = new Intl.Collator(this.#locale, { numeric: true, sensitivity: 'base' });
       rows.sort((a, b) => {
         const av = deepGet(a, sort.column);
         const bv = deepGet(b, sort.column);
         if (av == null && bv == null) return 0;
         if (av == null) return 1;
         if (bv == null) return -1;
-        const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+        const cmp =
+          typeof av === 'string' && typeof bv === 'string'
+            ? collator.compare(av, bv)
+            : av < bv
+              ? -1
+              : av > bv
+                ? 1
+                : 0;
         return sort.direction === 'asc' ? cmp : -cmp;
       });
     }
 
     if (this.paginated()) {
       const ps = this.#internalPageSize();
-      const pg = this.#internalPage();
+      const pg = this.effectivePage();
       rows = rows.slice((pg - 1) * ps, pg * ps);
     }
 
