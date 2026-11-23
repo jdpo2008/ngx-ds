@@ -108,3 +108,32 @@ describe('CalendarComponent keyboard navigation', () => {
     expect(tabbable().length).toBe(0);
   });
 });
+
+describe('CalendarComponent header', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(CalendarComponent);
+    fixture.componentRef.setInput('value', new Date(2026, 0, 15));
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    return {
+      fixture,
+      el,
+      nav: () => [...el.querySelectorAll<HTMLButtonElement>('.calendar__nav-btn')],
+    };
+  }
+
+  it('a disabled calendar disables the month buttons too', () => {
+    const { nav } = setup({ disabled: true });
+    expect(nav().every((b) => b.disabled)).toBe(true);
+  });
+
+  it('announces the visible month when it changes', () => {
+    const { el, fixture, nav } = setup();
+    const title = el.querySelector('.calendar__title')!;
+    expect(title.getAttribute('aria-live')).toBe('polite');
+    nav()[1].click();
+    fixture.detectChanges();
+    expect(title.textContent?.trim().toLowerCase()).toContain('febrero');
+  });
+});

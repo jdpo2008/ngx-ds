@@ -95,3 +95,19 @@ describe('NavbarComponent', () => {
     expect(fixture.componentInstance.menuOpen()).toBe(false);
   });
 });
+
+describe('NavbarComponent toggle', () => {
+  it('points aria-controls at the panel only while it exists', () => {
+    const fixture = TestBed.createComponent(NavbarComponent);
+    fixture.componentRef.setInput('items', ITEMS);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const toggle = el.querySelector<HTMLButtonElement>('.navbar__toggle')!;
+    expect(toggle.getAttribute('aria-controls')).toBeNull();
+    toggle.click();
+    fixture.detectChanges();
+    const id = toggle.getAttribute('aria-controls');
+    expect(id).toBeTruthy();
+    expect(el.querySelector(`#${id}`)).not.toBeNull();
+  });
+});
