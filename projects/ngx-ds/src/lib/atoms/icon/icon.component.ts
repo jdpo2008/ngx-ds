@@ -18,6 +18,12 @@ export type { LucideIconData } from 'lucide-angular';
   `,
   styles: [':host { display: inline-flex; align-items: center; justify-content: center; }'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Decorative unless labelled: a label makes the icon a named image.
+  host: {
+    '[attr.role]': "label() ? 'img' : null",
+    '[attr.aria-label]': 'label() || null',
+    '[attr.aria-hidden]': "label() ? null : 'true'",
+  },
 })
 export class IconComponent {
   readonly icon = input.required<LucideIconData>();
@@ -25,4 +31,6 @@ export class IconComponent {
   readonly color = input<string>('currentColor');
   readonly strokeWidth = input<number>(2);
   readonly absoluteStrokeWidth = input<boolean>(false);
+  /** Accessible name for an icon that carries meaning on its own. */
+  readonly label = input<string>('');
 }

@@ -25,3 +25,27 @@ describe('IconComponent', () => {
     expect(svg.getAttribute('stroke-width')).toBe('3');
   });
 });
+
+describe('IconComponent accessibility', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(IconComponent);
+    fixture.componentRef.setInput('icon', Check);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  it('is decorative by default', () => {
+    const host = setup();
+    expect(host.getAttribute('role')).toBeNull();
+    expect(host.getAttribute('aria-label')).toBeNull();
+    expect(host.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('a label turns it into a named image', () => {
+    const host = setup({ label: 'Completado' });
+    expect(host.getAttribute('role')).toBe('img');
+    expect(host.getAttribute('aria-label')).toBe('Completado');
+    expect(host.getAttribute('aria-hidden')).toBeNull();
+  });
+});

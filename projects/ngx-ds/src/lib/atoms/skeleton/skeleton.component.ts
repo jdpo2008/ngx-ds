@@ -19,7 +19,7 @@ export class SkeletonComponent {
   readonly animated = input<boolean>(true);
 
   protected readonly lineIndices = computed(() =>
-    Array.from({ length: Math.max(1, this.lines()) }, (_, i) => i),
+    Array.from({ length: Math.max(1, Math.floor(this.lines()) || 1) }, (_, i) => i),
   );
 
   protected readonly baseClass = computed(() => {
