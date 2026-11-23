@@ -9,6 +9,7 @@
       variant="outline"
       [color]="isOpen() || hasUnread() ? 'primary' : 'secondary'"
       size="md"
+      [ariaExpanded]="isOpen()"
       (click)="togglePanel()"
     />
     @if (badgeLabel()) {
@@ -43,6 +44,7 @@
       <div class="nc__filters" role="tablist">
         <ngx-ds-button
           role="tab"
+          [attr.aria-selected]="filter() === 'all'"
           [variant]="filter() === 'all' ? 'solid' : 'outline'"
           [color]="filter() === 'all' ? 'primary' : 'secondary'"
           size="sm"
@@ -55,6 +57,7 @@
         </ngx-ds-button>
         <ngx-ds-button
           role="tab"
+          [attr.aria-selected]="filter() === 'unread'"
           [variant]="filter() === 'unread' ? 'solid' : 'outline'"
           [color]="filter() === 'unread' ? 'primary' : 'secondary'"
           size="sm"

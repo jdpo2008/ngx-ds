@@ -155,5 +155,15 @@ describe('NotificationItemComponent', () => {
       expect(action).toHaveBeenCalledWith(n);
       expect(markRead).not.toHaveBeenCalled();
     });
+
+    it('does not mark as read when Enter is pressed on the dismiss or action button', () => {
+      const { root, markRead } = setup({ ...base, actionLabel: 'Ver' });
+      for (const btn of Array.from(root.querySelectorAll('button'))) {
+        btn.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      }
+      expect(markRead).not.toHaveBeenCalled();
+      root.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      expect(markRead).toHaveBeenCalledTimes(1);
+    });
   });
 });

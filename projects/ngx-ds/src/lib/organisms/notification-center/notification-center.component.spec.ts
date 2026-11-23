@@ -90,4 +90,49 @@ describe('NotificationCenterComponent', () => {
     expect(all).toBe(1);
     expect(dismissed).toBe(1);
   });
+
+  it('tells assistive tech whether the panel is open', () => {
+    const { cmp, el, run } = setup();
+    const bell = () => el.querySelector('.nc__bell-wrap button') as HTMLButtonElement;
+    expect(bell().getAttribute('aria-expanded')).toBe('false');
+    run(() => cmp.togglePanel());
+    expect(bell().getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('marks the selected filter tab', () => {
+    const { cmp, el, run } = setup();
+    run(() => cmp.togglePanel());
+    const tabs = () =>
+      Array.from(el.querySelectorAll('[role="tab"]'), (t) => t.getAttribute('aria-selected'));
+    expect(tabs()).toEqual(['true', 'false']);
+    run(() => cmp.setFilter('unread'));
+    expect(tabs()).toEqual(['false', 'true']);
+  });
+
+  it('returns focus to the bell when Escape closes the panel from inside', () => {
+    const { cmp, el, run } = setup();
+    document.body.appendChild(el);
+    run(() => cmp.togglePanel());
+    (el.querySelector('.nc__panel button') as HTMLButtonElement).focus();
+    run(() =>
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })),
+    );
+    expect(cmp.isOpen()).toBe(false);
+    expect(document.activeElement).toBe(el.querySelector('.nc__bell-wrap button'));
+    el.remove();
+  });
+
+  it('leaves focus alone when Escape is pressed with the panel closed', () => {
+    const { el, run } = setup();
+    document.body.appendChild(el);
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+    run(() =>
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })),
+    );
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+    el.remove();
+  });
 });
