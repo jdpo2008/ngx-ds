@@ -1,4 +1,6 @@
 import {
+  afterNextRender,
+  Injector,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -29,6 +31,7 @@ const SWIPE_THRESHOLD = 40;
 })
 export class CarouselComponent {
   readonly i18n = inject(NGX_DS_LABELS);
+  readonly #injector = inject(Injector);
   protected readonly icons = { ChevronLeft, ChevronRight, Pause, Play };
 
   // ── Inputs ───────────────────────────────────────────────────
@@ -59,7 +62,7 @@ export class CarouselComponent {
 
   // ── Derived ──────────────────────────────────────────────────
   readonly count = computed(() => this.items().length);
-  readonly current = computed(() => Math.min(Math.max(this.index(), 0), this.count() - 1));
+  readonly current = computed(() => Math.max(Math.min(this.index(), this.count() - 1), 0));
   readonly hasAutoplay = computed(() => this.autoplay() > 0 && this.count() > 1);
   readonly isPlaying = computed(
     () => this.hasAutoplay() && !this.#userPaused() && !this.#hovered() && !this.#focused(),
@@ -91,6 +94,19 @@ export class CarouselComponent {
 
   next(): void {
     this.index.set(stepIndex(this.current(), 1, this.count(), this.loop()));
+  }
+
+  /** Steps from an arrow; if that arrow is now disabled, focus moves to the other one. */
+  onArrow(delta: 1 | -1, event: Event): void {
+    if (delta < 0) this.prev();
+    else this.next();
+    if (delta < 0 ? this.canPrev() : this.canNext()) return;
+    const other = delta < 0 ? '.carousel__arrow--next' : '.carousel__arrow--prev';
+    const target = (event.currentTarget as HTMLElement).parentElement?.querySelector<HTMLElement>(
+      other,
+    );
+    // The other arrow may still be disabled until this change renders.
+    afterNextRender(() => target?.focus(), { injector: this.#injector });
   }
 
   toggleAutoplay(): void {

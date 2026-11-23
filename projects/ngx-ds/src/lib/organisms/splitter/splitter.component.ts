@@ -66,6 +66,7 @@ export class SplitterComponent {
 
   onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
+    const before = this.current();
     const [less, more] = this.isHorizontal()
       ? ['ArrowLeft', 'ArrowRight']
       : ['ArrowUp', 'ArrowDown'];
@@ -89,7 +90,7 @@ export class SplitterComponent {
         return;
     }
     event.preventDefault();
-    this.resizeEnd.emit(this.current());
+    if (this.current() !== before) this.resizeEnd.emit(this.current());
   }
 
   /** Collapses the first pane to `min`, or restores the size it had before. */

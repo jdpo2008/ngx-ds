@@ -55,7 +55,7 @@ describe('SplitterComponent', () => {
     press('Home');
     expect(cmp.size()).toBe(10);
     expect(handle.getAttribute('aria-valuenow')).toBe('10');
-    expect(ends).toEqual([60, 50, 40, 90, 90, 10]);
+    expect(ends).toEqual([60, 50, 40, 90, 10]);
   });
 
   it('uses Up/Down when vertical', () => {
@@ -107,5 +107,21 @@ describe('SplitterComponent', () => {
     fixture.detectChanges();
     expect(el.querySelector('.splitter--dragging')).toBeNull();
     expect(ends).toEqual([90]);
+  });
+});
+
+describe('SplitterComponent resizeEnd', () => {
+  it('does not emit when a key leaves the size unchanged', () => {
+    const fixture = TestBed.createComponent(SplitterComponent);
+    fixture.componentRef.setInput('size', 10);
+    fixture.detectChanges();
+    const handle = fixture.nativeElement.querySelector('[role="separator"]') as HTMLElement;
+    const sizes: number[] = [];
+    fixture.componentInstance.resizeEnd.subscribe((s) => sizes.push(s));
+    for (const key of ['ArrowLeft', 'Home', 'ArrowRight']) {
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
+      fixture.detectChanges();
+    }
+    expect(sizes).toEqual([15]);
   });
 });

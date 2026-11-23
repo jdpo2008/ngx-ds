@@ -53,7 +53,7 @@
         class="carousel__arrow carousel__arrow--prev"
         [disabled]="!canPrev()"
         [attr.aria-label]="i18n.prevSlide"
-        (click)="prev()"
+        (click)="onArrow(-1, $event)"
       >
         <ngx-ds-icon [icon]="icons.ChevronLeft" [size]="20" />
       </button>
@@ -62,7 +62,7 @@
         class="carousel__arrow carousel__arrow--next"
         [disabled]="!canNext()"
         [attr.aria-label]="i18n.nextSlide"
-        (click)="next()"
+        (click)="onArrow(1, $event)"
       >
         <ngx-ds-icon [icon]="icons.ChevronRight" [size]="20" />
       </button>
