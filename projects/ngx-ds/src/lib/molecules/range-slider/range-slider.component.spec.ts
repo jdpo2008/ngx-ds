@@ -90,3 +90,63 @@ describe('RangeSliderComponent forms integration', () => {
     expect(inputs[0].disabled).toBe(false);
   });
 });
+
+describe('RangeSliderComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(RangeSliderComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const thumbs = () => Array.from(el.querySelectorAll<HTMLInputElement>('input[type="range"]'));
+    const slide = (input: HTMLInputElement, value: number) => {
+      input.value = String(value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      fixture.detectChanges();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, thumbs, slide };
+  }
+
+  it('names the single slider with its label', () => {
+    const { el, thumbs } = setup({ label: 'Volumen' });
+    const labelId = thumbs()[0].getAttribute('aria-labelledby')!;
+    expect(el.querySelector(`#${labelId}`)!.textContent).toContain('Volumen');
+  });
+
+  it('keeps the fill inside the rail when the value is out of range', () => {
+    const { el } = setup({ value: 150 });
+    const rail = el.querySelector<HTMLElement>('.slider__rail')!;
+    expect(rail.style.getPropertyValue('--slider-fill')).toBe('100%');
+  });
+
+  it('emits rangeChange and keeps the thumbs apart by minGap', () => {
+    const { cmp, thumbs, slide } = setup({ range: true, values: [20, 60], minGap: 10 });
+    const emitted: [number, number][] = [];
+    cmp.rangeChange.subscribe((v) => emitted.push(v));
+    slide(thumbs()[1], 25);
+    expect(cmp.values()).toEqual([20, 30]);
+    expect(thumbs()[1].value).toBe('30');
+    slide(thumbs()[0], 70);
+    expect(cmp.values()).toEqual([20, 30]);
+    expect(thumbs()[0].value).toBe('20');
+    expect(emitted).toEqual([
+      [20, 30],
+      [20, 30],
+    ]);
+  });
+
+  it('never moves a thumb outside min and max to honour minGap', () => {
+    const { cmp, thumbs, slide } = setup({ range: true, values: [0, 5], minGap: 10 });
+    slide(thumbs()[0], 3);
+    expect(cmp.values()[0]).toBe(0);
+    slide(thumbs()[1], 98);
+    expect(cmp.values()).toEqual([0, 98]);
+  });
+
+  it('gives each range thumb a distinct accessible name', () => {
+    const { thumbs } = setup({ range: true, values: [20, 60] });
+    const [a, b] = thumbs().map((t) => t.getAttribute('aria-label'));
+    expect(a).toBeTruthy();
+    expect(b).toBeTruthy();
+    expect(a).not.toBe(b);
+  });
+});

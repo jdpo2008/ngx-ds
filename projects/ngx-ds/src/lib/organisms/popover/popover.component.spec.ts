@@ -120,3 +120,57 @@ describe('PopoverComponent', () => {
 class NativeHost {
   open = signal(false);
 }
+
+describe('PopoverComponent behaviour', () => {
+  function setup() {
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const trigger = el.querySelector<HTMLElement>('.popover__trigger')!;
+    const host = fixture.componentInstance;
+    return { fixture, el, trigger, host };
+  }
+
+  it('links the trigger to the open panel with aria-controls', () => {
+    const { fixture, el, trigger } = setup();
+    expect(trigger.hasAttribute('aria-controls')).toBe(false);
+    trigger.click();
+    fixture.detectChanges();
+    const panel = el.querySelector<HTMLElement>('[role="dialog"]')!;
+    expect(panel.id).toMatch(/^ngx-popover-/);
+    expect(trigger.getAttribute('aria-controls')).toBe(panel.id);
+  });
+
+  it('returns focus to the trigger when Escape closes it from inside the panel', () => {
+    const { fixture, el, trigger, host } = setup();
+    document.body.appendChild(el);
+    trigger.click();
+    fixture.detectChanges();
+    const content = el.querySelector<HTMLElement>('.content')!;
+    content.tabIndex = -1;
+    content.focus();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(host.open()).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+    el.remove();
+  });
+
+  it('closes when it becomes disabled while open', () => {
+    const { fixture, trigger, host } = setup();
+    trigger.click();
+    fixture.detectChanges();
+    host.disabled.set(true);
+    fixture.detectChanges();
+    expect(host.open()).toBe(false);
+  });
+
+  it('opens with Space and prevents page scroll', () => {
+    const { fixture, trigger, host } = setup();
+    const ev = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+    trigger.dispatchEvent(ev);
+    fixture.detectChanges();
+    expect(host.open()).toBe(true);
+    expect(ev.defaultPrevented).toBe(true);
+  });
+});

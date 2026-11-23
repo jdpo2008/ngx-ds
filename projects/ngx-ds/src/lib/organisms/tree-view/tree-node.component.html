@@ -1,7 +1,8 @@
 <li
   class="tree-node"
   role="treeitem"
-  [attr.aria-selected]="isSelected()"
+  [attr.aria-selected]="selectable() ? isSelected() : null"
+  [attr.aria-disabled]="node().disabled ? 'true' : null"
   [attr.aria-expanded]="hasChildren() ? isExpanded() : null"
 >
   <!-- Row -->
@@ -10,8 +11,7 @@
     [style.paddingLeft]="indent()"
     tabindex="0"
     (click)="select()"
-    (keydown.enter)="select()"
-    (keydown.space)="$event.preventDefault(); select()"
+    (keydown)="onRowKey($event)"
   >
     <!-- Expand toggle -->
     <button
@@ -22,7 +22,7 @@
       (click)="toggle($event)"
       [attr.aria-label]="isExpanded() ? i18n.collapse : i18n.expand"
     >
-      <ngx-ds-icon [icon]="ChevronRight" [size]="14" />
+      <ngx-ds-icon [icon]="ChevronRight" [size]="14" aria-hidden="true" />
     </button>
 
     <span class="tree-node__label">{{ node().label }}</span>

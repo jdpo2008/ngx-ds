@@ -26,6 +26,12 @@ const TRACK_COLORS: Record<SliderColor, string> = {
 
 let nextId = 0;
 
+/** Position of `v` on the rail, clamped to 0–100 so the fill never overflows. */
+function toPercent(v: number, min: number, max: number): number {
+  const pct = Math.round(((v - min) / (max - min)) * 100 * 100) / 100;
+  return Math.min(100, Math.max(0, pct));
+}
+
 @Component({
   selector: 'ngx-ds-range-slider',
   standalone: true,
@@ -73,7 +79,7 @@ export class RangeSliderComponent implements ControlValueAccessor {
       max = this.max(),
       val = this.value();
     if (max === min) return 0;
-    return Math.round(((val - min) / (max - min)) * 100 * 100) / 100;
+    return toPercent(val, min, max);
   });
 
   protected readonly rangeFillPercent = computed(() => {
@@ -81,8 +87,7 @@ export class RangeSliderComponent implements ControlValueAccessor {
       max = this.max();
     const [start, end] = this.values();
     if (max === min) return { from: 0, to: 0 };
-    const toPercent = (v: number) => Math.round(((v - min) / (max - min)) * 100 * 100) / 100;
-    return { from: toPercent(start), to: toPercent(end) };
+    return { from: toPercent(start, min, max), to: toPercent(end, min, max) };
   });
 
   protected readonly trackColor = computed(() => TRACK_COLORS[this.color()]);
@@ -110,7 +115,7 @@ export class RangeSliderComponent implements ControlValueAccessor {
   protected onStartInput(event: Event): void {
     const raw = Number((event.target as HTMLInputElement).value);
     const [, end] = this.values();
-    const clamped = Math.min(raw, end - this.minGap());
+    const clamped = Math.max(this.min(), Math.min(raw, end - this.minGap()));
     (event.target as HTMLInputElement).value = String(clamped);
     const next: [number, number] = [clamped, end];
     this.values.set(next);
@@ -121,7 +126,7 @@ export class RangeSliderComponent implements ControlValueAccessor {
   protected onEndInput(event: Event): void {
     const raw = Number((event.target as HTMLInputElement).value);
     const [start] = this.values();
-    const clamped = Math.max(raw, start + this.minGap());
+    const clamped = Math.min(this.max(), Math.max(raw, start + this.minGap()));
     (event.target as HTMLInputElement).value = String(clamped);
     const next: [number, number] = [start, clamped];
     this.values.set(next);

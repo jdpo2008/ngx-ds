@@ -42,6 +42,30 @@ export class TreeNodeComponent {
     if (!this.node().disabled) this.nodeSelect.emit(this.node());
   }
 
+  /** Row keys. Keys pressed on the toggle button are left to the button. */
+  onRowKey(event: KeyboardEvent): void {
+    if (event.target !== event.currentTarget) return;
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        this.select();
+        break;
+      case 'ArrowRight':
+        if (this.hasChildren() && !this.isExpanded()) {
+          event.preventDefault();
+          this.nodeToggle.emit(this.node());
+        }
+        break;
+      case 'ArrowLeft':
+        if (this.hasChildren() && this.isExpanded()) {
+          event.preventDefault();
+          this.nodeToggle.emit(this.node());
+        }
+        break;
+    }
+  }
+
   toggle(event: MouseEvent): void {
     event.stopPropagation();
     if (this.hasChildren()) this.nodeToggle.emit(this.node());

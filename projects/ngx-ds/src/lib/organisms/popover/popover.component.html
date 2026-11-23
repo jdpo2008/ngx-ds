@@ -6,6 +6,7 @@
     [attr.tabindex]="nativeTrigger() || disabled() ? null : 0"
     [attr.aria-expanded]="nativeTrigger() ? null : open()"
     [attr.aria-haspopup]="nativeTrigger() ? null : 'dialog'"
+    [attr.aria-controls]="!nativeTrigger() && open() ? panelId : null"
     (click)="toggle()"
     (keydown.enter)="onTriggerKey($event)"
     (keydown.space)="onTriggerKey($event)"
@@ -14,7 +15,12 @@
   </div>
 
   @if (open()) {
-    <div [class]="panelClasses()" role="dialog" [attr.aria-label]="ariaLabel() ?? i18n.popover">
+    <div
+      [id]="panelId"
+      [class]="panelClasses()"
+      role="dialog"
+      [attr.aria-label]="ariaLabel() ?? i18n.popover"
+    >
       <ng-content select="[popover-content]" />
     </div>
   }

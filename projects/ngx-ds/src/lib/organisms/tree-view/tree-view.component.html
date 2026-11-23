@@ -1,4 +1,4 @@
-<ul class="tree-view" role="tree">
+<ul class="tree-view" role="tree" [attr.aria-multiselectable]="selectable() ? 'true' : null">
   @for (node of nodes(); track node.id) {
     <ngx-ds-tree-node
       [node]="node"
