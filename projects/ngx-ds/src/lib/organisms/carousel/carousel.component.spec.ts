@@ -139,3 +139,60 @@ describe('CarouselComponent', () => {
     });
   });
 });
+
+describe('CarouselComponent edge cases', () => {
+  it('renders an empty list without a negative slide index', () => {
+    const fixture = TestBed.createComponent(CarouselComponent);
+    fixture.componentRef.setInput('items', []);
+    fixture.detectChanges();
+    const cmp = fixture.componentInstance;
+    expect(cmp.current()).toBe(0);
+    expect(cmp.trackTransform()).toBe('translateX(-0%)');
+    const region = fixture.nativeElement.querySelector('[role="region"]') as HTMLElement;
+    region.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', cancelable: true }));
+    region.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    fixture.detectChanges();
+    expect(cmp.current()).toBe(0);
+  });
+
+  it('keeps focus on an arrow when the one clicked becomes disabled', () => {
+    const fixture = TestBed.createComponent(CarouselComponent);
+    fixture.componentRef.setInput('items', ITEMS);
+    fixture.componentRef.setInput('loop', false);
+    fixture.detectChanges();
+    document.body.appendChild(fixture.nativeElement);
+    const el = fixture.nativeElement as HTMLElement;
+    const next = el.querySelector<HTMLButtonElement>('.carousel__arrow--next')!;
+    const prev = el.querySelector<HTMLButtonElement>('.carousel__arrow--prev')!;
+    next.focus();
+    next.click();
+    fixture.detectChanges();
+    next.click();
+    fixture.detectChanges();
+    expect(next.disabled).toBe(true);
+    expect(document.activeElement).toBe(prev);
+    prev.click();
+    fixture.detectChanges();
+    prev.click();
+    fixture.detectChanges();
+    expect(prev.disabled).toBe(true);
+    expect(document.activeElement).toBe(next);
+    fixture.nativeElement.remove();
+  });
+  it('moves focus to the other arrow once it renders enabled, with two slides', () => {
+    const fixture = TestBed.createComponent(CarouselComponent);
+    fixture.componentRef.setInput('items', ITEMS.slice(0, 2));
+    fixture.componentRef.setInput('loop', false);
+    fixture.detectChanges();
+    document.body.appendChild(fixture.nativeElement);
+    const el = fixture.nativeElement as HTMLElement;
+    const next = el.querySelector<HTMLButtonElement>('.carousel__arrow--next')!;
+    const prev = el.querySelector<HTMLButtonElement>('.carousel__arrow--prev')!;
+    expect(prev.disabled).toBe(true);
+    next.focus();
+    next.click();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(prev);
+    fixture.nativeElement.remove();
+  });
+});
