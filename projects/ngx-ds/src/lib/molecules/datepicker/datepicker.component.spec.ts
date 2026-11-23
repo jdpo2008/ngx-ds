@@ -282,4 +282,18 @@ describe('DatepickerComponent mouse and state', () => {
     cmp.writeValue(null);
     expect(cmp.value()).toBeNull();
   });
+
+  it('clearing moves focus to the trigger and marks the control touched', () => {
+    const { fixture, cmp, q } = setup();
+    const touched = vi.fn();
+    cmp.registerOnTouched(touched);
+    cmp.writeValue(new Date(2026, 0, 15));
+    fixture.detectChanges();
+    const clear = q<HTMLButtonElement>('.ngx-datepicker__clear')!;
+    clear.focus();
+    clear.click();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(q('[role="button"]'));
+    expect(touched).toHaveBeenCalledTimes(1);
+  });
 });

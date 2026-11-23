@@ -259,4 +259,23 @@ describe('DateRangePickerComponent mouse and state', () => {
     expect(cmp.end()).toBeNull();
     expect(cmp.triggerLabel()).toBe('');
   });
+
+  it('clearing moves focus to the trigger', () => {
+    const { cmp, q, trigger, render } = setup();
+    cmp.writeValue({ start: new Date(2026, 0, 10), end: new Date(2026, 0, 12) });
+    render();
+    const clear = q<HTMLButtonElement>('.drp__clear')!;
+    clear.focus();
+    clear.click();
+    render();
+    expect(document.activeElement).toBe(trigger());
+  });
+
+  it('shows the end date when only the end is set', () => {
+    const { cmp, q, render } = setup();
+    cmp.writeValue({ start: null, end: new Date(2026, 0, 12) });
+    render();
+    expect(cmp.triggerLabel()).toBe('... – 12/01/2026');
+    expect(q('.drp__text')!.classList).not.toContain('drp__text--placeholder');
+  });
 });
