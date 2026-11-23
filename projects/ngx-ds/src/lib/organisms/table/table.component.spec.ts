@@ -90,6 +90,27 @@ describe('TableComponent', () => {
     expect(names(cmp.processedData())).toEqual(['Ana']);
   });
 
+  it('stays on the last page when client-side data shrinks below the current page', () => {
+    const { fixture, cmp } = setup({ paginated: true, pageSize: 2, page: 2 });
+    fixture.componentRef.setInput('data', ROWS.slice(0, 2));
+    expect(cmp.effectivePage()).toBe(1);
+    expect(names(cmp.processedData())).toEqual(['Ana', 'Luis']);
+    expect([cmp.pageStart(), cmp.pageEnd()]).toEqual([1, 2]);
+  });
+
+  it('sorts text with the locale, ignoring case and accents', () => {
+    const data = [
+      { id: 1, name: 'beto', city: { name: 'X' }, age: 1 },
+      { id: 2, name: 'Álvaro', city: { name: 'X' }, age: 2 },
+      { id: 3, name: 'Carla', city: { name: 'X' }, age: 3 },
+      { id: 4, name: 'item 10', city: { name: 'X' }, age: 4 },
+      { id: 5, name: 'item 9', city: { name: 'X' }, age: 5 },
+    ];
+    const { cmp } = setup({ data });
+    cmp.onSort(COLUMNS[0]);
+    expect(names(cmp.processedData())).toEqual(['Álvaro', 'beto', 'Carla', 'item 9', 'item 10']);
+  });
+
   it('uses the server-side total for the page count', () => {
     const { cmp } = setup({ clientSide: false, paginated: true, total: 95, page: 3 });
     expect(cmp.totalPages()).toBe(10);
