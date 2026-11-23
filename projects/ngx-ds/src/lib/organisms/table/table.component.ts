@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   linkedSignal,
   inject,
   input,
@@ -35,6 +36,7 @@ import {
 } from 'lucide-angular';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { setupClickOutside } from '../../shared/click-outside';
+import { setupEscapeClose } from '../../shared/escape-close';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 // ── Public types ─────────────────────────────────────────────────────────────
@@ -132,12 +134,28 @@ export class TableComponent<T extends object = Record<string, unknown>> {
   readonly #locale = inject(NGX_DS_LOCALE);
   readonly #openMenuId = signal<unknown>(null);
   readonly #columnMenuOpen = signal(false);
+  readonly #host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   constructor() {
     setupClickOutside(() => {
       this.#openMenuId.set(null);
       this.#columnMenuOpen.set(false);
     });
+    setupEscapeClose(() => this.#closeMenusOnEscape());
+  }
+
+  /** Escape closes the open menu and, if focus was inside the table, returns it to the menu's button. */
+  #closeMenusOnEscape(): void {
+    const rowMenu = this.#openMenuId() !== null;
+    if (!rowMenu && !this.#columnMenuOpen()) return;
+    const host = this.#host.nativeElement;
+    const trigger = host.querySelector<HTMLElement>(
+      rowMenu ? '.ngx-table__action-menu--open button' : '.ngx-table__column-menu button',
+    );
+    const hadFocus = host.contains(host.ownerDocument.activeElement);
+    this.#openMenuId.set(null);
+    this.#columnMenuOpen.set(false);
+    if (hadFocus) trigger?.focus();
   }
 
   // ── Data ─────────────────────────────────────────────────────────────────
@@ -389,6 +407,13 @@ export class TableComponent<T extends object = Record<string, unknown>> {
       this.#internalPage.set(1);
     }
     this.sortChange.emit(next);
+  }
+
+  /** Enter and Space sort from a focused header, like a click. */
+  onSortKeydown(event: Event, col: TableColumn<T>): void {
+    if (!col.sortable) return;
+    event.preventDefault();
+    this.onSort(col);
   }
 
   sortIconFor(col: TableColumn<T>) {

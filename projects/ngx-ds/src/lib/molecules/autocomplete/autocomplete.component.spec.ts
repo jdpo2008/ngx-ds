@@ -401,3 +401,70 @@ describe('AutocompleteComponent behaviour', () => {
     expect(searches).toEqual(['']);
   });
 });
+
+describe('AutocompleteComponent leaving the field', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(AutocompleteComponent);
+    fixture.componentRef.setInput('options', OPTIONS);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const native = el.querySelector<HTMLInputElement>('input')!;
+    const type = (text: string) => {
+      native.value = text;
+      native.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+    };
+    const tab = () => {
+      native.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+      fixture.detectChanges();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, native, type, tab };
+  }
+
+  it('Tab closes the panel and drops unmatched text', () => {
+    const { cmp, native, type, tab } = setup();
+    native.dispatchEvent(new Event('focus'));
+    type('Bar');
+    expect(cmp.showPanel()).toBe(true);
+    tab();
+    expect(cmp.showPanel()).toBe(false);
+    expect(native.getAttribute('aria-expanded')).toBe('false');
+    expect(native.value).toBe('');
+  });
+
+  it('Tab keeps the selected label when the text was not edited', () => {
+    const { cmp, native, tab, fixture } = setup({ showAllOnFocus: true });
+    cmp.writeValue('mad');
+    fixture.detectChanges();
+    native.dispatchEvent(new Event('focus'));
+    fixture.detectChanges();
+    expect(cmp.showPanel()).toBe(true);
+    tab();
+    expect(cmp.showPanel()).toBe(false);
+    expect(native.value).toBe('Madrid');
+    expect(cmp.value()).toBe('mad');
+  });
+
+  it('Tab keeps custom text with allowCustom', () => {
+    const { cmp, native, type, tab } = setup({ allowCustom: true });
+    native.dispatchEvent(new Event('focus'));
+    type('Zaragoza');
+    tab();
+    expect(cmp.showPanel()).toBe(false);
+    expect(native.value).toBe('Zaragoza');
+  });
+
+  it('writing a value with no matching option clears the old label', () => {
+    const { cmp, native, fixture } = setup();
+    cmp.writeValue('mad');
+    fixture.detectChanges();
+    expect(native.value).toBe('Madrid');
+    cmp.writeValue('zzz');
+    fixture.detectChanges();
+    expect(native.value).toBe('');
+    fixture.componentRef.setInput('options', [...OPTIONS, { label: 'Zamora', value: 'zzz' }]);
+    fixture.detectChanges();
+    expect(native.value).toBe('Zamora');
+  });
+});

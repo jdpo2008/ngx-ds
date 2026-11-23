@@ -19,6 +19,7 @@
           <ngx-ds-icon-button
             [icon]="icons.Columns3"
             [ariaLabel]="i18n.visibleColumns"
+            [ariaExpanded]="isColumnMenuOpen()"
             variant="outline"
             color="secondary"
             size="sm"
@@ -99,7 +100,10 @@
             [attr.aria-sort]="
               isSortActive(col) ? (isSortAsc(col) ? 'ascending' : 'descending') : null
             "
+            [attr.tabindex]="col.sortable ? 0 : null"
             (click)="col.sortable && onSort(col)"
+            (keydown.enter)="onSortKeydown($event, col)"
+            (keydown.space)="onSortKeydown($event, col)"
           >
             @if (col.headerTemplate) {
               <ng-container
@@ -189,7 +193,7 @@
                     color="secondary"
                     size="sm"
                     [bordered]="false"
-                    [attr.aria-expanded]="isExpanded(row)"
+                    [ariaExpanded]="isExpanded(row)"
                     (click)="toggleExpand(row, $event)"
                   />
                 </span>
@@ -264,6 +268,7 @@
                   <ngx-ds-icon-button
                     [icon]="icons.MoreVertical"
                     [ariaLabel]="i18n.rowActions"
+                    [ariaExpanded]="isMenuOpen(row)"
                     variant="outline"
                     color="secondary"
                     size="sm"
