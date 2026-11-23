@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { ChevronDown, LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { ACCORDION_CONTROLLER } from './accordion.token';
@@ -30,6 +39,8 @@ export class AccordionItemComponent {
   readonly description = input<string>('');
   readonly icon = input<LucideIconData | undefined>(undefined);
   readonly disabled = input<boolean>(false);
+  /** Opens or closes the item from outside; in single mode, opening it closes the others. */
+  readonly expanded = input<boolean>(false);
 
   // ── State set by parent ───────────────────────────────────────
   readonly _open = signal(false);
@@ -44,6 +55,16 @@ export class AccordionItemComponent {
   }
   setSize(s: AccordionSize): void {
     this._size.set(s);
+  }
+
+  constructor() {
+    effect(() => {
+      const open = this.expanded();
+      untracked(() => {
+        this._open.set(open);
+        if (open) this.controller?.itemOpened(this);
+      });
+    });
   }
 
   // ── Icons ─────────────────────────────────────────────────────

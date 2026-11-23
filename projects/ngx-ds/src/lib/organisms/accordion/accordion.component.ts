@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, contentChildren, effect, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  contentChildren,
+  effect,
+  input,
+  untracked,
+} from '@angular/core';
 import {
   AccordionItemComponent,
   AccordionVariant,
@@ -27,17 +34,24 @@ export class AccordionComponent implements AccordionController {
   }
 
   constructor() {
-    effect(
-      () => {
-        const variant = this.variant();
-        const size = this.size();
-        this.items().forEach((it) => {
-          it.setVariant(variant);
-          it.setSize(size);
-        });
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      const variant = this.variant();
+      const size = this.size();
+      this.items().forEach((it) => {
+        it.setVariant(variant);
+        it.setSize(size);
+      });
+    });
+
+    // Leaving multiple mode keeps only the first open item.
+    effect(() => {
+      if (this.multiple()) return;
+      const items = this.items();
+      untracked(() => {
+        const first = items.find((it) => it._open());
+        if (first) this.itemOpened(first);
+      });
+    });
   }
 
   // Called by an item when it opens — close siblings if single mode
