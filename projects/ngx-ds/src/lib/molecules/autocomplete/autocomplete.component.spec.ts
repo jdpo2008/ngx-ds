@@ -313,4 +313,91 @@ describe('AutocompleteComponent behaviour', () => {
     expect(q('.ngx-autocomplete__message--hint')).toBeNull();
     expect(q('.ngx-autocomplete__message--error')!.textContent!.trim()).toBe('Obligatoria');
   });
+
+  describe('keyboard', () => {
+    const key = (native: HTMLInputElement, k: string) => {
+      const event = new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true });
+      native.dispatchEvent(event);
+      return event;
+    };
+
+    it('arrows move the active option, skipping disabled ones, and set aria-activedescendant', () => {
+      const { fixture, cmp, native, type, options } = setup();
+      fixture.componentRef.setInput('options', [
+        { label: 'Madrid', value: 'mad' },
+        { label: 'Málaga', value: 'agp', disabled: true },
+        { label: 'Mallorca', value: 'pmi' },
+      ]);
+      type('a');
+      expect(options().length).toBe(3);
+      expect(native.getAttribute('aria-activedescendant')).toBeNull();
+      expect(key(native, 'ArrowDown').defaultPrevented).toBe(true);
+      fixture.detectChanges();
+      expect(native.getAttribute('aria-activedescendant')).toBe(options()[0].id);
+      expect(options()[0].classList).toContain('ngx-autocomplete__option--active');
+      key(native, 'ArrowDown');
+      fixture.detectChanges();
+      expect(cmp.activeIndex()).toBe(2);
+      key(native, 'ArrowDown');
+      fixture.detectChanges();
+      expect(cmp.activeIndex()).toBe(2);
+      key(native, 'ArrowUp');
+      fixture.detectChanges();
+      expect(cmp.activeIndex()).toBe(0);
+      type('mad');
+      expect(native.getAttribute('aria-activedescendant')).toBeNull();
+    });
+
+    it('Enter picks the active option and closes', () => {
+      const { fixture, cmp, native, type } = setup();
+      const changed = vi.fn();
+      cmp.registerOnChange(changed);
+      type('a');
+      key(native, 'ArrowUp');
+      fixture.detectChanges();
+      expect(key(native, 'Enter').defaultPrevented).toBe(true);
+      fixture.detectChanges();
+      expect(cmp.value()).toBe('bcn');
+      expect(changed).toHaveBeenCalledWith('bcn');
+      expect(native.value).toBe('Barcelona');
+      expect(cmp.showPanel()).toBe(false);
+    });
+
+    it('Enter without an active option is left to the form', () => {
+      const { cmp, native, type } = setup();
+      type('a');
+      expect(key(native, 'Enter').defaultPrevented).toBe(false);
+      expect(cmp.value()).toBeNull();
+    });
+
+    it('Escape closes the panel; ArrowDown opens it again', () => {
+      const { fixture, cmp, native, type } = setup();
+      type('ma');
+      expect(key(native, 'Escape').defaultPrevented).toBe(true);
+      fixture.detectChanges();
+      expect(cmp.showPanel()).toBe(false);
+      expect(native.value).toBe('ma');
+      key(native, 'ArrowDown');
+      fixture.detectChanges();
+      expect(cmp.showPanel()).toBe(true);
+      expect(cmp.activeIndex()).toBe(0);
+    });
+  });
+
+  it('clearing cancels a pending debounced search', () => {
+    vi.useFakeTimers();
+    const { fixture, cmp, el, type } = setup();
+    const searches: string[] = [];
+    cmp.searchChange.subscribe((s) => searches.push(s));
+    type('mad');
+    cmp.onOptionSelect(OPTIONS[0]);
+    type('Madri');
+    cmp.writeValue('mad');
+    fixture.detectChanges();
+    el.querySelector<HTMLButtonElement>('.ngx-autocomplete__clear')!.dispatchEvent(
+      new MouseEvent('mousedown', { bubbles: true }),
+    );
+    vi.advanceTimersByTime(1000);
+    expect(searches).toEqual(['']);
+  });
 });

@@ -10,6 +10,8 @@ import {
   untracked,
   forwardRef,
   inject,
+  Injector,
+  afterNextRender,
   OnDestroy,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -62,6 +64,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   readonly i18n = inject(NGX_DS_LABELS);
 
   private readonly sanitizer = inject(DomSanitizer);
+  readonly #injector = inject(Injector);
 
   // ── Configuration ─────────────────────────────────────────
   readonly options = input<AutocompleteOption[]>([]);
@@ -107,6 +110,8 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   readonly disabled = input<boolean>(false);
   readonly #cvaDisabled = signal(false);
   readonly #focused = signal(false);
+  /** Index in `filteredOptions()` of the option moved to with the arrow keys, or -1. */
+  readonly #active = signal(-1);
 
   readonly isOpen = this.#open.asReadonly();
   readonly inputText = this.#inputText.asReadonly();
@@ -153,6 +158,20 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     return this.showAllOnFocus() ? true : text >= this.minChars();
   });
 
+  readonly activeIndex = this.#active.asReadonly();
+
+  /** Id of the active option, for the input's `aria-activedescendant`. */
+  readonly activeOptionId = computed(() => {
+    const i = this.#active();
+    return this.showPanel() && i >= 0 && i < this.filteredOptions().length
+      ? this.optionId(i)
+      : null;
+  });
+
+  optionId(index: number): string {
+    return `${this.id}-option-${index}`;
+  }
+
   readonly fieldClasses = computed(() => {
     const base = 'ngx-autocomplete__field';
     return [
@@ -198,6 +217,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   // ── Interactions ──────────────────────────────────────────
   onInputChange(text: string): void {
     this.#inputText.set(text);
+    this.#active.set(-1);
 
     const selected = this.selectedOption();
     if (selected && text !== selected.label) {
@@ -217,6 +237,57 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     const text = this.#inputText();
     const shouldOpen = this.showAllOnFocus() ? true : text.length >= this.minChars();
     this.#open.set(shouldOpen);
+    this.#active.set(-1);
+  }
+
+  /** Arrow keys move through the options, Enter picks the active one, Escape closes. */
+  onKeydown(event: KeyboardEvent): void {
+    if (event.isComposing || this.isDisabled()) return;
+    const options = this.filteredOptions();
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowUp': {
+        event.preventDefault();
+        if (!this.showPanel()) {
+          this.#open.set(true);
+          if (!this.showPanel()) return;
+        }
+        const enabled = options.flatMap((o, i) => (o.disabled ? [] : [i]));
+        if (!enabled.length) return;
+        const current = enabled.indexOf(this.#active());
+        const next =
+          event.key === 'ArrowDown'
+            ? enabled[current < 0 ? 0 : Math.min(current + 1, enabled.length - 1)]
+            : enabled[current < 0 ? enabled.length - 1 : Math.max(current - 1, 0)];
+        this.#active.set(next);
+        this.#scrollActiveIntoView();
+        break;
+      }
+      case 'Enter': {
+        const option = this.showPanel() ? options[this.#active()] : undefined;
+        if (!option) return;
+        event.preventDefault();
+        this.onOptionSelect(option);
+        break;
+      }
+      case 'Escape':
+        if (!this.showPanel()) return;
+        event.preventDefault();
+        this.#open.set(false);
+        this.#active.set(-1);
+        break;
+    }
+  }
+
+  #scrollActiveIntoView(): void {
+    afterNextRender(
+      () => {
+        const id = this.activeOptionId();
+        const el = id ? document.getElementById(id) : null;
+        el?.scrollIntoView?.({ block: 'nearest' });
+      },
+      { injector: this.#injector },
+    );
   }
 
   onBlur(): void {
@@ -230,6 +301,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     this.onChange(option.value);
     this.#inputText.set(option.label);
     this.#open.set(false);
+    this.#active.set(-1);
   }
 
   onClear(event: Event): void {
@@ -239,6 +311,9 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     this.onChange(null);
     this.#inputText.set('');
     this.#open.set(false);
+    this.#active.set(-1);
+    // A search still waiting on the debounce would bring back the old results.
+    if (this.searchTimer) clearTimeout(this.searchTimer);
     this.searchChange.emit('');
     this.inputEl?.focus();
   }

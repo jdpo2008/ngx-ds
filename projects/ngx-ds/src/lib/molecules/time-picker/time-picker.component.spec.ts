@@ -141,6 +141,18 @@ describe('TimePickerComponent', () => {
     expect(el.querySelector('.ngx-time-picker__clear')).toBeNull();
   });
 
+  it('clearing moves focus to the trigger and marks the control touched', async () => {
+    const { cmp, el, trigger, render } = await setup({}, '08:00');
+    const touched = vi.fn();
+    cmp.registerOnTouched(touched);
+    const clear = el.querySelector<HTMLButtonElement>('.ngx-time-picker__clear')!;
+    clear.focus();
+    clear.click();
+    await render();
+    expect(document.activeElement).toBe(trigger);
+    expect(touched).toHaveBeenCalledTimes(1);
+  });
+
   it('does not open when disabled', async () => {
     const { cmp, el, open } = await setup();
     cmp.setDisabledState(true);

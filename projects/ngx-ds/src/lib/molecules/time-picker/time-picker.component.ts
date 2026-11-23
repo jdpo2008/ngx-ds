@@ -345,6 +345,9 @@ export class TimePickerComponent implements ControlValueAccessor {
     if (this.isDisabled()) return;
     this.value.set(null);
     this.onChange(null);
+    this.onTouched();
+    // The clear button goes away with the value; keep focus on the field.
+    this.triggerRef()?.nativeElement.focus();
   }
 
   // ── Helpers ───────────────────────────────────────────────
