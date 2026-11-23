@@ -37,6 +37,9 @@ export class FormFieldComponent {
   readonly errorId = computed(() => `${this.fieldId()}-error`);
   readonly errorText = computed(() => this.errorMessage());
 
+  /** The message id this field last added to the control's aria-describedby. */
+  #describedBy: string | null = null;
+
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly renderer = inject(Renderer2);
 
@@ -62,16 +65,18 @@ export class FormFieldComponent {
       const hasError = this.errorText().length > 0;
       const hasHint = this.hint().length > 0;
 
-      if (hasError) {
-        this.renderer.setAttribute(control, 'aria-describedby', this.errorId());
-        this.renderer.setAttribute(control, 'aria-invalid', 'true');
-      } else if (hasHint) {
-        this.renderer.setAttribute(control, 'aria-describedby', this.hintId());
-        this.renderer.removeAttribute(control, 'aria-invalid');
-      } else {
-        this.renderer.removeAttribute(control, 'aria-describedby');
-        this.renderer.removeAttribute(control, 'aria-invalid');
-      }
+      if (hasError) this.renderer.setAttribute(control, 'aria-invalid', 'true');
+      else this.renderer.removeAttribute(control, 'aria-invalid');
+
+      // Keep any description the control brought with it; swap only our own message id.
+      const message = hasError ? this.errorId() : hasHint ? this.hintId() : null;
+      const own = (control.getAttribute('aria-describedby') ?? '')
+        .split(/\s+/)
+        .filter((id: string) => id && id !== this.#describedBy);
+      const ids = message ? [...own, message] : own;
+      if (ids.length) this.renderer.setAttribute(control, 'aria-describedby', ids.join(' '));
+      else this.renderer.removeAttribute(control, 'aria-describedby');
+      this.#describedBy = message;
     });
   }
 }

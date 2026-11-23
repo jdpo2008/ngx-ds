@@ -59,3 +59,31 @@ describe('ButtonGroupComponent behaviour', () => {
     ]);
   });
 });
+
+describe('ButtonGroupComponent corners', () => {
+  @Component({
+    standalone: true,
+    imports: [ButtonGroupComponent, ButtonComponent],
+    template: `<ngx-ds-button-group>
+      <ngx-ds-button [rounded]="true">Uno</ngx-ds-button>
+      <ngx-ds-button [rounded]="true">Dos</ngx-ds-button>
+      <ngx-ds-button [rounded]="true">Tres</ngx-ds-button>
+    </ngx-ds-button-group>`,
+  })
+  class RoundedHost {}
+
+  it('squares only the inner corners, so rounded buttons keep their outer shape', () => {
+    const fixture = TestBed.createComponent(RoundedHost);
+    fixture.detectChanges();
+    const [first, middle, last] = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('.btn'),
+    ).map((b) => getComputedStyle(b));
+    // jsdom keeps the button's shorthand unexpanded: '' means the group left the corner alone.
+    expect(['', '9999px']).toContain(first.borderTopLeftRadius);
+    expect(first.borderTopRightRadius).toBe('0px');
+    expect(middle.borderTopLeftRadius).toBe('0px');
+    expect(middle.borderBottomRightRadius).toBe('0px');
+    expect(['', '9999px']).toContain(last.borderBottomRightRadius);
+    expect(last.borderBottomLeftRadius).toBe('0px');
+  });
+});

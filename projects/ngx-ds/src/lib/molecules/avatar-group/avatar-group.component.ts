@@ -6,8 +6,10 @@ import {
   input,
   computed,
   effect,
+  inject,
 } from '@angular/core';
 import { AvatarComponent, AvatarSize } from '../../atoms/avatar';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 @Component({
   selector: 'ngx-ds-avatar-group',
@@ -18,14 +20,22 @@ import { AvatarComponent, AvatarSize } from '../../atoms/avatar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarGroupComponent {
+  readonly i18n = inject(NGX_DS_LABELS);
+
   readonly max = input<number | null>(null);
   readonly size = input<AvatarSize>('md');
   readonly spacing = input<string>('-0.5rem');
 
   private readonly avatarRefs = contentChildren(AvatarComponent, { read: ElementRef });
 
-  readonly hiddenCount = computed(() => {
+  /** How many avatars to show; a negative max shows none. */
+  readonly #limit = computed(() => {
     const max = this.max();
+    return max == null ? null : Math.max(0, max);
+  });
+
+  readonly hiddenCount = computed(() => {
+    const max = this.#limit();
     const total = this.avatarRefs().length;
     return max != null && total > max ? total - max : 0;
   });
@@ -34,7 +44,7 @@ export class AvatarGroupComponent {
 
   constructor() {
     effect(() => {
-      const max = this.max();
+      const max = this.#limit();
       const refs = this.avatarRefs();
       refs.forEach((ref, i) => {
         const el = ref.nativeElement as HTMLElement;

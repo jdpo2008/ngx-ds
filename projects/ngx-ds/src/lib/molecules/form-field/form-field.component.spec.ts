@@ -141,3 +141,52 @@ describe('FormFieldComponent behaviour', () => {
     expect(el.querySelector('.ngx-ff__control--disabled')).not.toBeNull();
   });
 });
+
+describe('FormFieldComponent behaviour', () => {
+  @Component({
+    standalone: true,
+    imports: [FormFieldComponent],
+    template: `
+      <ngx-ds-form-field label="Código" [hint]="hint()" [errorMessage]="error()">
+        <input aria-describedby="own-help" />
+      </ngx-ds-form-field>
+      <p id="own-help">Seis dígitos</p>
+    `,
+  })
+  class OwnDescribedHost {
+    hint = signal('');
+    error = signal('');
+  }
+
+  function setup() {
+    const fixture = TestBed.createComponent(OwnDescribedHost);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const ids = () =>
+      (el.querySelector('input')!.getAttribute('aria-describedby') ?? '').split(' ');
+    return { fixture, host: fixture.componentInstance, el, ids };
+  }
+
+  it('keeps the control own aria-describedby when there is no message', () => {
+    const { ids } = setup();
+    expect(ids()).toEqual(['own-help']);
+  });
+
+  it('adds the hint and the error to the control own description', () => {
+    const { fixture, host, el, ids } = setup();
+    host.hint.set('Te lo enviamos por SMS');
+    fixture.detectChanges();
+    const hintId = el.querySelector('.ngx-ff__message--hint')!.id;
+    expect(ids()).toEqual(['own-help', hintId]);
+
+    host.error.set('Código incorrecto');
+    fixture.detectChanges();
+    const errorId = el.querySelector('.ngx-ff__message--error')!.id;
+    expect(ids()).toEqual(['own-help', errorId]);
+
+    host.error.set('');
+    host.hint.set('');
+    fixture.detectChanges();
+    expect(ids()).toEqual(['own-help']);
+  });
+});
