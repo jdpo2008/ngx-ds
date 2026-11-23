@@ -27,23 +27,18 @@
     }
   }
 
+  // Square only the corners between buttons, so the outer ones keep the
+  // button's own shape (rounded buttons stay pill-shaped at the ends).
   ::ng-deep ngx-ds-button {
-    .btn {
-      border-radius: 0;
-    }
-
-    &:first-child .btn {
-      border-top-left-radius: 0.375rem;
-      border-bottom-left-radius: 0.375rem;
-    }
-
-    &:last-child .btn {
-      border-top-right-radius: 0.375rem;
-      border-bottom-right-radius: 0.375rem;
-    }
-
     &:not(:first-child) .btn {
       margin-left: -1.5px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:not(:last-child) .btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     .btn:focus-visible {

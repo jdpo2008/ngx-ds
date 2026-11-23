@@ -113,3 +113,40 @@ describe('AvatarGroupComponent behaviour', () => {
     );
   });
 });
+
+describe('AvatarGroupComponent overflow', () => {
+  @Component({
+    standalone: true,
+    imports: [AvatarGroupComponent, AvatarComponent],
+    template: `
+      <ngx-ds-avatar-group [max]="max()">
+        <ngx-ds-avatar initials="AB" />
+        <ngx-ds-avatar initials="CD" />
+        <ngx-ds-avatar initials="EF" />
+      </ngx-ds-avatar-group>
+    `,
+  })
+  class MaxHost {
+    max = signal<number | null>(1);
+  }
+
+  function setup(max: number | null) {
+    const fixture = TestBed.createComponent(MaxHost);
+    fixture.componentInstance.max.set(max);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    return { el, count: () => el.querySelector('.avatar-group__count') };
+  }
+
+  it('names the +N counter for screen readers', () => {
+    const { count } = setup(1);
+    expect(count()!.textContent!.trim()).toBe('+2');
+    expect(count()!.getAttribute('aria-label')).toBe('2 más');
+  });
+
+  it('never counts more hidden avatars than there are', () => {
+    const { el, count } = setup(-1);
+    expect(count()!.textContent!.trim()).toBe('+3');
+    expect(el.querySelectorAll('ngx-ds-avatar[hidden]').length).toBe(3);
+  });
+});

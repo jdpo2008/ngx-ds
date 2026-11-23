@@ -62,6 +62,8 @@ export interface NgxDsLabels {
   /** Visually hidden status of a timeline step. */
   timelineCompleted: string;
   timelineError: string;
+  /** AvatarGroup overflow counter: "+3" read as "3 more". */
+  moreAvatars: (n: number) => string;
 
   // ── Password strength ─────────────────────────────────────
   passwordRequirements: string;
@@ -216,6 +218,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   copied: 'Copiado',
   timelineCompleted: 'Completado',
   timelineError: 'Error',
+  moreAvatars: (n) => `${n} más`,
 
   passwordRequirements: 'Requisitos de contraseña',
   passwordStrength: 'Fortaleza',
@@ -358,6 +361,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   copied: 'Copied',
   timelineCompleted: 'Completed',
   timelineError: 'Error',
+  moreAvatars: (n) => `${n} more`,
 
   passwordRequirements: 'Password requirements',
   passwordStrength: 'Strength',

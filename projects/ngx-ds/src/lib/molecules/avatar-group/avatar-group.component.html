@@ -1,7 +1,10 @@
 <div class="avatar-group" [style]="hostStyle()">
   <ng-content />
   @if (hiddenCount() > 0) {
-    <span class="avatar-group__count" [class]="'avatar-group__count--' + size()"
+    <span
+      class="avatar-group__count"
+      [class]="'avatar-group__count--' + size()"
+      [attr.aria-label]="i18n.moreAvatars(hiddenCount())"
       >+{{ hiddenCount() }}</span
     >
   }
