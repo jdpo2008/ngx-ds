@@ -19,13 +19,16 @@ export class DividerComponent {
   readonly align = input<DividerAlign>('center');
   readonly color = input<string>('');
 
+  /** Only a horizontal divider shows its label. */
+  readonly shownLabel = computed(() => (this.orientation() === 'horizontal' ? this.label() : ''));
+
   readonly hostClasses = computed(() => {
     const b = 'divider';
     return [
       b,
       `${b}--${this.orientation()}`,
       `${b}--${this.variant()}`,
-      this.label() ? `${b}--labeled ${b}--label-${this.align()}` : '',
+      this.shownLabel() ? `${b}--labeled ${b}--label-${this.align()}` : '',
     ]
       .filter(Boolean)
       .join(' ');

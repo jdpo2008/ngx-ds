@@ -5,6 +5,8 @@
 // ── Base ──────────────────────────────────────────────────────────────────────
 
 .divider {
+  // Line style, shared with the labeled divider's ::before/::after lines.
+  --divider-style: solid;
   border-color: var(--border-base, #e5e7eb);
 
   // ── Horizontal ───────────────────────────────────────────────────────────
@@ -32,9 +34,11 @@
 
   // ── Variants ─────────────────────────────────────────────────────────────
   &--dashed {
+    --divider-style: dashed;
     border-style: dashed;
   }
   &--dotted {
+    --divider-style: dotted;
     border-style: dotted;
   }
 
@@ -43,15 +47,16 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    border: none;
+    // Only the lines either side of the label are drawn. border-style alone keeps
+    // the border colour for them to inherit (the `border` shorthand would reset it).
+    border-style: none;
 
     &::before,
     &::after {
       content: '';
       flex: 1;
-      border-top-width: 1.5px;
-      border-top-style: inherit;
-      border-color: inherit;
+      border-top: 1.5px var(--divider-style) currentColor;
+      border-top-color: inherit;
     }
   }
 
