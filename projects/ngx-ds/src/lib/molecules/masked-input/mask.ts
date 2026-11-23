@@ -22,24 +22,26 @@ export interface MaskResult {
   raw: string;
 }
 
-/** Literal characters before the first token, such as `+34 `. */
-function maskPrefix(mask: string): string {
-  let prefix = '';
-  for (const char of mask) {
-    if (isMaskToken(char)) break;
-    prefix += char;
-  }
-  return prefix;
-}
-
 /**
- * Keeps the letters and digits a user typed or pasted. A leading literal prefix of the
- * mask is removed first, so a prefix with digits (`+34 `) is not read as input.
+ * Keeps the letters and digits a user typed or pasted. The text is read along the mask,
+ * so a literal found where the mask puts it, even a digit (`+34 `, `/20`), is skipped
+ * instead of being read as input. Literals the text leaves out are not required.
  */
 export function extractRaw(text: string, mask: string): string {
-  const prefix = maskPrefix(mask);
-  const body = prefix && text.startsWith(prefix) ? text.slice(prefix.length) : text;
-  return [...body].filter((char) => ACCEPTABLE.test(char)).join('');
+  const slots = [...mask];
+  let j = 0;
+  let raw = '';
+  for (const char of text) {
+    if (j < slots.length && !isMaskToken(slots[j]) && slots[j] === char) {
+      j++;
+      continue;
+    }
+    if (!ACCEPTABLE.test(char)) continue;
+    while (j < slots.length && !isMaskToken(slots[j])) j++;
+    raw += char;
+    j++;
+  }
+  return raw;
 }
 
 /**

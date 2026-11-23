@@ -104,9 +104,16 @@ export class InlineEditComponent implements ControlValueAccessor {
   constructor() {
     // Entering edit mode, from a click or from a bound `[(editing)]`, starts a draft
     // from the current value and focuses the field.
+    // A disabled field can't be edited: an edit in progress is cancelled, and a bound
+    // `[editing]` is turned back off.
     let wasEditing = false;
     effect(() => {
       const editing = this.editing();
+      if (editing && this.isDisabled()) {
+        untracked(() => (wasEditing ? this.cancel() : this.editing.set(false)));
+        wasEditing = false;
+        return;
+      }
       if (editing && !wasEditing) untracked(() => this.#begin());
       wasEditing = editing;
     });
@@ -146,6 +153,8 @@ export class InlineEditComponent implements ControlValueAccessor {
   }
 
   onKeydown(event: KeyboardEvent): void {
+    // Enter or Escape while composing (Japanese, Chinese…) belongs to the IME.
+    if (event.isComposing) return;
     if (event.key === 'Escape') {
       event.preventDefault();
       event.stopPropagation();

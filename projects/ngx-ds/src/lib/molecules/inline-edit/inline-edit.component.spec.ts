@@ -150,6 +150,37 @@ describe('InlineEditComponent', () => {
     expect(cmp.editing()).toBe(false);
   });
 
+  it('does not save on the Enter that confirms an IME composition', async () => {
+    const { cmp, saved, startEditing, type, key } = setup({ value: 'a' });
+    await startEditing();
+    type('日本');
+    key('Enter', { isComposing: true });
+    expect(cmp.editing()).toBe(true);
+    expect(saved).not.toHaveBeenCalled();
+    key('Enter');
+    expect(saved).toHaveBeenCalledWith('日本');
+  });
+
+  it('stops editing, without saving, when disabled mid-edit', async () => {
+    const { fixture, cmp, saved, field, startEditing, type } = setup({ value: 'a' });
+    await startEditing();
+    type('b');
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+    expect(cmp.editing()).toBe(false);
+    expect(field()).toBeNull();
+    expect(cmp.value()).toBe('a');
+    expect(saved).not.toHaveBeenCalled();
+  });
+
+  it('ignores [editing] set from outside while disabled', () => {
+    const { fixture, cmp, field } = setup({ value: 'a', disabled: true });
+    fixture.componentRef.setInput('editing', true);
+    fixture.detectChanges();
+    expect(cmp.editing()).toBe(false);
+    expect(field()).toBeNull();
+  });
+
   describe('with reactive forms', () => {
     @Component({
       standalone: true,

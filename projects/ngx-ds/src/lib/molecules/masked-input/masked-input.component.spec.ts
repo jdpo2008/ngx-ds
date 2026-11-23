@@ -28,6 +28,17 @@ describe('mask helpers', () => {
     expect(extractRaw('+34 612', '+34 999 999 999')).toBe('612');
   });
 
+  it('does not read literal letters or digits in the text as input', () => {
+    const DATE = '99/99/2099';
+    expect(extractRaw('01/01/2025', DATE)).toBe('010125');
+    expect(applyMask(extractRaw('01/01/2025', DATE), DATE).masked).toBe('01/01/2025');
+    expect(extractRaw('12 XY ab', '99 XY **')).toBe('12ab');
+    // A literal the text left out is not required: raw values and deleted literals.
+    expect(extractRaw('010125', DATE)).toBe('010125');
+    expect(extractRaw('(555)1', PHONE)).toBe('5551');
+    expect(extractRaw('555-123-4567', PHONE)).toBe('5551234567');
+  });
+
   it('places the caret after the n-th accepted character', () => {
     expect(caretAfter('(555) 1', PHONE, 4)).toBe(7);
     expect(caretAfter('(555) 1', PHONE, 3)).toBe(4);
@@ -65,6 +76,19 @@ describe('MaskedInputComponent', () => {
     type('(555) 123-45678');
     expect(cmp.value()).toBe('5551234567');
     expect(cmp.isComplete()).toBe(true);
+  });
+
+  it('types through a literal with digits, such as a year prefix', () => {
+    for (const keepLiterals of [false, true]) {
+      const { cmp, native, type } = setup({ mask: '99/99/2099', keepLiterals });
+      type('0101');
+      type('01/012');
+      expect(native().value).toBe('01/01/202');
+      type('01/01/2025');
+      expect(native().value).toBe('01/01/2025');
+      expect(cmp.value()).toBe(keepLiterals ? '01/01/2025' : '010125');
+      expect(cmp.isComplete()).toBe(true);
+    }
   });
 
   it('keeps the literals in the value with keepLiterals', () => {
