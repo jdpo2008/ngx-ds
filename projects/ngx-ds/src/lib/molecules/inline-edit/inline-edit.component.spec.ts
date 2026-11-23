@@ -216,3 +216,14 @@ describe('InlineEditComponent', () => {
     });
   });
 });
+
+describe('InlineEditComponent with a number written by a form', () => {
+  it('shows it as text', () => {
+    const fixture = TestBed.createComponent(InlineEditComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(5551234 as unknown as string);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isEmpty()).toBe(false);
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('5551234');
+  });
+});

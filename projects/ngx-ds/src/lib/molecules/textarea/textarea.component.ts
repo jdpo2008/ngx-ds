@@ -125,7 +125,8 @@ export class TextareaComponent implements ControlValueAccessor {
   }
 
   writeValue(v: string): void {
-    this.value.set(v ?? '');
+    // Forms may hand over a number (e.g. a numeric FormControl).
+    this.value.set(v == null ? '' : String(v));
   }
   registerOnChange(fn: (v: string) => void): void {
     this.onChange = fn;

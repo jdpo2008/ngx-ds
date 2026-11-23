@@ -135,3 +135,15 @@ describe('MaskedInputComponent', () => {
     });
   });
 });
+
+describe('MaskedInputComponent with a number written by a form', () => {
+  it('shows it as text', () => {
+    const fixture = TestBed.createComponent(MaskedInputComponent);
+    fixture.componentRef.setInput('mask', PHONE);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(5551234 as unknown as string);
+    fixture.detectChanges();
+    const native = (fixture.nativeElement as HTMLElement).querySelector('input')!;
+    expect(native.value).toBe('(555) 123-4');
+  });
+});

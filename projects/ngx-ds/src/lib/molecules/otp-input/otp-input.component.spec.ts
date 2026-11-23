@@ -192,3 +192,15 @@ describe('OtpInputComponent interaction', () => {
     expect(select).toHaveBeenCalled();
   });
 });
+
+describe('OtpInputComponent with a number written by a form', () => {
+  it('shows it as text', () => {
+    const fixture = TestBed.createComponent(OtpInputComponent);
+    fixture.componentRef.setInput('length', 7);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(5551234 as unknown as string);
+    fixture.detectChanges();
+    const boxes = (fixture.nativeElement as HTMLElement).querySelectorAll('input');
+    expect(Array.from(boxes, (b) => b.value).join('')).toBe('5551234');
+  });
+});

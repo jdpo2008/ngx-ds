@@ -183,7 +183,8 @@ export class OtpInputComponent implements ControlValueAccessor {
   #onTouched: () => void = () => {};
 
   writeValue(value: string | null): void {
-    this.value.set(value ?? '');
+    // Forms may hand over a number (e.g. a numeric FormControl).
+    this.value.set(value == null ? '' : String(value));
   }
 
   registerOnChange(fn: (value: string) => void): void {
