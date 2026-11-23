@@ -118,3 +118,54 @@ describe('AccordionComponent behaviour', () => {
     expect(el.querySelector('.accordion-item__description')?.textContent).toContain('Detalle');
   });
 });
+
+@Component({
+  standalone: true,
+  imports: [AccordionComponent, AccordionItemComponent],
+  template: `
+    <ngx-ds-accordion [multiple]="multiple()">
+      <ngx-ds-accordion-item label="Uno">A</ngx-ds-accordion-item>
+      <ngx-ds-accordion-item label="Dos" [expanded]="second()">B</ngx-ds-accordion-item>
+      <ngx-ds-accordion-item label="Tres" [expanded]="third()">C</ngx-ds-accordion-item>
+    </ngx-ds-accordion>
+  `,
+})
+class ExpandedHost {
+  multiple = signal(false);
+  second = signal(true);
+  third = signal(false);
+}
+
+describe('AccordionComponent open state', () => {
+  function setup(multiple = false) {
+    const fixture = TestBed.createComponent(ExpandedHost);
+    fixture.componentInstance.multiple.set(multiple);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const triggers = Array.from(el.querySelectorAll<HTMLButtonElement>('.accordion-item__trigger'));
+    const expanded = () => triggers.map((t) => t.getAttribute('aria-expanded'));
+    return { fixture, host: fixture.componentInstance, triggers, expanded };
+  }
+
+  it('opens an item from its expanded input', () => {
+    const { expanded } = setup();
+    expect(expanded()).toEqual(['false', 'true', 'false']);
+  });
+
+  it('applies expanded changes and keeps single mode', () => {
+    const { fixture, host, expanded } = setup();
+    host.third.set(true);
+    fixture.detectChanges();
+    expect(expanded()).toEqual(['false', 'false', 'true']);
+  });
+
+  it('keeps only the first open item when multiple is turned off', () => {
+    const { fixture, host, triggers, expanded } = setup(true);
+    triggers[0].click();
+    fixture.detectChanges();
+    expect(expanded()).toEqual(['true', 'true', 'false']);
+    host.multiple.set(false);
+    fixture.detectChanges();
+    expect(expanded()).toEqual(['true', 'false', 'false']);
+  });
+});
