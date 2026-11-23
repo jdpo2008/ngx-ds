@@ -35,6 +35,8 @@
     [attr.aria-controls]="id + '-panel'"
     [attr.aria-expanded]="showPanel()"
     [attr.aria-autocomplete]="'list'"
+    [attr.aria-activedescendant]="activeOptionId()"
+    (keydown)="onKeydown($event)"
     (input)="onInputChange($any($event.target).value)"
     (focus)="onFocus()"
     (blur)="onBlur()"
@@ -64,9 +66,11 @@
 @if (showPanel()) {
   <div class="ngx-autocomplete__panel" role="listbox" [id]="id + '-panel'">
     <ul class="ngx-autocomplete__options" role="presentation">
-      @for (option of filteredOptions(); track option.value) {
+      @for (option of filteredOptions(); track option.value; let i = $index) {
         <li
+          [id]="optionId(i)"
           class="ngx-autocomplete__option"
+          [class.ngx-autocomplete__option--active]="i === activeIndex()"
           [class.ngx-autocomplete__option--selected]="isSelected(option.value)"
           [class.ngx-autocomplete__option--disabled]="option.disabled"
           role="option"

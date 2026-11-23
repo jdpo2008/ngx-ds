@@ -124,6 +124,15 @@ describe('TagInputComponent', () => {
     expect(cmp.value()).toEqual(['a', 'c']);
   });
 
+  it('dismissing a tag keeps focus in the field', async () => {
+    const { el, native, render } = await setup({}, ['a', 'b']);
+    const dismiss = el.querySelectorAll<HTMLButtonElement>('li button')[0];
+    dismiss.focus();
+    dismiss.click();
+    await render();
+    expect(document.activeElement).toBe(native);
+  });
+
   it('blur adds the pending text and marks the control touched', async () => {
     const { cmp, native, type, render } = await setup();
     let touched = false;
