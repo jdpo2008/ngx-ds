@@ -7,6 +7,8 @@ import { Size } from '../../shared/size';
 export type AccordionVariant = 'default' | 'flush' | 'ghost';
 export type AccordionSize = Size;
 
+let nextId = 0;
+
 const ICON_SIZE: Record<AccordionSize, number> = { sm: 14, md: 16, lg: 18 };
 
 @Component({
@@ -19,6 +21,9 @@ const ICON_SIZE: Record<AccordionSize, number> = { sm: 14, md: 16, lg: 18 };
 })
 export class AccordionItemComponent {
   private readonly controller = inject(ACCORDION_CONTROLLER, { optional: true });
+
+  readonly triggerId = `ngx-accordion-trigger-${nextId}`;
+  readonly panelId = `ngx-accordion-panel-${nextId++}`;
 
   // ── Inputs ────────────────────────────────────────────────────
   readonly label = input.required<string>();

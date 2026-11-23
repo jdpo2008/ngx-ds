@@ -5,13 +5,14 @@
       [class]="panelClasses()"
       role="dialog"
       aria-modal="true"
-      [attr.aria-label]="title() || i18n.drawer"
+      [attr.aria-labelledby]="title() ? titleId : null"
+      [attr.aria-label]="title() ? null : i18n.drawer"
       ngxFocusTrap
       tabindex="-1"
     >
       <div class="drawer__header">
         @if (title()) {
-          <h2 class="drawer__title">{{ title() }}</h2>
+          <h2 class="drawer__title" [id]="titleId">{{ title() }}</h2>
         }
         <ng-content select="[drawer-header]" />
         @if (dismissible()) {
