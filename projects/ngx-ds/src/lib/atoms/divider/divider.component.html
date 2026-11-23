@@ -1,5 +1,11 @@
-<div [class]="hostClasses()" [style.border-color]="color() || null" role="separator">
-  @if (label() && orientation() === 'horizontal') {
-    <span class="divider__label">{{ label() }}</span>
+<div
+  [class]="hostClasses()"
+  [style.border-color]="color() || null"
+  role="separator"
+  [attr.aria-orientation]="orientation() === 'vertical' ? 'vertical' : null"
+  [attr.aria-label]="shownLabel() || null"
+>
+  @if (shownLabel()) {
+    <span class="divider__label">{{ shownLabel() }}</span>
   }
 </div>

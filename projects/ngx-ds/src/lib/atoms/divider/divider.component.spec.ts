@@ -39,3 +39,28 @@ describe('DividerComponent', () => {
     expect(root.style.borderColor).toBe('red');
   });
 });
+
+describe('DividerComponent semantics', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(DividerComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('[role="separator"]')!;
+  }
+
+  it('tells assistive tech when it is vertical', () => {
+    expect(setup().hasAttribute('aria-orientation')).toBe(false);
+    expect(setup({ orientation: 'vertical' }).getAttribute('aria-orientation')).toBe('vertical');
+  });
+
+  it('names the separator with its label, since a separator hides its children', () => {
+    expect(setup({ label: 'O continúa con' }).getAttribute('aria-label')).toBe('O continúa con');
+    expect(setup().hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('stays a plain vertical line when given a label', () => {
+    const root = setup({ label: 'O', orientation: 'vertical' });
+    expect(classesOf(root)).toEqual(classesOf('divider divider--vertical divider--solid'));
+    expect(root.hasAttribute('aria-label')).toBe(false);
+  });
+});
