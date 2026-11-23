@@ -19,10 +19,8 @@ describe('DrawerComponent', () => {
     document.body.style.overflow = '';
   });
 
-  it('renders the dialog with the title as aria-label', () => {
+  it('renders the title', () => {
     const { el } = setup({ title: 'Filtros' });
-    const dialog = el.querySelector('[role="dialog"]')!;
-    expect(dialog.getAttribute('aria-label')).toBe('Filtros');
     expect(el.querySelector('.drawer__title')?.textContent).toContain('Filtros');
   });
 
@@ -71,5 +69,47 @@ describe('DrawerComponent', () => {
   it('hides the close button when dismissible is false', () => {
     const { el } = setup({ dismissible: false });
     expect(el.querySelector('.drawer__close')).toBeNull();
+  });
+});
+
+describe('DrawerComponent behaviour', () => {
+  afterEach(() => {
+    document.body.style.overflow = '';
+  });
+
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(DrawerComponent);
+    for (const [k, v] of Object.entries({ open: true, ...inputs })) {
+      fixture.componentRef.setInput(k, v);
+    }
+    fixture.detectChanges();
+    return { fixture, cmp: fixture.componentInstance, el: fixture.nativeElement as HTMLElement };
+  }
+
+  it('names the dialog by its visible title', () => {
+    const { el } = setup({ title: 'Filtros' });
+    const dialog = el.querySelector('[role="dialog"]')!;
+    const title = el.querySelector('.drawer__title')!;
+    expect(title.id).toBeTruthy();
+    expect(dialog.getAttribute('aria-labelledby')).toBe(title.id);
+    expect(dialog.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('ignores Escape when closeOnEscape is false', () => {
+    const { cmp } = setup({ closeOnEscape: false });
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(cmp.open()).toBe(true);
+  });
+
+  it('applies side and size classes', () => {
+    const { el } = setup({ side: 'left', size: 'lg' });
+    const cls = el.querySelector('[role="dialog"]')!.classList;
+    expect(cls).toContain('drawer--left');
+    expect(cls).toContain('drawer--lg');
+  });
+
+  it('renders nothing while closed', () => {
+    const { el } = setup({ open: false });
+    expect(el.querySelector('.drawer-overlay')).toBeNull();
   });
 });

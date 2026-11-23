@@ -68,3 +68,53 @@ describe('AccordionComponent', () => {
     expect(expanded()[2]).toBe('false');
   });
 });
+
+describe('AccordionComponent behaviour', () => {
+  function setup() {
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const triggers = Array.from(el.querySelectorAll<HTMLButtonElement>('.accordion-item__trigger'));
+    const panels = Array.from(el.querySelectorAll<HTMLElement>('.accordion-item__panel'));
+    return { fixture, el, triggers, panels };
+  }
+
+  it('links each trigger to its panel region', () => {
+    const { triggers, panels } = setup();
+    const ids = new Set<string>();
+    triggers.forEach((t, i) => {
+      const panel = panels[i];
+      expect(panel.id).toBeTruthy();
+      expect(t.getAttribute('aria-controls')).toBe(panel.id);
+      expect(panel.getAttribute('role')).toBe('region');
+      expect(t.id).toBeTruthy();
+      expect(panel.getAttribute('aria-labelledby')).toBe(t.id);
+      ids.add(panel.id);
+    });
+    expect(ids.size).toBe(3);
+  });
+
+  it('keeps the content of a closed panel out of the tab order', () => {
+    const { fixture, triggers, panels } = setup();
+    expect(panels[0].hasAttribute('inert')).toBe(true);
+    triggers[0].click();
+    fixture.detectChanges();
+    expect(panels[0].hasAttribute('inert')).toBe(false);
+    expect(panels[0].hasAttribute('aria-hidden')).toBe(false);
+  });
+
+  it('shows the description under the label', () => {
+    @Component({
+      standalone: true,
+      imports: [AccordionComponent, AccordionItemComponent],
+      template: `<ngx-ds-accordion>
+        <ngx-ds-accordion-item label="Uno" description="Detalle">A</ngx-ds-accordion-item>
+      </ngx-ds-accordion>`,
+    })
+    class DescHost {}
+    const fixture = TestBed.createComponent(DescHost);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.accordion-item__description')?.textContent).toContain('Detalle');
+  });
+});

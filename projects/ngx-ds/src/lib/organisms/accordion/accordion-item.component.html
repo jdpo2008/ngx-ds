@@ -2,6 +2,8 @@
   <!-- Trigger -->
   <button
     class="accordion-item__trigger"
+    [id]="triggerId"
+    [attr.aria-controls]="panelId"
     type="button"
     [attr.aria-expanded]="_open()"
     [disabled]="disabled() || null"
@@ -32,7 +34,13 @@
   </button>
 
   <!-- Panel (animated with grid-template-rows trick) -->
-  <div class="accordion-item__panel" [attr.aria-hidden]="!_open() || null">
+  <div
+    class="accordion-item__panel"
+    role="region"
+    [id]="panelId"
+    [attr.aria-labelledby]="triggerId"
+    [attr.inert]="_open() ? null : ''"
+  >
     <div class="accordion-item__panel-inner">
       <div class="accordion-item__panel-content">
         <ng-content />

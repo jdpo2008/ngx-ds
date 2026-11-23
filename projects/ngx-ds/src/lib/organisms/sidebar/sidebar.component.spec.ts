@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SidebarComponent } from './sidebar.component';
+import { PanelLeftOpen } from 'lucide-angular';
 import { SidebarItem, SidebarSection } from './sidebar.types';
 
 const SECTIONS: SidebarSection[] = [
@@ -60,5 +61,49 @@ describe('SidebarComponent', () => {
   it('omits the toggle when not collapsible', () => {
     const { el } = setup({ collapsible: false });
     expect(el.querySelector('.sidebar__toggle')).toBeNull();
+  });
+});
+
+describe('SidebarComponent behaviour', () => {
+  const ICON_SECTIONS: SidebarSection[] = [
+    { items: [{ id: 'home', label: 'Inicio', icon: PanelLeftOpen }] },
+  ];
+
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(SidebarComponent);
+    for (const [k, v] of Object.entries({ sections: ICON_SECTIONS, ...inputs })) {
+      fixture.componentRef.setInput(k, v);
+    }
+    fixture.detectChanges();
+    return { fixture, cmp: fixture.componentInstance, el: fixture.nativeElement as HTMLElement };
+  }
+
+  it('hides item icons from assistive tech', () => {
+    const { el } = setup();
+    expect(el.querySelector('.sidebar__item-icon')?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('reports the expanded state on the toggle', () => {
+    const { fixture, el } = setup({ collapsible: true });
+    const btn = () => el.querySelector<HTMLElement>('.sidebar__toggle button')!;
+    expect(btn().getAttribute('aria-expanded')).toBe('true');
+    btn().click();
+    fixture.detectChanges();
+    expect(btn().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('keeps the item label as accessible name when collapsed', () => {
+    const { el } = setup({ collapsed: true });
+    expect(el.querySelector('.sidebar__item')?.textContent).toContain('Inicio');
+  });
+
+  it('uses a custom aria-label for the nav', () => {
+    const { el } = setup({ ariaLabel: 'Menú' });
+    expect(el.querySelector('nav')?.getAttribute('aria-label')).toBe('Menú');
+  });
+
+  it('shows string badges as labels', () => {
+    const { el } = setup({ sections: [{ items: [{ id: 'a', label: 'A', badge: 'Nuevo' }] }] });
+    expect(el.querySelector('ngx-ds-badge')?.textContent).toContain('Nuevo');
   });
 });

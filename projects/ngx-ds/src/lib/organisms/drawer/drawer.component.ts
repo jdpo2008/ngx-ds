@@ -14,6 +14,8 @@ import { setupOverlay } from '../../shared/overlay-stack';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
+let nextId = 0;
+
 export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
 export type DrawerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -29,6 +31,7 @@ export class DrawerComponent {
   readonly i18n = inject(NGX_DS_LABELS);
 
   protected readonly icons = { X };
+  readonly titleId = `ngx-drawer-title-${nextId++}`;
 
   // ── Inputs ───────────────────────────────────────────────────────────────
   readonly open = model<boolean>(false);

@@ -23,6 +23,8 @@ export class IconButtonComponent {
   readonly bordered = input<boolean>(true);
   readonly disabled = input<boolean>(false);
   readonly type = input<'button' | 'submit' | 'reset'>('button');
+  /** Sets `aria-expanded` on the button when it toggles a region. */
+  readonly ariaExpanded = input<boolean | undefined>(undefined);
 
   readonly hostClasses = computed(() => {
     const classes = [
