@@ -27,7 +27,7 @@
         type="button"
         class="navbar__toggle"
         [attr.aria-expanded]="menuOpen()"
-        [attr.aria-controls]="panelId"
+        [attr.aria-controls]="menuOpen() ? panelId : null"
         [attr.aria-label]="menuOpen() ? i18n.closeMenu : i18n.openMenu"
         (click)="toggleMenu()"
       >

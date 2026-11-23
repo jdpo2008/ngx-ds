@@ -69,10 +69,12 @@ export class CalendarComponent {
   readonly weeks = computed(() => toWeeks(this.days()));
 
   prevMonth(): void {
+    if (this.disabled()) return;
     this.#focusedDate.update((d) => addMonths(d, -1));
   }
 
   nextMonth(): void {
+    if (this.disabled()) return;
     this.#focusedDate.update((d) => addMonths(d, 1));
   }
 
