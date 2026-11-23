@@ -47,6 +47,11 @@ export class AlertComponent {
 
   readonly typeIcon = computed(() => TYPE_ICONS[this.color()]);
 
+  /** Warnings and errors interrupt the screen reader; info and success wait their turn. */
+  readonly role = computed(() =>
+    this.color() === 'warning' || this.color() === 'danger' ? 'alert' : 'status',
+  );
+
   readonly hostClasses = computed(() =>
     ['alert', `alert--${this.color()}`, `alert--${this.variant()}`].join(' '),
   );

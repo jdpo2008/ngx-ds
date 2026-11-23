@@ -39,10 +39,10 @@
       type="button"
       class="ngx-input__password-toggle"
       [attr.aria-label]="effectiveType() === 'text' ? i18n.hidePassword : i18n.showPassword"
+      [disabled]="isDisabled()"
       (click)="togglePassword()"
-      tabindex="-1"
     >
-      <ngx-ds-icon [icon]="eyeIcon()" [size]="iconSize()" />
+      <ngx-ds-icon [icon]="eyeIcon()" [size]="iconSize()" aria-hidden="true" />
     </button>
   }
 

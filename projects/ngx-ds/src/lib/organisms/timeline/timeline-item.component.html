@@ -1,6 +1,6 @@
 <div class="timeline-item">
   <div class="timeline-item__rail">
-    <div [class]="dotClasses()">
+    <div [class]="dotClasses()" aria-hidden="true">
       @if (icon()) {
         <ngx-ds-icon [icon]="icon()!" [size]="14" />
       }
@@ -14,6 +14,9 @@
     }
     @if (title()) {
       <p class="timeline-item__title">{{ title() }}</p>
+    }
+    @if (statusText()) {
+      <span class="timeline-item__status">{{ statusText() }}</span>
     }
     @if (description()) {
       <p class="timeline-item__description">{{ description() }}</p>

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { LucideIconData } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
+import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type TimelineItemStatus = 'completed' | 'active' | 'pending' | 'error';
 
@@ -14,6 +15,8 @@ export type TimelineItemStatus = 'completed' | 'active' | 'pending' | 'error';
   host: { role: 'listitem', '[attr.aria-current]': "status() === 'active' ? 'step' : null" },
 })
 export class TimelineItemComponent {
+  readonly #i18n = inject(NGX_DS_LABELS);
+
   readonly title = input<string>('');
   readonly description = input<string>('');
   readonly time = input<string>('');
@@ -21,4 +24,16 @@ export class TimelineItemComponent {
   readonly icon = input<LucideIconData | null>(null);
 
   readonly dotClasses = computed(() => `timeline-item__dot timeline-item__dot--${this.status()}`);
+
+  /** Text for statuses shown only by colour. Active uses aria-current; pending is the default. */
+  readonly statusText = computed(() => {
+    switch (this.status()) {
+      case 'completed':
+        return this.#i18n.timelineCompleted;
+      case 'error':
+        return this.#i18n.timelineError;
+      default:
+        return '';
+    }
+  });
 }

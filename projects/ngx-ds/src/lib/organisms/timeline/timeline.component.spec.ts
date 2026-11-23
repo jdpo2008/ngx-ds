@@ -1,7 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Check } from 'lucide-angular';
 import { TimelineComponent } from './timeline.component';
-import { TimelineItemComponent } from './timeline-item.component';
+import { TimelineItemComponent, TimelineItemStatus } from './timeline-item.component';
 
 @Component({
   standalone: true,
@@ -110,5 +111,30 @@ describe('TimelineItemComponent behaviour', () => {
     fixture.componentInstance.variant.set('compact');
     fixture.detectChanges();
     expect(padding()).toEqual(['0.75rem', '0px']);
+  });
+});
+
+describe('TimelineItemComponent status text', () => {
+  function setup(status: TimelineItemStatus, icon = false) {
+    const fixture = TestBed.createComponent(TimelineItemComponent);
+    fixture.componentRef.setInput('title', 'Paso');
+    fixture.componentRef.setInput('status', status);
+    if (icon) fixture.componentRef.setInput('icon', Check);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  it('hides the decorative dot from assistive technology', () => {
+    const el = setup('completed', true);
+    expect(el.querySelector('.timeline-item__dot')!.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('states completed and error in text, not only by colour', () => {
+    expect(setup('completed').querySelector('.timeline-item__status')?.textContent).toBe(
+      'Completado',
+    );
+    expect(setup('error').querySelector('.timeline-item__status')?.textContent).toBe('Error');
+    expect(setup('pending').querySelector('.timeline-item__status')).toBeNull();
+    expect(setup('active').querySelector('.timeline-item__status')).toBeNull();
   });
 });
