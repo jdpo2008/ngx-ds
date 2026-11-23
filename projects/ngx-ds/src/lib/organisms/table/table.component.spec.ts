@@ -451,7 +451,7 @@ describe('TableComponent templates and expandable rows', () => {
     expect(
       Array.from(el.querySelectorAll('.ngx-table__row--detail')).map((r) => r.textContent!.trim()),
     ).toEqual(['Detalle Ana', 'Detalle Luis']);
-    expect(toggles()[0].getAttribute('aria-expanded')).toBe('true');
+    expect(toggles()[0].querySelector('button')!.getAttribute('aria-expanded')).toBe('true');
     expect(changes.at(-1)!.map((r) => r.id)).toEqual([1, 2]);
     table.toggleExpand({ ...ROWS[0] });
     expect(table.isExpanded(ROWS[0])).toBe(false);
@@ -474,5 +474,102 @@ describe('TableComponent templates and expandable rows', () => {
     const td = el.querySelector('.ngx-table__td--empty')!;
     expect(td.textContent!.trim()).toBe('Vacío propio');
     expect(td.getAttribute('colspan')).toBe('2');
+  });
+});
+
+describe('TableComponent keyboard and ARIA', () => {
+  function render(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent<TableComponent<Row>>(TableComponent);
+    fixture.componentRef.setInput('data', ROWS);
+    fixture.componentRef.setInput('columns', COLUMNS);
+    fixture.componentRef.setInput('rowKey', 'id');
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    return { fixture, cmp: fixture.componentInstance, el };
+  }
+  const escape = () =>
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+  afterEach(() => document.body.querySelectorAll('ngx-ds-table').forEach((n) => n.remove()));
+
+  it('sets aria-expanded on the buttons that open menus and rows', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { fixture, el } = render({ actions, columnToggle: true, expandable: true });
+    const expand = el.querySelector<HTMLButtonElement>('.ngx-table__td--expand button')!;
+    const columns = el.querySelector<HTMLButtonElement>('.ngx-table__column-menu button')!;
+    const rowMenu = el.querySelector<HTMLButtonElement>('.ngx-table__action-menu button')!;
+    expect([expand, columns, rowMenu].map((b) => b.getAttribute('aria-expanded'))).toEqual([
+      'false',
+      'false',
+      'false',
+    ]);
+    expand.click();
+    columns.click();
+    fixture.detectChanges();
+    expect(expand.getAttribute('aria-expanded')).toBe('true');
+    expect(columns.getAttribute('aria-expanded')).toBe('true');
+    rowMenu.click();
+    fixture.detectChanges();
+    expect(rowMenu.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('Escape closes the row action menu and returns focus to its button', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { fixture, cmp, el } = render({ actions });
+    const toggle = el.querySelectorAll<HTMLButtonElement>('.ngx-table__action-menu button')[1];
+    toggle.click();
+    fixture.detectChanges();
+    el.querySelector<HTMLButtonElement>('.ngx-table__action-panel button')!.focus();
+    escape();
+    fixture.detectChanges();
+    expect(cmp.isMenuOpen(ROWS[1])).toBe(false);
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('Escape closes the column menu and returns focus to its button', () => {
+    const { fixture, cmp, el } = render({ columnToggle: true });
+    const toggle = el.querySelector<HTMLButtonElement>('.ngx-table__column-menu button')!;
+    toggle.click();
+    fixture.detectChanges();
+    el.querySelector<HTMLInputElement>('.ngx-table__column-panel input')!.focus();
+    escape();
+    fixture.detectChanges();
+    expect(cmp.isColumnMenuOpen()).toBe(false);
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('Escape leaves focus alone when it is outside the table', () => {
+    const { fixture, cmp } = render({ columnToggle: true });
+    cmp.toggleColumnMenu(new Event('click'));
+    fixture.detectChanges();
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+    escape();
+    expect(cmp.isColumnMenuOpen()).toBe(false);
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+  });
+
+  it('sortable headers can be focused and sorted with Enter and Space', () => {
+    const { fixture, cmp, el } = render({ clientSide: true });
+    const [name, city] = Array.from(el.querySelectorAll<HTMLElement>('th'));
+    expect(name.tabIndex).toBe(0);
+    expect(city.hasAttribute('tabindex')).toBe(false);
+    const sorts: unknown[] = [];
+    cmp.sortChange.subscribe((s) => sorts.push(s));
+    name.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true }));
+    const space = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+    name.dispatchEvent(space);
+    city.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    fixture.detectChanges();
+    expect(sorts).toEqual([
+      { column: 'name', direction: 'asc' },
+      { column: 'name', direction: 'desc' },
+    ]);
+    expect(space.defaultPrevented).toBe(true);
+    expect(name.getAttribute('aria-sort')).toBe('descending');
   });
 });

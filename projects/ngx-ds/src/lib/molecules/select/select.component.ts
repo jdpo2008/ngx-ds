@@ -253,6 +253,8 @@ export class SelectComponent implements ControlValueAccessor {
     const newVal = this.selectedValues().filter((v) => v !== optionValue);
     this.value.set(newVal.length ? newVal : null);
     this.onChange(newVal.length ? newVal : null);
+    // The removed chip's button is gone: keep focus in the field.
+    this.triggerRef()?.nativeElement.focus();
   }
 
   tagLabel(optionValue: SelectValue): string {
@@ -260,8 +262,10 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   selectAll(): void {
+    // Disabled options cannot be toggled, so one that is already selected stays selected.
+    const current = this.selectedValues();
     const all = this.options()
-      .filter((o) => !o.disabled)
+      .filter((o) => !o.disabled || current.includes(o.value))
       .map((o) => o.value);
     this.value.set(all);
     this.onChange(all);
@@ -272,6 +276,7 @@ export class SelectComponent implements ControlValueAccessor {
     if (this.isDisabled()) return;
     this.value.set(null);
     this.onChange(null);
+    this.triggerRef()?.nativeElement.focus();
   }
 
   // ── CVA ───────────────────────────────────────────────────

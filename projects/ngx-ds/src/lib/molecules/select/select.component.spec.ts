@@ -335,3 +335,52 @@ describe('SelectComponent', () => {
     });
   });
 });
+
+describe('SelectComponent focus and select all', () => {
+  function render(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(SelectComponent);
+    fixture.componentRef.setInput('options', OPTIONS);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!;
+    return { fixture, cmp: fixture.componentInstance, el, trigger };
+  }
+
+  afterEach(() => document.body.querySelectorAll('ngx-ds-select').forEach((n) => n.remove()));
+
+  it('keeps focus in the field after removing a chip', () => {
+    const { fixture, cmp, el, trigger } = render({ multiple: true });
+    cmp.writeValue(['es', 'fr']);
+    fixture.detectChanges();
+    const remove = el.querySelector<HTMLButtonElement>('.ngx-select__tag-remove')!;
+    remove.focus();
+    remove.click();
+    fixture.detectChanges();
+    expect(cmp.value()).toEqual(['fr']);
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('keeps focus in the field after clearing the value', () => {
+    const { fixture, cmp, el, trigger } = render();
+    cmp.writeValue('es');
+    fixture.detectChanges();
+    const clear = el.querySelector<HTMLButtonElement>('.ngx-select__clear')!;
+    clear.focus();
+    clear.click();
+    fixture.detectChanges();
+    expect(cmp.value()).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('select all keeps a selected disabled option', () => {
+    const { cmp } = render({ multiple: true });
+    const changes: unknown[] = [];
+    cmp.registerOnChange((v) => changes.push(v));
+    cmp.writeValue(['it']);
+    cmp.selectAll();
+    expect(cmp.value()).toEqual(['es', 'fr', 'it']);
+    expect(changes).toEqual([['es', 'fr', 'it']]);
+  });
+});

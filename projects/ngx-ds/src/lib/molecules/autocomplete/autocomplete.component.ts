@@ -270,6 +270,10 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
         this.onOptionSelect(option);
         break;
       }
+      case 'Tab':
+        // Leaving the field by keyboard closes it like an outside click.
+        if (this.#open()) this.closeAndRestore();
+        break;
       case 'Escape':
         if (!this.showPanel()) return;
         event.preventDefault();
@@ -379,8 +383,9 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   writeValue(v: AutocompleteValue | null): void {
     this.value.set(v ?? null);
     if (v !== null && v !== undefined) {
+      // Without a matching option, clear the old label; the effect fills it in once options arrive.
       const opt = this.options().find((o) => o.value === v);
-      if (opt) this.#inputText.set(opt.label);
+      this.#inputText.set(opt ? opt.label : '');
     } else {
       this.#inputText.set('');
     }
