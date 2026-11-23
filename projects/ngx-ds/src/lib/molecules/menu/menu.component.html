@@ -9,22 +9,32 @@
       role="menuitem"
       class="menu__item"
       [class.menu__item--danger]="item.danger"
-      [class.menu__item--active]="activeIndex() === i"
+      [class.menu__item--active]="focusIndex() === i"
       [disabled]="item.disabled"
       [attr.aria-haspopup]="item.children?.length ? 'menu' : null"
       [attr.aria-expanded]="item.children?.length ? openSubmenu() === item.id : null"
-      [attr.tabindex]="activeIndex() === i ? 0 : -1"
+      [attr.tabindex]="focusIndex() === i ? 0 : -1"
       (click)="onItemClick(item, i)"
     >
       @if (item.icon) {
-        <ngx-ds-icon [icon]="item.icon" [size]="iconSize()" class="menu__item-icon" />
+        <ngx-ds-icon
+          [icon]="item.icon"
+          [size]="iconSize()"
+          class="menu__item-icon"
+          aria-hidden="true"
+        />
       }
       <span class="menu__item-label">{{ item.label }}</span>
       @if (item.kbd) {
         <ngx-ds-kbd size="sm" class="menu__item-kbd">{{ item.kbd }}</ngx-ds-kbd>
       }
       @if (item.children?.length) {
-        <ngx-ds-icon [icon]="chevronRight" [size]="14" class="menu__item-chevron" />
+        <ngx-ds-icon
+          [icon]="chevronRight"
+          [size]="14"
+          class="menu__item-chevron"
+          aria-hidden="true"
+        />
       }
     </button>
 
@@ -32,6 +42,7 @@
       <div class="menu__submenu">
         <ngx-ds-menu
           [items]="item.children!"
+          [ariaLabel]="item.label"
           [size]="size()"
           [autofocus]="true"
           (itemClick)="onSubmenuItemClick($event)"

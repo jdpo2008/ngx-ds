@@ -76,3 +76,55 @@ describe('ContextMenuComponent', () => {
     expect(cmp.isOpen()).toBe(false);
   });
 });
+
+describe('ContextMenuComponent behaviour', () => {
+  function setup() {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+    const fixture = TestBed.createComponent(ContextMenuComponent);
+    fixture.componentRef.setInput('items', ITEMS);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    const openAt = (x: number, y: number) => {
+      el.querySelector('.ctx')!.dispatchEvent(
+        new MouseEvent('contextmenu', { clientX: x, clientY: y, bubbles: true, cancelable: true }),
+      );
+      fixture.detectChanges();
+    };
+    const cleanup = () => {
+      trigger.remove();
+      el.remove();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, trigger, openAt, cleanup };
+  }
+
+  it('returns focus to the original element after reopening in place', () => {
+    const { cmp, el, trigger, openAt, cleanup } = setup();
+    openAt(10, 10);
+    el.querySelector<HTMLElement>('[role="menuitem"]')!.focus();
+    openAt(20, 20);
+    cmp.close();
+    expect(document.activeElement).toBe(trigger);
+    cleanup();
+  });
+
+  it('restores focus after Escape', () => {
+    const { cmp, trigger, openAt, cleanup } = setup();
+    openAt(10, 10);
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(cmp.isOpen()).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+    cleanup();
+  });
+
+  it('places the panel at the pointer', () => {
+    const { el, openAt, cleanup } = setup();
+    openAt(40, 60);
+    const panel = el.querySelector<HTMLElement>('.ctx__panel')!;
+    expect(panel.style.left).toBe('40px');
+    expect(panel.style.top).toBe('60px');
+    cleanup();
+  });
+});
