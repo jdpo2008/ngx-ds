@@ -56,3 +56,20 @@ describe('SkeletonComponent behaviour', () => {
     expect(line.style.width).toBe('8rem');
   });
 });
+
+describe('SkeletonComponent lines input', () => {
+  function count(lines: unknown) {
+    const fixture = TestBed.createComponent(SkeletonComponent);
+    fixture.componentRef.setInput('lines', lines);
+    fixture.detectChanges();
+    return (fixture.nativeElement as HTMLElement).querySelectorAll('div').length;
+  }
+
+  it('rounds a fractional count down instead of throwing', () => {
+    expect(count(2.5)).toBe(2);
+  });
+
+  it('falls back to one line when the count is not a number', () => {
+    expect(count(NaN)).toBe(1);
+  });
+});

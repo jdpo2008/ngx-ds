@@ -45,3 +45,9 @@
     animation: ngx-shimmer 1.6s ease-in-out infinite;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton--animated {
+    animation: none;
+  }
+}
