@@ -45,3 +45,23 @@ describe('IconButtonComponent', () => {
     expect(setup({ disabled: true }).disabled).toBe(true);
   });
 });
+
+describe('IconButtonComponent aria-expanded', () => {
+  function setup(expanded?: boolean) {
+    const fixture = TestBed.createComponent(IconButtonComponent);
+    fixture.componentRef.setInput('icon', Trash);
+    fixture.componentRef.setInput('ariaLabel', 'Menú');
+    if (expanded !== undefined) fixture.componentRef.setInput('ariaExpanded', expanded);
+    fixture.detectChanges();
+    return (fixture.nativeElement as HTMLElement).querySelector('button')!;
+  }
+
+  it('omits aria-expanded unless it is set', () => {
+    expect(setup().hasAttribute('aria-expanded')).toBe(false);
+  });
+
+  it('reflects aria-expanded, including false', () => {
+    expect(setup(true).getAttribute('aria-expanded')).toBe('true');
+    expect(setup(false).getAttribute('aria-expanded')).toBe('false');
+  });
+});

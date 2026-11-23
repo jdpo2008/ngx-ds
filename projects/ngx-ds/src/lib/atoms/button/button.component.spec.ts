@@ -81,3 +81,16 @@ describe('ButtonComponent', () => {
     expect(host.clicks).toBe(1);
   });
 });
+
+describe('ButtonComponent busy state', () => {
+  it('marks itself busy only while loading', () => {
+    const fixture = TestBed.createComponent(ButtonComponent);
+    fixture.detectChanges();
+    const btn = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+    expect(btn.hasAttribute('aria-busy')).toBe(false);
+
+    fixture.componentRef.setInput('loading', true);
+    fixture.detectChanges();
+    expect(btn.getAttribute('aria-busy')).toBe('true');
+  });
+});

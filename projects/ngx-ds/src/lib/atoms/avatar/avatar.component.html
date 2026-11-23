@@ -1,11 +1,17 @@
 <span [class]="hostClasses()">
-  @if (src()) {
-    <img [src]="src()" [alt]="alt()" class="avatar__img" />
+  @if (imageSrc()) {
+    <img [src]="imageSrc()" [alt]="alt()" class="avatar__img" (error)="onImageError()" />
   } @else {
-    <span class="avatar__initials">{{ displayInitials() }}</span>
+    <span
+      class="avatar__initials"
+      [attr.role]="alt() ? 'img' : null"
+      [attr.aria-label]="alt() || null"
+      >{{ displayInitials() }}</span
+    >
   }
 
   @if (status()) {
     <span class="avatar__status avatar__status--{{ status() }}" aria-hidden="true"></span>
+    <span class="avatar__status-text">{{ statusText() }}</span>
   }
 </span>
