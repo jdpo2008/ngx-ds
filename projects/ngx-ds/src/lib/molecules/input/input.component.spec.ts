@@ -128,3 +128,16 @@ describe('InputComponent behaviour', () => {
     expect(el.querySelector('input')!.readOnly).toBe(true);
   });
 });
+
+describe('InputComponent with a number written by a form', () => {
+  it('shows it as text', () => {
+    const fixture = TestBed.createComponent(InputComponent);
+    fixture.componentRef.setInput('label', 'Edad');
+    fixture.componentRef.setInput('floatingLabel', true);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(5551234 as unknown as string);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.value()).toBe('5551234');
+    expect(fixture.componentInstance.isFloating()).toBe(true);
+  });
+});

@@ -130,3 +130,14 @@ describe('TextareaComponent behaviour', () => {
     expect(el.querySelector('.ngx-textarea__field--disabled')).not.toBeNull();
   });
 });
+
+describe('TextareaComponent with a number written by a form', () => {
+  it('shows it as text', () => {
+    const fixture = TestBed.createComponent(TextareaComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.writeValue(5551234 as unknown as string);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.value()).toBe('5551234');
+    expect(fixture.componentInstance.charCount()).toBe(7);
+  });
+});

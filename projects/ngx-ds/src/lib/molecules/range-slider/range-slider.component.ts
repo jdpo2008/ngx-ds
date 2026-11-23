@@ -117,10 +117,7 @@ export class RangeSliderComponent implements ControlValueAccessor {
     const [, end] = this.values();
     const clamped = Math.max(this.min(), Math.min(raw, end - this.minGap()));
     (event.target as HTMLInputElement).value = String(clamped);
-    const next: [number, number] = [clamped, end];
-    this.values.set(next);
-    this.rangeChange.emit(next);
-    this.#onChange(next);
+    this.#commit([clamped, end]);
   }
 
   protected onEndInput(event: Event): void {
@@ -128,7 +125,13 @@ export class RangeSliderComponent implements ControlValueAccessor {
     const [start] = this.values();
     const clamped = Math.min(this.max(), Math.max(raw, start + this.minGap()));
     (event.target as HTMLInputElement).value = String(clamped);
-    const next: [number, number] = [start, clamped];
+    this.#commit([start, clamped]);
+  }
+
+  // A thumb pushed against the other one stays put: don't report it again.
+  #commit(next: [number, number]): void {
+    const [start, end] = this.values();
+    if (next[0] === start && next[1] === end) return;
     this.values.set(next);
     this.rangeChange.emit(next);
     this.#onChange(next);

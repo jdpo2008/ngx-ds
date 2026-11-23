@@ -128,10 +128,7 @@ describe('RangeSliderComponent behaviour', () => {
     slide(thumbs()[0], 70);
     expect(cmp.values()).toEqual([20, 30]);
     expect(thumbs()[0].value).toBe('20');
-    expect(emitted).toEqual([
-      [20, 30],
-      [20, 30],
-    ]);
+    expect(emitted).toEqual([[20, 30]]);
   });
 
   it('never moves a thumb outside min and max to honour minGap', () => {
@@ -148,5 +145,36 @@ describe('RangeSliderComponent behaviour', () => {
     expect(a).toBeTruthy();
     expect(b).toBeTruthy();
     expect(a).not.toBe(b);
+  });
+});
+
+describe('RangeSliderComponent thumbs against each other', () => {
+  it('does not emit again when a thumb pushed against the other stays put', () => {
+    const fixture = TestBed.createComponent(RangeSliderComponent);
+    fixture.componentRef.setInput('range', true);
+    fixture.componentRef.setInput('minGap', 10);
+    fixture.componentInstance.values.set([20, 60]);
+    fixture.detectChanges();
+    const cmp = fixture.componentInstance;
+    const emitted: [number, number][] = [];
+    const changed = vi.fn();
+    cmp.rangeChange.subscribe((v) => emitted.push(v));
+    cmp.registerOnChange(changed);
+    const [start, end] = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLInputElement>('input'),
+    );
+    const move = (box: HTMLInputElement, v: number) => {
+      box.value = String(v);
+      box.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+    };
+    move(start, 55);
+    expect(emitted).toEqual([[50, 60]]);
+    expect(start.value).toBe('50');
+    move(start, 58);
+    move(end, 45);
+    expect(emitted).toEqual([[50, 60]]);
+    expect(changed).toHaveBeenCalledTimes(1);
+    expect(end.value).toBe('60');
   });
 });
