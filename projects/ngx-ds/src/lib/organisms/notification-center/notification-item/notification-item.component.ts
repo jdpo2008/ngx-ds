@@ -71,6 +71,11 @@ export class NotificationItemComponent {
     if (!this.notification().read) this.markRead.emit(this.notification());
   }
 
+  // Enter on the inner buttons bubbles here too: only the row itself marks as read.
+  onEnter(event: Event): void {
+    if (event.target === event.currentTarget) this.onMarkRead();
+  }
+
   onDismiss(event: MouseEvent): void {
     event.stopPropagation();
     this.dismissed.emit(this.notification());

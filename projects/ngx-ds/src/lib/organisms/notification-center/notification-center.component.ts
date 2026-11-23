@@ -6,6 +6,7 @@ import {
   output,
   signal,
   inject,
+  ElementRef,
 } from '@angular/core';
 import { Bell, BellOff } from 'lucide-angular';
 import { setupClickOutside } from '../../shared/click-outside';
@@ -29,6 +30,7 @@ export type NotificationFilter = 'all' | 'unread';
 })
 export class NotificationCenterComponent {
   readonly i18n = inject(NGX_DS_LABELS);
+  readonly #host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   // ── Inputs ────────────────────────────────────────────────────────────────
   readonly notifications = input<NgxNotification[]>([]);
@@ -107,6 +109,13 @@ export class NotificationCenterComponent {
       this.#open.set(false);
     });
 
-    setupEscapeClose(() => this.#open.set(false));
+    setupEscapeClose(() => {
+      if (!this.#open()) return;
+      // The panel is about to leave the DOM: don't strand focus on <body>.
+      const host = this.#host.nativeElement;
+      const hadFocus = host.contains(host.ownerDocument.activeElement);
+      this.#open.set(false);
+      if (hadFocus) host.querySelector<HTMLButtonElement>('.nc__bell-wrap button')?.focus();
+    });
   }
 }
