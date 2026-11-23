@@ -112,7 +112,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
       `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
     if (s && e) return `${fmt(s)} – ${fmt(e)}`;
     if (s) return `${fmt(s)} – ...`;
-    return '';
+    return `... – ${fmt(e!)}`;
   });
 
   readonly hasError = computed(() =>
@@ -323,7 +323,11 @@ export class DateRangePickerComponent implements ControlValueAccessor {
     this.start.set(null);
     this.end.set(null);
     this.#open.set(false);
+    this.#picking.set('start');
+    this.#hover.set(null);
     this.#emitChange();
+    // The clear button goes away with the value; keep focus on the field.
+    this.triggerRef()?.nativeElement.focus();
   }
 
   constructor() {
