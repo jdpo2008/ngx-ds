@@ -64,6 +64,8 @@ export interface NgxDsLabels {
   timelineError: string;
   /** AvatarGroup overflow counter: "+3" read as "3 more". */
   moreAvatars: (n: number) => string;
+  /** Avatar status, read instead of the coloured dot. */
+  avatarStatus: Record<'online' | 'offline' | 'away' | 'busy', string>;
 
   // ── Password strength ─────────────────────────────────────
   passwordRequirements: string;
@@ -219,6 +221,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   timelineCompleted: 'Completado',
   timelineError: 'Error',
   moreAvatars: (n) => `${n} más`,
+  avatarStatus: { online: 'En línea', offline: 'Desconectado', away: 'Ausente', busy: 'Ocupado' },
 
   passwordRequirements: 'Requisitos de contraseña',
   passwordStrength: 'Fortaleza',
@@ -362,6 +365,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   timelineCompleted: 'Completed',
   timelineError: 'Error',
   moreAvatars: (n) => `${n} more`,
+  avatarStatus: { online: 'Online', offline: 'Offline', away: 'Away', busy: 'Busy' },
 
   passwordRequirements: 'Password requirements',
   passwordStrength: 'Strength',
