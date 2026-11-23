@@ -1,5 +1,5 @@
 @if (!isClosed()) {
-  <div [class]="hostClasses()" role="alert">
+  <div [class]="hostClasses()" [attr.role]="role()">
     @if (showIcon()) {
       <ngx-ds-icon class="alert__icon" [icon]="typeIcon()" [size]="20" aria-hidden="true" />
     }

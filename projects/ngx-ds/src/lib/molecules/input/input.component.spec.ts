@@ -91,3 +91,40 @@ describe('InputComponent', () => {
     });
   });
 });
+
+describe('InputComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(InputComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const toggle = () => el.querySelector<HTMLButtonElement>('.ngx-input__password-toggle')!;
+    return { fixture, el, toggle };
+  }
+
+  it('keeps the password toggle reachable by keyboard', () => {
+    const { toggle } = setup({ type: 'password' });
+    expect(toggle().getAttribute('tabindex')).not.toBe('-1');
+    expect(toggle().querySelector('ngx-ds-icon')!.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('disables the password toggle with the field', () => {
+    const { toggle } = setup({ type: 'password', disabled: true });
+    expect(toggle().disabled).toBe(true);
+  });
+
+  it('links the hint to the input and drops it when there is no message', () => {
+    const { fixture, el } = setup({ hint: 'Ayuda' });
+    const input = el.querySelector('input')!;
+    const id = input.getAttribute('aria-describedby')!;
+    expect(el.querySelector(`#${id}`)!.textContent).toContain('Ayuda');
+    fixture.componentRef.setInput('hint', '');
+    fixture.detectChanges();
+    expect(input.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('marks the input read-only', () => {
+    const { el } = setup({ readonly: true });
+    expect(el.querySelector('input')!.readOnly).toBe(true);
+  });
+});

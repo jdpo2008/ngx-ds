@@ -59,6 +59,9 @@ export interface NgxDsLabels {
   /** Accessible name of a copy button: "Copy <label>". */
   copy: (label: string) => string;
   copied: string;
+  /** Visually hidden status of a timeline step. */
+  timelineCompleted: string;
+  timelineError: string;
 
   // ── Password strength ─────────────────────────────────────
   passwordRequirements: string;
@@ -211,6 +214,8 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   closeAlert: 'Cerrar alerta',
   copy: (label) => `Copiar ${label}`,
   copied: 'Copiado',
+  timelineCompleted: 'Completado',
+  timelineError: 'Error',
 
   passwordRequirements: 'Requisitos de contraseña',
   passwordStrength: 'Fortaleza',
@@ -351,6 +356,8 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   closeAlert: 'Close alert',
   copy: (label) => `Copy ${label}`,
   copied: 'Copied',
+  timelineCompleted: 'Completed',
+  timelineError: 'Error',
 
   passwordRequirements: 'Password requirements',
   passwordStrength: 'Strength',
