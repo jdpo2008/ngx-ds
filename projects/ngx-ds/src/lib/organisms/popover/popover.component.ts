@@ -10,6 +10,7 @@ import {
   output,
   inject,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { setupClickOutside } from '../../shared/click-outside';
@@ -19,6 +20,8 @@ import { NGX_DS_LABELS } from '../../shared/labels';
 // A projected trigger that is already interactive (e.g. <ngx-ds-button>) handles
 // focus and keyboard itself; the wrapper must not be a second, nested button.
 const INTERACTIVE = 'button, a[href], input, select, textarea, [tabindex]';
+
+let nextId = 0;
 
 export type PopoverPlacement =
   'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
@@ -33,6 +36,8 @@ export type PopoverPlacement =
 })
 export class PopoverComponent {
   readonly i18n = inject(NGX_DS_LABELS);
+  readonly #host = inject<ElementRef<HTMLElement>>(ElementRef);
+  readonly panelId = `ngx-popover-${nextId++}`;
 
   readonly open = model<boolean>(false);
   readonly placement = input<PopoverPlacement>('bottom');
@@ -75,10 +80,21 @@ export class PopoverComponent {
       if (!el) return;
       el.setAttribute('aria-haspopup', 'dialog');
       el.setAttribute('aria-expanded', String(this.open()));
+      if (this.open()) el.setAttribute('aria-controls', this.panelId);
+      else el.removeAttribute('aria-controls');
+    });
+
+    // Disabling an open popover closes it.
+    effect(() => {
+      if (this.disabled() && untracked(this.open)) this.close();
     });
 
     setupEscapeClose(() => {
-      if (this.open() && this.closeOnEscape()) this.close();
+      if (!this.open() || !this.closeOnEscape()) return;
+      const hadFocus = this.#host.nativeElement.contains(document.activeElement);
+      this.close();
+      // The panel is removed, so focus would fall to <body>: return it to the trigger.
+      if (hadFocus) (this.nativeTrigger() ?? this.triggerRef().nativeElement).focus();
     });
 
     setupClickOutside(() => {
