@@ -53,7 +53,8 @@ export class ContextMenuComponent {
     if (this.disabled()) return;
     event.preventDefault();
 
-    this.lastActive = this.doc.activeElement as HTMLElement | null;
+    // Reopening in place keeps the element that had focus before the first open.
+    if (!this.isOpen()) this.lastActive = this.doc.activeElement as HTMLElement | null;
     this.posX.set(event.clientX);
     this.posY.set(event.clientY);
     this.visible.set(false);

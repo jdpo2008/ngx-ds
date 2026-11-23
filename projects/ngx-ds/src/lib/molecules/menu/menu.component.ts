@@ -4,6 +4,7 @@ import {
   ElementRef,
   afterNextRender,
   computed,
+  inject,
   input,
   output,
   signal,
@@ -44,7 +45,18 @@ export class MenuComponent {
 
   private readonly itemBtns = viewChildren<ElementRef<HTMLButtonElement>>('itemBtn');
 
+  /** Set when this menu is a submenu of another menu. */
+  private readonly parentMenu = inject(MenuComponent, { optional: true, skipSelf: true });
+
   readonly activeIndex = signal(0);
+  /** The item that holds the tab stop: the active one, or the first enabled one if it is disabled. */
+  readonly focusIndex = computed(() => {
+    const items = this.items();
+    const i = this.activeIndex();
+    if (items[i] && !items[i].disabled) return i;
+    const first = items.findIndex((it) => !it.disabled);
+    return first === -1 ? i : first;
+  });
   readonly openSubmenu = signal<string | null>(null);
   readonly chevronRight: LucideIconData = ChevronRight;
 
@@ -81,6 +93,7 @@ export class MenuComponent {
     const items = this.items();
     if (items.length === 0) return;
 
+    let handled = true;
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
@@ -101,10 +114,12 @@ export class MenuComponent {
         this.focusItem(this.activeIndex());
         break;
       case 'ArrowRight': {
-        const item = items[this.activeIndex()];
+        const item = items[this.focusIndex()];
         if (item?.children?.length && !item.disabled) {
           event.preventDefault();
           this.openSubmenu.set(item.id);
+        } else {
+          handled = false;
         }
         break;
       }
@@ -113,11 +128,16 @@ export class MenuComponent {
         event.preventDefault();
         this.closed.emit();
         break;
+      default:
+        handled = false;
     }
+    // A submenu sits inside its parent's host: keep its keys from also moving
+    // the parent or reaching document-level Escape handlers.
+    if (handled && this.parentMenu) event.stopPropagation();
   }
 
   private moveActive(dir: 1 | -1): void {
-    const next = this.nextEnabled(this.activeIndex(), dir);
+    const next = this.nextEnabled(this.focusIndex(), dir);
     this.activeIndex.set(next);
     this.focusItem(next);
   }

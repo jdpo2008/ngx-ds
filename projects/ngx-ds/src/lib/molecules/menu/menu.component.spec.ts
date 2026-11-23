@@ -115,3 +115,68 @@ describe('MenuComponent', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('MenuComponent behaviour', () => {
+  function setup(items: MenuItem[] = ITEMS) {
+    const fixture = TestBed.createComponent(MenuComponent);
+    fixture.componentRef.setInput('items', items);
+    fixture.detectChanges();
+    const host = fixture.nativeElement as HTMLElement;
+    const buttons = () =>
+      Array.from(host.querySelectorAll<HTMLButtonElement>(':scope > .menu__item-wrapper > button'));
+    return { fixture, cmp: fixture.componentInstance, host, buttons };
+  }
+
+  it('hides decorative icons from assistive tech', () => {
+    const { host } = setup();
+    const icons = host.querySelectorAll('.menu__item-icon, .menu__item-chevron');
+    expect(icons.length).toBe(3);
+    icons.forEach((i) => expect(i.getAttribute('aria-hidden')).toBe('true'));
+  });
+
+  it('puts the tab stop on the first enabled item when the first one is disabled', () => {
+    const { buttons } = setup([
+      { id: 'x', label: 'X', disabled: true },
+      { id: 'y', label: 'Y' },
+    ]);
+    expect(buttons().map((b) => b.getAttribute('tabindex'))).toEqual(['-1', '0']);
+  });
+
+  it('names a submenu after its parent item', () => {
+    const { fixture, host, buttons } = setup();
+    buttons()[2].click();
+    fixture.detectChanges();
+    expect(host.querySelector('.menu__submenu ngx-ds-menu')?.getAttribute('aria-label')).toBe(
+      'Más',
+    );
+  });
+
+  it('keeps submenu keys inside the submenu', () => {
+    const { fixture, cmp, host, buttons } = setup();
+    const closed = vi.fn();
+    cmp.closed.subscribe(closed);
+    buttons()[2].click();
+    fixture.detectChanges();
+    const sub = host.querySelector<HTMLElement>('.menu__submenu ngx-ds-menu')!;
+    const subBtn = sub.querySelector<HTMLButtonElement>('button')!;
+    const docKeys = vi.fn();
+    document.addEventListener('keydown', docKeys);
+    subBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    expect(cmp.activeIndex()).toBe(2);
+    subBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    document.removeEventListener('keydown', docKeys);
+    expect(closed).not.toHaveBeenCalled();
+    expect(docKeys).not.toHaveBeenCalled();
+    expect(host.querySelector('.menu__submenu')).toBeNull();
+    expect(document.activeElement).toBe(buttons()[2]);
+  });
+
+  it('ignores clicks on disabled items', () => {
+    const { cmp } = setup();
+    const spy = vi.fn();
+    cmp.itemClick.subscribe(spy);
+    cmp.onItemClick(ITEMS[1], 1);
+    expect(spy).not.toHaveBeenCalled();
+  });
+});

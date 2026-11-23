@@ -50,3 +50,31 @@ describe('MenuButtonComponent', () => {
     expect(setup(true).disabled).toBe(true);
   });
 });
+
+describe('MenuButtonComponent behaviour', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(MenuButtonComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    return (fixture.nativeElement as HTMLElement).querySelector('button')!;
+  }
+
+  it('defaults to a non-submitting md default button without icons', () => {
+    const btn = setup();
+    expect(btn.type).toBe('button');
+    expect(classesOf(btn)).toEqual(classesOf('menu-btn menu-btn--md menu-btn--default'));
+    expect(btn.querySelector('ngx-ds-icon')).toBeNull();
+    expect(btn.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('passes the button type through', () => {
+    expect(setup({ type: 'submit' }).type).toBe('submit');
+  });
+
+  it('sizes the icons with the button', () => {
+    const btn = setup({ iconLeft: User, size: 'sm' });
+    const icon = btn.querySelector('ngx-ds-icon')!;
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+    expect(icon.querySelector('svg')?.getAttribute('width')).toBe('14');
+  });
+});
