@@ -352,6 +352,8 @@ export class TreeSelectComponent implements ControlValueAccessor {
     event.stopPropagation();
     if (this.isDisabled()) return;
     this.#commit(this.selectedIds().filter((v) => v !== id));
+    // The chip's button is about to leave the DOM: keep focus in the field.
+    this.triggerRef()?.nativeElement.focus();
   }
 
   #commit(next: TreeSelectValue): void {

@@ -200,3 +200,19 @@ describe('TagInputComponent with Signal Forms', () => {
     expect(native.getAttribute('aria-invalid')).toBe('true');
   });
 });
+
+describe('TagInputComponent chip removal focus', () => {
+  it('keeps focus in the field after removing a chip with its button', () => {
+    const fixture = TestBed.createComponent(TagInputComponent);
+    fixture.componentInstance.writeValue(['a', 'b']);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    const remove = el.querySelector<HTMLButtonElement>('.tag__dismiss')!;
+    remove.focus();
+    remove.click();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(el.querySelector('input'));
+    el.remove();
+  });
+});

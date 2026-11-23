@@ -475,3 +475,21 @@ describe('TreeSelectComponent behaviour', () => {
     expect(trigger.getAttribute('aria-controls')).toBe(q('[role="tree"]')!.id);
   });
 });
+
+describe('TreeSelectComponent chip removal focus', () => {
+  it('keeps focus in the field after removing a chip with its button', () => {
+    const fixture = TestBed.createComponent(TreeSelectComponent);
+    fixture.componentRef.setInput('nodes', NODES);
+    fixture.componentRef.setInput('multiple', true);
+    fixture.componentRef.setInput('value', ['apple', 'bread']);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    const remove = el.querySelector<HTMLButtonElement>('.ts__chip-remove')!;
+    remove.focus();
+    remove.click();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(el.querySelector('[role="combobox"]'));
+    el.remove();
+  });
+});

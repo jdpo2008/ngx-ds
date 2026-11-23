@@ -195,6 +195,8 @@ export class MultiSelectComponent implements ControlValueAccessor {
     this.value.set(next);
     this.#onChange(next);
     this.#onTouched();
+    // The chip's button is about to leave the DOM: keep focus in the field.
+    this.triggerRef()?.nativeElement.focus();
   }
 
   isSelected(option: MultiSelectOption): boolean {
