@@ -125,6 +125,8 @@ export interface NgxDsLabels {
   commandPalette: string;
   commandPlaceholder: string;
   noResultsFor: (query: string) => string;
+  /** Optional, so label objects written before it was added still compile. Without it, only the number is announced. */
+  commandResults?: (n: number) => string;
   hintNavigate: string;
   hintSelect: string;
   hintClose: string;
@@ -275,6 +277,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   commandPalette: 'Paleta de comandos',
   commandPlaceholder: 'Buscar comandos...',
   noResultsFor: (q) => `Sin resultados para "${q}"`,
+  commandResults: (n) => `${n} resultado${n === 1 ? '' : 's'}`,
   hintNavigate: 'navegar',
   hintSelect: 'seleccionar',
   hintClose: 'cerrar',
@@ -419,6 +422,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   commandPalette: 'Command palette',
   commandPlaceholder: 'Search commands...',
   noResultsFor: (q) => `No results for "${q}"`,
+  commandResults: (n) => `${n} result${n === 1 ? '' : 's'}`,
   hintNavigate: 'navigate',
   hintSelect: 'select',
   hintClose: 'close',

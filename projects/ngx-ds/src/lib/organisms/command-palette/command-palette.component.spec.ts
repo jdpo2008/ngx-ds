@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { NGX_DS_LABELS, NGX_DS_LABELS_ES, NgxDsLabels } from '../../shared/labels';
 import { CommandItem, CommandPaletteComponent } from './command-palette.component';
 
 function press(key: string, init: KeyboardEventInit = {}): void {
@@ -18,6 +19,14 @@ describe('CommandPaletteComponent', () => {
     press('k', { ctrlKey: true });
     expect(cmp.open()).toBe(true);
     press('k', { ctrlKey: true });
+    expect(cmp.open()).toBe(false);
+  });
+
+  it('toggles with Ctrl/Cmd+K when Caps Lock or Shift makes the key uppercase', () => {
+    const { cmp } = setup();
+    press('K', { ctrlKey: true, shiftKey: true });
+    expect(cmp.open()).toBe(true);
+    press('K', { metaKey: true });
     expect(cmp.open()).toBe(false);
   });
 
@@ -94,7 +103,117 @@ describe('CommandPaletteComponent', () => {
       press('ArrowDown');
       press('ArrowDown');
       fixture.detectChanges();
-      expect(active()).toContain('Delta');
+      // Delta is disabled, so Beta is the last reachable item.
+      expect(active()).toContain('Beta');
+    });
+
+    it('skips disabled items, including a disabled first item', () => {
+      const { fixture, cmp, active } = openWith([
+        { id: 'x', label: 'Off', disabled: true },
+        { id: 'a', label: 'Alpha' },
+        { id: 'y', label: 'Off too', disabled: true },
+        { id: 'b', label: 'Beta' },
+      ]);
+      const selected: CommandItem[] = [];
+      cmp.itemSelect.subscribe((item) => selected.push(item));
+      expect(active()).toBe('Alpha');
+      press('ArrowDown');
+      fixture.detectChanges();
+      expect(active()).toBe('Beta');
+      press('ArrowUp');
+      press('ArrowUp');
+      fixture.detectChanges();
+      expect(active()).toBe('Alpha');
+      press('Enter');
+      expect(selected.map((i) => i.id)).toEqual(['a']);
+    });
+
+    it('scrolls the active option into view on arrow navigation', () => {
+      const { fixture, options } = openWith();
+      const scrolled: string[] = [];
+      const original = Element.prototype.scrollIntoView;
+      Element.prototype.scrollIntoView = function (this: Element) {
+        scrolled.push(this.id);
+      };
+      try {
+        press('ArrowDown');
+        fixture.detectChanges();
+        expect(scrolled).toEqual([options()[1].id]);
+      } finally {
+        Element.prototype.scrollIntoView = original;
+      }
+    });
+
+    it('keeps the options out of the Tab order', () => {
+      const { options } = openWith();
+      for (const option of options()) expect(option.getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('makes the hovered option the active one', () => {
+      const { fixture, cmp, options, active } = openWith();
+      const selected: CommandItem[] = [];
+      cmp.itemSelect.subscribe((item) => selected.push(item));
+      options()[2].dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+      fixture.detectChanges();
+      expect(active()).toContain('Beta');
+      // Hovering a disabled item leaves the cursor where it was.
+      options()[3].dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+      fixture.detectChanges();
+      expect(active()).toContain('Beta');
+      press('Enter');
+      expect(selected.map((i) => i.id)).toEqual(['b']);
+    });
+
+    it('groups the options of each category under its heading', () => {
+      const { el } = openWith();
+      const groups = Array.from(el.querySelectorAll('[role="listbox"] > [role="group"]'));
+      expect(groups.length).toBe(2);
+      const names = groups.map((g) =>
+        el.querySelector(`[id="${g.getAttribute('aria-labelledby')}"]`)?.textContent?.trim(),
+      );
+      expect(names).toEqual(['Files', 'Actions']);
+      expect(groups[0].querySelectorAll('[role="option"]').length).toBe(2);
+      expect(groups[1].querySelectorAll('[role="option"]').length).toBe(1);
+      // Delta has no category, so it isn't in a group.
+      const delta = el.querySelector('[role="option"][aria-disabled="true"]')!;
+      expect(delta.closest('[role="group"]')).toBeNull();
+    });
+
+    it('gives the search input an accessible name', () => {
+      const { fixture, el } = openWith();
+      const input = el.querySelector('.cp__search-input')!;
+      expect(input.getAttribute('aria-label')).toBe('Buscar comandos...');
+      fixture.componentRef.setInput('placeholder', 'Type a command');
+      fixture.detectChanges();
+      expect(input.getAttribute('aria-label')).toBe('Type a command');
+    });
+
+    it('announces the result count in a polite live region', () => {
+      const { el, search } = openWith();
+      const status = () => el.querySelector('[role="status"]')!;
+      expect(status().getAttribute('aria-live')).toBe('polite');
+      expect(status().textContent?.trim()).toBe('4 resultados');
+      search('alp');
+      expect(status().textContent?.trim()).toBe('1 resultado');
+      search('zzz');
+      expect(status().textContent?.trim()).toBe('Sin resultados para "zzz"');
+    });
+
+    it('announces the bare count when the labels lack commandResults', () => {
+      const labels: NgxDsLabels = { ...NGX_DS_LABELS_ES };
+      delete labels.commandResults;
+      TestBed.configureTestingModule({ providers: [{ provide: NGX_DS_LABELS, useValue: labels }] });
+      const { el } = openWith();
+      expect(el.querySelector('[role="status"]')!.textContent?.trim()).toBe('4');
+    });
+
+    it('reflects whether results show in aria-expanded, with the empty message outside the listbox', () => {
+      const { el, search } = openWith();
+      const input = el.querySelector('.cp__search-input')!;
+      expect(input.getAttribute('aria-expanded')).toBe('true');
+      search('zzz');
+      expect(input.getAttribute('aria-expanded')).toBe('false');
+      expect(el.querySelector('.cp__empty')!.closest('[role="listbox"]')).toBeNull();
     });
 
     it('points aria-activedescendant at the active option', () => {
