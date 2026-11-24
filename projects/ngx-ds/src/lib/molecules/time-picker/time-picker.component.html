@@ -24,7 +24,9 @@
     [attr.aria-disabled]="isDisabled()"
   >
     @if (floatingLabel() && label()) {
-      <span [id]="id + '-label'" [class]="floatLabelClasses()">{{ label() }}</span>
+      <!-- The space after it (whitespace in a flex box takes no room) separates label and value in the visible text,
+           so it matches the accessible name (axe label-content-name-mismatch). -->
+      <span [id]="id + '-label'" [class]="floatLabelClasses()">{{ label() }}</span>{{ ' ' }}
     }
 
     <span class="ngx-time-picker__icon" aria-hidden="true">
