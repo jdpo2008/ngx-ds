@@ -48,7 +48,7 @@ Rules:
 - Organisms with shared interfaces add `<name>.types.ts`; sub-components go in a subfolder.
 
 `<name>.component.scss`:
-- `:host { display: ...; font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif); }`
+- `:host { display: ...; font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif); }`. If the root element is a `<button>` (or another form control), repeat the `font-family` on it: those don't inherit the font. `src/font-family.spec.ts` checks it.
 - Short BEM block (`badge`, `um__trigger`).
 - Tokens with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. Never the deprecated aliases in `styles/_legacy.scss` (`--color-*`, `--ngx-color-*`, …).
 
