@@ -20,8 +20,11 @@ export interface NgxDsLabels {
   /** Text of the Select tag when more than two options are selected. */
   selectedCount: (n: number) => string;
   noResults: string;
-  /** Announced to screen readers when a search finds `n` matches. */
-  resultsCount: (n: number) => string;
+  /**
+   * Announced to screen readers when a search finds `n` matches. Optional, so label
+   * objects written before it was added still compile. Without it, only the number is announced.
+   */
+  resultsCount?: (n: number) => string;
   noOptions: string;
   loading: string;
   expand: string;

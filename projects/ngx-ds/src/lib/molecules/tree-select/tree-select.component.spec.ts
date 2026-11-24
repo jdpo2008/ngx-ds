@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NGX_DS_LABELS, NGX_DS_LABELS_ES, NgxDsLabels } from '../../shared/labels';
 import { TreeSelectComponent, TreeSelectNode, TreeSelectValue } from './tree-select.component';
 
 const NODES: TreeSelectNode[] = [
@@ -570,6 +571,17 @@ describe('TreeSelectComponent accessibility', () => {
     expect(status.textContent!.trim()).toBe('1 resultado');
     type('xyz');
     expect(status.textContent!.trim()).toBe('Sin resultados');
+  });
+
+  it('announces the bare count when the labels lack resultsCount', () => {
+    const labels: NgxDsLabels = { ...NGX_DS_LABELS_ES };
+    delete labels.resultsCount;
+    TestBed.configureTestingModule({ providers: [{ provide: NGX_DS_LABELS, useValue: labels }] });
+    const { el, trigger, fixture, type } = setup({ searchable: true });
+    trigger.click();
+    fixture.detectChanges();
+    type('lim');
+    expect(el.querySelector('[role="status"]')!.textContent!.trim()).toBe('1');
   });
 
   it('the no-results text is outside the tree', () => {

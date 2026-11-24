@@ -231,7 +231,7 @@ export class TreeSelectComponent implements ControlValueAccessor {
     const query = this.#search().trim().toLowerCase();
     if (!query) return '';
     const count = this.rows().filter((r) => r.node.label.toLowerCase().includes(query)).length;
-    return count ? this.i18n.resultsCount(count) : this.i18n.noResults;
+    return count ? (this.i18n.resultsCount?.(count) ?? String(count)) : this.i18n.noResults;
   });
 
   readonly hasError = computed(() =>
