@@ -4,6 +4,12 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-11-24
+
+### Fixed
+
+- Alert, PasswordStrength and ProgressBar render their host as a block, so `width` and vertical margins set on the element take effect. The host used to be inline, which ignores them.
+
 ## [1.2.1] - 2026-11-24
 
 ### Fixed
@@ -323,6 +329,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.2.2]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.2
 [1.2.1]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.1
 [1.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.0
 [1.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.1.0
