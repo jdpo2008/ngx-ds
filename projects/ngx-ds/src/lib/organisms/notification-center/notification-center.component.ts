@@ -116,6 +116,6 @@ export class NotificationCenterComponent {
       const hadFocus = host.contains(host.ownerDocument.activeElement);
       this.#open.set(false);
       if (hadFocus) host.querySelector<HTMLButtonElement>('.nc__bell-wrap button')?.focus();
-    });
+    }, this.#open);
   }
 }

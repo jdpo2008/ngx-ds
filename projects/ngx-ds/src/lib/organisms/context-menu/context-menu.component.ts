@@ -46,7 +46,7 @@ export class ContextMenuComponent {
 
   constructor() {
     setupClickOutside(() => this.close());
-    setupEscapeClose(() => this.close());
+    setupEscapeClose(() => this.close(), this.isOpen);
   }
 
   onContextMenu(event: MouseEvent): void {

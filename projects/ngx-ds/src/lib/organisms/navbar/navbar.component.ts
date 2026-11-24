@@ -60,7 +60,7 @@ export class NavbarComponent {
       if (!this.menuOpen()) return;
       this.menuOpen.set(false);
       this.toggle()?.nativeElement.focus();
-    });
+    }, this.menuOpen);
   }
 
   toggleMenu(): void {

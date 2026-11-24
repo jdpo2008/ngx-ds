@@ -141,7 +141,10 @@ export class TableComponent<T extends object = Record<string, unknown>> {
       this.#openMenuId.set(null);
       this.#columnMenuOpen.set(false);
     });
-    setupEscapeClose(() => this.#closeMenusOnEscape());
+    setupEscapeClose(
+      () => this.#closeMenusOnEscape(),
+      computed(() => this.#openMenuId() !== null || this.#columnMenuOpen()),
+    );
   }
 
   /** Escape closes the open menu and, if focus was inside the table, returns it to the menu's button. */

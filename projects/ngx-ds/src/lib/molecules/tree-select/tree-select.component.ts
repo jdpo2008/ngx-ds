@@ -236,7 +236,7 @@ export class TreeSelectComponent implements ControlValueAccessor {
   constructor() {
     setupEscapeClose(() => {
       if (this.#open()) this.close(true);
-    });
+    }, this.isOpen);
     setupClickOutside(() => {
       if (this.#open()) this.close(false);
     });

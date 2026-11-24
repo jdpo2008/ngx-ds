@@ -225,7 +225,7 @@ export class TimePickerComponent implements ControlValueAccessor {
   private readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
 
   constructor() {
-    setupEscapeClose(() => this.#closeOnEscape());
+    setupEscapeClose(() => this.#closeOnEscape(), this.#open);
     setupClickOutside(() => {
       if (!this.#open() && !this.#focused()) return;
       this.#open.set(false);

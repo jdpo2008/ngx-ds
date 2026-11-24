@@ -331,7 +331,7 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   }
 
   constructor() {
-    setupEscapeClose(() => this.#closeOnEscape());
+    setupEscapeClose(() => this.#closeOnEscape(), this.#open);
     setupClickOutside(() => {
       if (!this.#open()) return;
       this.#cancel();

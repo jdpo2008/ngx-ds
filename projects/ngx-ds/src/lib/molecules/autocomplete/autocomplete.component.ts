@@ -20,6 +20,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LucideIconData, Search, X } from 'lucide-angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
+import { setupEscapeLayer } from '../../shared/overlay-stack';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -212,6 +213,8 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
     });
 
     setupClickOutside(() => this.closeAndRestore());
+    // An open list takes Escape (see onKeydown) before a modal or drawer around it.
+    setupEscapeLayer(this.showPanel);
   }
 
   // ── Interactions ──────────────────────────────────────────

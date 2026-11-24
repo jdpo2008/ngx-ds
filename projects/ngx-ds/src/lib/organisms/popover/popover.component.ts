@@ -89,13 +89,16 @@ export class PopoverComponent {
       if (this.disabled() && untracked(this.open)) this.close();
     });
 
-    setupEscapeClose(() => {
-      if (!this.open() || !this.closeOnEscape()) return;
-      const hadFocus = this.#host.nativeElement.contains(document.activeElement);
-      this.close();
-      // The panel is removed, so focus would fall to <body>: return it to the trigger.
-      if (hadFocus) (this.nativeTrigger() ?? this.triggerRef().nativeElement).focus();
-    });
+    setupEscapeClose(
+      () => {
+        if (!this.open() || !this.closeOnEscape()) return;
+        const hadFocus = this.#host.nativeElement.contains(document.activeElement);
+        this.close();
+        // The panel is removed, so focus would fall to <body>: return it to the trigger.
+        if (hadFocus) (this.nativeTrigger() ?? this.triggerRef().nativeElement).focus();
+      },
+      computed(() => this.open() && this.closeOnEscape()),
+    );
 
     setupClickOutside(() => {
       if (!this.open() || !this.closeOnBackdrop()) return;
