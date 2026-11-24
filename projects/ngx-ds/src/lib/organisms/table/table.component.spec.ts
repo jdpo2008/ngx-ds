@@ -2,6 +2,7 @@ import { Component, TemplateRef, computed, signal, viewChild } from '@angular/co
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TableAction, TableColumn, TableComponent } from './table.component';
+import { NGX_DS_LABELS, NGX_DS_LABELS_EN } from '../../shared/labels';
 
 interface Row {
   id: number;
@@ -571,5 +572,162 @@ describe('TableComponent keyboard and ARIA', () => {
     ]);
     expect(space.defaultPrevented).toBe(true);
     expect(name.getAttribute('aria-sort')).toBe('descending');
+  });
+
+  const key = (target: HTMLElement, k: string) => {
+    const event = new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true });
+    target.dispatchEvent(event);
+    return event;
+  };
+  const bodyRows = (el: HTMLElement) =>
+    Array.from(el.querySelectorAll<HTMLElement>('tbody tr.ngx-table__row'));
+
+  it('clickable rows are focusable and activate with Enter and Space', () => {
+    const { cmp, el } = render({ rowClickable: true });
+    const clicks: Row[] = [];
+    cmp.rowClick.subscribe((r) => clicks.push(r));
+    const rows = bodyRows(el);
+    expect(rows.map((r) => r.tabIndex)).toEqual([0, 0, 0]);
+    key(rows[0], 'Enter');
+    const space = key(rows[2], ' ');
+    key(rows[1], 'a');
+    expect(clicks).toEqual([ROWS[0], ROWS[2]]);
+    expect(space.defaultPrevented).toBe(true);
+  });
+
+  it('ignores row keys that come from controls inside the row', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { cmp, el } = render({ rowClickable: true, selectable: true, actions });
+    const clicks: Row[] = [];
+    cmp.rowClick.subscribe((r) => clicks.push(r));
+    key(el.querySelector<HTMLInputElement>('tbody input[type="checkbox"]')!, 'Enter');
+    key(el.querySelector<HTMLButtonElement>('.ngx-table__action-menu button')!, ' ');
+    expect(clicks).toEqual([]);
+  });
+
+  it('leaves rows that are not clickable out of the tab order', () => {
+    const { cmp, el } = render();
+    const clicks: Row[] = [];
+    cmp.rowClick.subscribe((r) => clicks.push(r));
+    const rows = bodyRows(el);
+    expect(rows.some((r) => r.hasAttribute('tabindex'))).toBe(false);
+    key(rows[0], 'Enter');
+    expect(clicks).toEqual([]);
+  });
+
+  it('gives each row control a label with its row number, across pages', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { fixture, el } = render({
+      actions,
+      selectable: true,
+      expandable: true,
+      clientSide: true,
+      paginated: true,
+      pageSize: 2,
+    });
+    const labels = (selector: string) =>
+      Array.from(el.querySelectorAll(selector)).map((n) => n.getAttribute('aria-label'));
+    expect(labels('.ngx-table__td--expand button')).toEqual(['Expandir fila 1', 'Expandir fila 2']);
+    expect(labels('tbody input[type="checkbox"]')).toEqual([
+      'Seleccionar fila 1',
+      'Seleccionar fila 2',
+    ]);
+    expect(labels('.ngx-table__action-menu button')).toEqual([
+      'Acciones de la fila 1',
+      'Acciones de la fila 2',
+    ]);
+    fixture.componentInstance.onPageChange(2);
+    fixture.detectChanges();
+    expect(labels('tbody input[type="checkbox"]')).toEqual(['Seleccionar fila 3']);
+  });
+
+  it('keeps consumer label overrides, adding the row number', () => {
+    TestBed.overrideProvider(NGX_DS_LABELS, {
+      useValue: { ...NGX_DS_LABELS_EN, selectRow: 'Pick' },
+    });
+    const { el } = render({ selectable: true, selectMode: 'single' });
+    const radios = Array.from(el.querySelectorAll('.ngx-table__radio'));
+    expect(radios.map((r) => r.getAttribute('aria-label'))).toEqual(['Pick 1', 'Pick 2', 'Pick 3']);
+  });
+
+  it('the radio of the selected row keeps the selection', () => {
+    const { fixture, cmp, el } = render({ selectable: true, selectMode: 'single' });
+    const radio = () => el.querySelectorAll<HTMLButtonElement>('.ngx-table__radio')[1];
+    radio().click();
+    fixture.detectChanges();
+    radio().click();
+    fixture.detectChanges();
+    expect(cmp.selectedRows()).toEqual([ROWS[1]]);
+    expect(radio().getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('the row action button exposes popup semantics and the panel it controls', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { fixture, el } = render({ actions });
+    const toggle = el.querySelectorAll<HTMLButtonElement>('.ngx-table__action-menu button')[1];
+    expect(toggle.getAttribute('aria-haspopup')).toBe('true');
+    expect(toggle.hasAttribute('aria-controls')).toBe(false);
+    toggle.click();
+    fixture.detectChanges();
+    const panel = el.querySelector<HTMLElement>('.ngx-table__action-panel')!;
+    expect(panel.id).toBeTruthy();
+    expect(toggle.getAttribute('aria-controls')).toBe(panel.id);
+    expect(panel.getAttribute('role')).toBe('group');
+  });
+
+  it('moves focus into the row action menu when it opens, skipping disabled actions', () => {
+    const actions: TableAction<Row>[] = [
+      { label: 'Delete', disabled: () => true, onClick: () => undefined },
+      { label: 'Edit', onClick: () => undefined },
+    ];
+    const { fixture, el } = render({ actions });
+    const toggle = el.querySelectorAll<HTMLButtonElement>('.ngx-table__action-menu button')[0];
+    toggle.focus();
+    toggle.click();
+    fixture.detectChanges();
+    expect(document.activeElement!.textContent!.trim()).toBe('Edit');
+    toggle.click();
+    fixture.detectChanges();
+    expect(el.querySelector('.ngx-table__action-panel')).toBeNull();
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('returns focus to the row action button when an action runs', () => {
+    let focusedDuringAction: Element | null = null;
+    const actions: TableAction<Row>[] = [
+      { label: 'Edit', onClick: () => (focusedDuringAction = document.activeElement) },
+    ];
+    const { fixture, el } = render({ actions });
+    const toggle = el.querySelectorAll<HTMLButtonElement>('.ngx-table__action-menu button')[2];
+    toggle.click();
+    fixture.detectChanges();
+    el.querySelector<HTMLButtonElement>('.ngx-table__action-panel button')!.click();
+    fixture.detectChanges();
+    expect(el.querySelector('.ngx-table__action-panel')).toBeNull();
+    expect(focusedDuringAction).toBe(toggle);
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('marks the table busy while loading and announces the page range', () => {
+    const { fixture, el } = render({ loading: true, paginated: true });
+    const table = el.querySelector('table')!;
+    expect(table.getAttribute('aria-busy')).toBe('true');
+    fixture.componentRef.setInput('loading', false);
+    fixture.detectChanges();
+    expect(table.hasAttribute('aria-busy')).toBe(false);
+    expect(el.querySelector('.ngx-table__page-info')!.getAttribute('aria-live')).toBe('polite');
+  });
+
+  it('names the actions header with actionsLabel, keeping the visible dots', () => {
+    const actions: TableAction<Row>[] = [{ label: 'Edit', onClick: () => undefined }];
+    const { fixture, el } = render({ actions });
+    const th = () => el.querySelector('.ngx-table__th--actions')!;
+    expect(th().querySelector('.ngx-table__sr-only')!.textContent!.trim()).toBe(
+      'Acciones de la fila',
+    );
+    expect(th().querySelector('[aria-hidden="true"]')!.textContent).toBe('...');
+    fixture.componentRef.setInput('actionsLabel', 'Opciones');
+    fixture.detectChanges();
+    expect(th().querySelector('.ngx-table__sr-only')!.textContent!.trim()).toBe('Opciones');
   });
 });

@@ -4,6 +4,8 @@
   [disabled]="disabled() || null"
   [attr.aria-label]="ariaLabel()"
   [attr.aria-expanded]="ariaExpanded() ?? null"
+  [attr.aria-haspopup]="ariaHaspopup() ?? null"
+  [attr.aria-controls]="ariaControls() ?? null"
 >
   <ngx-ds-icon [icon]="icon()" [size]="iconSize()" aria-hidden="true" />
 </button>

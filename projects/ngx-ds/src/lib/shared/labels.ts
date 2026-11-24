@@ -110,6 +110,7 @@ export interface NgxDsLabels {
   tableEmptyDescription: string;
   tableAdd: string;
   visibleColumns: string;
+  /** Row controls: the table appends the row number ("Select row 3"). */
   expandRow: string;
   selectRow: string;
   rowActions: string;
@@ -264,7 +265,7 @@ export const NGX_DS_LABELS_ES: NgxDsLabels = {
   visibleColumns: 'Columnas visibles',
   expandRow: 'Expandir fila',
   selectRow: 'Seleccionar fila',
-  rowActions: 'Acciones',
+  rowActions: 'Acciones de la fila',
 
   mainNavigation: 'Navegación principal',
   expandMenu: 'Expandir menú',
@@ -408,7 +409,7 @@ export const NGX_DS_LABELS_EN: NgxDsLabels = {
   visibleColumns: 'Visible columns',
   expandRow: 'Expand row',
   selectRow: 'Select row',
-  rowActions: 'Actions',
+  rowActions: 'Row actions',
 
   mainNavigation: 'Main navigation',
   expandMenu: 'Expand menu',

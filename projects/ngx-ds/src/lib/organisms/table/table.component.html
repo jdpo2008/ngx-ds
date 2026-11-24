@@ -66,6 +66,7 @@
     [class.ngx-table--striped]="striped()"
     [class.ngx-table--hoverable]="hoverable()"
     [class.ngx-table--dense]="dense()"
+    [attr.aria-busy]="loading() || null"
   >
     <!-- ── HEAD ─────────────────────────────────────────────────────── -->
     <thead class="ngx-table__head">
@@ -127,7 +128,10 @@
         }
 
         @if (hasActions()) {
-          <th class="ngx-table__th ngx-table__th--actions">...</th>
+          <th class="ngx-table__th ngx-table__th--actions">
+            <span aria-hidden="true">...</span>
+            <span class="ngx-table__sr-only">{{ actionsLabel() || i18n.rowActions }}</span>
+          </th>
         }
       </tr>
     </thead>
@@ -172,13 +176,15 @@
           </td>
         </tr>
       } @else {
-        @for (row of processedData(); track rowTrack(row, $index)) {
+        @for (row of processedData(); track rowTrack(row, $index); let i = $index) {
           <tr
             class="ngx-table__row"
-            [class.ngx-table__row--odd]="$index % 2 === 1"
+            [class.ngx-table__row--odd]="i % 2 === 1"
             [class.ngx-table__row--selected]="isSelected(row)"
             [class.ngx-table__row--clickable]="selectable() || rowClickable()"
+            [attr.tabindex]="rowClickable() ? 0 : null"
             (click)="onRowClick(row)"
+            (keydown)="onRowKeydown($event, row)"
           >
             @if (expandable()) {
               <td class="ngx-table__td ngx-table__td--expand" (click)="$event.stopPropagation()">
@@ -188,7 +194,7 @@
                 >
                   <ngx-ds-icon-button
                     [icon]="icons.ChevronRight"
-                    [ariaLabel]="i18n.expandRow"
+                    [ariaLabel]="rowLabel(i18n.expandRow, i)"
                     variant="outline"
                     color="secondary"
                     size="sm"
@@ -205,7 +211,7 @@
                 @if (selectMode() === 'multi') {
                   <ngx-ds-checkbox
                     [checked]="isSelected(row)"
-                    [ariaLabel]="i18n.selectRow"
+                    [ariaLabel]="rowLabel(i18n.selectRow, i)"
                     (checkedChange)="toggleRow(row)"
                   />
                 } @else {
@@ -213,10 +219,10 @@
                     type="button"
                     class="ngx-table__radio"
                     role="radio"
-                    [attr.aria-label]="i18n.selectRow"
+                    [attr.aria-label]="rowLabel(i18n.selectRow, i)"
                     [attr.aria-checked]="isSelected(row)"
                     [class.ngx-table__radio--selected]="isSelected(row)"
-                    (click)="toggleRow(row)"
+                    (click)="selectOnly(row)"
                   ></button>
                 }
               </td>
@@ -267,8 +273,10 @@
                 >
                   <ngx-ds-icon-button
                     [icon]="icons.MoreVertical"
-                    [ariaLabel]="i18n.rowActions"
+                    [ariaLabel]="rowLabel(i18n.rowActions, i)"
                     [ariaExpanded]="isMenuOpen(row)"
+                    ariaHaspopup="true"
+                    [ariaControls]="isMenuOpen(row) ? menuPanelId(i) : null"
                     variant="outline"
                     color="secondary"
                     size="sm"
@@ -277,7 +285,12 @@
                   />
 
                   @if (isMenuOpen(row)) {
-                    <div class="ngx-table__action-panel">
+                    <div
+                      class="ngx-table__action-panel"
+                      role="group"
+                      [id]="menuPanelId(i)"
+                      [attr.aria-label]="rowLabel(i18n.rowActions, i)"
+                    >
                       @for (action of actions(); track action.label) {
                         @if (isActionVisible(action, row)) {
                           <ngx-ds-menu-button
@@ -335,7 +348,7 @@
       </select>
     </div>
 
-    <span class="ngx-table__page-info">
+    <span class="ngx-table__page-info" aria-live="polite">
       @if (totalItems() > 0) {
         {{ i18n.pageRange(pageStart(), pageEnd(), totalItems()) }}
       } @else {

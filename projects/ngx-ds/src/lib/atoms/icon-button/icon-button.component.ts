@@ -25,6 +25,10 @@ export class IconButtonComponent {
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   /** Sets `aria-expanded` on the button when it toggles a region. */
   readonly ariaExpanded = input<boolean | undefined>(undefined);
+  /** Sets `aria-haspopup` on the button when it opens a popup. */
+  readonly ariaHaspopup = input<'true' | 'menu' | 'listbox' | 'dialog' | undefined>(undefined);
+  /** Sets `aria-controls` on the button: the id of the region it toggles. */
+  readonly ariaControls = input<string | null | undefined>(undefined);
 
   readonly hostClasses = computed(() => {
     const classes = [
