@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;

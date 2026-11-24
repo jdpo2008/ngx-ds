@@ -1,6 +1,10 @@
 @use 'sass:list';
 @use 'sass:map';
 
+:host {
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
 $avatar-colors: (
   'neutral': (
     var(--surface-active, #e5e7eb),

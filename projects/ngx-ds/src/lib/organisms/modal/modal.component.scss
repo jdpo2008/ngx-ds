@@ -1,3 +1,7 @@
+:host {
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
+}
+
 // ── Overlay ────────────────────────────────────────────────────────────────
 
 .modal-overlay {
