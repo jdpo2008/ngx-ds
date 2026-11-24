@@ -31,6 +31,10 @@ $progress-sizes: (
   }
 }
 
+:host {
+  display: block;
+}
+
 .progress {
   width: 100%;
   background-color: var(--surface-active, #e5e7eb);

@@ -28,6 +28,10 @@ $alert-types: (
   ),
 );
 
+:host {
+  display: block;
+}
+
 .alert {
   display: flex;
   align-items: flex-start;
