@@ -150,8 +150,22 @@ export class MaskedInputComponent implements ControlValueAccessor, Validator {
     const mask = this.mask();
     const caret = el.selectionStart ?? el.value.length;
 
-    const result = applyMask(extractRaw(el.value, mask), mask);
-    const before = applyMask(extractRaw(el.value.slice(0, caret), mask), mask).raw.length;
+    let raw = applyMask(extractRaw(el.value, mask), mask).raw;
+    let before = applyMask(extractRaw(el.value.slice(0, caret), mask), mask).raw.length;
+
+    // Backspace or Delete next to a literal only removes the literal, which the mask puts
+    // back: remove the character on the other side of it instead.
+    const inputType = (event as InputEvent).inputType;
+    if (raw === this.#result().raw) {
+      if (inputType === 'deleteContentBackward' && before > 0) {
+        raw = raw.slice(0, before - 1) + raw.slice(before);
+        before--;
+      } else if (inputType === 'deleteContentForward' && before < raw.length) {
+        raw = raw.slice(0, before) + raw.slice(before + 1);
+      }
+    }
+
+    const result = applyMask(raw, mask);
 
     // Write the formatted text now: when it is unchanged (a rejected key) the binding won't.
     el.value = result.masked;

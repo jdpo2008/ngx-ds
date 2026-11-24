@@ -147,3 +147,95 @@ describe('MaskedInputComponent with a number written by a form', () => {
     expect(native.value).toBe('(555) 123-4');
   });
 });
+
+describe('MaskedInputComponent editing and states', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(MaskedInputComponent);
+    fixture.componentRef.setInput('mask', PHONE);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const native = () => el.querySelector<HTMLInputElement>('input')!;
+    /** Simulates the browser removing one character next to `caret`. */
+    const del = (caret: number, inputType: 'deleteContentBackward' | 'deleteContentForward') => {
+      const text = native().value;
+      const at = inputType === 'deleteContentBackward' ? caret - 1 : caret;
+      native().value = text.slice(0, at) + text.slice(at + 1);
+      native().setSelectionRange(at, at);
+      native().dispatchEvent(new InputEvent('input', { inputType }));
+      fixture.detectChanges();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, native, del };
+  }
+
+  it('Delete in front of a literal removes the next digit', () => {
+    const { cmp, native, del, fixture } = setup();
+    cmp.writeValue('555123');
+    fixture.detectChanges();
+    expect(native().value).toBe('(555) 123');
+    del(4, 'deleteContentForward');
+    expect(cmp.value()).toBe('55523');
+    expect(native().value).toBe('(555) 23');
+    expect(native().selectionStart).toBe(4);
+  });
+
+  it('Backspace after a literal removes the previous digit', () => {
+    const { cmp, native, del, fixture } = setup();
+    cmp.writeValue('555123');
+    fixture.detectChanges();
+    del(6, 'deleteContentBackward');
+    expect(cmp.value()).toBe('55123');
+    expect(native().value).toBe('(551) 23');
+    expect(native().selectionStart).toBe(3);
+  });
+
+  it('Backspace on a digit still removes just that digit', () => {
+    const { cmp, native, del, fixture } = setup();
+    cmp.writeValue('555123');
+    fixture.detectChanges();
+    del(9, 'deleteContentBackward');
+    expect(cmp.value()).toBe('55512');
+    expect(native().value).toBe('(555) 12');
+  });
+
+  it('floating label moves up on focus and with a value', () => {
+    const { el, native, fixture } = setup({ label: 'Teléfono', floatingLabel: true });
+    const label = () => el.querySelector('label')!;
+    expect(label().className).toContain('ngx-input__float-label');
+    expect(label().className).not.toContain('--active');
+    expect(native().placeholder).toBe('');
+    native().dispatchEvent(new Event('focus'));
+    fixture.detectChanges();
+    expect(label().className).toContain('--active');
+    expect(native().placeholder).toBe('(___) ___-____');
+  });
+
+  it('links the hint or the error to the field', () => {
+    const { el, native, fixture } = setup({ hint: 'Con prefijo' });
+    const id = native().getAttribute('aria-describedby')!;
+    expect(el.querySelector(`#${id}`)!.textContent).toContain('Con prefijo');
+    fixture.componentRef.setInput('errorMessage', 'Número incompleto');
+    fixture.detectChanges();
+    expect(native().getAttribute('aria-invalid')).toBe('true');
+    expect(el.querySelector('[role="alert"]')!.textContent).toContain('Número incompleto');
+  });
+
+  it('marks touched on blur and disables with the form', () => {
+    const { cmp, native, fixture } = setup();
+    const touched = vi.fn();
+    cmp.registerOnTouched(touched);
+    native().dispatchEvent(new Event('focus'));
+    native().dispatchEvent(new Event('blur'));
+    expect(touched).toHaveBeenCalledTimes(1);
+    cmp.setDisabledState(true);
+    fixture.detectChanges();
+    expect(native().disabled).toBe(true);
+  });
+
+  it('uses a text keyboard when the mask has letters', () => {
+    const { native, fixture } = setup();
+    fixture.componentRef.setInput('mask', 'AAA-999');
+    fixture.detectChanges();
+    expect(native().getAttribute('inputmode')).toBe('text');
+  });
+});
