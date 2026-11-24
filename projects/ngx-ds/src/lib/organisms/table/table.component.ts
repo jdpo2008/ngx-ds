@@ -1,8 +1,10 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
+  Injector,
   linkedSignal,
   inject,
   input,
@@ -97,6 +99,8 @@ export interface TablePageEvent {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
+let nextId = 0;
+
 @Component({
   selector: 'ngx-ds-table',
   standalone: true,
@@ -135,6 +139,8 @@ export class TableComponent<T extends object = Record<string, unknown>> {
   readonly #openMenuId = signal<unknown>(null);
   readonly #columnMenuOpen = signal(false);
   readonly #host = inject<ElementRef<HTMLElement>>(ElementRef);
+  readonly #injector = inject(Injector);
+  readonly #id = `ngx-table-${nextId++}`;
 
   constructor() {
     setupClickOutside(() => {
@@ -397,6 +403,11 @@ export class TableComponent<T extends object = Record<string, unknown>> {
     }
   }
 
+  /** Single select radio: selects the row and never clears the selection, like a native radio. */
+  selectOnly(row: T): void {
+    if (!this.isSelected(row)) this.toggleRow(row);
+  }
+
   // ── Sort ─────────────────────────────────────────────────────────────────
   onSort(col: TableColumn<T>): void {
     if (!col.sortable) return;
@@ -474,6 +485,25 @@ export class TableComponent<T extends object = Record<string, unknown>> {
     if (this.selectable() && this.selectMode() === 'single') {
       this.toggleRow(row);
     }
+  }
+
+  /** Enter and Space activate a focused clickable row. Keys from controls inside the row are ignored. */
+  onRowKeydown(event: KeyboardEvent, row: T): void {
+    if (!this.rowClickable() || event.target !== event.currentTarget) return;
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    this.onRowClick(row);
+  }
+
+  /** 1-based position of a rendered row across pages. */
+  rowNumber(index: number): number {
+    const offset = this.paginated() ? (this.effectivePage() - 1) * this.effectivePageSize() : 0;
+    return offset + index + 1;
+  }
+
+  /** Accessible name of a row control, with the row number so rows can be told apart. */
+  rowLabel(label: string, index: number): string {
+    return `${label} ${this.rowNumber(index)}`;
   }
 
   rowTrack(row: T, index: number): unknown {
@@ -558,11 +588,39 @@ export class TableComponent<T extends object = Record<string, unknown>> {
     return this.#openMenuId() === this.#rowMenuId(row);
   }
 
+  /** Id of the action panel of the row at `index`, for `aria-controls`. */
+  menuPanelId(index: number): string {
+    return `${this.#id}-actions-${index}`;
+  }
+
   toggleMenu(row: T, event: Event): void {
     event.stopPropagation();
     this.#columnMenuOpen.set(false);
     const id = this.#rowMenuId(row);
-    this.#openMenuId.set(this.#openMenuId() === id ? null : id);
+    if (this.#openMenuId() === id) {
+      // Closing from the button: keep focus on it, not on a removed menu item.
+      this.#openMenuId.set(null);
+      this.#menuTrigger(event)?.focus();
+      return;
+    }
+    this.#openMenuId.set(id);
+    // Move focus to the first enabled action once the panel is rendered.
+    afterNextRender(
+      () =>
+        this.#host.nativeElement
+          .querySelector<HTMLElement>(
+            '.ngx-table__action-menu--open .ngx-table__action-panel button:not([disabled])',
+          )
+          ?.focus(),
+      { injector: this.#injector },
+    );
+  }
+
+  /** The row action button of the menu that `event` came from. */
+  #menuTrigger(event: Event): HTMLElement | null | undefined {
+    return (event.target as Element | null)
+      ?.closest?.('.ngx-table__action-menu')
+      ?.querySelector<HTMLElement>(':scope > ngx-ds-icon-button button');
   }
 
   isActionVisible(action: TableAction<T>, row: T): boolean {
@@ -576,7 +634,11 @@ export class TableComponent<T extends object = Record<string, unknown>> {
   onActionClick(action: TableAction<T>, row: T, event: Event): void {
     event.stopPropagation();
     if (!this.isActionDisabled(action, row)) {
+      // Return focus to the menu's button before the action runs, so an action
+      // that opens a dialog can still move focus on its own.
+      const trigger = this.#menuTrigger(event);
       this.#openMenuId.set(null);
+      trigger?.focus();
       action.onClick(row, event);
     }
   }
