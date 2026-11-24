@@ -1,7 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ModalComponent } from './modal.component';
 import { DrawerComponent } from '../drawer/drawer.component';
+import { PopoverComponent } from '../popover/popover.component';
+import { TableComponent } from '../table/table.component';
+import { DatepickerComponent } from '../../molecules/datepicker/datepicker.component';
+import { SelectComponent } from '../../molecules/select/select.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 describe('ModalComponent', () => {
@@ -62,6 +66,42 @@ describe('ModalComponent', () => {
 class StackHost {
   drawerOpen = signal(false);
   modalOpen = signal(false);
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    ModalComponent,
+    DrawerComponent,
+    DatepickerComponent,
+    PopoverComponent,
+    SelectComponent,
+    TableComponent,
+  ],
+  template: `
+    <ngx-ds-modal [(open)]="modalOpen" title="Editar">
+      <ngx-ds-datepicker />
+      <ngx-ds-popover [(open)]="popoverOpen">
+        <button popover-trigger type="button">Más</button>
+        <div popover-content>
+          <ngx-ds-select [options]="options" />
+        </div>
+      </ngx-ds-popover>
+    </ngx-ds-modal>
+    <ngx-ds-drawer [(open)]="drawerOpen" title="Filtros">
+      <ngx-ds-table [columns]="columns" [columnToggle]="true" />
+    </ngx-ds-drawer>
+  `,
+})
+class PanelHost {
+  modalOpen = signal(true);
+  popoverOpen = signal(false);
+  drawerOpen = signal(false);
+  options = [{ value: 'a', label: 'A' }];
+  columns = [{ key: 'name', label: 'Nombre' }];
+  readonly datepicker = viewChild.required(DatepickerComponent);
+  readonly select = viewChild.required(SelectComponent);
+  readonly table = viewChild.required(TableComponent);
 }
 
 describe('ModalComponent behaviour', () => {
@@ -146,6 +186,77 @@ describe('ModalComponent behaviour', () => {
       expect(host.modalOpen()).toBe(false);
       expect(host.drawerOpen()).toBe(true);
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      render();
+      expect(host.drawerOpen()).toBe(false);
+    });
+  });
+
+  describe('with a panel open inside', () => {
+    function panels() {
+      const fixture = TestBed.createComponent(PanelHost);
+      const host = fixture.componentInstance;
+      const render = () => fixture.detectChanges();
+      render();
+      return { host, render };
+    }
+
+    const escape = () =>
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    it('the first Escape closes the open datepicker, the next one the modal', () => {
+      const { host, render } = panels();
+      host.datepicker().togglePanel();
+      render();
+      expect(host.datepicker().isOpen()).toBe(true);
+
+      escape();
+      render();
+      expect(host.datepicker().isOpen()).toBe(false);
+      expect(host.modalOpen()).toBe(true);
+
+      escape();
+      render();
+      expect(host.modalOpen()).toBe(false);
+    });
+
+    it('a select inside a popover inside the modal closes one Escape at a time', () => {
+      const { host, render } = panels();
+      host.popoverOpen.set(true);
+      render();
+      host.select().togglePanel();
+      render();
+
+      escape();
+      render();
+      expect(host.select().isOpen()).toBe(false);
+      expect(host.popoverOpen()).toBe(true);
+      expect(host.modalOpen()).toBe(true);
+
+      escape();
+      render();
+      expect(host.popoverOpen()).toBe(false);
+      expect(host.modalOpen()).toBe(true);
+
+      escape();
+      render();
+      expect(host.modalOpen()).toBe(false);
+    });
+
+    it("the table's column menu inside a drawer takes the first Escape", () => {
+      const { host, render } = panels();
+      host.modalOpen.set(false);
+      host.drawerOpen.set(true);
+      render();
+      host.table().toggleColumnMenu(new Event('click'));
+      render();
+      expect(host.table().isColumnMenuOpen()).toBe(true);
+
+      escape();
+      render();
+      expect(host.table().isColumnMenuOpen()).toBe(false);
+      expect(host.drawerOpen()).toBe(true);
+
+      escape();
       render();
       expect(host.drawerOpen()).toBe(false);
     });

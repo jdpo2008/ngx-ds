@@ -13,6 +13,7 @@ import { IconComponent } from '../../atoms/icon/icon.component';
 import { KbdComponent } from '../../atoms/kbd/kbd.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { NGX_DS_LABELS } from '../../shared/labels';
+import { setupEscapeLayer } from '../../shared/overlay-stack';
 
 export interface CommandItem {
   id: string | number;
@@ -49,6 +50,11 @@ export class CommandPaletteComponent {
 
   readonly #query = signal('');
   readonly #cursor = signal(0);
+
+  constructor() {
+    // While open, the palette takes Escape before a modal or drawer it was opened over.
+    setupEscapeLayer(this.open);
+  }
 
   readonly query = this.#query.asReadonly();
 
