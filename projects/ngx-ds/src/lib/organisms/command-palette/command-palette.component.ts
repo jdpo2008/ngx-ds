@@ -111,7 +111,7 @@ export class CommandPaletteComponent {
   /** Text of the polite live region: the result count, or the empty message. */
   readonly resultsAnnouncement = computed(() => {
     const count = this.filteredItems().length;
-    if (count > 0) return this.i18n.commandResults(count);
+    if (count > 0) return this.i18n.commandResults?.(count) ?? String(count);
     const q = this.#query().trim();
     return q ? this.i18n.noResultsFor(q) : this.i18n.noResults;
   });

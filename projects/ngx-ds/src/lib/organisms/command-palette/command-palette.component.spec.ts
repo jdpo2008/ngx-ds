@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { NGX_DS_LABELS, NGX_DS_LABELS_ES, NgxDsLabels } from '../../shared/labels';
 import { CommandItem, CommandPaletteComponent } from './command-palette.component';
 
 function press(key: string, init: KeyboardEventInit = {}): void {
@@ -196,6 +197,14 @@ describe('CommandPaletteComponent', () => {
       expect(status().textContent?.trim()).toBe('1 resultado');
       search('zzz');
       expect(status().textContent?.trim()).toBe('Sin resultados para "zzz"');
+    });
+
+    it('announces the bare count when the labels lack commandResults', () => {
+      const labels: NgxDsLabels = { ...NGX_DS_LABELS_ES };
+      delete labels.commandResults;
+      TestBed.configureTestingModule({ providers: [{ provide: NGX_DS_LABELS, useValue: labels }] });
+      const { el } = openWith();
+      expect(el.querySelector('[role="status"]')!.textContent?.trim()).toBe('4');
     });
 
     it('reflects whether results show in aria-expanded, with the empty message outside the listbox', () => {

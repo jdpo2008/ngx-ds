@@ -125,7 +125,8 @@ export interface NgxDsLabels {
   commandPalette: string;
   commandPlaceholder: string;
   noResultsFor: (query: string) => string;
-  commandResults: (n: number) => string;
+  /** Optional, so label objects written before it was added still compile. Without it, only the number is announced. */
+  commandResults?: (n: number) => string;
   hintNavigate: string;
   hintSelect: string;
   hintClose: string;
