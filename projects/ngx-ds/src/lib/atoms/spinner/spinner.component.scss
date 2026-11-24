@@ -1,5 +1,6 @@
 :host {
   display: inline-flex;
+  font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif);
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
