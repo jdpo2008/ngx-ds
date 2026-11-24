@@ -15,6 +15,7 @@
 //   --filter <text>         only stories whose id contains <text>
 //   --update                write the screenshots as the new baselines
 //   --max-diff-ratio <n>    share of pixels allowed to differ (default: 0.0001)
+//   --threshold <n>         how different a pixel's colour must be to count, 0–1 (default: 0)
 //
 // A story opts out with the `skip-visual` tag: `tags: ['skip-visual']`.
 // Exits with code 1 when a screenshot differs from its baseline or has none.
@@ -36,6 +37,7 @@ const { values: args } = parseArgs({
     filter: { type: 'string', default: '' },
     update: { type: 'boolean', default: false },
     'max-diff-ratio': { type: 'string', default: '0.0001' },
+    threshold: { type: 'string', default: '0' },
   },
 });
 
@@ -43,6 +45,7 @@ const THEMES = args.themes.split(',').filter(Boolean);
 const BASELINES = resolve(args.baselines);
 const OUT = resolve(args.out);
 const MAX_DIFF_RATIO = Number(args['max-diff-ratio']);
+const THRESHOLD = Number(args.threshold);
 const CONCURRENCY = 4;
 const CONTEXT_OPTIONS = {
   viewport: { width: 1024, height: 768 },
@@ -119,7 +122,7 @@ function compare(expected, actual) {
     diff.data,
     expected.width,
     expected.height,
-    { threshold: 0.1 },
+    { threshold: THRESHOLD },
   );
   return { diffPixels, diff };
 }
