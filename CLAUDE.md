@@ -124,7 +124,7 @@ All components use `ChangeDetectionStrategy.OnPush` and are `standalone: true`.
 
 ### SCSS conventions
 
-- Each component's `:host` sets `display` and `font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif)`.
+- Each component's `:host` sets `display` and `font-family: var(--ngx-primary-font-family, 'Poppins', sans-serif)`. A few (Button, Badge, Tag, Alert, Toast, …) set the font on their root element instead: it must go there when that element is a `<button>`, which doesn't inherit the font. `src/font-family.spec.ts` fails if a public component declares the library font in neither place; wrappers of projected content (Icon, Step, Tab) are exempt there.
 - Class names use short BEM blocks scoped to the component (`btn__icon`, `nc__panel`, `um__trigger`).
 - Colors and surfaces use short CSS custom properties with fallbacks: `var(--text-base, #111827)`, `var(--surface-hover, #f3f4f6)`, `var(--primary-600, #4f46e5)`, `var(--border-base, #e5e7eb)`. Tokens live in `styles/_tokens.scss` (dark overrides in `_themes.scss`). The old aliases (`--color-*`, `--border-color`, `--text-primary`, `--surface-secondary`, `--ngx-color-*`) were removed in 0.7.0; do not reintroduce them.
 
