@@ -1,6 +1,8 @@
 <!-- Static label -->
 @if (!floatingLabel() && label()) {
-  <label [for]="id" class="ngx-datepicker__label">{{ label() }}</label>
+  <!-- `for` can't reach the div trigger: it is named with aria-labelledby,
+       and onLabelClick() focuses it. -->
+  <label [for]="id" [id]="id + '-label'" class="ngx-datepicker__label">{{ label() }}</label>
 }
 
 <!-- Field trigger. The clear button is a sibling: a button inside
@@ -12,6 +14,7 @@
     (click)="togglePanel()"
     (keydown)="onTriggerKeydown($event)"
     [attr.id]="id"
+    [attr.aria-labelledby]="label() ? id + '-label ' + id + '-value' : null"
     [attr.aria-invalid]="hasError() || null"
     [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     role="button"
@@ -21,7 +24,9 @@
   >
     <!-- Floating label -->
     @if (floatingLabel() && label()) {
-      <span [class]="floatLabelClasses()">{{ label() }}</span>
+      <!-- The space after it (whitespace in a flex box takes no room) separates label and value in the visible text,
+           so it matches the accessible name (axe label-content-name-mismatch). -->
+      <span [id]="id + '-label'" [class]="floatLabelClasses()">{{ label() }}</span>{{ ' ' }}
     }
 
     <!-- Calendar icon -->
@@ -30,7 +35,7 @@
     </span>
 
     <!-- Display value -->
-    <span class="ngx-datepicker__display">
+    <span [id]="id + '-value'" class="ngx-datepicker__display">
       @if (displayValue()) {
         <span class="ngx-datepicker__value">{{ displayValue() }}</span>
       } @else {

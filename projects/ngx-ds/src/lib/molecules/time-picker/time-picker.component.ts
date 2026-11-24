@@ -66,6 +66,7 @@ let nextId = 0;
   templateUrl: './time-picker.component.html',
   styleUrl: './time-picker.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '(click)': 'onLabelClick($event)' },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -223,6 +224,12 @@ export class TimePickerComponent implements ControlValueAccessor {
 
   private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
   private readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
+
+  /** A label's `for` can't focus the div trigger, so a click on the label does it here. */
+  protected onLabelClick(event: MouseEvent): void {
+    if (this.isDisabled() || !(event.target as Element).closest('.ngx-time-picker__label')) return;
+    this.triggerRef()?.nativeElement.focus();
+  }
 
   constructor() {
     setupEscapeClose(() => this.#closeOnEscape(), this.#open);

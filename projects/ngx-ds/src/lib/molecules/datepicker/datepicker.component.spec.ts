@@ -297,3 +297,49 @@ describe('DatepickerComponent mouse and state', () => {
     expect(touched).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('DatepickerComponent accessible name', () => {
+  function setup(inputs: Record<string, unknown>) {
+    const fixture = TestBed.createComponent(DatepickerComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    document.body.appendChild(fixture.nativeElement);
+    const el = fixture.nativeElement as HTMLElement;
+    const trigger = el.querySelector<HTMLElement>('[role="button"]')!;
+    /** The name a screen reader computes from aria-labelledby. */
+    const labelledName = () =>
+      (trigger.getAttribute('aria-labelledby') ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+        .join(' ');
+    return { fixture, el, trigger, labelledName };
+  }
+
+  afterEach(() => document.body.replaceChildren());
+
+  it('names the trigger with the static label and the shown text', () => {
+    const { fixture, el, trigger, labelledName } = setup({
+      label: 'Birth date',
+      placeholder: 'Pick one',
+    });
+    expect(labelledName()).toBe('Birth date Pick one');
+    fixture.componentInstance.writeValue(new Date(2026, 0, 15));
+    fixture.detectChanges();
+    expect(labelledName()).toMatch(/^Birth date \S/);
+    expect(labelledName()).not.toContain('Pick one');
+
+    el.querySelector<HTMLElement>('label')!.click();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('names the trigger with the floating label', () => {
+    const { labelledName } = setup({ label: 'Birth date', floatingLabel: true });
+    expect(labelledName()).toMatch(/^Birth date\b/);
+  });
+
+  it('leaves the name to the content when there is no label', () => {
+    const { trigger } = setup({ placeholder: 'Pick one' });
+    expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+  });
+});

@@ -46,6 +46,7 @@ let nextId = 0;
   templateUrl: './datepicker.component.html',
   styleUrl: './datepicker.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '(click)': 'onLabelClick($event)' },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -204,6 +205,12 @@ export class DatepickerComponent implements ControlValueAccessor {
   // ── Keyboard ───────────────────────────────────────────────
   private readonly triggerRef = viewChild<ElementRef<HTMLElement>>('trigger');
   private readonly gridRef = viewChild<ElementRef<HTMLElement>>('grid');
+
+  /** A label's `for` can't focus the div trigger, so a click on the label does it here. */
+  protected onLabelClick(event: MouseEvent): void {
+    if (this.isDisabled() || !(event.target as Element).closest('.ngx-datepicker__label')) return;
+    this.triggerRef()?.nativeElement.focus();
+  }
 
   /** True for the single day button reachable with Tab (roving tabindex). */
   isFocusTarget(cell: DayCell): boolean {
