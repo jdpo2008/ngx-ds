@@ -80,7 +80,7 @@ describe('DatepickerComponent keyboard navigation', () => {
   });
 
   it('disabled days stay reachable by keyboard but cannot be selected', async () => {
-    const { cmp, press, focusedLabel } = await setup({ maxDate: new Date(2026, 0, 15) });
+    const { cmp, press, focusedLabel } = await setup({ disabledDates: [new Date(2026, 0, 16)] });
     await press('ArrowRight');
     const day16 = document.activeElement as HTMLElement;
     expect(focusedLabel()).toBe(label(new Date(2026, 0, 16)));
@@ -88,6 +88,88 @@ describe('DatepickerComponent keyboard navigation', () => {
     day16.click();
     expect(cmp.value()?.getDate()).toBe(15);
     expect(cmp.isOpen()).toBe(true);
+  });
+
+  it('keyboard navigation stops at minDate and maxDate', async () => {
+    const { cmp, press, focusedLabel } = await setup({
+      minDate: new Date(2026, 0, 13),
+      maxDate: new Date(2026, 0, 20, 18, 30),
+    });
+    await press('ArrowRight');
+    await press('ArrowDown');
+    expect(focusedLabel()).toBe(label(new Date(2026, 0, 20)));
+    await press('PageDown');
+    expect(focusedLabel()).toBe(label(new Date(2026, 0, 20)));
+    expect(cmp.headerText()).toBe('Enero 2026');
+    await press('ArrowUp');
+    await press('PageUp', true);
+    expect(focusedLabel()).toBe(label(new Date(2026, 0, 13)));
+    expect(cmp.headerText()).toBe('Enero 2026');
+  });
+
+  it('Tab and Shift+Tab cycle inside the open panel', async () => {
+    const { el, focusedLabel } = await setup();
+    const panel = el.querySelector('[role="dialog"]') as HTMLElement;
+    const prev = panel.querySelector('[aria-label="Mes anterior"]') as HTMLElement;
+    const today = panel.querySelector('.ngx-datepicker__today-btn') as HTMLElement;
+    const tab = (shiftKey = false) => {
+      const event = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey,
+        bubbles: true,
+        cancelable: true,
+      });
+      (document.activeElement as HTMLElement).dispatchEvent(event);
+      return event;
+    };
+
+    // Middle of the panel: the browser moves focus, the trap stays out of the way.
+    expect(tab().defaultPrevented).toBe(false);
+    expect(focusedLabel()).toBe(label(new Date(2026, 0, 15)));
+
+    today.focus();
+    expect(tab().defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(prev);
+
+    expect(tab(true).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(today);
+  });
+
+  it('announces the month when the month buttons change it', async () => {
+    const { fixture, el } = await setup();
+    const title = el.querySelector('.ngx-datepicker__header-text') as HTMLElement;
+    expect(title.getAttribute('aria-live')).toBe('polite');
+    (el.querySelector('[aria-label="Mes siguiente"]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(title.textContent!.trim()).toBe('Febrero 2026');
+  });
+});
+
+describe('DatepickerComponent popup semantics', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(DatepickerComponent);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    fixture.componentInstance.togglePanel();
+    fixture.detectChanges();
+    return {
+      trigger: el.querySelector('[role="button"]') as HTMLElement,
+      dialog: el.querySelector('[role="dialog"]') as HTMLElement,
+    };
+  }
+
+  it('the trigger announces that it opens a dialog', () => {
+    const { trigger } = setup();
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('names the dialog after the field label', () => {
+    expect(setup().dialog.getAttribute('aria-label')).toBe('Calendario');
+    expect(setup({ label: 'Fecha de nacimiento' }).dialog.getAttribute('aria-label')).toBe(
+      'Fecha de nacimiento, Calendario',
+    );
   });
 });
 

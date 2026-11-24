@@ -35,6 +35,13 @@ export function addMonths(date: Date, n: number): Date {
   return target;
 }
 
+/** `date` clamped to the `[min, max]` days (either bound may be null). Compares whole days. */
+export function clampDate(date: Date, min: Date | null, max: Date | null): Date {
+  if (min && date < startOfDay(min)) return startOfDay(min);
+  if (max && date > startOfDay(max)) return startOfDay(max);
+  return date;
+}
+
 /** Splits a flat list of day cells into weeks of 7 (rows of the grid). */
 export function toWeeks<T>(cells: T[]): T[][] {
   const weeks: T[][] = [];

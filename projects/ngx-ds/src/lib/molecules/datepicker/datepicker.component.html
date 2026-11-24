@@ -19,6 +19,7 @@
     [attr.aria-describedby]="errorText() || hint() ? messageId : null"
     role="button"
     [attr.tabindex]="isDisabled() ? -1 : 0"
+    aria-haspopup="dialog"
     [attr.aria-expanded]="isOpen()"
     [attr.aria-disabled]="isDisabled()"
   >
@@ -58,7 +59,12 @@
 
 <!-- Calendar panel -->
 @if (isOpen()) {
-  <div class="ngx-datepicker__panel" role="dialog" [attr.aria-label]="i18n.calendar">
+  <div
+    class="ngx-datepicker__panel"
+    role="dialog"
+    [attr.aria-label]="panelLabel()"
+    (keydown)="onPanelKeydown($event)"
+  >
     <!-- Month navigation -->
     <div class="ngx-datepicker__header">
       <button
@@ -69,7 +75,7 @@
       >
         <ngx-ds-icon [icon]="ChevronLeft" [size]="16" />
       </button>
-      <span class="ngx-datepicker__header-text">{{ headerText() }}</span>
+      <span class="ngx-datepicker__header-text" aria-live="polite">{{ headerText() }}</span>
       <button
         type="button"
         class="ngx-datepicker__nav"
