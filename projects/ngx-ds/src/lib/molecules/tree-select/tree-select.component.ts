@@ -114,6 +114,7 @@ export class TreeSelectComponent implements ControlValueAccessor {
   readonly id = `ngx-tree-select-${nextId++}`;
   readonly panelId = `${this.id}-panel`;
   readonly messageId = `${this.id}-message`;
+  readonly searchId = `${this.id}-search`;
 
   protected readonly icons = { ChevronDown, ChevronRight, Check, Minus, X };
 
@@ -218,6 +219,21 @@ export class TreeSelectComponent implements ControlValueAccessor {
     return (rows.find((r) => selected.has(r.node.id)) ?? rows[0])?.node.id ?? null;
   });
 
+  /** What the combobox reads as its value: the selected labels, or the placeholder. */
+  readonly valueText = computed(() => {
+    const nodes = this.selectedNodes();
+    if (nodes.length === 0) return this.placeholder() ?? this.i18n.selectPlaceholder;
+    return nodes.map((n) => n.label).join(', ');
+  });
+
+  /** Live-region text while searching: how many nodes match, or "no results". */
+  readonly searchStatus = computed(() => {
+    const query = this.#search().trim().toLowerCase();
+    if (!query) return '';
+    const count = this.rows().filter((r) => r.node.label.toLowerCase().includes(query)).length;
+    return count ? this.i18n.resultsCount(count) : this.i18n.noResults;
+  });
+
   readonly hasError = computed(() =>
     fieldHasError(this.errorMessage(), this.errors(), this.touched()),
   );
@@ -248,7 +264,12 @@ export class TreeSelectComponent implements ControlValueAccessor {
     if (!this.multiple() || !this.cascade() || !node.children?.length) {
       return selected.has(node.id) ? 'checked' : 'unchecked';
     }
-    const leaves = this.#index().leavesOf.get(node.id) ?? [];
+    // Disabled leaves can't be toggled from the parent, so they only count when
+    // they are already selected. A parent whose enabled leaves are all checked
+    // is checked, matching what a click on it does (it unchecks them).
+    const leaves = (this.#index().leavesOf.get(node.id) ?? []).filter(
+      (l) => !l.disabled || selected.has(l.id),
+    );
     const count = leaves.filter((l) => selected.has(l.id)).length;
     if (count === 0) return 'unchecked';
     return count === leaves.length ? 'checked' : 'mixed';
@@ -267,7 +288,18 @@ export class TreeSelectComponent implements ControlValueAccessor {
   // ── Open / close ─────────────────────────────────────────────
   toggleOpen(): void {
     if (this.#open()) this.close(false);
-    else this.open();
+    else this.#openFromUser(false);
+  }
+
+  /** Opens from a click or key: focuses the search box when there is one, else the tree on request. */
+  #openFromUser(focusTree: boolean): void {
+    const searchable = this.searchable();
+    this.open(focusTree && !searchable);
+    if (searchable && this.isOpen()) {
+      afterNextRender(() => document.getElementById(this.searchId)?.focus(), {
+        injector: this.#injector,
+      });
+    }
   }
 
   open(focusTree = false): void {
@@ -371,10 +403,13 @@ export class TreeSelectComponent implements ControlValueAccessor {
   onTriggerKeydown(event: KeyboardEvent): void {
     // Ignore keys from nested controls (chip remove buttons).
     if (event.target !== event.currentTarget) return;
-    if (event.key === 'ArrowDown' || (isActivationKey(event) && !this.#open())) {
+    const opens =
+      event.key === 'ArrowDown' ||
+      ((event.key === 'ArrowUp' || isActivationKey(event)) && !this.#open());
+    if (opens) {
       event.preventDefault();
       if (this.#open()) this.#focusActiveAfterRender();
-      else this.open(true);
+      else this.#openFromUser(true);
     } else if (isActivationKey(event)) {
       event.preventDefault();
       this.close(false);
@@ -382,9 +417,14 @@ export class TreeSelectComponent implements ControlValueAccessor {
   }
 
   onSearchKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowDown') return;
-    event.preventDefault();
-    this.#focusActiveAfterRender();
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.#focusActiveAfterRender();
+    } else if (event.key === 'Tab' && (event.shiftKey || this.rows().length === 0)) {
+      // Back to the trigger, or past an empty tree: focus leaves the panel.
+      this.close(false);
+    }
+    // Plain Tab moves on to the tree's focusable row.
   }
 
   onRowKeydown(event: KeyboardEvent, row: TreeSelectRow, index: number): void {
@@ -416,16 +456,30 @@ export class TreeSelectComponent implements ControlValueAccessor {
         this.activate(row);
         break;
       case 'Tab':
-        this.close(false);
+        // Shift+Tab goes back to the search box, which stays open.
+        if (!(event.shiftKey && this.searchable())) this.close(false);
         return;
       default:
-        return;
+        target = this.#typeaheadTarget(event, index);
+        if (target === null) return;
     }
     event.preventDefault();
     if (target !== null && rows[target]) {
       this.#active.set(rows[target].node.id);
       this.#focusActiveAfterRender();
     }
+  }
+
+  /** A printable key moves to the next visible row whose label starts with it. */
+  #typeaheadTarget(event: KeyboardEvent, index: number): number | null {
+    if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey) return null;
+    const char = event.key.toLocaleLowerCase();
+    const rows = this.rows();
+    for (let step = 1; step <= rows.length; step++) {
+      const i = (index + step) % rows.length;
+      if (rows[i].node.label.trim().toLocaleLowerCase().startsWith(char)) return i;
+    }
+    return null;
   }
 
   #focusActiveAfterRender(): void {

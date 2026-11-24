@@ -3,31 +3,37 @@
 }
 
 <div class="ts">
-  <!-- Trigger -->
-  <div
-    #trigger
-    [class]="triggerClasses()"
-    [id]="id"
-    role="combobox"
-    aria-haspopup="tree"
-    [attr.aria-labelledby]="label() ? id + '-label' : null"
-    [attr.aria-label]="label() ? null : (placeholder() ?? i18n.selectPlaceholder)"
-    [attr.aria-expanded]="isOpen()"
-    [attr.aria-controls]="isOpen() ? panelId : null"
-    [attr.aria-disabled]="isDisabled() || null"
-    [attr.aria-invalid]="hasError() || null"
-    [attr.aria-describedby]="errorText() || hint() ? messageId : null"
-    [attr.tabindex]="isDisabled() ? -1 : 0"
-    (click)="toggleOpen()"
-    (keydown)="onTriggerKeydown($event)"
-  >
+  <!-- Trigger: a visual box. The combobox covers it and takes the clicks; the
+       chip remove buttons sit above it so they are not nested inside it. -->
+  <div [class]="triggerClasses()">
+    <div
+      #trigger
+      class="ts__combo"
+      [id]="id"
+      role="combobox"
+      aria-haspopup="tree"
+      [attr.aria-labelledby]="label() ? id + '-label' : null"
+      [attr.aria-label]="label() ? null : (placeholder() ?? i18n.selectPlaceholder)"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-controls]="isOpen() ? panelId : null"
+      [attr.aria-disabled]="isDisabled() || null"
+      [attr.aria-invalid]="hasError() || null"
+      [attr.aria-describedby]="errorText() || hint() ? messageId : null"
+      [attr.tabindex]="isDisabled() ? -1 : 0"
+      (click)="toggleOpen()"
+      (keydown)="onTriggerKeydown($event)"
+    >
+      <span class="ts__sr-only">{{ valueText() }}</span>
+    </div>
     <div class="ts__value">
       @if (selectedNodes().length === 0) {
-        <span class="ts__placeholder">{{ placeholder() ?? i18n.selectPlaceholder }}</span>
+        <span class="ts__placeholder" aria-hidden="true">{{
+          placeholder() ?? i18n.selectPlaceholder
+        }}</span>
       } @else if (multiple()) {
         @for (node of selectedNodes(); track node.id) {
           <span class="ts__chip">
-            {{ node.label }}
+            <span aria-hidden="true">{{ node.label }}</span>
             @if (!isDisabled()) {
               <button
                 type="button"
@@ -41,7 +47,7 @@
           </span>
         }
       } @else {
-        <span class="ts__single">{{ selectedNodes()[0].label }}</span>
+        <span class="ts__single" aria-hidden="true">{{ selectedNodes()[0].label }}</span>
       }
     </div>
     <ngx-ds-icon
@@ -60,6 +66,8 @@
           <input
             class="ts__search"
             type="text"
+            [id]="searchId"
+            [attr.aria-controls]="panelId"
             [placeholder]="i18n.searchPlaceholder"
             [attr.aria-label]="i18n.search"
             [value]="search()"
@@ -67,12 +75,14 @@
             (keydown)="onSearchKeydown($event)"
           />
         </div>
+        <div class="ts__sr-only" role="status" aria-atomic="true">{{ searchStatus() }}</div>
       }
 
       <div
         class="ts__tree"
         role="tree"
         [id]="panelId"
+        [hidden]="rows().length === 0"
         [attr.aria-label]="label() || placeholder() || i18n.selectPlaceholder"
         [attr.aria-multiselectable]="multiple() || null"
       >
@@ -126,10 +136,11 @@
               <ngx-ds-icon class="ts__row-mark" [icon]="icons.Check" [size]="14" />
             }
           </div>
-        } @empty {
-          <div class="ts__empty">{{ i18n.noResults }}</div>
         }
       </div>
+      @if (rows().length === 0) {
+        <div class="ts__empty">{{ i18n.noResults }}</div>
+      }
     </div>
   }
 </div>

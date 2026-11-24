@@ -19,7 +19,17 @@
 
 // ── Trigger ───────────────────────────────────────────────────────────────────
 
+.ts__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .ts__trigger {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -48,11 +58,15 @@
     min-height: 3rem;
   }
 
-  &--open,
-  &:focus {
+  // Two rules: a browser without :has() drops only the second one.
+  &--open {
     border-color: var(--primary-500, #6366f1);
     box-shadow: 0 0 0 3px var(--primary-100, #e0e7ff);
     outline: none;
+  }
+  &:has(> .ts__combo:focus) {
+    border-color: var(--primary-500, #6366f1);
+    box-shadow: 0 0 0 3px var(--primary-100, #e0e7ff);
   }
 
   &--error {
@@ -64,6 +78,14 @@
     opacity: 0.6;
     background: var(--surface-subtle, #f9fafb);
   }
+}
+
+// The focusable combobox covers the whole trigger; the box above shows its focus.
+.ts__combo {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  outline: none;
 }
 
 // ── Value ─────────────────────────────────────────────────────────────────────
@@ -99,6 +121,9 @@
 }
 
 .ts__chip-remove {
+  // Above the combobox overlay, so it can be clicked.
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -263,7 +288,9 @@
   flex-shrink: 0;
 }
 
+// Outside the tree: the margin stands in for the tree's padding.
 .ts__empty {
+  margin: 0.25rem;
   padding: 0.75rem;
   text-align: center;
   font-size: 0.8125rem;

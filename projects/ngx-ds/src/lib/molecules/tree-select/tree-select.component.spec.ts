@@ -107,10 +107,10 @@ describe('TreeSelectComponent', () => {
     expect(el.querySelector('[role="tree"]')?.getAttribute('aria-multiselectable')).toBe('true');
     row('Fruta').click();
     fixture.detectChanges();
-    // Naranja is disabled, so it stays out.
+    // Naranja is disabled, so it stays out, and the parents count as checked.
     expect(cmp.value()).toEqual(['apple', 'pear', 'lemon']);
-    expect(row('Fruta').getAttribute('aria-checked')).toBe('mixed');
-    expect(row('Cítricos').getAttribute('aria-checked')).toBe('mixed');
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('true');
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('true');
     expect(row('Pera').getAttribute('aria-checked')).toBe('true');
     expect(el.querySelectorAll('.ts__chip').length).toBe(3);
 
@@ -419,7 +419,8 @@ describe('TreeSelectComponent behaviour', () => {
       expanded: ['fruit', 'citrus'],
     });
     open();
-    expect(row('Cítricos').getAttribute('aria-checked')).toBe('mixed');
+    // Limón is the only enabled leaf of Cítricos (Naranja is disabled).
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('true');
     expect(row('Fruta').getAttribute('aria-checked')).toBe('mixed');
     expect(row('Limón').getAttribute('aria-checked')).toBe('true');
     expect(row('Pan').getAttribute('aria-checked')).toBe('false');
@@ -463,16 +464,185 @@ describe('TreeSelectComponent behaviour', () => {
     expect(q('.ts__hint')).toBeNull();
     expect(q('.ts__error')!.textContent!.trim()).toBe('Obligatoria');
     expect(trigger.getAttribute('aria-invalid')).toBe('true');
-    expect(trigger.className).toContain('ts__trigger--error');
+    expect(q('.ts__trigger')!.className).toContain('ts__trigger--error');
   });
 
   it('without a label, the placeholder names the trigger and the tree', () => {
     const { trigger, open, q } = setup({ placeholder: 'Elige categoría', size: 'sm' });
     expect(trigger.getAttribute('aria-label')).toBe('Elige categoría');
-    expect(trigger.className).toContain('ts__trigger--sm');
+    expect(q('.ts__trigger')!.className).toContain('ts__trigger--sm');
     open();
     expect(q('[role="tree"]')!.getAttribute('aria-label')).toBe('Elige categoría');
     expect(trigger.getAttribute('aria-controls')).toBe(q('[role="tree"]')!.id);
+  });
+});
+
+describe('TreeSelectComponent accessibility', () => {
+  function setup(inputs: Record<string, unknown> = {}) {
+    const fixture = TestBed.createComponent(TreeSelectComponent);
+    fixture.componentRef.setInput('nodes', NODES);
+    for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    document.body.appendChild(el);
+    const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!;
+    const rows = () => Array.from(el.querySelectorAll<HTMLElement>('[role="treeitem"]'));
+    const row = (label: string) =>
+      rows().find((r) => r.querySelector('.ts__row-label')?.textContent?.trim() === label)!;
+    const search = () => el.querySelector<HTMLInputElement>('.ts__search')!;
+    const type = (text: string) => {
+      search().value = text;
+      search().dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+    };
+    const tick = async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+    };
+    return { fixture, cmp: fixture.componentInstance, el, trigger, rows, row, search, type, tick };
+  }
+
+  afterEach(() => document.body.replaceChildren());
+
+  it('searchable: a click opens the panel with focus in the search box', async () => {
+    const { trigger, search, tick } = setup({ searchable: true });
+    trigger.click();
+    await tick();
+    expect(document.activeElement).toBe(search());
+  });
+
+  it('searchable: Enter or ArrowUp on the trigger opens with focus in the search box', async () => {
+    const { cmp, trigger, search, tick } = setup({ searchable: true });
+    trigger.focus();
+    key(trigger, 'Enter');
+    await tick();
+    expect(document.activeElement).toBe(search());
+    cmp.close(true);
+    await tick();
+    key(trigger, 'ArrowUp');
+    await tick();
+    expect(cmp.isOpen()).toBe(true);
+    expect(document.activeElement).toBe(search());
+  });
+
+  it('searchable: Tab and Shift+Tab move between search and tree without closing', async () => {
+    const { cmp, trigger, row, search, tick } = setup({ searchable: true });
+    trigger.click();
+    await tick();
+    key(search(), 'Tab');
+    await tick();
+    expect(cmp.isOpen()).toBe(true);
+    expect(row('Fruta').getAttribute('tabindex')).toBe('0');
+
+    key(search(), 'ArrowDown');
+    await tick();
+    expect(document.activeElement).toBe(row('Fruta'));
+    key(row('Fruta'), 'Tab', { shiftKey: true });
+    await tick();
+    expect(cmp.isOpen()).toBe(true);
+
+    // Shift+Tab out of the search box goes back to the trigger and closes.
+    key(search(), 'Tab', { shiftKey: true });
+    await tick();
+    expect(cmp.isOpen()).toBe(false);
+  });
+
+  it('opening from code does not move focus into the search box', async () => {
+    const { cmp, search, tick } = setup({ searchable: true });
+    cmp.open();
+    await tick();
+    expect(search()).not.toBeNull();
+    expect(document.activeElement).not.toBe(search());
+  });
+
+  it('announces the number of matches, or no results, in a polite status', () => {
+    const { el, trigger, fixture, type } = setup({ searchable: true });
+    trigger.click();
+    fixture.detectChanges();
+    const status = el.querySelector('[role="status"]')!;
+    expect(status).not.toBeNull();
+    expect(status.textContent!.trim()).toBe('');
+
+    type('a');
+    // Fruta, Manzana, Pera, Naranja, Verdura, Zanahoria, Pan.
+    expect(status.textContent!.trim()).toBe('7 resultados');
+    type('lim');
+    expect(status.textContent!.trim()).toBe('1 resultado');
+    type('xyz');
+    expect(status.textContent!.trim()).toBe('Sin resultados');
+  });
+
+  it('the no-results text is outside the tree', () => {
+    const { el, trigger, fixture, type } = setup({ searchable: true });
+    trigger.click();
+    fixture.detectChanges();
+    type('xyz');
+    const empty = el.querySelector('.ts__empty')!;
+    expect(empty).not.toBeNull();
+    expect(empty.closest('[role="tree"]')).toBeNull();
+    expect(el.querySelector<HTMLElement>('[role="tree"]')!.hidden).toBe(true);
+  });
+
+  it('chip remove buttons are not inside the combobox, which reads the value', () => {
+    const { el, trigger } = setup({ multiple: true, value: ['apple', 'bread'] });
+    const buttons = el.querySelectorAll('.ts__chip-remove');
+    expect(buttons.length).toBe(2);
+    for (const b of Array.from(buttons)) expect(trigger.contains(b)).toBe(false);
+    expect(trigger.querySelector('button, [tabindex]')).toBeNull();
+    expect(trigger.textContent!.trim()).toBe('Manzana, Pan');
+  });
+
+  it('the combobox reads the placeholder or the single value', () => {
+    const { fixture, trigger } = setup();
+    expect(trigger.textContent!.trim()).toBe('Seleccionar...');
+    fixture.componentRef.setInput('value', 'pear');
+    fixture.detectChanges();
+    expect(trigger.textContent!.trim()).toBe('Pera');
+  });
+
+  it('cascade: a parent with all enabled leaves checked is checked despite a disabled leaf', () => {
+    const { fixture, cmp, row, trigger } = setup({
+      multiple: true,
+      expanded: ['fruit', 'citrus'],
+    });
+    trigger.click();
+    fixture.detectChanges();
+    row('Fruta').click();
+    fixture.detectChanges();
+    expect(cmp.value()).toEqual(['apple', 'pear', 'lemon']);
+    expect(row('Fruta').getAttribute('aria-checked')).toBe('true');
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('true');
+    expect(row('Naranja').getAttribute('aria-checked')).toBe('false');
+    // The box shows a check, not the mixed dash.
+    expect(row('Cítricos').querySelector('.ts__check--on')).not.toBeNull();
+    expect(cmp.checkState(NODES[0])).toBe('checked');
+  });
+
+  it('cascade: a selected disabled leaf still counts toward its parent', () => {
+    const { fixture, row, trigger } = setup({
+      multiple: true,
+      value: ['orange'],
+      expanded: ['fruit', 'citrus'],
+    });
+    trigger.click();
+    fixture.detectChanges();
+    expect(row('Cítricos').getAttribute('aria-checked')).toBe('mixed');
+  });
+
+  it('typeahead moves to the next row starting with the typed letter', async () => {
+    const { trigger, row, tick } = setup({ expanded: ['fruit'] });
+    key(trigger, 'ArrowDown');
+    await tick();
+    expect(document.activeElement).toBe(row('Fruta'));
+    key(row('Fruta'), 'p');
+    await tick();
+    expect(document.activeElement).toBe(row('Pera'));
+    key(row('Pera'), 'P');
+    await tick();
+    expect(document.activeElement).toBe(row('Pan'));
+    key(row('Pan'), 'm');
+    await tick();
+    expect(document.activeElement).toBe(row('Manzana'));
   });
 });
 
