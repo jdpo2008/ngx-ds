@@ -19,10 +19,11 @@
         type="text"
         class="cp__search-input"
         role="combobox"
-        aria-expanded="true"
         aria-autocomplete="list"
+        [attr.aria-expanded]="filteredItems().length > 0"
         [attr.aria-controls]="listboxId"
         [attr.aria-activedescendant]="activeOptionId()"
+        [attr.aria-label]="placeholder() ?? i18n.commandPlaceholder"
         [placeholder]="placeholder() ?? i18n.commandPlaceholder"
         [value]="query()"
         (input)="onSearch($event)"
@@ -31,43 +32,65 @@
     </div>
 
     <!-- Results -->
-    <div class="cp__results" role="listbox" [attr.id]="listboxId">
-      @if (filteredItems().length === 0) {
-        <div class="cp__empty">{{ i18n.noResultsFor(query()) }}</div>
-      } @else {
-        @for (group of categories(); track group.cat) {
-          @if (group.cat) {
-            <p class="cp__category" role="presentation">{{ group.cat }}</p>
-          }
-          @for (item of group.items; track item.id) {
-            <button
-              type="button"
-              class="cp__item"
-              role="option"
-              [attr.id]="optionId(item)"
-              [attr.aria-selected]="isActive(item)"
-              [class.cp__item--active]="isActive(item)"
-              [class.cp__item--disabled]="item.disabled"
-              [disabled]="item.disabled || null"
-              (click)="selectItem(item)"
-            >
-              <span class="cp__item-body">
-                <span class="cp__item-label">{{ item.label }}</span>
-                @if (item.description) {
-                  <span class="cp__item-desc">{{ item.description }}</span>
-                }
-              </span>
-              @if (item.kbd?.length) {
-                <span class="cp__item-kbd">
-                  @for (k of item.kbd!; track k) {
-                    <ngx-ds-kbd size="sm">{{ k }}</ngx-ds-kbd>
+    <div class="cp__results">
+      <div
+        role="listbox"
+        [attr.id]="listboxId"
+        [attr.aria-label]="i18n.commandPalette"
+        [hidden]="filteredItems().length === 0"
+      >
+        @for (group of categories(); track group.cat; let g = $index) {
+          <!-- Items without a category aren't grouped (no heading to name the group). -->
+          <div
+            [attr.role]="group.cat ? 'group' : null"
+            [attr.aria-labelledby]="group.cat ? groupLabelId(g) : null"
+          >
+            @if (group.cat) {
+              <p class="cp__category" role="presentation" [id]="groupLabelId(g)">{{ group.cat }}</p>
+            }
+            @for (item of group.items; track item.id) {
+              <!-- tabindex="-1": focus stays in the search input (aria-activedescendant); options are mouse targets only. -->
+              <button
+                type="button"
+                class="cp__item"
+                role="option"
+                tabindex="-1"
+                [attr.id]="optionId(item)"
+                [attr.aria-selected]="isActive(item)"
+                [attr.aria-disabled]="item.disabled || null"
+                [class.cp__item--active]="isActive(item)"
+                [class.cp__item--disabled]="item.disabled"
+                [disabled]="item.disabled || null"
+                (click)="selectItem(item)"
+                (mousemove)="hover(item)"
+              >
+                <span class="cp__item-body">
+                  <span class="cp__item-label">{{ item.label }}</span>
+                  @if (item.description) {
+                    <span class="cp__item-desc">{{ item.description }}</span>
                   }
                 </span>
-              }
-            </button>
-          }
+                @if (item.kbd?.length) {
+                  <span class="cp__item-kbd">
+                    @for (k of item.kbd!; track k) {
+                      <ngx-ds-kbd size="sm">{{ k }}</ngx-ds-kbd>
+                    }
+                  </span>
+                }
+              </button>
+            }
+          </div>
         }
+      </div>
+      <!-- Outside the listbox: a listbox may only contain options and groups. -->
+      @if (filteredItems().length === 0) {
+        <div class="cp__empty">{{ i18n.noResultsFor(query()) }}</div>
       }
+    </div>
+
+    <!-- Announces the result count as the query changes. -->
+    <div class="cp__sr-only" role="status" aria-live="polite" aria-atomic="true">
+      {{ resultsAnnouncement() }}
     </div>
 
     <!-- Footer -->

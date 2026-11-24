@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Injector,
+  afterNextRender,
   computed,
   input,
   model,
@@ -37,6 +39,7 @@ let nextId = 0;
 })
 export class CommandPaletteComponent {
   readonly i18n = inject(NGX_DS_LABELS);
+  readonly #injector = inject(Injector);
 
   readonly open = model<boolean>(false);
   readonly items = input<CommandItem[]>([]);
@@ -82,9 +85,35 @@ export class CommandPaletteComponent {
     return `${this.listboxId}-option-${item.id}`;
   }
 
+  groupLabelId(index: number): string {
+    return `${this.listboxId}-group-${index}`;
+  }
+
+  /**
+   * Index of the active option. Disabled items can't be active: when the cursor
+   * lands on one (e.g. the first item is disabled), the nearest enabled item
+   * after it, or else before it, is used. -1 when nothing can be active.
+   */
+  readonly activeIndex = computed(() => {
+    const items = this.flatItems();
+    if (items.length === 0) return -1;
+    const cursor = Math.min(this.#cursor(), items.length - 1);
+    for (let i = cursor; i < items.length; i++) if (!items[i].disabled) return i;
+    for (let i = cursor - 1; i >= 0; i--) if (!items[i].disabled) return i;
+    return -1;
+  });
+
   readonly activeOptionId = computed(() => {
-    const item = this.flatItems()[this.#cursor()];
+    const item = this.flatItems()[this.activeIndex()];
     return item ? this.optionId(item) : null;
+  });
+
+  /** Text of the polite live region: the result count, or the empty message. */
+  readonly resultsAnnouncement = computed(() => {
+    const count = this.filteredItems().length;
+    if (count > 0) return this.i18n.commandResults(count);
+    const q = this.#query().trim();
+    return q ? this.i18n.noResultsFor(q) : this.i18n.noResults;
   });
 
   onSearch(event: Event): void {
@@ -106,12 +135,43 @@ export class CommandPaletteComponent {
 
   isActive(item: CommandItem): boolean {
     const idx = this.flatItems().indexOf(item);
-    return idx === this.#cursor();
+    return idx !== -1 && idx === this.activeIndex();
+  }
+
+  /** Mouse hover moves the cursor, so hover and keyboard share one active option. */
+  hover(item: CommandItem): void {
+    if (item.disabled) return;
+    const idx = this.flatItems().indexOf(item);
+    if (idx !== -1) this.#cursor.set(idx);
+  }
+
+  /** Moves the cursor to the next enabled item in `direction`, staying put at either end. */
+  #move(direction: 1 | -1): void {
+    const items = this.flatItems();
+    for (let i = this.activeIndex() + direction; i >= 0 && i < items.length; i += direction) {
+      if (!items[i].disabled) {
+        this.#cursor.set(i);
+        this.#scrollActiveIntoView();
+        return;
+      }
+    }
+  }
+
+  #scrollActiveIntoView(): void {
+    afterNextRender(
+      () => {
+        const id = this.activeOptionId();
+        const el = id ? document.getElementById(id) : null;
+        el?.scrollIntoView?.({ block: 'nearest' });
+      },
+      { injector: this.#injector },
+    );
   }
 
   onKeydown(event: KeyboardEvent): void {
-    const shortcut = this.openShortcut();
-    if ((event.ctrlKey || event.metaKey) && event.key === shortcut) {
+    const shortcut = this.openShortcut().toLowerCase();
+    // Compare case-insensitively: Caps Lock or Shift turn `k` into `K`.
+    if ((event.ctrlKey || event.metaKey) && event.key?.toLowerCase() === shortcut) {
       event.preventDefault();
       this.open.update((v) => !v);
       return;
@@ -126,14 +186,14 @@ export class CommandPaletteComponent {
         break;
       case 'ArrowDown':
         event.preventDefault();
-        this.#cursor.update((c) => Math.min(c + 1, items.length - 1));
+        this.#move(1);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        this.#cursor.update((c) => Math.max(c - 1, 0));
+        this.#move(-1);
         break;
       case 'Enter': {
-        const selected = items[this.#cursor()];
+        const selected = items[this.activeIndex()];
         if (selected) this.selectItem(selected);
         break;
       }
