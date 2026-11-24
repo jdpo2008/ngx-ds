@@ -119,6 +119,56 @@ describe('ContextMenuComponent behaviour', () => {
     cleanup();
   });
 
+  const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
+
+  it('focuses the first item once the panel is visible', async () => {
+    const { fixture, el, openAt, cleanup } = setup();
+    let visibleWhenFocused: boolean | null = null;
+    el.addEventListener('focusin', (e) => {
+      const panel = (e.target as HTMLElement).closest('.ctx__panel');
+      if (panel) visibleWhenFocused ??= panel.classList.contains('ctx__panel--visible');
+    });
+    openAt(10, 10);
+    await nextFrame();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(el.querySelector('[role="menuitem"]'));
+    expect(visibleWhenFocused).toBe(true);
+    cleanup();
+  });
+
+  it('opens from the keyboard below the focused target', () => {
+    const { fixture, el, cleanup } = setup();
+    const target = document.createElement('div');
+    target.tabIndex = 0;
+    el.querySelector('.ctx')!.appendChild(target);
+    vi.spyOn(target, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(30, 50, 100, 20) /* left 30, top 50, bottom 70 */,
+    );
+    target.focus();
+    // Shift+F10 / the ContextMenu key: a contextmenu event with no pointer position.
+    target.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isOpen()).toBe(true);
+    const panel = el.querySelector<HTMLElement>('.ctx__panel')!;
+    expect(panel.style.left).toBe('30px');
+    expect(panel.style.top).toBe('70px');
+    cleanup();
+  });
+
+  it('closes on Tab and restores focus without blocking the focus move', () => {
+    const { fixture, cmp, el, trigger, openAt, cleanup } = setup();
+    openAt(10, 10);
+    const item = el.querySelector<HTMLElement>('[role="menuitem"]')!;
+    item.focus();
+    const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    item.dispatchEvent(ev);
+    fixture.detectChanges();
+    expect(cmp.isOpen()).toBe(false);
+    expect(ev.defaultPrevented).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+    cleanup();
+  });
+
   it('places the panel at the pointer', () => {
     const { el, openAt, cleanup } = setup();
     openAt(40, 60);

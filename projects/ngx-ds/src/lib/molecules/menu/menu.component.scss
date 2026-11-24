@@ -33,7 +33,7 @@
     background 0.12s ease,
     color 0.12s ease;
 
-  &:hover:not(:disabled),
+  &:hover:not([aria-disabled='true']),
   &--active {
     background: var(--surface-hover, #f3f4f6);
   }
@@ -43,7 +43,8 @@
     outline-offset: -2px;
   }
 
-  &:disabled {
+  // aria-disabled, not native disabled: the item stays reachable with the arrow keys.
+  &[aria-disabled='true'] {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -51,7 +52,7 @@
   &--danger {
     color: var(--danger-600, #dc2626);
 
-    &:hover:not(:disabled) {
+    &:hover:not([aria-disabled='true']) {
       background: rgba(239, 68, 68, 0.08);
     }
   }

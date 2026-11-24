@@ -10,7 +10,7 @@
       class="menu__item"
       [class.menu__item--danger]="item.danger"
       [class.menu__item--active]="focusIndex() === i"
-      [disabled]="item.disabled"
+      [attr.aria-disabled]="item.disabled ? 'true' : null"
       [attr.aria-haspopup]="item.children?.length ? 'menu' : null"
       [attr.aria-expanded]="item.children?.length ? openSubmenu() === item.id : null"
       [attr.tabindex]="focusIndex() === i ? 0 : -1"

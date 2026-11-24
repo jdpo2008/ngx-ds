@@ -1,7 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  Injector,
+  afterNextRender,
   inject,
   input,
   output,
@@ -17,6 +20,11 @@ import { setupEscapeClose } from '../../shared/escape-close';
 
 export type { MenuItem } from '../../molecules/menu/menu.types';
 
+/**
+ * Opens a menu on right click, Shift+F10 or the ContextMenu key over the projected content.
+ * Keyboard users can only open it when the projected target is focusable: give it
+ * `tabindex="0"` (or use a focusable element) and an accessible name.
+ */
 @Component({
   selector: 'ngx-ds-context-menu',
   standalone: true,
@@ -36,8 +44,11 @@ export class ContextMenuComponent {
   readonly opened = output<void>();
   readonly closed = output<void>();
 
+  private readonly injector = inject(Injector);
   private readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
+  private readonly menuRef = viewChild(MenuComponent);
   private lastActive: HTMLElement | null = null;
+  private frame = 0;
 
   readonly isOpen = signal(false);
   readonly visible = signal(false);
@@ -47,6 +58,7 @@ export class ContextMenuComponent {
   constructor() {
     setupClickOutside(() => this.close());
     setupEscapeClose(() => this.close(), this.isOpen);
+    inject(DestroyRef).onDestroy(() => cancelAnimationFrame(this.frame));
   }
 
   onContextMenu(event: MouseEvent): void {
@@ -55,13 +67,15 @@ export class ContextMenuComponent {
 
     // Reopening in place keeps the element that had focus before the first open.
     if (!this.isOpen()) this.lastActive = this.doc.activeElement as HTMLElement | null;
-    this.posX.set(event.clientX);
-    this.posY.set(event.clientY);
+    const { x, y } = this.anchorPoint(event);
+    this.posX.set(x);
+    this.posY.set(y);
     this.visible.set(false);
     this.isOpen.set(true);
     this.opened.emit();
 
-    requestAnimationFrame(() => this.clampPosition());
+    cancelAnimationFrame(this.frame);
+    this.frame = requestAnimationFrame(() => this.clampPosition());
   }
 
   onMenuItemClick(item: MenuItem): void {
@@ -96,5 +110,19 @@ export class ContextMenuComponent {
     this.posX.set(x);
     this.posY.set(y);
     this.visible.set(true);
+    // The panel is `visibility: hidden` until now, and a hidden element can't take focus:
+    // focus the first item once the visible class has been rendered.
+    afterNextRender(() => this.menuRef()?.focusFirst(), { injector: this.injector });
+  }
+
+  /**
+   * Where to open the menu. Shift+F10 and the ContextMenu key fire `contextmenu` on the
+   * focused element with no pointer position (0, 0): open below that element instead.
+   */
+  private anchorPoint(event: MouseEvent): { x: number; y: number } {
+    if (event.clientX !== 0 || event.clientY !== 0) return { x: event.clientX, y: event.clientY };
+    const target = event.target instanceof Element ? event.target : null;
+    const rect = target?.getBoundingClientRect();
+    return rect ? { x: rect.left, y: rect.bottom } : { x: 0, y: 0 };
   }
 }
