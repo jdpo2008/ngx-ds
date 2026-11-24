@@ -4,6 +4,159 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-24
+
+### Added
+
+- AccordionItem: `expanded` input to open an item from outside, for example on first render. In single mode, opening one closes the others.
+- Icon: new `label` input. A labelled icon is exposed as a named image (`role="img"`).
+- `NgxDsLabels.selectedCount(n)`: text of the Select tag when more than two options are selected (`"3 seleccionados"` / `"3 selected"`).
+- Autocomplete: keyboard navigation. ArrowDown/ArrowUp move through the enabled options (and open the panel), Enter picks the highlighted one, Escape closes the panel. The input points at the highlighted option with `aria-activedescendant`.
+- `NgxDsLabels.today` label for the Datepicker Today button.
+- `IconButton`: `ariaExpanded` input that sets `aria-expanded` on the button.
+- AvatarGroup: the `+N` counter has an accessible name ("3 more"). New label `moreAvatars`.
+- Avatar: the status is also given as visually hidden text ("Busy"), not only by the dot's colour. New label `avatarStatus`.
+- Timeline: completed and error steps include a visually hidden status text, so their status is not shown by colour only. New labels `timelineCompleted` and `timelineError`.
+- `NgxDsLabels.fileTypeNotAllowed`, the error FileUpload shows for a file that doesn't match `accept`.
+
+### Changed
+
+- Alert: `info` and `success` alerts use `role="status"` (polite) instead of `role="alert"`. `warning` and `danger` alerts keep `role="alert"`.
+
+### Fixed
+
+- Accordion: turning `multiple` off keeps only the first open item instead of leaving several open.
+- Calendar: a disabled calendar also disables its previous/next month buttons, which stayed reachable by keyboard.
+- Calendar: the month title is a polite live region, so changing month is announced.
+- Navbar: the menu toggle sets `aria-controls` only while the panel exists.
+- TreeSelect and MultiSelect: removing a chip with its button moves focus to the field instead of losing it.
+- Datepicker, DateRangePicker: clearing the value keeps focus on the field instead of dropping it to the page.
+- Datepicker: clearing the value marks the control as touched, like DateRangePicker.
+- DateRangePicker: a range with only an end date shows it in the field instead of the placeholder.
+- Divider: a labeled divider draws its lines again. They had no border style, so only the label showed.
+- Divider: a vertical divider with a `label` no longer disappears; the label is ignored as documented.
+- Divider: a vertical divider sets `aria-orientation="vertical"`, and a labeled one is named by its label (a separator hides its children from assistive tech).
+- Icon: unlabelled icons are hidden from assistive technology (`aria-hidden="true"`).
+- Skeleton: a `lines` value that is not a number renders one line instead of none.
+- Skeleton and Spinner: respect `prefers-reduced-motion` (the shimmer stops, the spinner slows down).
+- InlineEdit: the Enter that confirms an IME composition (Japanese, Chinese…) no longer saves the field.
+- InlineEdit: disabling the field while it is being edited cancels the edit, and `[editing]` can't open a disabled field.
+- MaskedInput: literals with digits or letters in the middle of a mask (such as `99/99/2099`) are no longer read back as input, so typing the rest of the value no longer corrupts it.
+- MaskedInput: Delete in front of a literal (such as `)` or `-`) removes the next character instead of leaving the caret stuck, and Backspace right after a literal removes the previous character in one press.
+- NotificationCenter: the bell sets `aria-expanded`, the filter tabs set `aria-selected`, and closing the panel with Escape while focus is inside it moves focus back to the bell instead of losing it.
+- NotificationItem: pressing Enter on the action or dismiss button no longer marks the notification as read.
+- RangeSlider: a thumb pushed against the other one no longer emits `rangeChange` and the form value again while it stays put.
+- Input, Textarea, MaskedInput, InlineEdit and OtpInput accept a number from a form control (e.g. `new FormControl(5)`): the label floats, the counter counts it, and MaskedInput, InlineEdit and OtpInput no longer throw.
+- Select in multiple mode showed "N seleccionados" in Spanish even with English labels; it now uses `selectedCount` from `NGX_DS_LABELS`.
+- Splitter: `resizeEnd` is no longer emitted when a key leaves the size unchanged (for example ArrowLeft at `min`).
+- Carousel: an empty `items` list no longer produces a negative slide index and an invalid track transform.
+- Carousel: when an arrow becomes disabled at the end of a non-looping carousel, focus moves to the other arrow instead of being lost.
+- Table: in client-side mode, the page is clamped to the last one when the data shrinks, instead of showing an empty page.
+- Table: client-side sorting compares text with the locale, so case and accents no longer split the order and "item 9" comes before "item 10".
+- Table: the expand, column and row-action buttons now set `aria-expanded` on the real button (the expand button set it on the wrapper element).
+- Table: Escape closes the column menu and the row action menu, and returns focus to the button that opened it.
+- Table: sortable column headers can be focused with Tab and sorted with Enter or Space.
+- Select: removing a chip or clearing the value keeps focus in the field.
+- Select: "Select all" no longer drops a selected option that is disabled.
+- Autocomplete: Tab closes the panel and restores the selected label (or keeps the text with `allowCustom`).
+- Autocomplete: writing a value with no matching option clears the old label, and fills in the new one when its option arrives.
+- TimePicker: clearing the value keeps focus on the field and marks the control as touched.
+- Autocomplete: clearing cancels a search still waiting on the debounce, so the old results no longer come back after `searchChange` emits `''`.
+- Toast: the position containers now stay in the page as polite live regions, so screen readers announce new toasts. Before, each container was created together with its first toast, and many screen readers ignored it. Error toasts keep `role="alert"`; the other types no longer carry `role="status"`.
+- Select and Datepicker: clicking anywhere on the page no longer marks their form control as touched when the panel was never opened (it showed validation errors on untouched fields).
+- AvatarGroup: avatars past `max` are now actually hidden; before, only the `+N` count was added and every avatar stayed visible.
+- Breadcrumb: with `maxItems` set to 1, the current page is shown after the ellipsis instead of the first item, and the ellipsis is no longer marked as the current page.
+- ButtonGroup: with `fullWidth`, the component itself is now a block, so the group spans its container instead of only its inner row.
+- EmptyState: the decorative icon is hidden from assistive technology (`aria-hidden="true"`).
+- Radio: selecting a radio in a group bound to one reactive `FormControl`, or in a group without forms, no longer leaves the previous radio styled as checked.
+- Radio: with `[checked]`, a click the parent ignores no longer leaves the native radio checked.
+- Checkbox, Radio, Switch: leaving the control marks it as touched, so validation messages appear on blur and not only after a change.
+- `ConfirmationService`: calling `confirm()` while a dialog is open, or calling `close()`, resolved nothing, so the earlier promise stayed pending forever. Both now resolve it with `false`.
+- `ConfirmationComponent` locks the page scroll while open, and Escape only cancels it when it is the topmost overlay (a modal or drawer under it stays open).
+- `ColorPickerComponent`: setting the `value` input, or `writeValue` with a `#rgb` hex, did not move the sliders. Short and upper-case hex values are stored as `#rrggbb` lower-case, and an invalid value falls back to the default colour.
+- `ColorPickerComponent`: a typed hex is kept exactly instead of being rounded through HSL (`#123456` became `#123354`), and moving the hue at 0 % saturation no longer resets it.
+- `ColorPickerComponent` marks the form control as touched on blur, not on every change.
+- CommandPalette: the arrow keys follow the rendered order (grouped by category), not the order of `items`.
+- Tooltip: hover and focus together no longer stack two tooltips (the first one stayed on screen).
+- The Datepicker "Hoy" button text was hard-coded; it now follows `NGX_DS_LABELS`.
+- The Datepicker Today button could select a date listed in `disabledDates`.
+- DateRangePicker kept a half-picked range when closed with Escape, an outside click or Enter; the previous range is now restored.
+- DateRangePicker now marks the field as touched when an outside click closes the panel.
+- `Accordion`: each panel is a `region` linked to its trigger (`aria-controls` / `aria-labelledby`), and the content of a closed panel is `inert`, so it no longer receives keyboard focus.
+- `Drawer`: with a `title`, the dialog is named by the visible heading (`aria-labelledby`) instead of a duplicate `aria-label`.
+- `Sidebar`: item icons are hidden from screen readers, and the collapse toggle reports `aria-expanded`.
+- Dropdown: clicking anywhere on the page no longer marks its form control as touched when the panel was never opened (it showed validation errors on untouched fields).
+- Lightbox: a swipe that ends outside the image no longer closes it.
+- FormField: the hint and error ids are added to the control's own `aria-describedby` instead of replacing it.
+- AvatarGroup: a negative `max` no longer reports more hidden avatars than there are.
+- ButtonGroup: only the corners between buttons are squared, so rounded buttons keep their pill shape at both ends.
+- Avatar: initials have an accessible name from `alt`.
+- Avatar: shows the initials when the image fails to load, and tries again when `src` changes.
+- Button: sets `aria-busy="true"` while loading.
+- Input: the password visibility toggle can be reached with the keyboard, is disabled together with the field, and hides its icon from screen readers.
+- Timeline: the decorative status dot is hidden from screen readers.
+- `Menu`: keys pressed in a submenu no longer also move the parent menu, and Escape in a submenu closes only that submenu instead of the whole menu or the `ContextMenu` around it.
+- `Menu`: when the first item is disabled, the tab stop goes to the first enabled item, so the menu can still be reached with Tab.
+- `Menu`: a submenu is named after its parent item, and item icons and the submenu chevron are hidden from screen readers.
+- `ContextMenu`: right-clicking again while it is open no longer loses the element that should get focus back when it closes.
+- Timeline: every item lost its connector line and spacing, because the "last item" rule matched each one. Only the last item hides it now.
+- Timeline: `variant="compact"` had no effect; it now uses tighter rows and a smaller dot.
+- Timeline: the `active` item is announced as the current step (`aria-current="step"`).
+- UserMenu: without `initials` or `avatarSrc` the avatar was empty; it now shows initials taken from the name.
+- UserMenu: choosing an action moves focus back to the trigger instead of losing it.
+- Modal, Drawer and Lightbox: a closed overlay no longer resets the page's `overflow`, and closing one gives back the `overflow` the page had before.
+- Modal, Drawer and Lightbox: with one overlay open over another (a modal over a drawer, a lightbox over a modal), closing the top one keeps the page scroll locked, and Escape closes only the top one.
+- Stepper: clicking the current step no longer emits `stepChange`, and `goTo()` ignores an index outside the steps.
+- ProgressBar: `aria-valuenow` stays inside `0`–`max` when `value` is out of range.
+- ProgressBar: `max` of `0` no longer gives a `NaN%` width and value.
+- StatCard: a `delta` that rounds to `0%` is shown as no change, without an arrow, colour or sign.
+- Rating: the stars are a labelled group (`role="group"`), so the label is announced, and the selected star is marked with `aria-pressed`.
+- PasswordStrength: the meter announces the strength as text (`aria-valuetext`), and its label no longer ends in a dangling ": " when the password is empty.
+- Pagination: `showBoundary` had no effect. Set to `false`, it now shows only the pages around the current one.
+- Pagination: an ellipsis no longer stands for a single page; that page is shown instead.
+- Pagination: choosing the page already shown, or `next()` / `prev()` at the ends, no longer emits `pageChange`.
+- Pagination: with `totalPages` at 0, or a `currentPage` past the end, the arrows are disabled and the page no longer drops to 0.
+- SearchInput: clearing the field keeps focus in it instead of losing it to the page.
+- SearchInput: Enter that confirms an IME composition no longer emits `searchSubmit`.
+- SegmentedControl: choosing the option already selected no longer reports a change to the form, and focus leaving the group marks it as touched.
+- Autocomplete: a click anywhere on the page no longer marks the field touched or clears its text when the field isn't in use.
+- Autocomplete: disabled options set `aria-disabled`.
+- MultiSelect: each chip shows the label of its own value, and its remove button removes that value. Before, chips used the options order, so with a selection made in another order they showed the wrong label and removed a different value.
+- MultiSelect: a form-disabled control is no longer focusable and its chips can't be removed.
+- MultiSelect: Escape and clicks outside mark the field touched when they close the panel.
+- MultiSelect: options blocked by `maxSelected` set `aria-disabled`.
+- FileUpload: dropped files are checked against `accept`, like the ones picked in the file dialog.
+- FileUpload: files can't be removed while the component is disabled.
+- Table: in client-side mode the `page` and `pageSize` inputs now set the initial page and page size (they were ignored: it always started at page 1 with 10 rows).
+- Spinner: the loading text is now inside the `role="status"` live region (visually hidden), so screen readers announce it; an `aria-label` on a live region is often not read.
+- Skeleton: the host is `aria-hidden="true"`, so placeholder shapes are skipped by assistive technology.
+- Skeleton: a `circle` given only a `width` is now round; its height follows the width instead of the default `1rem`.
+- `ToastrService`: `duration: 0` was replaced by the 5 s default, so a toast could never stay until closed. It now stays (and shows no progress bar).
+- `ToastComponent`: toasts were silent for screen readers. Errors use `role="alert"`, the rest `role="status"`.
+- `ChipGroupComponent`: removing a selected chip left its value in `selected` and in the form control. It is now dropped from both.
+- `FormFieldComponent`: a projected control that already had an `id` (and no `for` input) was not linked to the label, hint or error. They now use the control's id.
+- `FormFieldComponent`: `required` only drew the asterisk (hidden from screen readers). The control now gets `aria-required="true"`.
+- NumberInput: the field shows the stored value after an entry that is clamped to the current value, or that isn't a number. Before, it kept the typed text.
+- NumberInput: decimal steps are rounded, so three steps of 0.1 give 0.3 instead of 0.30000000000000004.
+- NumberInput: leaving the field marks it touched.
+- Tabs: when `active` points to a disabled tab or past the last one, the first enabled tab is shown and selected. Before, no panel was shown and no tab could be reached with Tab.
+- Tabs: a non-lazy tab with an `ngxDsTabContent` template renders it. Before, it rendered nothing.
+- Tabs: a lazy tab without a template shows its projected content instead of throwing.
+- TreeSelect: Escape, clicks outside and Tab mark the field touched when they close the panel.
+- TreeSelect: chips can't be removed while the control is disabled.
+- TreeView: pressing Enter or Space on a node's expand toggle no longer also selects (or deselects) the node, and Space on the toggle now activates it.
+- TreeView: ArrowRight expands and ArrowLeft collapses the focused node.
+- TreeView: the tree is marked `aria-multiselectable` when selectable, nodes only expose `aria-selected` when the tree is selectable, disabled nodes expose `aria-disabled`, and the chevron icon is hidden from screen readers.
+- Popover: the trigger points to the open panel with `aria-controls`.
+- Popover: closing with Escape from inside the panel returns focus to the trigger instead of losing it.
+- Popover: setting `disabled` while it is open now closes it.
+- RangeSlider: the track fill stays inside the rail when the value is outside `min`–`max`.
+- RangeSlider: `minGap` can no longer push a range thumb below `min` or above `max`.
+
+### Security
+
+- Autocomplete: option labels are HTML-escaped in the match highlight. Before, a label containing HTML (for example from async search results) was rendered as markup.
+
 ## [1.1.0] - 2026-11-19
 
 ### Added
@@ -164,6 +317,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.0
 [1.1.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.1.0
 [1.0.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.0.0
 [0.7.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v0.7.0
