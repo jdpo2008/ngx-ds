@@ -331,3 +331,38 @@ describe('TimePickerComponent edge cases', () => {
     expect(el.querySelector('.ngx-time-picker__message--hint')).toBeNull();
   });
 });
+
+describe('TimePickerComponent accessible name', () => {
+  afterEach(() => document.body.replaceChildren());
+
+  /** The name a screen reader computes from aria-labelledby. */
+  const labelledName = (trigger: HTMLElement) =>
+    (trigger.getAttribute('aria-labelledby') ?? '')
+      .split(' ')
+      .filter(Boolean)
+      .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+      .join(' ');
+
+  it('names the trigger with the static label and the shown text', async () => {
+    const { el, trigger } = await setup({ label: 'Start', placeholder: 'Pick one' });
+    expect(labelledName(trigger)).toBe('Start Pick one');
+
+    el.querySelector<HTMLElement>('label')!.click();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('includes the selected time in the name', async () => {
+    const { trigger } = await setup({ label: 'Start' }, '09:30');
+    expect(labelledName(trigger)).toBe('Start 09:30');
+  });
+
+  it('names the trigger with the floating label', async () => {
+    const { trigger } = await setup({ label: 'Start', floatingLabel: true }, '09:30');
+    expect(labelledName(trigger)).toBe('Start 09:30');
+  });
+
+  it('leaves the name to the content when there is no label', async () => {
+    const { trigger } = await setup({ placeholder: 'Pick one' });
+    expect(trigger.hasAttribute('aria-labelledby')).toBe(false);
+  });
+});
