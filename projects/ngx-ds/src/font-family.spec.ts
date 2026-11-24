@@ -1,7 +1,9 @@
 import { Type } from '@angular/core';
 import * as api from './public-api';
+import { TooltipBoxComponent } from './lib/atoms/tooltip/tooltip-box.component';
+import { NotificationItemComponent } from './lib/organisms/notification-center/notification-item/notification-item.component';
 
-// Every public component sets the library font in its own styles, so it renders in Poppins
+// Every component sets the library font in its own styles, so it renders in Poppins
 // (or --ngx-primary-font-family) even inside an app whose body uses another font. 1.2.1 fixed
 // twelve components that had none; this keeps new ones from shipping without it.
 //
@@ -13,7 +15,10 @@ const EXEMPT = new Set(['IconComponent', 'StepComponent', 'TabComponent']);
 
 const LIBRARY_FONT = /font-family\s*:\s*var\(\s*--ngx-primary-font-family\b/;
 
-const components = Object.entries(api)
+/** Components the public ones render but do not export. */
+const INTERNAL = { TooltipBoxComponent, NotificationItemComponent };
+
+const components = Object.entries({ ...api, ...INTERNAL })
   .filter(([, value]) => typeof value === 'function' && 'ɵcmp' in value)
   .map(
     ([name, value]) =>
@@ -21,8 +26,11 @@ const components = Object.entries(api)
   );
 
 describe('component font-family', () => {
-  it('finds the public components', () => {
+  it('finds the public and internal components', () => {
     expect(components.length).toBeGreaterThan(50);
+    for (const name of Object.keys(INTERNAL)) {
+      expect(components.some(([n]) => n === name)).toBe(true);
+    }
   });
 
   it.each(components.filter(([name]) => !EXEMPT.has(name)))(
