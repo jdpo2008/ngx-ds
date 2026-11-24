@@ -18,9 +18,9 @@ describe('ToastComponent', () => {
     vi.useRealTimers();
   });
 
-  it('renders nothing without toasts', () => {
+  it('renders no toast without toasts', () => {
     const { el } = setup();
-    expect(el.querySelector('.toast-container')).toBeNull();
+    expect(el.querySelector('.toast')).toBeNull();
   });
 
   it('renders a toast with title, message, type class and progress bar', () => {
@@ -44,7 +44,7 @@ describe('ToastComponent', () => {
     render();
     expect(el.querySelectorAll('.toast-container--bottom-left .toast').length).toBe(2);
     expect(el.querySelectorAll('.toast-container--top-left .toast').length).toBe(1);
-    expect(el.querySelector('.toast-container--top-right')).toBeNull();
+    expect(el.querySelectorAll('.toast-container--top-right .toast').length).toBe(0);
   });
 
   it('removes a toast with the close button', () => {
@@ -104,14 +104,16 @@ describe('ToastComponent behaviour', () => {
     expect([toast.type, toast.position, toast.duration]).toEqual(['info', 'top-right', 5000]);
   });
 
-  it('announces errors as alerts and the rest as status', () => {
+  it('announces errors as alerts and leaves the rest to the polite region', () => {
     const { service, el, render } = setup();
     service.danger('Fallo');
     service.success('Bien');
     render();
     const [danger, success] = Array.from(el.querySelectorAll('.toast'));
     expect(danger.getAttribute('role')).toBe('alert');
-    expect(success.getAttribute('role')).toBe('status');
+    expect(danger.getAttribute('aria-live')).toBe('assertive');
+    expect(success.hasAttribute('role')).toBe(false);
+    expect(success.closest('[aria-live]')!.getAttribute('aria-live')).toBe('polite');
   });
 
   it('show returns an id that remove accepts; the other toasts stay', () => {
@@ -131,5 +133,32 @@ describe('ToastComponent behaviour', () => {
     service.clear();
     render();
     expect(el.querySelector('.toast')).toBeNull();
+  });
+});
+
+describe('ToastComponent live regions', () => {
+  afterEach(() => TestBed.inject(ToastrService).clear());
+
+  it('keeps a polite live region per position before any toast arrives', () => {
+    const fixture = TestBed.createComponent(ToastComponent);
+    const service = TestBed.inject(ToastrService);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const regions = Array.from(el.querySelectorAll('.toast-container'));
+    expect(regions.map((r) => r.getAttribute('aria-live'))).toEqual([
+      'polite',
+      'polite',
+      'polite',
+      'polite',
+    ]);
+    const bottomLeft = el.querySelector('.toast-container--bottom-left')!;
+    service.show({ message: 'Copiado', position: 'bottom-left' });
+    fixture.detectChanges();
+    // The toast lands inside the region that was already there, so it gets announced.
+    expect(el.querySelector('.toast-container--bottom-left')).toBe(bottomLeft);
+    expect(bottomLeft.querySelector('.toast__message')!.textContent).toContain('Copiado');
+    service.clear();
+    fixture.detectChanges();
+    expect(el.querySelector('.toast-container--bottom-left')).toBe(bottomLeft);
   });
 });
