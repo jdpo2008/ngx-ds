@@ -106,6 +106,22 @@ function waitForDomQuiet(page, quietMs = 300, maxMs = 3000) {
   );
 }
 
+// Waits until every <img> is decoded, then forces a repaint. Under parallel load Chromium
+// sometimes paints an image before it is decoded and keeps that raster, which changes the
+// antialiased edge of rounded images (avatars) by a few hundred pixels from run to run.
+function settleImages(page) {
+  return page.evaluate(async () => {
+    await Promise.all([...document.images].map((img) => img.decode().catch(() => {})));
+    const nextFrame = () =>
+      new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+    const root = document.documentElement;
+    root.style.transform = 'translateZ(0)';
+    await nextFrame();
+    root.style.transform = '';
+    await nextFrame();
+  });
+}
+
 async function screenshot(page) {
   return page.screenshot({ fullPage: true, animations: 'disabled', caret: 'hide' });
 }
@@ -152,6 +168,7 @@ async function checkStory(browser, base, story, theme) {
     await gotoStory(page, base, story, theme);
     await waitForDomQuiet(page);
     await page.evaluate(() => document.fonts.ready);
+    await settleImages(page);
 
     let shot = await screenshot(page);
     if (args.update) {
