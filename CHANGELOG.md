@@ -4,6 +4,29 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-25
+
+### Fixed
+
+- CommandPalette: options are no longer Tab stops, so focus stays in the search input; disabled items are skipped by the arrow keys, mouse hover moves the active option, and the active option scrolls into view.
+- CommandPalette: the search input has an accessible name, `aria-expanded` follows whether results show, a polite live region announces the result count, and categories are exposed as labelled groups.
+- CommandPalette: Ctrl/Cmd+K also opens the palette with Caps Lock or Shift on.
+- Datepicker: Tab and Shift+Tab stay inside the open calendar panel, the trigger has `aria-haspopup="dialog"`, and the panel is named after the field label (`"<label>, Calendario"`).
+- Datepicker: changing the month with the previous/next buttons is announced to screen readers.
+- Datepicker: keyboard navigation of the day grid stops at `minDate` / `maxDate`.
+- ContextMenu: focuses the first item when it opens, and opens from the keyboard (Shift+F10 or the ContextMenu key) below the focused target. The target must be focusable.
+- Menu: Tab closes the menu, typing a letter moves to the next item that starts with it, ArrowLeft only closes submenus, and Enter on a parent item opens its submenu and focuses its first item.
+- Menu: disabled items use `aria-disabled` and stay reachable with the arrow keys, but still can't be activated.
+- Modal and Drawer: Escape inside an open Datepicker, TimePicker, Select, TreeSelect, Popover, ContextMenu, CommandPalette, Table menu or other panel now closes only that panel. The next Escape closes the Modal or Drawer.
+- Nested panels (for example a Select inside a Popover) also close one Escape at a time.
+- Datepicker and TimePicker: screen readers now announce the field label, static or floating, together with the shown value. Clicking the static label focuses the field.
+- Table: clickable rows can be reached with Tab and activated with Enter or Space. The expand, select and row action buttons name their row ("Expandir fila 3"), and custom labels get the row number appended.
+- Table: the row action menu exposes `aria-haspopup`, `aria-expanded` and `aria-controls`, moves focus into the menu when it opens, and returns focus to its button when it closes or an action runs. The default `rowActions` label is now "Acciones de la fila" / "Row actions".
+- Table: the table is marked `aria-busy` while loading, the page range is announced when it changes, the actions column header has an accessible name, and clicking the selected row's radio no longer clears a single selection.
+- TreeSelect: with `searchable`, opening the panel by click or keyboard focuses the search box, and Tab / Shift+Tab move between search and tree without closing. Search results are announced in a polite live region, and "No results" is no longer inside `role="tree"`.
+- TreeSelect: the chip remove buttons are no longer nested inside the `role="combobox"` element, and in cascade mode a parent whose enabled leaves are all checked reports `aria-checked="true"` even with a disabled leaf.
+- TreeSelect: ArrowUp on the closed trigger opens the panel, and typing a letter in the tree moves to the next row that starts with it.
+
 ## [1.2.2] - 2026-11-24
 
 ### Fixed
@@ -329,6 +352,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.3.0
 [1.2.2]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.2
 [1.2.1]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.1
 [1.2.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.0
