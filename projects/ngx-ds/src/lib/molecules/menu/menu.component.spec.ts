@@ -47,7 +47,8 @@ describe('MenuComponent', () => {
     expect(btns.every((b) => b.getAttribute('role') === 'menuitem')).toBe(true);
     expect(btns[0].querySelector('ngx-ds-kbd')?.textContent?.trim()).toBe('Ctrl+C');
     expect(btns[0].querySelector('.menu__item-icon svg')?.getAttribute('width')).toBe('16');
-    expect(btns[1].disabled).toBe(true);
+    expect(btns[1].getAttribute('aria-disabled')).toBe('true');
+    expect(btns[1].disabled).toBe(false);
     expect(btns[2].getAttribute('aria-haspopup')).toBe('menu');
     expect(btns[2].getAttribute('aria-expanded')).toBe('false');
     expect(btns[3].classList).toContain('menu__item--danger');
@@ -85,8 +86,12 @@ describe('MenuComponent', () => {
     expect(host.querySelector('.menu__submenu')).toBeNull();
   });
 
-  it('moves focus with arrows, skipping disabled items and wrapping', () => {
+  it('moves focus with arrows through disabled items and wraps', () => {
     const { cmp, buttons, key } = setup();
+    key('ArrowDown');
+    expect(cmp.activeIndex()).toBe(1);
+    expect(document.activeElement).toBe(buttons()[1]);
+    expect(buttons()[1].getAttribute('tabindex')).toBe('0');
     key('ArrowDown');
     expect(cmp.activeIndex()).toBe(2);
     expect(document.activeElement).toBe(buttons()[2]);
@@ -104,6 +109,7 @@ describe('MenuComponent', () => {
 
   it('opens a submenu with ArrowRight and emits closed on Escape', () => {
     const { cmp, host, key } = setup();
+    key('ArrowDown');
     key('ArrowDown');
     key('ArrowRight');
     expect(cmp.openSubmenu()).toBe('more');
@@ -178,5 +184,122 @@ describe('MenuComponent behaviour', () => {
     cmp.itemClick.subscribe(spy);
     cmp.onItemClick(ITEMS[1], 1);
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  function keydown(target: HTMLElement, key: string, init: KeyboardEventInit = {}) {
+    const ev = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true, ...init });
+    target.dispatchEvent(ev);
+    return ev;
+  }
+
+  it('keeps disabled items focusable but does not activate them', () => {
+    const { fixture, cmp, host, buttons } = setup();
+    const spy = vi.fn();
+    cmp.itemClick.subscribe(spy);
+    keydown(host, 'ArrowDown');
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(buttons()[1]);
+    buttons()[1].click();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('does not close a top-level menu on ArrowLeft', () => {
+    const { cmp, host } = setup();
+    const closed = vi.fn();
+    cmp.closed.subscribe(closed);
+    const ev = keydown(host, 'ArrowLeft');
+    expect(closed).not.toHaveBeenCalled();
+    expect(ev.defaultPrevented).toBe(false);
+    keydown(host, 'Escape');
+    expect(closed).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes a submenu on ArrowLeft and returns focus to its parent item', () => {
+    const { fixture, cmp, host, buttons } = setup();
+    const closed = vi.fn();
+    cmp.closed.subscribe(closed);
+    buttons()[2].click();
+    fixture.detectChanges();
+    const subBtn = host.querySelector<HTMLButtonElement>('.menu__submenu button')!;
+    keydown(subBtn, 'ArrowLeft');
+    fixture.detectChanges();
+    expect(host.querySelector('.menu__submenu')).toBeNull();
+    expect(document.activeElement).toBe(buttons()[2]);
+    expect(closed).not.toHaveBeenCalled();
+  });
+
+  it('closes on Tab without preventing the default focus move', () => {
+    const { cmp, host } = setup();
+    const closed = vi.fn();
+    cmp.closed.subscribe(closed);
+    const ev = keydown(host, 'Tab');
+    expect(closed).toHaveBeenCalledTimes(1);
+    expect(ev.defaultPrevented).toBe(false);
+  });
+
+  it('closes the top-level menu on Tab from a submenu', () => {
+    const { fixture, cmp, host, buttons } = setup();
+    const closed = vi.fn();
+    cmp.closed.subscribe(closed);
+    buttons()[2].click();
+    fixture.detectChanges();
+    const subBtn = host.querySelector<HTMLButtonElement>('.menu__submenu button')!;
+    const ev = keydown(subBtn, 'Tab');
+    expect(closed).toHaveBeenCalledTimes(1);
+    expect(ev.defaultPrevented).toBe(false);
+  });
+
+  it('moves focus to the next enabled item starting with a typed character', () => {
+    const { fixture, cmp, host, buttons } = setup([
+      { id: 'a', label: 'Abrir' },
+      { id: 'b', label: 'Borrar' },
+      { id: 'c', label: 'Bloquear', disabled: true },
+      { id: 'd', label: 'Buscar' },
+    ]);
+    keydown(host, 'b');
+    fixture.detectChanges();
+    expect(cmp.activeIndex()).toBe(1);
+    expect(document.activeElement).toBe(buttons()[1]);
+    keydown(host, 'B');
+    fixture.detectChanges();
+    expect(cmp.activeIndex()).toBe(3);
+    keydown(host, 'b');
+    expect(cmp.activeIndex()).toBe(1);
+    keydown(host, 'a');
+    expect(cmp.activeIndex()).toBe(0);
+    keydown(host, 'z');
+    expect(cmp.activeIndex()).toBe(0);
+    keydown(host, 'b', { ctrlKey: true });
+    expect(cmp.activeIndex()).toBe(0);
+  });
+
+  it('opens a submenu with Enter and focuses its first item', async () => {
+    const { fixture, host, buttons } = setup();
+    document.body.appendChild(host);
+    buttons()[2].focus();
+    const ev = keydown(buttons()[2], 'Enter');
+    expect(ev.defaultPrevented).toBe(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const subBtns = () => host.querySelectorAll<HTMLButtonElement>('.menu__submenu button');
+    expect(document.activeElement).toBe(subBtns()[0]);
+
+    // Enter on the parent again keeps the submenu open and moves focus back into it.
+    buttons()[2].focus();
+    keydown(buttons()[2], 'Enter');
+    fixture.detectChanges();
+    expect(host.querySelector('.menu__submenu')).not.toBeNull();
+    expect(buttons()[2].getAttribute('aria-expanded')).toBe('true');
+    expect(document.activeElement).toBe(subBtns()[0]);
+    host.remove();
+  });
+
+  it('lets Enter on a submenu item reach that item', () => {
+    const { fixture, host, buttons } = setup();
+    buttons()[2].click();
+    fixture.detectChanges();
+    const subBtn = host.querySelector<HTMLButtonElement>('.menu__submenu button')!;
+    const ev = keydown(subBtn, 'Enter');
+    expect(ev.defaultPrevented).toBe(false);
   });
 });

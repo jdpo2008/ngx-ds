@@ -43,17 +43,25 @@ export class MenuComponent {
   readonly itemClick = output<MenuItem>();
   readonly closed = output<void>();
 
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly itemBtns = viewChildren<ElementRef<HTMLButtonElement>>('itemBtn');
 
   /** Set when this menu is a submenu of another menu. */
   private readonly parentMenu = inject(MenuComponent, { optional: true, skipSelf: true });
 
+  private readonly submenus = viewChildren(MenuComponent);
+
   readonly activeIndex = signal(0);
-  /** The item that holds the tab stop: the active one, or the first enabled one if it is disabled. */
+  /** Set once the user moves through the items; from then on disabled items can hold focus. */
+  readonly #moved = signal(false);
+  /**
+   * The item that holds the tab stop: the active one, or the first enabled one while the
+   * user hasn't moved yet and the active one is disabled.
+   */
   readonly focusIndex = computed(() => {
     const items = this.items();
     const i = this.activeIndex();
-    if (items[i] && !items[i].disabled) return i;
+    if (items[i] && (!items[i].disabled || this.#moved())) return i;
     const first = items.findIndex((it) => !it.disabled);
     return first === -1 ? i : first;
   });
@@ -64,10 +72,15 @@ export class MenuComponent {
 
   constructor() {
     afterNextRender(() => {
-      if (this.autofocus()) {
-        this.focusItem(this.nextEnabled(-1, 1));
-      }
+      if (this.autofocus()) this.focusFirst();
     });
+  }
+
+  /** Moves focus to the first enabled item. */
+  focusFirst(): void {
+    const first = this.nextEnabled(-1, 1);
+    this.activeIndex.set(first);
+    this.focusItem(first);
   }
 
   onItemClick(item: MenuItem, index: number): void {
@@ -105,41 +118,99 @@ export class MenuComponent {
         break;
       case 'Home':
         event.preventDefault();
-        this.activeIndex.set(this.nextEnabled(-1, 1));
-        this.focusItem(this.activeIndex());
+        this.moveTo(0);
         break;
       case 'End':
         event.preventDefault();
-        this.activeIndex.set(this.nextEnabled(items.length, -1));
-        this.focusItem(this.activeIndex());
+        this.moveTo(items.length - 1);
         break;
-      case 'ArrowRight': {
-        const item = items[this.focusIndex()];
+      case 'ArrowRight':
+      case 'Enter': {
+        // Keys bubbling up from an open submenu belong to the submenu's items (index -1).
+        const index = this.targetIndex(event);
+        const item = items[index];
         if (item?.children?.length && !item.disabled) {
           event.preventDefault();
-          this.openSubmenu.set(item.id);
+          this.activeIndex.set(index);
+          this.openAndFocusSubmenu(item);
         } else {
           handled = false;
         }
         break;
       }
       case 'ArrowLeft':
+        // Only a submenu closes on ArrowLeft; a top-level menu has nothing to go back to.
+        if (this.parentMenu) {
+          event.preventDefault();
+          this.closed.emit();
+        } else {
+          handled = false;
+        }
+        break;
       case 'Escape':
         event.preventDefault();
         this.closed.emit();
         break;
+      case 'Tab':
+        // Tab leaves the whole menu: a submenu lets it bubble to the top-level menu, which
+        // closes without preventDefault so focus moves on naturally.
+        if (this.parentMenu) handled = false;
+        else this.closed.emit();
+        break;
       default:
-        handled = false;
+        handled = this.typeahead(event);
     }
     // A submenu sits inside its parent's host: keep its keys from also moving
     // the parent or reaching document-level Escape handlers.
     if (handled && this.parentMenu) event.stopPropagation();
   }
 
+  /** Focuses the next enabled item whose label starts with the typed character. */
+  private typeahead(event: KeyboardEvent): boolean {
+    const { key } = event;
+    if (key.length !== 1 || key === ' ' || event.ctrlKey || event.metaKey || event.altKey) {
+      return false;
+    }
+    const items = this.items();
+    const count = items.length;
+    const char = key.toLocaleLowerCase();
+    const start = this.focusIndex();
+    for (let step = 1; step <= count; step++) {
+      const i = (start + step) % count;
+      const item = items[i];
+      if (!item.disabled && item.label.trim().toLocaleLowerCase().startsWith(char)) {
+        this.moveTo(i);
+        break;
+      }
+    }
+    return true;
+  }
+
+  private openAndFocusSubmenu(item: MenuItem): void {
+    if (this.openSubmenu() === item.id) {
+      // Already open: the submenu won't autofocus again, so move focus into it here.
+      this.submenus()[0]?.focusFirst();
+    } else {
+      this.openSubmenu.set(item.id);
+    }
+  }
+
+  /** The index of the item the key was pressed on, the tab stop for the host, or -1. */
+  private targetIndex(event: KeyboardEvent): number {
+    const target = event.target;
+    if (target === this.host.nativeElement) return this.focusIndex();
+    return this.itemBtns().findIndex((b) => b.nativeElement === target);
+  }
+
   private moveActive(dir: 1 | -1): void {
-    const next = this.nextEnabled(this.focusIndex(), dir);
-    this.activeIndex.set(next);
-    this.focusItem(next);
+    const count = this.items().length;
+    this.moveTo((this.focusIndex() + dir + count) % count);
+  }
+
+  private moveTo(index: number): void {
+    this.#moved.set(true);
+    this.activeIndex.set(index);
+    this.focusItem(index);
   }
 
   private nextEnabled(from: number, dir: 1 | -1): number {
