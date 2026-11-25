@@ -1,4 +1,4 @@
-import { addMonths, isSameDay, moveFocusDate, toWeeks } from './day-cell';
+import { addMonths, clampDate, isSameDay, moveFocusDate, toWeeks } from './day-cell';
 
 const key = (k: string, shiftKey = false) => new KeyboardEvent('keydown', { key: k, shiftKey });
 const ymd = (d: Date | null) => (d ? [d.getFullYear(), d.getMonth() + 1, d.getDate()] : null);
@@ -8,6 +8,16 @@ describe('day-cell helpers', () => {
     expect(ymd(addMonths(new Date(2026, 0, 31), 1))).toEqual([2026, 2, 28]);
     expect(ymd(addMonths(new Date(2024, 0, 31), 1))).toEqual([2024, 2, 29]);
     expect(ymd(addMonths(new Date(2026, 0, 15), -1))).toEqual([2025, 12, 15]);
+  });
+
+  it('clampDate keeps the date within whole-day bounds', () => {
+    const min = new Date(2026, 0, 10, 15);
+    const max = new Date(2026, 0, 20, 15);
+    expect(ymd(clampDate(new Date(2026, 0, 5), min, max))).toEqual([2026, 1, 10]);
+    expect(clampDate(new Date(2026, 0, 5), min, max).getHours()).toBe(0);
+    expect(ymd(clampDate(new Date(2026, 0, 25), min, max))).toEqual([2026, 1, 20]);
+    expect(ymd(clampDate(new Date(2026, 0, 20), min, max))).toEqual([2026, 1, 20]);
+    expect(ymd(clampDate(new Date(2026, 0, 25), null, null))).toEqual([2026, 1, 25]);
   });
 
   it('isSameDay ignores the time and tolerates null', () => {

@@ -19,6 +19,7 @@ import { IconComponent } from '../../atoms/icon/icon.component';
 import {
   DayCell,
   addMonths,
+  clampDate,
   isSameDay,
   moveFocusDate,
   startOfDay,
@@ -26,6 +27,7 @@ import {
 } from '../../shared/day-cell';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
+import { trapTabKey } from '../../shared/focus-trap';
 import { isActivationKey } from '../../shared/keyboard';
 import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';
 import { Size } from '../../shared/size';
@@ -129,6 +131,12 @@ export class DatepickerComponent implements ControlValueAccessor {
 
   readonly headerText = computed(() => `${this.#months[this.#viewMonth()]} ${this.#viewYear()}`);
 
+  /** Accessible name of the panel: the field label, when there is one, plus "Calendar". */
+  readonly panelLabel = computed(() => {
+    const label = this.label().trim();
+    return label ? `${label}, ${this.i18n.calendar}` : this.i18n.calendar;
+  });
+
   readonly weekdayLabels = computed(() => {
     const fdow = this.firstDayOfWeek();
     return [...this.#weekdays.slice(fdow), ...this.#weekdays.slice(0, fdow)];
@@ -221,8 +229,13 @@ export class DatepickerComponent implements ControlValueAccessor {
     const next = moveFocusDate(cell.date, event, this.firstDayOfWeek());
     if (!next) return;
     event.preventDefault();
-    this.#focusedDate.set(next);
+    this.#focusedDate.set(clampDate(next, this.minDate(), this.maxDate()));
     this.#focusGridAfterRender();
+  }
+
+  /** The open panel is a dialog: Tab and Shift+Tab cycle through its controls. */
+  onPanelKeydown(event: KeyboardEvent): void {
+    trapTabKey(event.currentTarget as HTMLElement, event);
   }
 
   #focusGridAfterRender(): void {
