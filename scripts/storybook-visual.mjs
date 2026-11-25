@@ -106,6 +106,29 @@ function waitForDomQuiet(page, quietMs = 300, maxMs = 3000) {
   );
 }
 
+// Waits until every <img> is decoded, then forces a repaint. Under parallel load Chromium
+// sometimes paints an image before it is decoded and keeps that raster, which changes the
+// antialiased edge of rounded images (avatars) by a few hundred pixels from run to run.
+// Lazy images that have not loaded (off-screen carousel slides) never decode, so they are
+// skipped, and the wait gives up after 5 s so a stuck image cannot hang the run.
+function settleImages(page) {
+  return page.evaluate(async () => {
+    const decoded = Promise.all(
+      [...document.images]
+        .filter((img) => img.complete || img.loading !== 'lazy')
+        .map((img) => img.decode().catch(() => {})),
+    );
+    await Promise.race([decoded, new Promise((done) => setTimeout(done, 5000))]);
+    const nextFrame = () =>
+      new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+    const root = document.documentElement;
+    root.style.transform = 'translateZ(0)';
+    await nextFrame();
+    root.style.transform = '';
+    await nextFrame();
+  });
+}
+
 async function screenshot(page) {
   return page.screenshot({ fullPage: true, animations: 'disabled', caret: 'hide' });
 }
@@ -152,6 +175,7 @@ async function checkStory(browser, base, story, theme) {
     await gotoStory(page, base, story, theme);
     await waitForDomQuiet(page);
     await page.evaluate(() => document.fonts.ready);
+    await settleImages(page);
 
     let shot = await screenshot(page);
     if (args.update) {
