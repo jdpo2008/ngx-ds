@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Users } from 'lucide-angular';
+import { LucideUsers as Users } from '@lucide/angular';
 import { StatCardComponent } from './stat-card.component';
 
 describe('StatCardComponent', () => {

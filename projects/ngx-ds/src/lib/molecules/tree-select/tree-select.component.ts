@@ -13,7 +13,13 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Check, ChevronDown, ChevronRight, Minus, X } from 'lucide-angular';
+import {
+  LucideCheck as Check,
+  LucideChevronDown as ChevronDown,
+  LucideChevronRight as ChevronRight,
+  LucideMinus as Minus,
+  LucideX as X,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';

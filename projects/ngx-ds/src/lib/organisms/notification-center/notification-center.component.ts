@@ -8,7 +8,7 @@ import {
   inject,
   ElementRef,
 } from '@angular/core';
-import { Bell, BellOff } from 'lucide-angular';
+import { LucideBell as Bell, LucideBellOff as BellOff } from '@lucide/angular';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { ButtonComponent } from '../../atoms/button/button.component';

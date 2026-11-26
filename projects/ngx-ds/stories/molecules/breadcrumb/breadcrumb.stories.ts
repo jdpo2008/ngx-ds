@@ -5,8 +5,12 @@ import {
   BreadcrumbItem,
   BreadcrumbSize,
 } from '../../../src/lib/molecules/breadcrumb/breadcrumb.component';
-import { LayoutDashboard, ShoppingCart, Package } from 'lucide-angular';
-import { Slash } from 'lucide-angular';
+import {
+  LucideLayoutDashboard as LayoutDashboard,
+  LucideShoppingCart as ShoppingCart,
+  LucidePackage as Package,
+  LucideSlash as Slash,
+} from '@lucide/angular';
 
 // ── Basic Wrapper ─────────────────────────────────────────────────────────────
 

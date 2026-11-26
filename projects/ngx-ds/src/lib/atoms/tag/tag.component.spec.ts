@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Star } from 'lucide-angular';
+import { LucideStar as Star } from '@lucide/angular';
 import { TagComponent } from './tag.component';
 
 const classesOf = (x: Element | string) =>

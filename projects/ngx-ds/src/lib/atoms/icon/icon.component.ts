@@ -1,15 +1,27 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { LucideAngularModule, LucideIconData } from 'lucide-angular';
+import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import {
+  LucideDynamicIcon,
+  LucideIconData as LucideIconObject,
+  isLucideIconComponent,
+  isLucideIconData,
+  lucideLegacyIcon,
+} from '@lucide/angular';
+import { IconInput } from './icon.types';
 
-export type { LucideIconData } from 'lucide-angular';
+/** Turns any accepted icon shape into the `@lucide/angular` data object. */
+function toLucideIcon(icon: IconInput): LucideIconObject {
+  if (isLucideIconComponent(icon)) return icon.icon;
+  if (isLucideIconData(icon)) return icon;
+  return lucideLegacyIcon('icon', icon as unknown as LucideIconObject['node']);
+}
 
 @Component({
   selector: 'ngx-ds-icon',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideDynamicIcon],
   template: `
-    <lucide-angular
-      [img]="icon()"
+    <svg
+      [lucideIcon]="data()"
       [size]="size()"
       [color]="color()"
       [strokeWidth]="strokeWidth()"
@@ -26,11 +38,13 @@ export type { LucideIconData } from 'lucide-angular';
   },
 })
 export class IconComponent {
-  readonly icon = input.required<LucideIconData>();
+  readonly icon = input.required<IconInput>();
   readonly size = input<number>(24);
   readonly color = input<string>('currentColor');
   readonly strokeWidth = input<number>(2);
   readonly absoluteStrokeWidth = input<boolean>(false);
   /** Accessible name for an icon that carries meaning on its own. */
   readonly label = input<string>('');
+
+  protected readonly data = computed(() => toLucideIcon(this.icon()));
 }

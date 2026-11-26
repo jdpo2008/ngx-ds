@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SidebarComponent } from './sidebar.component';
-import { PanelLeftOpen } from 'lucide-angular';
+import { LucidePanelLeftOpen as PanelLeftOpen } from '@lucide/angular';
 import { SidebarItem, SidebarSection } from './sidebar.types';
 
 const SECTIONS: SidebarSection[] = [

@@ -1,6 +1,13 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
-import { Bell, FileText, Home, Layers, Settings, Users } from 'lucide-angular';
+import {
+  LucideBell as Bell,
+  LucideFileText as FileText,
+  LucideHome as Home,
+  LucideLayers as Layers,
+  LucideSettings as Settings,
+  LucideUsers as Users,
+} from '@lucide/angular';
 import { NavbarComponent } from '../../../src/lib/organisms/navbar/navbar.component';
 import type { NavbarItem } from '../../../src/lib/organisms/navbar/navbar.types';
 import { IconButtonComponent } from '../../../src/lib/atoms/icon-button/icon-button.component';

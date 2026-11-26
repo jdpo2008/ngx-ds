@@ -1,9 +1,9 @@
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 
 export interface SidebarItem {
   id: string;
   label: string;
-  icon?: LucideIconData;
+  icon?: IconInput;
   badge?: string | number;
   disabled?: boolean;
 }

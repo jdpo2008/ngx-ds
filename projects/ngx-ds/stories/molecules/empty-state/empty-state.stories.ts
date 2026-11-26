@@ -2,7 +2,11 @@ import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
 import { EmptyStateComponent } from '../../../src/lib/molecules/empty-state/empty-state.component';
 import { ButtonComponent } from '../../../src/lib/atoms/button/button.component';
-import { Inbox, Search, FileX } from 'lucide-angular';
+import {
+  LucideInbox as Inbox,
+  LucideSearch as Search,
+  LucideFileX as FileX,
+} from '@lucide/angular';
 
 @Component({
   selector: 'empty-state-basic-wrapper',

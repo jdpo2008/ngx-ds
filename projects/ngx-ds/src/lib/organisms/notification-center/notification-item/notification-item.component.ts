@@ -1,5 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import { Info, CheckCircle, AlertTriangle, AlertCircle, X, LucideIconData } from 'lucide-angular';
+import {
+  LucideInfo as Info,
+  LucideCheckCircle as CheckCircle,
+  LucideAlertTriangle as AlertTriangle,
+  LucideAlertCircle as AlertCircle,
+  LucideX as X,
+} from '@lucide/angular';
+import { IconInput } from '../../../atoms/icon/icon.types';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { IconComponent } from '../../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../../atoms/icon-button/icon-button.component';
@@ -7,7 +14,7 @@ import { NGX_DS_LOCALE } from '../../../shared/locale';
 import type { NgxNotification, NotificationType } from '../notification.types';
 import { NGX_DS_LABELS, NgxDsLabels } from '../../../shared/labels';
 
-const TYPE_ICONS: Record<NotificationType, LucideIconData> = {
+const TYPE_ICONS: Record<NotificationType, IconInput> = {
   info: Info,
   success: CheckCircle,
   warning: AlertTriangle,

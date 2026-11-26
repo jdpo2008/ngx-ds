@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../icon/icon.types';
 import { IconComponent } from '../icon/icon.component';
 import { SpinnerComponent, SpinnerSize } from '../spinner/spinner.component';
 import { Size } from '../../shared/size';
@@ -23,8 +23,8 @@ export class ButtonComponent {
   readonly variant = input<ButtonVariant>('solid');
   readonly size = input<ButtonSize>('md');
   readonly color = input<ButtonColor>('primary');
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
-  readonly iconRight = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
+  readonly iconRight = input<IconInput | undefined>(undefined);
   readonly disabled = input<boolean>(false);
   readonly loading = input<boolean>(false);
   readonly rounded = input<boolean>(false);

@@ -7,7 +7,14 @@ import {
   TabsVariant,
   TabsSize,
 } from '../../../src/lib/organisms/tabs';
-import { User, Settings, Bell, Shield, FileText, BarChart2 } from 'lucide-angular';
+import {
+  LucideUser as User,
+  LucideSettings as Settings,
+  LucideBell as Bell,
+  LucideShield as Shield,
+  LucideFileText as FileText,
+  LucideBarChart2 as BarChart2,
+} from '@lucide/angular';
 
 // ── Variants Wrapper ──────────────────────────────────────────────────────────
 

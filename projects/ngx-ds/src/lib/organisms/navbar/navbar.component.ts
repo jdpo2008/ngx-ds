@@ -9,7 +9,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { LucideIconData, Menu, X } from 'lucide-angular';
+import { LucideMenu as Menu, LucideX as X } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { BadgeComponent } from '../../atoms/badge/badge.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
@@ -49,8 +50,8 @@ export class NavbarComponent {
   readonly itemClick = output<NavbarItem>();
 
   readonly panelId = `ngx-navbar-panel-${nextId++}`;
-  readonly menuIcon: LucideIconData = Menu;
-  readonly closeIcon: LucideIconData = X;
+  readonly menuIcon: IconInput = Menu;
+  readonly closeIcon: IconInput = X;
 
   private readonly toggle = viewChild<ElementRef<HTMLButtonElement>>('toggle');
 

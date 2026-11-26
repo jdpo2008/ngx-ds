@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { LucideIconData, Star } from 'lucide-angular';
+import { LucideStar as Star } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { TabsComponent, TabsSize, TabsVariant } from './tabs.component';
 import { TabContentDirective } from './tab-content.directive';
 import { TabComponent } from './tab.component';
@@ -97,7 +98,7 @@ describe('TabsComponent behaviour', () => {
     size: TabsSize = 'md';
     fullWidth = false;
     firstDisabled = false;
-    icon: LucideIconData | undefined = undefined;
+    icon: IconInput | undefined = undefined;
     withFifth = false;
   }
 

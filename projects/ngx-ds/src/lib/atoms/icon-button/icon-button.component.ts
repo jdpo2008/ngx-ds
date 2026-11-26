@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../icon/icon.types';
 import { ButtonVariant, ButtonSize, ButtonColor } from '../button/button.component';
 import { IconComponent } from '../icon/icon.component';
 
@@ -14,7 +14,7 @@ const ICON_SIZE: Record<ButtonSize, number> = { sm: 14, md: 18, lg: 22 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconButtonComponent {
-  readonly icon = input.required<LucideIconData>();
+  readonly icon = input.required<IconInput>();
   readonly ariaLabel = input.required<string>();
   readonly variant = input<ButtonVariant>('solid');
   readonly size = input<ButtonSize>('md');

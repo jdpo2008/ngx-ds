@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 
 @Component({
   selector: 'ngx-ds-step',
@@ -14,7 +14,7 @@ import { LucideIconData } from 'lucide-angular';
 export class StepComponent {
   readonly label = input.required<string>();
   readonly description = input<string>('');
-  readonly icon = input<LucideIconData | undefined>(undefined);
+  readonly icon = input<IconInput | undefined>(undefined);
   readonly error = input<boolean>(false);
 
   readonly _active = signal(false);

@@ -6,7 +6,11 @@ import {
 } from '../../../src/lib/atoms/tooltip/tooltip.directive';
 import { ButtonComponent } from '../../../src/lib/atoms/button/button.component';
 import { IconButtonComponent } from '../../../src/lib/atoms/icon-button/icon-button.component';
-import { Info, Trash2, Settings } from 'lucide-angular';
+import {
+  LucideInfo as Info,
+  LucideTrash2 as Trash2,
+  LucideSettings as Settings,
+} from '@lucide/angular';
 
 // ── Placements Wrapper ────────────────────────────────────────────────────────
 

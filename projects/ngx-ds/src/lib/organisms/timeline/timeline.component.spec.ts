@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Check } from 'lucide-angular';
+import { LucideCheck as Check } from '@lucide/angular';
 import { TimelineComponent } from './timeline.component';
 import { TimelineItemComponent, TimelineItemStatus } from './timeline-item.component';
 

@@ -8,7 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { Check, Copy } from 'lucide-angular';
+import { LucideCheck as Check, LucideCopy as Copy } from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 import { Size } from '../../shared/size';

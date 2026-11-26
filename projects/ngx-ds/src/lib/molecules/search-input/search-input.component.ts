@@ -10,7 +10,7 @@ import {
   viewChild,
   ElementRef,
 } from '@angular/core';
-import { Search, X } from 'lucide-angular';
+import { LucideSearch as Search, LucideX as X } from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { SpinnerComponent } from '../../atoms/spinner/spinner.component';
 import { Size } from '../../shared/size';

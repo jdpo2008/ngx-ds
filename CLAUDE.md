@@ -65,7 +65,7 @@ Prereleases (`1.0.0-rc.1`): bump the version only — no `changelog --release`, 
 
 ### Schematics (`ng add`)
 
-`projects/ngx-ds/schematics/` holds the `ng add` schematic (`collection.json`, `ng-add/index.cts`, `ng-add/schema.json`). It adds `lucide-angular` and prepends `styles/ngx-ds.scss` to the app's `styles`.
+`projects/ngx-ds/schematics/` holds the `ng add` schematic (`collection.json`, `ng-add/index.cts`, `ng-add/schema.json`). It adds `@lucide/angular` and prepends `styles/ngx-ds.scss` to the app's `styles`.
 
 - The source is `.cts`: the built package is `"type": "module"`, and `npm pack` drops a nested `package.json`, so the schematic must compile to `.cjs`.
 - `npm run build` runs ng-packagr, then `tsc -p projects/ngx-ds/tsconfig.schematics.json`. ng-packagr copies the JSON files as assets.
@@ -120,7 +120,7 @@ All components use `ChangeDetectionStrategy.OnPush` and are `standalone: true`.
   private readonly ref = viewChild.required(SomeComponent);
   ```
 - `typeof this.#field` is invalid in TypeScript parameter type positions — write explicit types for `registerOnChange` / `registerOnTouched` callbacks.
-- Import `LucideIconData` from `'lucide-angular'` only — the subpath `'lucide-angular/icons/types'` does not exist.
+- Icons come from `@lucide/angular` (`import { LucideX as X } from '@lucide/angular'`). Type icon inputs as `IconInput` from `atoms/icon/icon.types`; `lucide-angular` is no longer a dependency.
 
 ### SCSS conventions
 

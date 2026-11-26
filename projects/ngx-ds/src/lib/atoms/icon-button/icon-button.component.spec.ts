@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Trash } from 'lucide-angular';
+import { LucideTrash as Trash } from '@lucide/angular';
 import { IconButtonComponent } from './icon-button.component';
 
 const classesOf = (x: Element | string) =>

@@ -6,7 +6,17 @@ import {
   ButtonColor,
   ButtonSize,
 } from '../../../src/lib/atoms/button/button.component';
-import { Plus, Trash2, Check, Pencil, Send, Search, Heart, Star, Settings2 } from 'lucide-angular';
+import {
+  LucidePlus as Plus,
+  LucideTrash2 as Trash2,
+  LucideCheck as Check,
+  LucidePencil as Pencil,
+  LucideSend as Send,
+  LucideSearch as Search,
+  LucideHeart as Heart,
+  LucideStar as Star,
+  LucideSettings2 as Settings2,
+} from '@lucide/angular';
 
 // ── Variants Wrapper ──────────────────────────────────────────────────────────
 

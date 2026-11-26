@@ -8,7 +8,7 @@ import {
   model,
   output,
 } from '@angular/core';
-import { Check, X } from 'lucide-angular';
+import { LucideCheck as Check, LucideX as X } from '@lucide/angular';
 import { StepComponent } from './step.component';
 import { IconComponent } from '../../atoms/icon/icon.component';
 

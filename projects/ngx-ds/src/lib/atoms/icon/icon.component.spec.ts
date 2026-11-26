@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { Check } from 'lucide-angular';
+import { LucideCheck } from '@lucide/angular';
 import { IconComponent } from './icon.component';
 
 describe('IconComponent', () => {
   function setup(inputs: Record<string, unknown> = {}) {
     const fixture = TestBed.createComponent(IconComponent);
-    fixture.componentRef.setInput('icon', Check);
+    fixture.componentRef.setInput('icon', LucideCheck);
     for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
     fixture.detectChanges();
     return (fixture.nativeElement as HTMLElement).querySelector('svg')!;
@@ -26,10 +26,32 @@ describe('IconComponent', () => {
   });
 });
 
+describe('IconComponent icon shapes', () => {
+  function render(icon: unknown) {
+    const fixture = TestBed.createComponent(IconComponent);
+    fixture.componentRef.setInput('icon', icon);
+    fixture.detectChanges();
+    return (fixture.nativeElement as HTMLElement).querySelector('svg')!;
+  }
+
+  it('accepts an @lucide/angular icon component', () => {
+    expect(render(LucideCheck).querySelector('path')).not.toBeNull();
+  });
+
+  it('accepts the icon data object', () => {
+    expect(render(LucideCheck.icon).querySelector('path')).not.toBeNull();
+  });
+
+  it('accepts a lucide-angular icon array (deprecated)', () => {
+    const svg = render([['circle', { cx: 12, cy: 12, r: 4 }]]);
+    expect(svg.querySelector('circle')?.getAttribute('r')).toBe('4');
+  });
+});
+
 describe('IconComponent accessibility', () => {
   function setup(inputs: Record<string, unknown> = {}) {
     const fixture = TestBed.createComponent(IconComponent);
-    fixture.componentRef.setInput('icon', Check);
+    fixture.componentRef.setInput('icon', LucideCheck);
     for (const [k, v] of Object.entries(inputs)) fixture.componentRef.setInput(k, v);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;

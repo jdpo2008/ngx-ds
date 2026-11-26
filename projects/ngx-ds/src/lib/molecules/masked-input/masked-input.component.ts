@@ -15,7 +15,7 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { Size } from '../../shared/size';
@@ -68,7 +68,7 @@ export class MaskedInputComponent implements ControlValueAccessor, Validator {
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
   readonly errors = input<FieldErrors>([]);
   readonly touched = input<boolean>(false);
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
   readonly autocomplete = input<string | null>(null);
   readonly readonly = input<boolean>(false);
   readonly disabled = input<boolean>(false);

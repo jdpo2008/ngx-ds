@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, contentChild, input, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { TabContentDirective } from './tab-content.directive';
 
 @Component({
@@ -28,7 +28,7 @@ import { TabContentDirective } from './tab-content.directive';
 export class TabComponent {
   readonly label = input.required<string>();
   readonly disabled = input<boolean>(false);
-  readonly icon = input<LucideIconData | undefined>(undefined);
+  readonly icon = input<IconInput | undefined>(undefined);
   readonly lazy = input<boolean>(false);
 
   protected readonly contentTpl = contentChild(TabContentDirective);

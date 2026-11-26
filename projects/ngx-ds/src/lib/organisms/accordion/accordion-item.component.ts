@@ -8,7 +8,8 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { ChevronDown, LucideIconData } from 'lucide-angular';
+import { LucideChevronDown as ChevronDown } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { ACCORDION_CONTROLLER } from './accordion.token';
 import { Size } from '../../shared/size';
@@ -37,7 +38,7 @@ export class AccordionItemComponent {
   // ── Inputs ────────────────────────────────────────────────────
   readonly label = input.required<string>();
   readonly description = input<string>('');
-  readonly icon = input<LucideIconData | undefined>(undefined);
+  readonly icon = input<IconInput | undefined>(undefined);
   readonly disabled = input<boolean>(false);
   /** Opens or closes the item from outside; in single mode, opening it closes the others. */
   readonly expanded = input<boolean>(false);

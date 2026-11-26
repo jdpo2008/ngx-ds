@@ -1,7 +1,11 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Calendar, CreditCard, Phone } from 'lucide-angular';
+import {
+  LucideCalendar as Calendar,
+  LucideCreditCard as CreditCard,
+  LucidePhone as Phone,
+} from '@lucide/angular';
 import { MaskedInputComponent } from '../../../src/lib/molecules/masked-input/masked-input.component';
 
 const COLUMN = 'display: flex; flex-direction: column; gap: 1.25rem; max-width: 360px;';

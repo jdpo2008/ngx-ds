@@ -1,9 +1,9 @@
-import type { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 
 export interface MenuItem {
   id: string;
   label: string;
-  icon?: LucideIconData;
+  icon?: IconInput;
   kbd?: string;
   disabled?: boolean;
   danger?: boolean;

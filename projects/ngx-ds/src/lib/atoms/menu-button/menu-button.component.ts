@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../icon/icon.types';
 import { IconComponent } from '../icon/icon.component';
 import { Size } from '../../shared/size';
 
@@ -17,8 +17,8 @@ const ICON_SIZE: Record<MenuButtonSize, number> = { sm: 14, md: 16, lg: 18 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuButtonComponent {
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
-  readonly iconRight = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
+  readonly iconRight = input<IconInput | undefined>(undefined);
   readonly color = input<MenuButtonColor>('default');
   readonly size = input<MenuButtonSize>('md');
   readonly disabled = input<boolean>(false);

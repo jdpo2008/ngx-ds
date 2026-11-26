@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
-import { ChevronRight, LucideIconData } from 'lucide-angular';
+import { LucideChevronRight as ChevronRight } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
@@ -7,7 +8,7 @@ import { NGX_DS_LABELS } from '../../shared/labels';
 export interface BreadcrumbItem {
   label: string;
   href?: string;
-  icon?: LucideIconData;
+  icon?: IconInput;
   disabled?: boolean;
 }
 
@@ -29,13 +30,13 @@ export class BreadcrumbComponent {
   readonly items = input<BreadcrumbItem[]>([]);
   readonly size = input<BreadcrumbSize>('md');
   readonly maxItems = input<number>(0); // 0 = show all
-  readonly separator = input<LucideIconData | string>(ChevronRight);
+  readonly separator = input<IconInput | string>(ChevronRight);
 
   readonly itemClick = output<BreadcrumbItem>();
 
   protected readonly separatorIsIcon = computed(() => typeof this.separator() !== 'string');
   protected readonly separatorIcon = computed(() =>
-    typeof this.separator() === 'string' ? null : (this.separator() as LucideIconData),
+    typeof this.separator() === 'string' ? null : (this.separator() as IconInput),
   );
   protected readonly separatorChar = computed(() =>
     typeof this.separator() === 'string' ? (this.separator() as string) : '',

@@ -14,7 +14,13 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
-import { ChevronDown, ChevronUp, Check, X, Search } from 'lucide-angular';
+import {
+  LucideChevronDown as ChevronDown,
+  LucideChevronUp as ChevronUp,
+  LucideCheck as Check,
+  LucideX as X,
+  LucideSearch as Search,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';

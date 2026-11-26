@@ -1,6 +1,11 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
-import { AlertTriangle, DollarSign, ShoppingCart, Users } from 'lucide-angular';
+import {
+  LucideAlertTriangle as AlertTriangle,
+  LucideDollarSign as DollarSign,
+  LucideShoppingCart as ShoppingCart,
+  LucideUsers as Users,
+} from '@lucide/angular';
 import { StatCardComponent } from '../../../src/lib/molecules/stat-card/stat-card.component';
 
 const GRID =

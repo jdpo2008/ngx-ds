@@ -7,14 +7,21 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { Info, CheckCircle2, AlertTriangle, AlertCircle, X, LucideIconData } from 'lucide-angular';
+import {
+  LucideInfo as Info,
+  LucideCheckCircle2 as CheckCircle2,
+  LucideAlertTriangle as AlertTriangle,
+  LucideAlertCircle as AlertCircle,
+  LucideX as X,
+} from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
 export type AlertColor = 'info' | 'success' | 'warning' | 'danger';
 export type AlertVariant = 'solid' | 'soft' | 'outline';
 
-const TYPE_ICONS: Record<AlertColor, LucideIconData> = {
+const TYPE_ICONS: Record<AlertColor, IconInput> = {
   info: Info,
   success: CheckCircle2,
   warning: AlertTriangle,

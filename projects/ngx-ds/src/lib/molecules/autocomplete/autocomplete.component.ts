@@ -17,7 +17,8 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { LucideIconData, Search, X } from 'lucide-angular';
+import { LucideSearch as Search, LucideX as X } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeLayer } from '../../shared/overlay-stack';
@@ -78,7 +79,7 @@ export class AutocompleteComponent implements ControlValueAccessor, OnDestroy {
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
   readonly errors = input<FieldErrors>([]);
   readonly touched = input<boolean>(false);
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
   /** Show loading spinner — set true while fetching async results */
   readonly loading = input<boolean>(false);
   /** Minimum characters typed before the panel opens */

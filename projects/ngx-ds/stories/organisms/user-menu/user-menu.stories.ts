@@ -1,6 +1,11 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
-import { User, Settings, LogOut, CreditCard } from 'lucide-angular';
+import {
+  LucideUser as User,
+  LucideSettings as Settings,
+  LucideLogOut as LogOut,
+  LucideCreditCard as CreditCard,
+} from '@lucide/angular';
 import { UserMenuComponent } from '../../../src/lib/organisms/user-menu/user-menu.component';
 import type {
   UserMenuAction,

@@ -7,7 +7,11 @@ import {
   output,
   inject,
 } from '@angular/core';
-import { LucideIconData, PanelLeftClose, PanelLeftOpen } from 'lucide-angular';
+import {
+  LucidePanelLeftClose as PanelLeftClose,
+  LucidePanelLeftOpen as PanelLeftOpen,
+} from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { BadgeComponent } from '../../atoms/badge/badge.component';
@@ -34,8 +38,8 @@ export class SidebarComponent {
   readonly collapsed = model<boolean>(false);
   readonly itemClick = output<SidebarItem>();
 
-  private readonly panelLeftOpen: LucideIconData = PanelLeftOpen;
-  private readonly panelLeftClose: LucideIconData = PanelLeftClose;
+  private readonly panelLeftOpen: IconInput = PanelLeftOpen;
+  private readonly panelLeftClose: IconInput = PanelLeftClose;
 
   readonly toggleIcon = computed(() =>
     this.collapsed() ? this.panelLeftOpen : this.panelLeftClose,

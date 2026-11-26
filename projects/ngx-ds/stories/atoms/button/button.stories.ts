@@ -6,7 +6,14 @@ import {
   ButtonSize,
   ButtonVariant,
 } from '../../../src/lib/atoms/button/button.component';
-import { Plus, Trash2, Check, ArrowRight, Download, Send } from 'lucide-angular';
+import {
+  LucidePlus as Plus,
+  LucideTrash2 as Trash2,
+  LucideCheck as Check,
+  LucideArrowRight as ArrowRight,
+  LucideDownload as Download,
+  LucideSend as Send,
+} from '@lucide/angular';
 
 // ── Variants Wrapper ──────────────────────────────────────────────────────────
 

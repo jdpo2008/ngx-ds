@@ -7,7 +7,11 @@ import {
   model,
   output,
 } from '@angular/core';
-import { ChevronLeft, ChevronRight, X } from 'lucide-angular';
+import {
+  LucideChevronLeft as ChevronLeft,
+  LucideChevronRight as ChevronRight,
+  LucideX as X,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';
 import { setupEscapeClose } from '../../shared/escape-close';
