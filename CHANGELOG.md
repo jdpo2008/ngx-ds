@@ -4,6 +4,22 @@ All notable changes to `@jdpo2008/ngx-ds` are documented here. The project follo
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-26
+
+### Added
+
+- `IconInput` type: any icon the components accept — an `@lucide/angular` icon component (`LucideX`), its data object (`LucideX.icon`), or a `lucide-angular` icon array.
+
+### Changed
+
+- Supports Angular 22: the `@angular/*` peer dependencies now accept `^21.0.0 || ^22.0.0`.
+- Icons now render with `@lucide/angular`, which replaces `lucide-angular` as the peer dependency (`npm install @lucide/angular`). `lucide-angular` is no longer maintained and does not support Angular 22. Icons from `lucide-angular` still work as inputs.
+- `ng add` installs `@lucide/angular` instead of `lucide-angular`.
+
+### Deprecated
+
+- The `LucideIconData` type and passing `lucide-angular` icons. Import icons from `@lucide/angular` (`import { LucideX } from '@lucide/angular'`) and type them as `IconInput`.
+
 ## [1.3.0] - 2026-11-25
 
 ### Fixed
@@ -352,6 +368,7 @@ First public release.
 - CI runs format, lint, tests, the library build and the Storybook build (#3).
 - Release workflow that publishes to npm when a GitHub release is published.
 
+[1.4.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.4.0
 [1.3.0]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.3.0
 [1.2.2]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.2
 [1.2.1]: https://github.com/jdpo2008/ngx-ds/releases/tag/v1.2.1
