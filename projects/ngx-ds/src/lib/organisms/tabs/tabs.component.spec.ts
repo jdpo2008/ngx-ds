@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { LucideStar as Star } from '@lucide/angular';
 import { IconInput } from '../../atoms/icon/icon.types';
@@ -162,8 +162,9 @@ describe('TabsComponent behaviour', () => {
     const { fixture, host, tabs, visible, render } = setup({ withFifth: true, active: 4 });
     expect(tabs()[4].getAttribute('aria-selected')).toBe('true');
     host.withFifth = false;
-    // Zoneless: a plain field change doesn't mark the host view dirty.
-    fixture.componentRef.changeDetectorRef.markForCheck();
+    // Zoneless: a plain field change doesn't mark the host view dirty. Mark the host's own
+    // view: Angular 22 makes OnPush the default, and componentRef.changeDetectorRef is the root view.
+    fixture.componentRef.injector.get(ChangeDetectorRef).markForCheck();
     render();
     expect(tabs().length).toBe(4);
     expect(tabs()[0].getAttribute('tabindex')).toBe('0');
