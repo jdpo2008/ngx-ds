@@ -13,7 +13,8 @@ import { NotificationItemComponent } from './lib/organisms/notification-center/n
 /** Wrappers that render only projected content, which inherits the font of their parent. */
 const EXEMPT = new Set(['IconComponent', 'StepComponent', 'TabComponent']);
 
-const LIBRARY_FONT = /font-family\s*:\s*var\(\s*--ngx-primary-font-family\b/;
+// Angular 22 compiles custom property names with a %NS% placeholder (`var(--%NS%ngx-…)`).
+const LIBRARY_FONT = /font-family\s*:\s*var\(\s*--(?:%NS%)?ngx-primary-font-family\b/;
 
 /** Components the public ones render but do not export. */
 const INTERNAL = { TooltipBoxComponent, NotificationItemComponent };
