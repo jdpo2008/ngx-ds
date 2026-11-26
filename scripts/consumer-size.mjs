@@ -171,6 +171,7 @@ async function measure(dir) {
   const lib = resolve(dir);
   await rm(PKG, { recursive: true, force: true });
   await cp(lib, PKG, { recursive: true });
+  await copyPeers(lib);
   const baseline = await buildApp(null);
   const added = {};
   for (const c of CASES) {
