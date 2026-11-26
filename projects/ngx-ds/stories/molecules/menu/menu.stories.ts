@@ -1,6 +1,12 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
-import { Copy, Pencil, Trash2, Share2, Download } from 'lucide-angular';
+import {
+  LucideCopy as Copy,
+  LucidePencil as Pencil,
+  LucideTrash2 as Trash2,
+  LucideShare2 as Share2,
+  LucideDownload as Download,
+} from '@lucide/angular';
 import { MenuComponent } from '../../../src/lib/molecules/menu/menu.component';
 import type { MenuItem } from '../../../src/lib/molecules/menu/menu.types';
 

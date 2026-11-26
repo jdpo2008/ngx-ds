@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { LucideIconData, Minus, TrendingDown, TrendingUp } from 'lucide-angular';
+import {
+  LucideMinus as Minus,
+  LucideTrendingDown as TrendingDown,
+  LucideTrendingUp as TrendingUp,
+} from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -32,7 +37,7 @@ export class StatCardComponent {
   readonly deltaLabel = input<string | undefined>(undefined);
   /** Lower is better: a decrease is shown as positive. */
   readonly invertTrend = input<boolean>(false);
-  readonly icon = input<LucideIconData | undefined>(undefined);
+  readonly icon = input<IconInput | undefined>(undefined);
   /** Shows placeholders instead of the value and change. */
   readonly loading = input<boolean>(false);
 
@@ -55,7 +60,7 @@ export class StatCardComponent {
     return (t === 'up') !== this.invertTrend() ? 'positive' : 'negative';
   });
 
-  readonly trendIcon = computed<LucideIconData>(() => {
+  readonly trendIcon = computed<IconInput>(() => {
     const t = this.trend();
     return t === 'up' ? TrendingUp : t === 'down' ? TrendingDown : Minus;
   });

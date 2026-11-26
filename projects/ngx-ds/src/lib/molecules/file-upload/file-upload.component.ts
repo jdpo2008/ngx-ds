@@ -8,15 +8,15 @@ import {
   inject,
 } from '@angular/core';
 import {
-  File as FileIcon,
-  FileImage,
-  FileText,
-  FileVideo,
-  Upload,
-  X,
-  CheckCircle2,
-  AlertCircle,
-} from 'lucide-angular';
+  LucideFile as FileIcon,
+  LucideFileImage as FileImage,
+  LucideFileText as FileText,
+  LucideFileVideo as FileVideo,
+  LucideUpload as Upload,
+  LucideX as X,
+  LucideCheckCircle2 as CheckCircle2,
+  LucideAlertCircle as AlertCircle,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { ProgressBarComponent } from '../../atoms/progress-bar/progress-bar.component';

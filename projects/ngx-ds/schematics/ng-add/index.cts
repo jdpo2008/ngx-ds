@@ -42,7 +42,7 @@ export function ngAdd(options: NgAddOptions): Rule {
     }
 
     return chain([
-      addDependency('lucide-angular', peerVersion('lucide-angular'), {
+      addDependency('@lucide/angular', peerVersion('@lucide/angular'), {
         existing: ExistingBehavior.Skip,
       }),
       addStylesheet(projectName),

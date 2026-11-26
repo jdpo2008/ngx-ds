@@ -1,6 +1,12 @@
 import { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
-import { Home, FileText, Settings, Users, Bell } from 'lucide-angular';
+import {
+  LucideHome as Home,
+  LucideFileText as FileText,
+  LucideSettings as Settings,
+  LucideUsers as Users,
+  LucideBell as Bell,
+} from '@lucide/angular';
 import { SidebarComponent } from '../../../src/lib/organisms/sidebar/sidebar.component';
 import type { SidebarSection, SidebarItem } from '../../../src/lib/organisms/sidebar/sidebar.types';
 

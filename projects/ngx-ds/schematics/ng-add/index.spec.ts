@@ -37,19 +37,19 @@ describe('ng-add', () => {
     expect(styles(tree)).toEqual([STYLESHEET, 'projects/app/src/styles.scss']);
   });
 
-  it('adds lucide-angular with the peer dependency range', async () => {
+  it('adds @lucide/angular with the peer dependency range', async () => {
     tree = await run({ project: 'app' }, tree);
     const pkg = JSON.parse(tree.readContent('/package.json'));
-    expect(pkg.dependencies['lucide-angular']).toBe('^1.0.0');
+    expect(pkg.dependencies['@lucide/angular']).toBe('^1.80.0');
   });
 
-  it('keeps an existing lucide-angular version', async () => {
+  it('keeps an existing @lucide/angular version', async () => {
     const pkg = JSON.parse(tree.readContent('/package.json'));
-    pkg.dependencies['lucide-angular'] = '1.2.3';
+    pkg.dependencies['@lucide/angular'] = '1.2.3';
     tree.overwrite('/package.json', JSON.stringify(pkg));
 
     tree = await run({ project: 'app' }, tree);
-    expect(JSON.parse(tree.readContent('/package.json')).dependencies['lucide-angular']).toBe(
+    expect(JSON.parse(tree.readContent('/package.json')).dependencies['@lucide/angular']).toBe(
       '1.2.3',
     );
   });

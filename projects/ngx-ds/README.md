@@ -10,17 +10,17 @@ Browse every component in the [Storybook](https://jdpo2008.github.io/ngx-ds/).
 ng add @jdpo2008/ngx-ds
 ```
 
-`ng add` installs the package and `lucide-angular`, and adds the design tokens stylesheet to the `styles` of your application in `angular.json`. In a workspace with several applications, pass `--project <name>`.
+`ng add` installs the package and `@lucide/angular`, and adds the design tokens stylesheet to the `styles` of your application in `angular.json`. In a workspace with several applications, pass `--project <name>`.
 
 To set it up by hand instead:
 
 ```bash
-npm install @jdpo2008/ngx-ds lucide-angular
+npm install @jdpo2008/ngx-ds @lucide/angular
 ```
 
 then load the stylesheet as described in [Styles](#styles).
 
-Peer dependencies: `@angular/common`, `@angular/core`, `@angular/forms` and `@angular/platform-browser` 21, and `lucide-angular` 1.
+Peer dependencies: `@angular/common`, `@angular/core`, `@angular/forms` and `@angular/platform-browser` 21, and `@lucide/angular` 1.80 or later.
 
 ## Styles
 

@@ -1,7 +1,7 @@
 {
   "schematics": {
     "ng-add": {
-      "description": "Sets up @jdpo2008/ngx-ds: adds the design tokens stylesheet and lucide-angular.",
+      "description": "Sets up @jdpo2008/ngx-ds: adds the design tokens stylesheet and @lucide/angular.",
       "factory": "./ng-add/index.cjs#ngAdd",
       "schema": "./ng-add/schema.json"
     }

@@ -10,7 +10,7 @@ import {
   signal,
   inject,
 } from '@angular/core';
-import { Search } from 'lucide-angular';
+import { LucideSearch as Search } from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { KbdComponent } from '../../atoms/kbd/kbd.component';
 import { FocusTrapDirective } from '../../directives/focus-trap/focus-trap.directive';

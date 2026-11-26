@@ -6,16 +6,16 @@ import {
   MenuButtonSize,
 } from '../../../src/lib/atoms/menu-button/menu-button.component';
 import {
-  Pencil,
-  Trash2,
-  Eye,
-  Copy,
-  Download,
-  ArrowRight,
-  LogOut,
-  Settings2,
-  Star,
-} from 'lucide-angular';
+  LucidePencil as Pencil,
+  LucideTrash2 as Trash2,
+  LucideEye as Eye,
+  LucideCopy as Copy,
+  LucideDownload as Download,
+  LucideArrowRight as ArrowRight,
+  LucideLogOut as LogOut,
+  LucideSettings2 as Settings2,
+  LucideStar as Star,
+} from '@lucide/angular';
 
 // ── Colors Wrapper ────────────────────────────────────────────────────────────
 

@@ -11,7 +11,12 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-angular';
+import {
+  LucideChevronLeft as ChevronLeft,
+  LucideChevronRight as ChevronRight,
+  LucidePause as Pause,
+  LucidePlay as Play,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { NGX_DS_LABELS } from '../../shared/labels';
 import { CarouselItem, stepIndex } from './carousel.types';

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ChevronRight, User } from 'lucide-angular';
+import { LucideChevronRight as ChevronRight, LucideUser as User } from '@lucide/angular';
 import { MenuButtonComponent } from './menu-button.component';
 
 const classesOf = (x: Element | string) =>

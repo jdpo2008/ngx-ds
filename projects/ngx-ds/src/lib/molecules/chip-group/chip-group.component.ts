@@ -10,7 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { X } from 'lucide-angular';
+import { LucideX as X } from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';

@@ -2,7 +2,12 @@ import { Meta, StoryObj } from '@storybook/angular';
 import { Component } from '@angular/core';
 import { TimelineComponent } from '../../../src/lib/organisms/timeline/timeline.component';
 import { TimelineItemComponent } from '../../../src/lib/organisms/timeline/timeline-item.component';
-import { CheckCircle, Circle, AlertCircle, Clock } from 'lucide-angular';
+import {
+  LucideCheckCircle as CheckCircle,
+  LucideCircle as Circle,
+  LucideAlertCircle as AlertCircle,
+  LucideClock as Clock,
+} from '@lucide/angular';
 
 @Component({
   selector: 'timeline-wrapper',

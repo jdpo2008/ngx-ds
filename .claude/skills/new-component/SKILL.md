@@ -44,7 +44,7 @@ Rules:
 - `input()`, `input.required()`, `model()`, `output()`, `computed()`; private state as `readonly #state = signal(...)`.
 - `viewChild()` / `contentChild()` must be `private readonly`, **never** `#private`.
 - Open/close state: use `setupClickOutside` / `setupEscapeClose` from `../../shared/` in the constructor.
-- Icons: import `LucideIconData` from `'lucide-angular'` only.
+- Icons: import from `@lucide/angular` (`LucideX as X`); type icon inputs as `IconInput` from `../../atoms/icon/icon.types`.
 - Organisms with shared interfaces add `<name>.types.ts`; sub-components go in a subfolder.
 
 `<name>.component.scss`:

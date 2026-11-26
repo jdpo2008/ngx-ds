@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Home } from 'lucide-angular';
+import { LucideHome as Home } from '@lucide/angular';
 import { NGX_DS_LABELS_EN, provideNgxDsLabels } from '../../shared/labels';
 import { BreadcrumbComponent, BreadcrumbItem } from './breadcrumb.component';
 

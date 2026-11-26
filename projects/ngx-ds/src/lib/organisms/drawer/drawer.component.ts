@@ -7,7 +7,7 @@ import {
   model,
   output,
 } from '@angular/core';
-import { X } from 'lucide-angular';
+import { LucideX as X } from '@lucide/angular';
 import { IconButtonComponent } from '../../atoms/icon-button/icon-button.component';
 import { setupEscapeClose } from '../../shared/escape-close';
 import { setupOverlay } from '../../shared/overlay-stack';

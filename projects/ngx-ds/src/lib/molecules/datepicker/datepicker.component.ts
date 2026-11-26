@@ -14,7 +14,12 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
-import { Calendar, X, ChevronLeft, ChevronRight } from 'lucide-angular';
+import {
+  LucideCalendar as Calendar,
+  LucideX as X,
+  LucideChevronLeft as ChevronLeft,
+  LucideChevronRight as ChevronRight,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import {
   DayCell,

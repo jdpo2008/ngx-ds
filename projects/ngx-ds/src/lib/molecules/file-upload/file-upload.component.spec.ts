@@ -1,4 +1,9 @@
-import { File as FileIcon, FileImage, FileText, FileVideo } from 'lucide-angular';
+import {
+  LucideFile as FileIcon,
+  LucideFileImage as FileImage,
+  LucideFileText as FileText,
+  LucideFileVideo as FileVideo,
+} from '@lucide/angular';
 import { TestBed } from '@angular/core/testing';
 import { NGX_DS_LABELS_EN, provideNgxDsLabels } from '../../shared/labels';
 import { FileUploadComponent, UploadedFile } from './file-upload.component';

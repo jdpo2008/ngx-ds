@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Info } from 'lucide-angular';
+import { LucideInfo as Info } from '@lucide/angular';
 import { AvatarComponent } from './atoms/avatar/avatar.component';
 import { BadgeComponent } from './atoms/badge/badge.component';
 import { ButtonComponent } from './atoms/button/button.component';

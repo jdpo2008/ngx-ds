@@ -11,7 +11,10 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import { ChevronLeft, ChevronRight } from 'lucide-angular';
+import {
+  LucideChevronLeft as ChevronLeft,
+  LucideChevronRight as ChevronRight,
+} from '@lucide/angular';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { addMonths, isSameDay, moveFocusDate, startOfDay, toWeeks } from '../../shared/day-cell';
 import { NGX_DS_LOCALE, formatDayLabel, monthNames, weekdayNames } from '../../shared/locale';

@@ -24,18 +24,18 @@ import { PaginationComponent } from '../pagination/pagination.component';
 import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.component';
 import { SearchInputComponent } from '../../molecules/search-input/search-input.component';
 import {
-  ArrowUp,
-  ArrowDown,
-  ArrowUpDown,
-  Check,
-  X,
-  MoreVertical,
-  ChevronRight,
-  Columns3,
-  Plus,
-  LucideIconData,
-  Inbox,
-} from 'lucide-angular';
+  LucideArrowUp as ArrowUp,
+  LucideArrowDown as ArrowDown,
+  LucideArrowUpDown as ArrowUpDown,
+  LucideCheck as Check,
+  LucideX as X,
+  LucideMoreVertical as MoreVertical,
+  LucideChevronRight as ChevronRight,
+  LucideColumns3 as Columns3,
+  LucidePlus as Plus,
+  LucideInbox as Inbox,
+} from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { setupClickOutside } from '../../shared/click-outside';
 import { setupEscapeClose } from '../../shared/escape-close';
@@ -52,7 +52,7 @@ export type ActionColor = 'default' | 'primary' | 'danger' | 'success' | 'warnin
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- public API: consumers type rows loosely by default
 export interface TableAction<T = any> {
   label: string;
-  icon?: LucideIconData;
+  icon?: IconInput;
   color?: ActionColor;
   /** Return false to hide this action for a specific row. */
   show?: (row: T) => boolean;
@@ -203,7 +203,7 @@ export class TableComponent<T extends object = Record<string, unknown>> {
   readonly maxHeight = input<string>('');
   readonly emptyMessage = input<string | undefined>(undefined);
   readonly emptyDescription = input<string | undefined>(undefined);
-  readonly emptyIcon = input<LucideIconData | null>(Inbox);
+  readonly emptyIcon = input<IconInput | null>(Inbox);
   readonly emptyTemplate = input<TemplateRef<void> | null>(null);
   readonly rowClickable = input(false);
 

@@ -10,7 +10,8 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { ChevronRight, LucideIconData } from 'lucide-angular';
+import { LucideChevronRight as ChevronRight } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { KbdComponent } from '../../atoms/kbd/kbd.component';
 import { DividerComponent } from '../../atoms/divider/divider.component';
@@ -66,7 +67,7 @@ export class MenuComponent {
     return first === -1 ? i : first;
   });
   readonly openSubmenu = signal<string | null>(null);
-  readonly chevronRight: LucideIconData = ChevronRight;
+  readonly chevronRight: IconInput = ChevronRight;
 
   readonly iconSize = computed(() => ICON_SIZE[this.size()]);
 

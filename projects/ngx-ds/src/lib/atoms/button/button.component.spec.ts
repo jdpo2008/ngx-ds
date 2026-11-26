@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ArrowRight, LucideIconData, Plus } from 'lucide-angular';
+import { LucideArrowRight as ArrowRight, LucidePlus as Plus } from '@lucide/angular';
+import { IconInput } from '../icon/icon.types';
 import { ButtonComponent, ButtonSize } from './button.component';
 
 const classesOf = (x: Element | string) =>
@@ -27,8 +28,8 @@ describe('ButtonComponent', () => {
     size = signal<ButtonSize>('md');
     loading = signal(false);
     disabled = signal(false);
-    iconLeft = signal<LucideIconData | undefined>(undefined);
-    iconRight = signal<LucideIconData | undefined>(undefined);
+    iconLeft = signal<IconInput | undefined>(undefined);
+    iconRight = signal<IconInput | undefined>(undefined);
     clicks = 0;
   }
 

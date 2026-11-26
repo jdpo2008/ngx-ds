@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
 
@@ -16,7 +16,7 @@ const ICON_SIZES: Record<EmptyStateSize, number> = { sm: 32, md: 48, lg: 64 };
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyStateComponent {
-  readonly icon = input<LucideIconData | null>(null);
+  readonly icon = input<IconInput | null>(null);
   readonly title = input<string>('');
   readonly description = input<string>('');
   readonly size = input<EmptyStateSize>('md');

@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FieldErrors, fieldErrorText, fieldHasError } from '../../shared/field-error';
-import { LucideIconData, Eye, EyeOff } from 'lucide-angular';
+import { LucideEye as Eye, LucideEyeOff as EyeOff } from '@lucide/angular';
+import { IconInput } from '../../atoms/icon/icon.types';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
@@ -51,8 +52,8 @@ export class InputComponent implements ControlValueAccessor {
   /** Set by Signal Forms `[formField]`. Its errors show once the field is touched. */
   readonly errors = input<FieldErrors>([]);
   readonly touched = input<boolean>(false);
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
-  readonly iconRight = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
+  readonly iconRight = input<IconInput | undefined>(undefined);
   readonly readonly = input<boolean>(false);
 
   // ── Value — two-way bindable (signal forms) ──────────────────

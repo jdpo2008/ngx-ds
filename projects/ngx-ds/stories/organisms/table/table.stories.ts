@@ -7,7 +7,12 @@ import {
   TableSort,
   TablePageEvent,
 } from '../../../src/lib/organisms/table/table.component';
-import { Pencil, Trash2, Eye, Copy } from 'lucide-angular';
+import {
+  LucidePencil as Pencil,
+  LucideTrash2 as Trash2,
+  LucideEye as Eye,
+  LucideCopy as Copy,
+} from '@lucide/angular';
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 

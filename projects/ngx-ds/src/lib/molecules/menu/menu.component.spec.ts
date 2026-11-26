@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Copy, Trash } from 'lucide-angular';
+import { LucideCopy as Copy, LucideTrash as Trash } from '@lucide/angular';
 import { MenuComponent } from './menu.component';
 import type { MenuItem } from './menu.types';
 

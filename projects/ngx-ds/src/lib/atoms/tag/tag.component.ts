@@ -1,7 +1,8 @@
 import { Component, ChangeDetectionStrategy, input, output, computed, inject } from '@angular/core';
-import { LucideIconData } from 'lucide-angular';
+import { LucideX as X } from '@lucide/angular';
+import { IconInput } from '../icon/icon.types';
 import { IconComponent } from '../icon/icon.component';
-import { X } from 'lucide-angular';
+
 import { Size } from '../../shared/size';
 import { NGX_DS_LABELS } from '../../shared/labels';
 
@@ -26,8 +27,8 @@ export class TagComponent {
   readonly size = input<TagSize>('md');
   readonly color = input<TagColor>('primary');
   readonly variant = input<TagVariant>('soft');
-  readonly iconLeft = input<LucideIconData | undefined>(undefined);
-  readonly iconRight = input<LucideIconData | undefined>(undefined);
+  readonly iconLeft = input<IconInput | undefined>(undefined);
+  readonly iconRight = input<IconInput | undefined>(undefined);
   readonly rounded = input<boolean>(true);
   readonly dismissible = input<boolean>(false);
 

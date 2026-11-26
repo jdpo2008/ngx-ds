@@ -18,6 +18,7 @@
 // Exits with code 1 when --base is given and a component grows past both limits.
 
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -149,11 +150,28 @@ async function buildApp(c) {
   return gzip;
 }
 
+/**
+ * Peer dependencies the build needs but this checkout no longer installs (e.g. a base branch that
+ * still uses a package the PR replaced) are copied from the build's own checkout
+ * (`<checkout>/dist/ngx-ds` → `<checkout>/node_modules`).
+ */
+async function copyPeers(lib) {
+  const { peerDependencies = {} } = JSON.parse(await readFile(join(lib, 'package.json'), 'utf8'));
+  for (const name of Object.keys(peerDependencies)) {
+    const target = join(WORK, 'node_modules', name);
+    await rm(target, { recursive: true, force: true });
+    if (existsSync(join(ROOT, 'node_modules', name))) continue;
+    const source = resolve(lib, '..', '..', 'node_modules', name);
+    if (existsSync(source)) await cp(source, target, { recursive: true, dereference: true });
+  }
+}
+
 /** Bytes (gzip) each component adds to the baseline app, using the library build in `dir`. */
 async function measure(dir) {
   const lib = resolve(dir);
   await rm(PKG, { recursive: true, force: true });
   await cp(lib, PKG, { recursive: true });
+  await copyPeers(lib);
   const baseline = await buildApp(null);
   const added = {};
   for (const c of CASES) {

@@ -6,7 +6,12 @@ import {
   AccordionVariant,
   AccordionSize,
 } from '../../../src/lib/organisms/accordion';
-import { Settings, User, Shield, CreditCard } from 'lucide-angular';
+import {
+  LucideSettings as Settings,
+  LucideUser as User,
+  LucideShield as Shield,
+  LucideCreditCard as CreditCard,
+} from '@lucide/angular';
 
 // ── FAQ Wrapper ───────────────────────────────────────────────────────────────
 
